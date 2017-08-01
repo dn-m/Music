@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Math",
+        "repositoryURL": "https://github.com/dn-m/Math",
+        "state": {
+          "branch": "master",
+          "revision": "12ea22b1c6e0e44c385331c3c44e712a97cdf6fd",
+          "version": null
+        }
+      },
+      {
+        "package": "Structure",
+        "repositoryURL": "https://github.com/dn-m/Structure",
+        "state": {
+          "branch": "master",
+          "revision": "7ff248ef8d5f622852b686a01a9473c1e46ff5e2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
