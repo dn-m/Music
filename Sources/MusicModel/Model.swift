@@ -62,10 +62,6 @@ public final class Model {
         self.meters = meters
         self.tempi = tempi
     }
-
-    // MARK: - Instance Methods
-    
-
 }
 
 extension Model: CustomStringConvertible {
@@ -85,8 +81,3 @@ extension Model: CustomStringConvertible {
     }
 }
 
-//// TODO: Move down to `Collections`
-//infix operator ∩: AdditionPrecedence
-//func ∩ <T> (a: Set<T>, b: Set<T>) -> Set<T> {
-//    return a.intersection(b)
-//}
