@@ -144,15 +144,13 @@ class ModelTests: XCTestCase {
         // Construct the model
         let model = builder.build()
 
-        // Create a filter
-        let filter = Model.Filter(
-            interval: Fraction(4,4)...Fraction(5/>4),
-            scope: PerformanceContext.Scope("P","I"),
-            label: "articulation"
-        )
-        
+        let interval = Model.Filter(interval: Fraction(4,4)...Fraction(5/>4))
+        let scope = Model.Filter(scope: PerformanceContext.Scope("P","I"))
+        let label = Model.Filter(label: "articulation")
+        let filter = [interval,scope,label].nonEmptyProduct!
+
         // Get the ids of all of the attributes within the given filter
-        let filteredIDs = model.filtered(by: filter)
+        let filteredIDs = filter.apply(model)
         
         filteredIDs.forEach { id in
             let value = model.values[id]!
