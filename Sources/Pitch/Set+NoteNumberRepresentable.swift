@@ -27,7 +27,7 @@ extension Array where Element == Pitch.Class {
     public var normalForm: [Pitch.Class] {
 
         let values = map { $0.noteNumber.value }.sorted()
-        let rotations: [[Double]] = (0..<count).map { amount in
+        let rotations = (0..<count).map { amount in
             values.rotated(by: amount).denormalizedForIntervalComparison
         }
 
