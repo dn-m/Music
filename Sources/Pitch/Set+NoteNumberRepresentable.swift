@@ -25,18 +25,9 @@ extension Array where Element == Pitch.Class {
 
     /// Normal form of a Pitch.Class segment
     public var normalForm: [Pitch.Class] {
-
         let values = map { $0.noteNumber.value }.sorted()
-        let rotations = (0..<count).map { amount in
-            values.rotated(by: amount).denormalizedForIntervalComparison
-        }
-
-        // The sequence that is most compact (least distance between last and first elements)
-        let compact = rotations.extrema(property: { $0.span }, areInIncreasingOrder: <)
-
-        // The sequence that has the smallest interval at the beginning
-        let leftPacked = mostLeftPacked(compact)
-        return leftPacked.map(Pitch.Class.init)
+        let denormalized = values |> rotations >>> mostCompact >>> mostLeftPacked
+        return denormalized.map(Pitch.Class.init)
     }
 
     public var primeForm: [Pitch.Class] {
@@ -46,6 +37,16 @@ extension Array where Element == Pitch.Class {
         let it = inverse.map { $0 - inverse.first! }.map { $0.noteNumber.value }
         return mostLeftPacked([transposed.map { $0.noteNumber.value }, it]).map(Pitch.Class.init)
     }
+}
+
+func rotations(_ values: [Double]) -> [[Double]] {
+    return (0..<values.count).map { amount in
+        values.rotated(by: amount).denormalizedForIntervalComparison
+    }
+}
+
+func mostCompact(_ values: [[Double]]) -> [[Double]] {
+    return values.extrema(property: { $0.span }, areInIncreasingOrder: <)
 }
 
 // Make generic over Numeric
@@ -60,7 +61,7 @@ extension Array where Element == Double {
 
     // Adds 12 to each value if it is less than previous (which occurs for the last n values of
     // of an ordered pitch class set rotated n times)
-    private var denormalizedForIntervalComparison: [Double] {
+    var denormalizedForIntervalComparison: [Double] {
         return reduce([]) { accum, cur in
             // FIMXE: Refactor to one-liner
             if let last = accum.last {
@@ -77,9 +78,60 @@ extension Array where Element == Double {
     }
 
     // Invariant: self is sorted, is not empty
-    private var span: Double {
+    var span: Double {
         return last! - first!
     }
 }
 
+precedencegroup CompositionPrecedence {
+    associativity: right
+    higherThan: BitwiseShiftPrecedence
+}
+
+precedencegroup RightApplyPrecedence {
+    associativity: right
+    higherThan: AssignmentPrecedence
+    lowerThan: TernaryPrecedence
+}
+
+precedencegroup LeftApplyPrecedence {
+    associativity: left
+    higherThan: AssignmentPrecedence
+    lowerThan: TernaryPrecedence
+}
+
+/// Compose | Applies one function to the result of another function to produce a third function.
+infix operator <<< : CompositionPrecedence
+infix operator >>> : CompositionPrecedence
+
+/// Pipe Backward | Applies the function to its left to an argument on its right.
+infix operator <| : RightApplyPrecedence
+
+/// Pipe forward | Applies an argument on the left to a function on the right.
+infix operator |> : LeftApplyPrecedence
+
+/// Compose | Applies one function to the result of another function to produce a third function.
+///
+///     f : B -> C
+///     g : A -> B
+///     (f • g)(x) === f(g(x)) : A -> B -> C
+public func <<< <A, B, C> (f: @escaping (B) -> C, g : @escaping (A) -> B) -> (A) -> C {
+    return { x in
+        return f(g(x))
+    }
+}
+
+public func >>> <A, B, C> (f: @escaping (A) -> B, g : @escaping (B) -> C) -> (A) -> C {
+    return { x in
+        return g(f(x))
+    }
+}
+
+func <| <A,B> (_ f: @escaping (A) -> B, _ x: A) -> B {
+    return f(x)
+}
+
+func |> <A,B>(_ x: A, _ f: @escaping (A) -> B) -> B {
+    return f(x)
+}
 
