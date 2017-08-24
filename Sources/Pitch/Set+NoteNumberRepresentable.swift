@@ -25,9 +25,19 @@ extension Array where Element == Pitch.Class {
 
     /// Normal form of a Pitch.Class segment
     public var normalForm: [Pitch.Class] {
+
+        // Lift Pitch.Class values out mod 12
         let values = map { $0.noteNumber.value }.sorted()
-        let denormalized = values |> rotations >>> mostCompact >>> mostLeftPacked
-        return denormalized.map(Pitch.Class.init)
+
+        // Compare all rotations of values, choosing the most compact, using the most left packed
+        // as a tie-breaker
+        let normalized = values
+            |> rotations
+            >>> mostCompact
+            >>> mostLeftPacked
+
+        // Reign values back into mod 12
+        return normalized.map(Pitch.Class.init)
     }
 
     public var primeForm: [Pitch.Class] {
