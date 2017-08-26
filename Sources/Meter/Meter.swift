@@ -7,9 +7,6 @@
 //
 
 import Math
-
-// FIXME: Update to `MetricalDuration`.
-import Rhythm
 import MetricalDuration
 
 /// Model of a `Meter`.
