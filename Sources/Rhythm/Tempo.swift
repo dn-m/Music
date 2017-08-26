@@ -211,7 +211,7 @@ extension Tempo {
                 end.subdivision,
                 length.denominator,
                 offset.denominator
-                ].lcm
+            ].lcm
 
             return (
                 start: start.respelling(subdivision: lcm),
