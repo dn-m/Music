@@ -26,9 +26,6 @@ extension Collection where Element: NoteNumberRepresentable {
 extension Collection where Element == Pitch.Class {
 
     /// Normal form of a Pitch.Class segment
-    // Compare all rotations of values,
-    // first, select the most compact rotations,
-    // then, select the most "left-packed" rotation
     public var normalForm: [Pitch.Class] {
         return sorted().rotations |> mostCompact >>> mostLeftPacked
     }
@@ -66,30 +63,6 @@ func mostLeftPacked(_ values: [[Pitch.Class]]) -> [Pitch.Class] {
     assert(!values.isEmpty)
     guard values.count > 1 else { return values.first! }
     return values.sorted { $0.intervals.lexicographicallyPrecedes($1.intervals) }.first!
-}
-
-// Change Double to Pitch.Class
-extension Array where Element == Double {
-
-    // Adds 12 to each value if it is less than previous (which occurs for the last n values of
-    // of an ordered pitch class set rotated n times)
-    //
-    // FIXME: This will be moot once Pitch.Class arithmetic is in mod 12
-    var denormalizedForIntervalComparison: [Double] {
-        return reduce([]) { accum, cur in
-            // FIMXE: Refactor to one-liner
-            if let last = accum.last {
-                let normalized = cur < last ? cur + 12 : cur
-                return accum + [normalized]
-            } else {
-                return accum + [cur]
-            }
-        }
-    }
-
-    var intervals: [Double] {
-        return pairs.map { $1 - $0 }
-    }
 }
 
 extension BidirectionalCollection where Element == Pitch.Class {
