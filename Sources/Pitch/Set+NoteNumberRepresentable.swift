@@ -11,11 +11,13 @@ import Math
 extension Collection where Element: NoteNumberRepresentable {
 
     // TODO: Make lazy
+    // FIXME: Should not need to create `Array` (audit `pairs`)
     public var intervals: [OrderedInterval<Iterator.Element>] {
         return Array(self).pairs.map(OrderedInterval.init)
     }
 
     // TODO: Make lazy
+    // FIXME: Should not need to create `Array` (audit `pairs`)
     public var dyads: [Dyad<Iterator.Element>] {
         return Array(self).subsets(cardinality: 2).map(Dyad.init)
     }
@@ -24,24 +26,11 @@ extension Collection where Element: NoteNumberRepresentable {
 extension Collection where Element == Pitch.Class {
 
     /// Normal form of a Pitch.Class segment
-    //
-    // FIXME: We probably don't need to lift values outside of mod 12 universe (in order to compare
-    // interval sizes) if arithmetic on Pitch.Class is inherently mod 12
+    // Compare all rotations of values,
+    // first, select the most compact rotations,
+    // then, select the most "left-packed" rotation
     public var normalForm: [Pitch.Class] {
-
-        // Lift Pitch.Class values out mod 12
-        let values = map { $0.noteNumber.value }
-
-        // Sort the pitch classes
-        let sorted = values.sorted()
-
-        // Compare all rotations of values,
-        // first, select the most compact rotations,
-        // then, select the most "left-packed" rotation
-        let normalized = sorted |> rotations >>> mostCompact >>> mostLeftPacked
-
-        // Reign values back into mod 12
-        return normalized.map(Pitch.Class.init)
+        return sorted().rotations |> mostCompact >>> mostLeftPacked
     }
 
     /// - Returns: The Prime Form
@@ -49,27 +38,23 @@ extension Collection where Element == Pitch.Class {
         guard !isEmpty else { return map { $0 } }
         let transposed = normalForm.map { $0 - normalForm.first! }
         let inverse = transposed.map { $0.inversion }.normalForm
-        let it = inverse.map { $0 - inverse.first! }.map { $0.noteNumber.value }
-        return mostLeftPacked([transposed.map { $0.noteNumber.value }, it]).map(Pitch.Class.init)
+        let it = inverse.map { $0 - inverse.first! }
+        let options = [transposed, it]
+        let solution = mostLeftPacked(options)
+        return solution
+    }
+
+    private var rotations: [[Pitch.Class]] {
+        let values = Array(self)
+        return (0..<values.count).map { amount in values.rotated(by: amount) }
     }
 }
 
-func rotations(_ values: [Double]) -> [[Double]] {
-    return (0..<values.count).map { amount in
-        // FIXME: We probably don't need to denormalize these values (that is, add 12 to the rotated
-        // values) if `Pitch.Class` arithmetic is in mod 12
-        let rotation = values.rotated(by: amount).denormalizedForIntervalComparison
-        dump(rotation)
-        return rotation
-    }
-}
-
-func mostCompact(_ values: [[Double]]) -> [[Double]] {
+func mostCompact(_ values: [[Pitch.Class]]) -> [[Pitch.Class]] {
     return values.extrema(property: { $0.span }, areInIncreasingOrder: <)
 }
 
-// FIXME: Make generic over Numeric
-func mostLeftPacked(_ values: [[Double]]) -> [Double] {
+func mostLeftPacked(_ values: [[Pitch.Class]]) -> [Pitch.Class] {
     assert(!values.isEmpty)
     guard values.count > 1 else { return values.first! }
     return values.sorted { $0.intervals.lexicographicallyPrecedes($1.intervals) }.first!
@@ -97,9 +82,12 @@ extension Array where Element == Double {
     var intervals: [Double] {
         return pairs.map { $1 - $0 }
     }
+}
+
+extension BidirectionalCollection where Element == Pitch.Class {
 
     // Invariant: self is sorted, is not empty
-    var span: Double {
+    var span: Pitch.Class {
         return last! - first!
     }
 }
