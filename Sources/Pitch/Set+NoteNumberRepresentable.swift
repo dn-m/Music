@@ -13,13 +13,13 @@ extension Collection where Element: NoteNumberRepresentable {
     // TODO: Make lazy
     // FIXME: Should not need to create `Array` (audit `pairs`)
     public var intervals: [OrderedInterval<Iterator.Element>] {
-        return Array(self).pairs.map(OrderedInterval.init)
+        return pairs.map(OrderedInterval.init)
     }
 
     // TODO: Make lazy
     // FIXME: Should not need to create `Array` (audit `pairs`)
     public var dyads: [Dyad<Iterator.Element>] {
-        return Array(self).subsets(cardinality: 2).map(Dyad.init)
+        return subsets(cardinality: 2).map(Dyad.init)
     }
 }
 
