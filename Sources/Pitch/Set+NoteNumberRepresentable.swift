@@ -27,21 +27,21 @@ extension Array where Element == Pitch.Class {
     public var normalForm: [Pitch.Class] {
 
         // Lift Pitch.Class values out mod 12
-        let values = map { $0.noteNumber.value }.sorted()
+        let values = map { $0.noteNumber.value }
+
+        // Sort the pitch classes
+        let sorted = values.sorted()
 
         // Compare all rotations of values, choosing the most compact, using the most left packed
         // as a tie-breaker
-        let normalized = values
-            |> rotations
-            >>> mostCompact
-            >>> mostLeftPacked
+        let normalized = sorted |> rotations >>> mostCompact >>> mostLeftPacked
 
         // Reign values back into mod 12
         return normalized.map(Pitch.Class.init)
     }
 
     public var primeForm: [Pitch.Class] {
-        guard !isEmpty else { return [] }
+        guard !isEmpty else { return self }
         let transposed = normalForm.map { $0 - normalForm.first! }
         let inverse = transposed.map { $0.inversion }.normalForm
         let it = inverse.map { $0 - inverse.first! }.map { $0.noteNumber.value }
@@ -51,7 +51,9 @@ extension Array where Element == Pitch.Class {
 
 func rotations(_ values: [Double]) -> [[Double]] {
     return (0..<values.count).map { amount in
-        values.rotated(by: amount).denormalizedForIntervalComparison
+        let rotation = values.rotated(by: amount).denormalizedForIntervalComparison
+        dump(rotation)
+        return rotation
     }
 }
 
