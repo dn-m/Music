@@ -9,9 +9,8 @@ let package = Package(
         .library(name: "Articulations", targets: ["Articulations"]),
         .library(name: "Dynamics", targets: ["Dynamics"]),
         .library(name: "Pitch", targets: ["Pitch"]),
-        .library(name: "Rhythm", targets: ["MetricalDuration"]),
         .library(name: "MetricalDuration", targets: ["MetricalDuration"]),
-        //.library(name: "MetricalDuration", targets: ["MetricalDuration"]),
+        .library(name: "Rhythm", targets: ["Rhythm"]),
         .library(name: "Tempo", targets: ["Tempo"]),
         .library(name: "Meter", targets: ["Meter"]),
         .library(name: "MusicModel", targets: ["MusicModel"])
