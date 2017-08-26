@@ -8,7 +8,7 @@
 import XCTest
 import StructureWrapping
 import Math
-@testable import Rhythm
+@testable import Tempo
 
 class TempoInterpolationTests: XCTestCase {
 

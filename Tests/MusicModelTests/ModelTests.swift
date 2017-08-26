@@ -12,25 +12,11 @@ import Math
 import Rhythm
 import Pitch
 import Articulations
+import Meter
+import Tempo
 @testable import MusicModel
 
 class ModelTests: XCTestCase {
-    
-//    func testRhythmEventIntervals() {
-//        
-//        let rhythm = Rhythm<Int>(
-//            4/>8 * [1,1,1,1],
-//            [
-//                .instance(.absence),
-//                .instance(.event(0)),
-//                .continuation,
-//                .instance(.absence)
-//            ]
-//        )
-//        
-//        let intervals = rhythm.eventIntervals
-//        print(intervals)
-//    }
     
     func testAddPitchArrayAttribute() {
         let pitches: Set<Pitch> = [60,61,62]

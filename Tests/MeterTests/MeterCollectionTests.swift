@@ -10,7 +10,7 @@ import XCTest
 import Restructure
 import StructureWrapping
 import Math
-import Rhythm
+import Meter
 
 class MeterCollectionTests: XCTestCase {
 

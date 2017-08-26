@@ -8,6 +8,9 @@
 
 import Math
 
+// FIXME: Update to `MetricalDuration`.
+import Rhythm
+
 /// Model of a `Meter`.
 public struct Meter: Rational {
 
@@ -35,19 +38,8 @@ public struct Meter: Rational {
 
     // MARK: - Instance Methods
 
-    /// - returns: Offsets of each beat of a `Meter` at the given `Tempo`.
-    ///
-    /// - TODO: Change [Double] -> [Seconds]
-    ///
-    public func offsets(tempo: Tempo) -> [Double] {
-        let durationForBeat = tempo.duration(forBeatAt: denominator)
-        return (0..<numerator).map { Double($0) * durationForBeat }
-    }
+    // FIXME: Move to Model
 
-    /// - returns: Duration in seconds of measure at the given `tempo`.
-    public func duration(at tempo: Tempo) -> Double {
-        return Double(numerator) * tempo.duration(forBeatAt: denominator)
-    }
 }
 
 extension Meter: MetricalDurationSpanning {

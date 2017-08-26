@@ -8,6 +8,9 @@
 
 import Math
 
+// FIXME: Update to `MetricalDuration`.
+import Rhythm
+
 extension Meter {
 
     public struct Fragment: MetricalDurationSpanningFragment {

@@ -6,6 +6,9 @@
 //
 //
 
+// FIXME: Update to `MetricalDuration`
+import Rhythm
+
 /// Model of a `Tempo`.
 public struct Tempo {
 

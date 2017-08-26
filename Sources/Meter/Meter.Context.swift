@@ -6,6 +6,9 @@
 //
 //
 
+// FIXME: Update to `MetricalDuration`.
+import Rhythm
+
 extension Meter {
 
     public struct Context {

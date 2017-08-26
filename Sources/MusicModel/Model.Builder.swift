@@ -10,8 +10,10 @@ import Foundation
 import Algebra
 import DataStructures
 import Math
-import Rhythm
 import Pitch
+import Rhythm
+import Tempo
+import Meter
 
 extension Model {
     
