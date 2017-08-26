@@ -57,7 +57,3 @@ extension Pitch.Class {
         return Pitch.Class(noteNumber: NoteNumber(lhs.noteNumber.value - rhs.noteNumber.value))
     }
 }
-
-// FIXME: Implement Arithmetic
-// E.g., +/- should always be kept in mod 12 universe
-
