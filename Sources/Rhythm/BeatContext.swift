@@ -6,6 +6,8 @@
 //
 //
 
+// TODO: First, move to `MusicModel`, then out to `MetronomeController`
+
 //import Math
 //
 //// TODO: Move to `dn-m/MetronomeController`
