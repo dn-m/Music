@@ -21,9 +21,12 @@ extension Collection where Element: NoteNumberRepresentable {
     }
 }
 
-extension Array where Element == Pitch.Class {
+extension Collection where Element == Pitch.Class {
 
     /// Normal form of a Pitch.Class segment
+    //
+    // FIXME: We probably don't need to lift values outside of mod 12 universe (in order to compare
+    // interval sizes) if arithmetic on Pitch.Class is inherently mod 12
     public var normalForm: [Pitch.Class] {
 
         // Lift Pitch.Class values out mod 12
@@ -32,16 +35,18 @@ extension Array where Element == Pitch.Class {
         // Sort the pitch classes
         let sorted = values.sorted()
 
-        // Compare all rotations of values, choosing the most compact, using the most left packed
-        // as a tie-breaker
+        // Compare all rotations of values,
+        // first, select the most compact rotations,
+        // then, select the most "left-packed" rotation
         let normalized = sorted |> rotations >>> mostCompact >>> mostLeftPacked
 
         // Reign values back into mod 12
         return normalized.map(Pitch.Class.init)
     }
 
+    /// - Returns: The Prime Form
     public var primeForm: [Pitch.Class] {
-        guard !isEmpty else { return self }
+        guard !isEmpty else { return map { $0 } }
         let transposed = normalForm.map { $0 - normalForm.first! }
         let inverse = transposed.map { $0.inversion }.normalForm
         let it = inverse.map { $0 - inverse.first! }.map { $0.noteNumber.value }
@@ -51,6 +56,8 @@ extension Array where Element == Pitch.Class {
 
 func rotations(_ values: [Double]) -> [[Double]] {
     return (0..<values.count).map { amount in
+        // FIXME: We probably don't need to denormalize these values (that is, add 12 to the rotated
+        // values) if `Pitch.Class` arithmetic is in mod 12
         let rotation = values.rotated(by: amount).denormalizedForIntervalComparison
         dump(rotation)
         return rotation
@@ -61,7 +68,7 @@ func mostCompact(_ values: [[Double]]) -> [[Double]] {
     return values.extrema(property: { $0.span }, areInIncreasingOrder: <)
 }
 
-// Make generic over Numeric
+// FIXME: Make generic over Numeric
 func mostLeftPacked(_ values: [[Double]]) -> [Double] {
     assert(!values.isEmpty)
     guard values.count > 1 else { return values.first! }
@@ -73,6 +80,8 @@ extension Array where Element == Double {
 
     // Adds 12 to each value if it is less than previous (which occurs for the last n values of
     // of an ordered pitch class set rotated n times)
+    //
+    // FIXME: This will be moot once Pitch.Class arithmetic is in mod 12
     var denormalizedForIntervalComparison: [Double] {
         return reduce([]) { accum, cur in
             // FIMXE: Refactor to one-liner
@@ -94,6 +103,8 @@ extension Array where Element == Double {
         return last! - first!
     }
 }
+
+// FIXME: Move to lower level module
 
 precedencegroup CompositionPrecedence {
     associativity: right

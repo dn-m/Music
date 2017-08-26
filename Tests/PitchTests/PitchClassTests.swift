@@ -38,4 +38,18 @@ class PitchClassTests: XCTestCase {
     func testPitchClassInitWithFloat() {
         let _: Pitch.Class = 15.0
     }
+
+    // MARK: Arithmetic
+
+    func testAdd() {
+        let a: Pitch.Class = 7
+        let b: Pitch.Class = 8
+        XCTAssertEqual(a + b, 3)
+    }
+
+    func testSubtract() {
+        let a: Pitch.Class = 7
+        let b: Pitch.Class = 8
+        XCTAssertEqual(a - b, 11)
+    }
 }

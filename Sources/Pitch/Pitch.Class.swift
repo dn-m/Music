@@ -47,6 +47,13 @@ extension Pitch {
     }
 }
 
-// FIXME: Implement Arithmetic
-// E.g., +/- should always be kept in mod 12 universe
+extension Pitch.Class {
 
+    public static func + (lhs: Pitch.Class, rhs: Pitch.Class) -> Pitch.Class {
+        return Pitch.Class(noteNumber: NoteNumber(lhs.noteNumber.value + rhs.noteNumber.value))
+    }
+
+    public static func - (lhs: Pitch.Class, rhs: Pitch.Class) -> Pitch.Class {
+        return Pitch.Class(noteNumber: NoteNumber(lhs.noteNumber.value - rhs.noteNumber.value))
+    }
+}
