@@ -6,8 +6,6 @@
 //
 //
 
-// FIXME: Move to `MetricalDuration`
-
 /// Interface for `SpanningContainerBuilder`-types whose spanners are measures by 
 /// `MetricalDuration`.
 public protocol MetricalDurationSpanningContainerBuilder: SpanningContainerBuilder { }

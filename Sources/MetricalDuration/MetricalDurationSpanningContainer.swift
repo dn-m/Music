@@ -6,7 +6,5 @@
 //
 //
 
-// FIXME: Move to `MetricalDuration`
-
 public protocol MetricalDurationSpanningContainer: SpanningContainer
     where Spanner: MetricalDurationSpanningFragment { }
