@@ -6,6 +6,8 @@
 //
 //
 
+// FIXME: Move to `dn-m/Structure`
+
 import Math
 
 /// Interface extending `Spanning` types, which also carry with them a range of operation.

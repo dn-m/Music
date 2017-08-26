@@ -76,13 +76,7 @@ extension Tree where Branch == Int, Leaf == Int {
             return zip(trees, reduced).map { $0.updating(value: $1) }
         }
 
-        guard case
-            .branch(let value, let trees) = self,
-            trees.count > 1
-        else {
-            return self
-        }
-
+        guard case .branch(let value, let trees) = self, trees.count > 1 else { return self }
         return .branch(value, reduced(trees).map { $0.reducingSiblings } )
     }
 
@@ -102,10 +96,7 @@ extension Tree where Branch == Int, Leaf == Int {
             return closestPowerOfTwo(coefficient: coefficient, to: sum)!
         }
 
-        guard case .branch(let duration, let trees) = self else {
-            return self
-        }
-
+        guard case .branch(let duration, let trees) = self else { return self }
         let newDuration = updateDuration(duration, trees)
         return .branch(newDuration, trees.map { $0.matchingParentsToChildren })
     }
@@ -118,21 +109,12 @@ extension Tree where Branch == Int, Leaf == Int {
     internal var matchingChildrenToParents: ProportionTree {
 
         /// Only continue if we are a parent of only leaves.
-        guard case
-            .branch(let duration, let trees) = self,
-            self.height == 1
-        else {
-            return self
-        }
-
+        guard case .branch(let duration, let trees) = self, self.height == 1 else { return self }
         let sum = trees.map { $0.value }.sum
 
         /// If the duration of parent is greater than the sum of the children's values, our
         /// work is done.
-        guard sum < duration else {
-            return self
-        }
-
+        guard sum < duration else { return self }
         let multiplier = closestPowerOfTwo(coefficient: sum, to: duration)! / sum
         let newTrees = trees.map { $0.map { $0 * multiplier } }
         return .branch(duration, newTrees)

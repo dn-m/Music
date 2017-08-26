@@ -44,4 +44,3 @@ extension RhythmLeaf: Equatable {
         return lhs.metricalDuration == rhs.metricalDuration && lhs.context == rhs.context
     }
 }
-

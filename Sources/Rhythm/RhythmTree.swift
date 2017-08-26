@@ -46,10 +46,7 @@ public func lengths <S,T> (of rhythmTrees: S) -> [MetricalDuration]
         tied: MetricalDuration?
     ) -> [MetricalDuration]
     {
-
-        guard let (leaf, remaining) = leaves.destructured else {
-            return accum + tied
-        }
+        guard let (leaf, remaining) = leaves.destructured else { return accum + tied }
 
         switch leaf.context {
 
