@@ -33,11 +33,10 @@ extension Collection where Element == Pitch.Class {
     /// - Returns: The Prime Form
     public var primeForm: [Pitch.Class] {
         guard !isEmpty else { return map { $0 } }
-        let normalForm = self.normalForm
-        let inverse = normalForm.inversion.normalForm
-        return mostLeftPacked([normalForm, inverse]).reduced
+        return mostLeftPacked([normalForm, inversion.normalForm]).reduced
     }
 
+    // Transpose the set such that the first value is `0`.
     public var reduced: [Pitch.Class] {
         assert(count > 0)
         return map { $0 - first! }
