@@ -23,6 +23,7 @@ extension Collection where Element: NoteNumberRepresentable {
     }
 }
 
+// FIXME: Elevate this into own type, with assertion on init
 extension Collection where Element == Pitch.Class {
 
     /// - Returns: The Prime Form
@@ -57,6 +58,7 @@ extension BidirectionalCollection where Element == Pitch.Class {
 
     // Invariant: self is sorted, is not empty
     var span: Pitch.Class {
+        assert(count > 0)
         return last! - first!
     }
 }
@@ -65,7 +67,7 @@ func mostCompact(_ values: [[Pitch.Class]]) -> [[Pitch.Class]] {
     return values.extrema(property: { $0.span }, areInIncreasingOrder: <)
 }
 
-// TODO: Return array or arrays, not single array (dont call `.first!`)
+// TODO: Return array or arrays, not single array (dont call `.first!` at end)
 func mostLeftPacked(_ values: [[Pitch.Class]]) -> [Pitch.Class] {
     assert(!values.isEmpty)
     guard values.count > 1 else { return values.first! }
