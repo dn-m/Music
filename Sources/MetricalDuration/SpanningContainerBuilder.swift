@@ -48,7 +48,7 @@ extension SpanningContainerBuilder {
     ///
     // FIXME: This should be able to be abstracted to `SpanningContainerBuilder`.
     @discardableResult public func add(_ element: Spanner) -> Self {
-        self.intermediate.insert(element, key: offset)
+        intermediate.insert(element, key: offset)
         offset = offset + element.range.length
         return self
     }
