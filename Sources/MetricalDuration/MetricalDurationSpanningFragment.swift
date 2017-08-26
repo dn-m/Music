@@ -6,4 +6,6 @@
 //
 //
 
+// FIXME: Move to `MetricalDuration`
+
 public protocol MetricalDurationSpanningFragment: SpanningFragment, MetricalDurationSpanning { }
