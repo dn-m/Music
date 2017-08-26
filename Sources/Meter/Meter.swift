@@ -36,11 +36,6 @@ public struct Meter: Rational {
         self.numerator = numerator
         self.denominator = denominator
     }
-
-    // MARK: - Instance Methods
-
-    // FIXME: Move to Model
-
 }
 
 extension Meter: MetricalDurationSpanning {

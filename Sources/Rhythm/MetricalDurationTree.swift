@@ -11,8 +11,6 @@ import DataStructures
 import Math
 import MetricalDuration
 
-// FIXME: Move to `MetricalDuration`
-
 /// Tree containing `MetricalDuration` values.
 public typealias MetricalDurationTree = Tree<MetricalDuration, MetricalDuration>
 

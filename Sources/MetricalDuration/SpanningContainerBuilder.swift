@@ -45,8 +45,6 @@ extension SpanningContainerBuilder {
     /// Adds the given `element` to the `intermediate` with accumulativng offsets.
     ///
     /// - Returns: `Self`.
-    ///
-    // FIXME: This should be able to be abstracted to `SpanningContainerBuilder`.
     @discardableResult public func add(_ element: Spanner) -> Self {
         intermediate.insert(element, key: offset)
         offset = offset + element.range.length

@@ -11,7 +11,6 @@
 import Math
 
 /// Interface extending `Spanning` types, which also carry with them a range of operation.
-// FIXME: Use constrained associated types (Metric == Fragment.Metric)
 public protocol SpanningFragment: Spanning, Fragmentable {
 
     // MARK: - Instance Properties
