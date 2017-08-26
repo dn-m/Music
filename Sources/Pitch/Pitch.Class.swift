@@ -6,6 +6,8 @@
 //  Copyright © 2017 James Bean. All rights reserved.
 //
 
+import Math
+
 extension Pitch {
 
     public struct Class: NoteNumberRepresentable, PitchConvertible {
@@ -24,7 +26,7 @@ extension Pitch {
 
         //// Create a `Pitch.Class` with a given `noteNumber`.
         public init(noteNumber: NoteNumber) {
-            self.noteNumber = NoteNumber(noteNumber.value.truncatingRemainder(dividingBy: 12.0))
+            self.noteNumber = NoteNumber(mod(noteNumber.value, 12))
         }
 
         // MARK: - `PitchConvertible`
@@ -44,3 +46,7 @@ extension Pitch {
         }
     }
 }
+
+// FIXME: Implement Arithmetic
+// E.g., +/- should always be kept in mod 12 universe
+
