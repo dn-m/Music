@@ -36,14 +36,21 @@ extension Collection where Element == Pitch.Class {
     /// - Returns: The Prime Form
     public var primeForm: [Pitch.Class] {
         guard !isEmpty else { return map { $0 } }
-        let transposed = normalForm.map { $0 - normalForm.first! }
-        let inverse = transposed.map { $0.inversion }.normalForm
-        let it = inverse.map { $0 - inverse.first! }
-        let options = [transposed, it]
-        let solution = mostLeftPacked(options)
-        return solution
+        let normalForm = self.normalForm
+        let inverse = normalForm.inversion.normalForm
+        return mostLeftPacked([normalForm, inverse]).reduced
     }
 
+    public var reduced: [Pitch.Class] {
+        assert(count > 0)
+        return map { $0 - first! }
+    }
+
+    public var inversion: [Pitch.Class] {
+        return map { $0.inversion }
+    }
+
+    // FIXME: Lift rotated to Collection rather than Array
     private var rotations: [[Pitch.Class]] {
         let values = Array(self)
         return (0..<values.count).map { amount in values.rotated(by: amount) }
@@ -54,6 +61,7 @@ func mostCompact(_ values: [[Pitch.Class]]) -> [[Pitch.Class]] {
     return values.extrema(property: { $0.span }, areInIncreasingOrder: <)
 }
 
+// TODO: Return array or arrays, not single array (dont call `.first!`)
 func mostLeftPacked(_ values: [[Pitch.Class]]) -> [Pitch.Class] {
     assert(!values.isEmpty)
     guard values.count > 1 else { return values.first! }
