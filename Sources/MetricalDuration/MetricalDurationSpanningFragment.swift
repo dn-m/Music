@@ -6,6 +6,4 @@
 //
 //
 
-import Math
-
 public protocol MetricalDurationSpanningFragment: SpanningFragment, MetricalDurationSpanning { }

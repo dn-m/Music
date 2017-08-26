@@ -9,6 +9,7 @@
 import Algebra
 import DataStructures
 import Math
+import MetricalDuration
 
 /// Tree containing `MetricalDuration` values.
 public typealias MetricalDurationTree = Tree<MetricalDuration, MetricalDuration>

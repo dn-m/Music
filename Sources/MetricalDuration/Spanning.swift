@@ -6,6 +6,8 @@
 //
 //
 
+// FIXME: Move to `dn-m/Structure`
+
 import Algebra
 
 /// Interface for types which have a length of some `Metric`.

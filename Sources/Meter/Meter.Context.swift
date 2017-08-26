@@ -6,6 +6,8 @@
 //
 //
 
+import MetricalDuration
+
 extension Meter {
 
     public struct Context {

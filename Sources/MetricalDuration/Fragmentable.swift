@@ -8,6 +8,8 @@
 
 import Algebra
 
+// FIXME: Move to `dn-m/Structure`
+
 /// Interface for types which can be fragmented into smaller pieces.
 public protocol Fragmentable {
 
@@ -24,4 +26,3 @@ public protocol Fragmentable {
     /// - Returns: `Fragment` within the given `range`.
     subscript(range: Range<Metric>) -> Fragment { get }
 }
-

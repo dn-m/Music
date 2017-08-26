@@ -8,7 +8,7 @@
 
 import XCTest
 import Math
-@testable import Rhythm
+@testable import Tempo
 
 class TempoTests: XCTestCase {
 

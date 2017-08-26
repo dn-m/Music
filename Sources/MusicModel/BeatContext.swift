@@ -1,12 +1,14 @@
 //
 //  BeatContext.swift
-//  Rhythm
+//  MusicModel
 //
-//  Created by James Bean on 5/23/17.
-//
+//  Created by James Bean on 8/26/17.
 //
 
 import Math
+import MetricalDuration
+import Tempo
+import Meter
 
 // TODO: Move to `dn-m/MetronomeController`
 /// Information about a given beat within a `Meter`.
@@ -40,3 +42,4 @@ public struct BeatContext {
         self.offset = offset
     }
 }
+

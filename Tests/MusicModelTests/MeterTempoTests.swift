@@ -1,15 +1,17 @@
 //
-//  MeterTests.swift
-//  Rhythm
+//  MeterTempoTests.swift
+//  MusicModel
 //
-//  Created by James Bean on 4/26/17.
-//
+//  Created by James Bean on 8/26/17.
 //
 
 import XCTest
 import Rhythm
+import Tempo
+import Meter
+import MetricalDuration
 
-class MeterTests: XCTestCase {
+class MeterTempoTests: XCTestCase {
 
     func testTempoInit() {
         _ = Tempo(78, subdivision: 4)

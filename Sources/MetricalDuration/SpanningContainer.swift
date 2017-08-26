@@ -6,6 +6,8 @@
 //
 //
 
+// FIXME: Move to `dn-m/Structure`
+
 import Algebra
 import StructureWrapping
 import Restructure
@@ -13,7 +15,6 @@ import DataStructures
 import Math
 
 /// Interface for values that contain a sequence of `SpanningFragment` type values.
-// FIXME: Move to dn-m/Collections
 // FIXME: Use constrained associated types in Swift 4
 public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fragmentable {
 

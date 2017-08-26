@@ -6,6 +6,9 @@
 //
 //
 
+import Rhythm
+import MetricalDuration
+
 /// Model of a `Tempo`.
 public struct Tempo {
 
@@ -211,7 +214,7 @@ extension Tempo {
                 end.subdivision,
                 length.denominator,
                 offset.denominator
-                ].lcm
+            ].lcm
 
             return (
                 start: start.respelling(subdivision: lcm),

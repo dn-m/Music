@@ -7,6 +7,7 @@
 //
 
 import Math
+import MetricalDuration
 
 extension Meter {
 

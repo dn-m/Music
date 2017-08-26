@@ -10,8 +10,11 @@ import Foundation
 import Algebra
 import DataStructures
 import Math
-import Rhythm
 import Pitch
+import MetricalDuration
+import Rhythm
+import Tempo
+import Meter
 
 extension Model {
     
@@ -247,14 +250,6 @@ extension Model {
         return Builder()
     }
 }
-
-//extension Model.Builder: CustomStringConvertible {
-//    
-//    public var description: String {
-//        return "\(values)"
-//    }
-//}
-
 
 /// - TODO: Move to `dn-m/Rhythm`.
 extension Rhythm {

@@ -10,6 +10,8 @@ import Foundation
 import Algebra
 import Math
 import Rhythm
+import Tempo
+import Meter
 
 /// The database of musical information contained in a single musical _work_.
 public final class Model {

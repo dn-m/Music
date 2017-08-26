@@ -7,7 +7,4 @@
 //
 
 public protocol MetricalDurationSpanningContainer: SpanningContainer
-    where Spanner: MetricalDurationSpanningFragment
-{
-
-}
+    where Spanner: MetricalDurationSpanningFragment { }
