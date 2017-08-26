@@ -6,7 +6,7 @@
 //
 
 import Math
-import Rhythm
+import MetricalDuration
 import Tempo
 import Meter
 

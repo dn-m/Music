@@ -9,6 +9,7 @@
 import XCTest
 import DataStructures
 import Math
+import MetricalDuration
 import Rhythm
 
 class MetricalDurationTreeTests: XCTestCase {

@@ -10,6 +10,7 @@ import Math
 
 // FIXME: Update to `MetricalDuration`.
 import Rhythm
+import MetricalDuration
 
 /// Model of a `Meter`.
 public struct Meter: Rational {

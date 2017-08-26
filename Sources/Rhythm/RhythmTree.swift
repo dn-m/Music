@@ -8,6 +8,7 @@
 
 import Restructure
 import Math
+import MetricalDuration
 
 /// - Note: At some point, nest this within `Rhythm`, inheriting `T`. Currently, this produces
 /// "Runtime Error: cyclic metadata dependency detected, aborting" (SR-4383).

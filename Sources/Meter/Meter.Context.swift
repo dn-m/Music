@@ -6,8 +6,7 @@
 //
 //
 
-// FIXME: Update to `MetricalDuration`.
-import Rhythm
+import MetricalDuration
 
 extension Meter {
 

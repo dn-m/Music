@@ -9,6 +9,7 @@ import XCTest
 import Rhythm
 import Tempo
 import Meter
+import MetricalDuration
 
 class MeterTempoTests: XCTestCase {
 

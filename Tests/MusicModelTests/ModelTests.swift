@@ -9,11 +9,12 @@
 import XCTest
 import DataStructures
 import Math
-import Rhythm
 import Pitch
 import Articulations
+import MetricalDuration
 import Meter
 import Tempo
+import Rhythm
 @testable import MusicModel
 
 class ModelTests: XCTestCase {
