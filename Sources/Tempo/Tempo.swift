@@ -73,7 +73,7 @@ import Math
 extension Tempo {
 
     /// Interpolation between two `Tempo` values.
-    public struct Interpolation: MetricalDurationSpanning {
+    public struct Interpolation: Equatable, MetricalDurationSpanning {
 
         // MARK: Instance Properties
 
@@ -273,7 +273,7 @@ import DataStructures
 extension Tempo.Interpolation {
 
     /// Easing of `Interpolation`.
-    public enum Easing {
+    public enum Easing: Equatable {
 
         /// Linear interpolation.
         case linear
