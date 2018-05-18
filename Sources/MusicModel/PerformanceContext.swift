@@ -13,7 +13,7 @@ public struct PerformanceContext {
     
     /// Particular `Voice` -> `Instrument` -> `Performer` path within a `PerformanceContext`
     /// hierarchy.
-    public struct Path {
+    public struct Path: Equatable, Hashable {
     
         /// `Performer.Identifier`
         public let performer: Performer.Identifier
@@ -37,7 +37,7 @@ public struct PerformanceContext {
         }
     }
     
-    public struct Scope {
+    public struct Scope: Equatable, Hashable {
         
         private let performer: Performer.Identifier?
         private let instrument: Instrument.Identifier?
@@ -122,22 +122,3 @@ extension PerformanceContext: Equatable {
     }
 }
 
-extension PerformanceContext.Path: Equatable {
-    
-    public static func == (lhs: PerformanceContext.Path, rhs: PerformanceContext.Path)
-        -> Bool
-    {
-        return (
-            lhs.performer == rhs.performer &&
-            lhs.instrument == rhs.instrument &&
-            lhs.voice == rhs.voice
-        )
-    }
-}
-
-extension PerformanceContext.Path: Hashable {
-    
-    public var hashValue: Int {
-        return performer.hashValue ^ instrument.hashValue ^ voice.hashValue
-    }
-}
