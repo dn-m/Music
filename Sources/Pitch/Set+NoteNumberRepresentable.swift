@@ -7,6 +7,8 @@
 //
 
 import Math
+import Combinatorics
+import Predicates
 
 extension Collection where Element: NoteNumberRepresentable {
 

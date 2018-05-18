@@ -5,8 +5,17 @@
         "package": "Math",
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
+          "branch": "swift-4.2",
+          "revision": "3d4ef0552caf50fa7a4096259a7b2cfcd23f33a5",
+          "version": null
+        }
+      },
+      {
+        "package": "PerformanceTesting",
+        "repositoryURL": "https://github.com/dn-m/PerformanceTesting.git",
+        "state": {
           "branch": "master",
-          "revision": "d1284e043377c0b924cba2ffa2ab0b9aa9dd246f",
+          "revision": "fc96795471fce16de0277ec0dbd0f69f5dd013d6",
           "version": null
         }
       },
@@ -14,8 +23,8 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "master",
-          "revision": "b7a980354c668b890e201b3a2159d76eaa6c32be",
+          "branch": "swift-4.2",
+          "revision": "38738dca34843673308fd90adaf28e4636a11fc6",
           "version": null
         }
       }

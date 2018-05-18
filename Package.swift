@@ -16,17 +16,17 @@ let package = Package(
         .library(name: "MusicModel", targets: ["MusicModel"])
     ],
     dependencies: [
-        .package(url: "https://github.com/dn-m/Structure", .branch("master")),
-        .package(url: "https://github.com/dn-m/Math", .branch("master"))
+        .package(url: "https://github.com/dn-m/Structure", .branch("swift-4.2")),
+        .package(url: "https://github.com/dn-m/Math", .branch("swift-4.2"))
     ],
     targets: [
 
         // Sources
         .target(name: "Articulations", dependencies: []),
-        .target(name: "Dynamics", dependencies: ["Destructure", "Structure"]),
-        .target(name: "Pitch", dependencies: ["Math", "StructureWrapping"]),
+        .target(name: "Dynamics", dependencies: ["Destructure"]),
+        .target(name: "Pitch", dependencies: ["Math", "StructureWrapping", "Combinatorics"]),
         .target(name: "Rhythm", dependencies: ["MetricalDuration"]),
-        .target(name: "MetricalDuration", dependencies: ["Math", "DataStructures", "Structure"]),
+        .target(name: "MetricalDuration", dependencies: ["Math", "DataStructures"]),
         .target(name: "Tempo", dependencies: ["Rhythm"]),
         .target(name: "Meter", dependencies: ["Rhythm", "Tempo"]),
         .target(name: "MusicModel", dependencies: [

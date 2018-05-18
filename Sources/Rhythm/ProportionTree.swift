@@ -8,7 +8,6 @@
 //
 
 import Darwin
-import Structure
 import DataStructures
 import Math
 

@@ -7,7 +7,7 @@
 //
 
 import Destructure
-import Structure
+import Predicates
 
 extension Dynamic {
     

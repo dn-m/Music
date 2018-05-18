@@ -9,6 +9,7 @@
 import XCTest
 import Restructure
 import StructureWrapping
+import Combinatorics
 import Math
 import Meter
 
