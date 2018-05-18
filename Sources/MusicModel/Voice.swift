@@ -7,7 +7,7 @@
 //
 
 /// Model of a single `Voice` in a `PerformanceContext`.
-public struct Voice {
+public struct Voice: Equatable, Hashable {
     
     /// Type of `Identifier`
     public typealias Identifier = Int
@@ -18,22 +18,5 @@ public struct Voice {
     /// Create a `Voice` with a given `identifier`.
     public init(_ identifier: Identifier) {
         self.identifier = identifier
-    }
-}
-
-extension Voice: Equatable {
-
-    // MARK: - Equatable
-
-    /// - returns: `true` if both `Voice` values are equivalent. Otherwise, `false`.
-    public static func == (lhs: Voice, rhs: Voice) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
-}
-
-extension Voice: Hashable {
-    
-    public var hashValue: Int {
-        return identifier.hashValue
     }
 }
