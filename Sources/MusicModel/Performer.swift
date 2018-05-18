@@ -9,8 +9,8 @@
 import struct Foundation.UUID
 import StructureWrapping
 
-/// Model of a signle `Performer` in a `PerformanceContext`.
-public struct Performer {
+/// Model of a single `Performer` in a `PerformanceContext`.
+public struct Performer: Equatable, Hashable {
     
     // MARK: - Associated Types
     
@@ -61,21 +61,5 @@ extension Performer: CollectionWrapping {
     
     public var base: [Instrument.Identifier: Instrument] {
         return instruments
-    }
-}
-
-extension Performer: Equatable {
-    
-    // MARK: - Equatable
-    
-    public static func == (lhs: Performer, rhs: Performer) -> Bool {
-        return lhs.instruments == rhs.instruments
-    }
-}
-
-extension Performer: Hashable {
-    
-    public var hashValue: Int {
-        return identifier.hashValue
     }
 }
