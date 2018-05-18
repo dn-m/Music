@@ -255,7 +255,7 @@ extension Model {
 extension Rhythm {
     
     var events: [T] {
-        return leaves.flatMap { leaf in
+        return leaves.compactMap { leaf in
             guard case let .instance(.event(value)) = leaf.context else { return nil }
             return value
         }
