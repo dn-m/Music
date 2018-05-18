@@ -8,7 +8,7 @@
 
 extension Dynamic {
     
-    public struct Interpolation {
+    public struct Interpolation: Equatable {
         
         public enum Direction {
             case crescendo
