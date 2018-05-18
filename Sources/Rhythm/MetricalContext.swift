@@ -8,33 +8,20 @@
 
 /// The metrical context of a given `Leaf` (i.e., whether or not the musical event is "tied"
 /// from the previous event, and whether or not is a "rest" or an actual event.
-public typealias MetricalContext <T: Equatable> = ContinuationOrInstance<AbsenceOrEvent<T>>
+public typealias MetricalContext <Element> = ContinuationOrInstance<AbsenceOrEvent<Element>>
 
 /// Whether a metrical context is "tied" over from the previous context, or if it is new
 /// instance of the generic `T`.
-public enum ContinuationOrInstance <T: Equatable> {
+public enum ContinuationOrInstance <Element> {
 
-    /// "Tied" over from previous context.
+    /// Continued ("tied") over from previous context.
     case continuation
 
-    /// New instance of generic `T`.
-    case instance(T)
+    /// New instance of generic `Element`.
+    case instance(Element)
 }
 
-extension ContinuationOrInstance: Equatable {
-
-    /// - returns: `true` if both values are equivalent. Otherwise, `false`.
-    public static func == (lhs: ContinuationOrInstance, rhs: ContinuationOrInstance) -> Bool {
-        switch (lhs, rhs) {
-        case (.continuation, .continuation):
-            return true
-        case (.instance(let a), .instance(let b)):
-            return a == b
-        default:
-            return false
-        }
-    }
-}
+extension ContinuationOrInstance: Equatable where Element: Equatable { }
 
 extension ContinuationOrInstance: CustomStringConvertible {
 
@@ -52,28 +39,16 @@ extension ContinuationOrInstance: CustomStringConvertible {
 }
 
 /// Whether a context is a "rest" or an actual event of type `T`.
-public enum AbsenceOrEvent <T: Equatable> {
+public enum AbsenceOrEvent <Element> {
 
     /// "Rest".
     case absence
 
     /// Actual event of type `T`.
-    case event(T)
+    case event(Element)
 }
 
-extension AbsenceOrEvent: Equatable {
-    /// - returns: `true` if both values are equivalent. Otherwise, `false`.
-    public static func == (lhs: AbsenceOrEvent, rhs: AbsenceOrEvent) -> Bool{
-        switch (lhs, rhs) {
-        case (.absence, .absence):
-            return true
-        case (.event(let a), .event(let b)):
-            return a == b
-        default:
-            return false
-        }
-    }
-}
+extension AbsenceOrEvent: Equatable where Element: Equatable { }
 
 extension AbsenceOrEvent: CustomStringConvertible {
 
@@ -92,7 +67,9 @@ extension AbsenceOrEvent: CustomStringConvertible {
 
 extension AbsenceOrEvent {
 
-    func map <U> (_ transform: (T) -> U) -> AbsenceOrEvent<U> {
+    /// - Returns: An `.absence` if `.absence`, otherwise an `.event` containing the `Element`
+    /// transformed by the given `transform`.
+    func map <U> (_ transform: (Element) -> U) -> AbsenceOrEvent<U> {
         switch self {
         case .absence:
             return .absence
@@ -104,7 +81,9 @@ extension AbsenceOrEvent {
 
 extension ContinuationOrInstance {
 
-    func map <U> (_ transform: (T) -> U) -> ContinuationOrInstance<U> {
+    /// - Returns: An `.continuation` if `.continuation`, otherwise an `.instance` containing the
+    /// `Element` transformed by the given `transform`.
+    func map <U> (_ transform: (Element) -> U) -> ContinuationOrInstance<U> {
         switch self {
         case .continuation:
             return .continuation
