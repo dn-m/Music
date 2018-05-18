@@ -421,10 +421,3 @@ class MeterCollectionTests: XCTestCase {
         zip(meters.base.map { $0.1 }, flattenedFragments).forEach { XCTAssertEqual($0,$1) }
     }
 }
-
-extension Array {
-
-    var random: Element {
-        return self[Int.random(min: startIndex, max: endIndex - 1)]
-    }
-}
