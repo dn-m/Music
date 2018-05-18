@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -17,15 +17,16 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", .branch("swift-4.2")),
+        .package(url: "https://github.com/dn-m/Math", .branch("swift-4.2"))
     ],
     targets: [
 
         // Sources
         .target(name: "Articulations", dependencies: []),
         .target(name: "Dynamics", dependencies: ["Destructure", "Predicates"]),
-        .target(name: "Pitch", dependencies: ["StructureWrapping", "Combinatorics"]),
+        .target(name: "Pitch", dependencies: ["Math", "StructureWrapping", "Combinatorics"]),
         .target(name: "Rhythm", dependencies: ["MetricalDuration"]),
-        .target(name: "MetricalDuration", dependencies: ["DataStructures"]),
+        .target(name: "MetricalDuration", dependencies: ["Math", "DataStructures"]),
         .target(name: "Tempo", dependencies: ["Rhythm"]),
         .target(name: "Meter", dependencies: ["Rhythm", "Tempo"]),
         .target(name: "MusicModel", dependencies: [
