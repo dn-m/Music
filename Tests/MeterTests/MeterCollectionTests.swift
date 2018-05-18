@@ -18,8 +18,8 @@ class MeterCollectionTests: XCTestCase {
     var meters: Meter.Collection {
         let builder = Meter.Collection.Builder()
         (0..<500).forEach { _ in
-            let beats = Int.random(min: 3, max: 9)
-            let subdivision = [16,8,4].random
+            let beats = Int.random(in: 3..<9)
+            let subdivision = [16,8,4].randomElement()!
             builder.add(.init(Meter(beats,subdivision)))
         }
         return builder.build()
