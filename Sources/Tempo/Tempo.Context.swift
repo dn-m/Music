@@ -11,7 +11,7 @@ import Math
 extension Tempo {
 
     /// The context of a particular point within a `Tempo.Interpolation`.
-    public struct Context {
+    public struct Context: Equatable {
 
         // MARK: - Instance Properties
 

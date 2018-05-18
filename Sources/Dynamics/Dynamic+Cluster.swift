@@ -9,7 +9,7 @@
 extension Dynamic {
     
     /// Structure of one or more `Dynamic` objects.
-    public struct Cluster {
+    public struct Cluster: Equatable {
 
         fileprivate let dynamics: [Dynamic]
 

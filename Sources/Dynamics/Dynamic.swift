@@ -12,7 +12,7 @@
  - One or more `Dynamic.Element` objects are aggregated to create a `Dynamic`.
  - One or more `Dynamic` objects are aggregated to create a `Dynamic.Cluster`.
  */
-public struct Dynamic {
+public struct Dynamic: Equatable {
 
     // MARK: - Instance Properties
 
@@ -44,16 +44,6 @@ extension Dynamic {
         }
         
         fatalError("Poorly formed Dynamic")
-    }
-}
-
-extension Dynamic: Equatable {
-    
-    // MARK: - `Equatable`
-    
-    /// - returns: `true` if two `Dynamic` values are logically equivalent. Otherwise `false`.
-    public static func == (lhs: Dynamic, rhs: Dynamic) -> Bool {
-        return lhs.integerValue == rhs.integerValue
     }
 }
 
