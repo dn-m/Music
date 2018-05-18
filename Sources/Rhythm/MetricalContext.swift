@@ -38,47 +38,6 @@ extension ContinuationOrInstance: CustomStringConvertible {
     }
 }
 
-/// Whether a context is a "rest" or an actual event of type `T`.
-public enum AbsenceOrEvent <Element> {
-
-    /// "Rest".
-    case absence
-
-    /// Actual event of type `T`.
-    case event(Element)
-}
-
-extension AbsenceOrEvent: Equatable where Element: Equatable { }
-
-extension AbsenceOrEvent: CustomStringConvertible {
-
-    // MARK: - CustomStringConvertible
-
-    /// Printed description.
-    public var description: String {
-        switch self {
-        case .absence:
-            return "<>"
-        case .event(let value):
-            return "\(value)"
-        }
-    }
-}
-
-extension AbsenceOrEvent {
-
-    /// - Returns: An `.absence` if `.absence`, otherwise an `.event` containing the `Element`
-    /// transformed by the given `transform`.
-    func map <U> (_ transform: (Element) -> U) -> AbsenceOrEvent<U> {
-        switch self {
-        case .absence:
-            return .absence
-        case .event(let value):
-            return .event(transform(value))
-        }
-    }
-}
-
 extension ContinuationOrInstance {
 
     /// - Returns: An `.continuation` if `.continuation`, otherwise an `.instance` containing the
