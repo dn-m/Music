@@ -37,7 +37,7 @@ public struct PerformanceContext {
         }
     }
     
-    public struct Scope {
+    public struct Scope: Equatable, Hashable {
         
         private let performer: Performer.Identifier?
         private let instrument: Instrument.Identifier?
