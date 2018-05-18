@@ -10,7 +10,7 @@ import Rhythm
 import MetricalDuration
 
 /// Model of a `Tempo`.
-public struct Tempo {
+public struct Tempo: Equatable {
 
     // MARK: - Associated Types
     
@@ -63,16 +63,6 @@ public struct Tempo {
         assert(subdivision.isPowerOfTwo, "Subdivision must be a power-of-two")
         let quotient = Double(subdivision) / Double(self.subdivision)
         return durationOfBeat / quotient
-    }
-}
-
-extension Tempo: Equatable {
-
-    // MARK: - Equatable
-
-    /// - returns: `true` if `Tempo` values are equivalent. Otherwise, `false`.
-    public static func == (lhs: Tempo, rhs: Tempo) -> Bool {
-        return lhs.doubleValue == rhs.doubleValue
     }
 }
 
