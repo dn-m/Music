@@ -13,7 +13,7 @@ public struct PerformanceContext {
     
     /// Particular `Voice` -> `Instrument` -> `Performer` path within a `PerformanceContext`
     /// hierarchy.
-    public struct Path: Equatable {
+    public struct Path: Equatable, Hashable {
     
         /// `Performer.Identifier`
         public let performer: Performer.Identifier
@@ -122,9 +122,3 @@ extension PerformanceContext: Equatable {
     }
 }
 
-extension PerformanceContext.Path: Hashable {
-    
-    public var hashValue: Int {
-        return performer.hashValue ^ instrument.hashValue ^ voice.hashValue
-    }
-}
