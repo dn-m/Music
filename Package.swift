@@ -23,7 +23,7 @@ let package = Package(
 
         // Sources
         .target(name: "Articulations", dependencies: []),
-        .target(name: "Dynamics", dependencies: ["Destructure"]),
+        .target(name: "Dynamics", dependencies: ["Destructure", "Predicates"]),
         .target(name: "Pitch", dependencies: ["Math", "StructureWrapping", "Combinatorics"]),
         .target(name: "Rhythm", dependencies: ["MetricalDuration"]),
         .target(name: "MetricalDuration", dependencies: ["Math", "DataStructures"]),
