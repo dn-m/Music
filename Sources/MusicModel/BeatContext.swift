@@ -12,7 +12,7 @@ import Meter
 
 // TODO: Move to `dn-m/MetronomeController`
 /// Information about a given beat within a `Meter`.
-public struct BeatContext {
+public struct BeatContext: Equatable {
 
     // MARK: - Instance Properties
 
