@@ -10,21 +10,64 @@ import Restructure
 import Math
 import MetricalDuration
 
+/// Hierachical organization of metrical durations and their metrical contexts.
 public struct Rhythm <T> {
+
+    /// Leaf item of a hierarchically-structured `Rhythm`.
+    public struct Leaf {
+
+        // MARK: - Instance Properties
+
+        /// `MetricalDuration` of `Rhythm.Leaf`.
+        public let metricalDuration: MetricalDuration
+
+        /// `MetricalContext` of `Rhythm.Leaf`
+        public let context: MetricalContext<T>
+
+        // MARK: - Initializers
+
+        /// Create a `Rhythm.Leaf` with a given `metricalDuration` and `context`.
+        public init(metricalDuration: MetricalDuration, context: MetricalContext<T>) {
+            self.metricalDuration = metricalDuration
+            self.context = context
+        }
+    }
+
+    /// Hierarchical representation of metrical durations.
     public let metricalDurationTree: MetricalDurationTree
+
+    /// Leaf items containing metrical context.
     public let leaves: [Leaf]
 }
 
 extension Rhythm {
 
+    // MARK: - Initializers
+
+    /// Create a `Rhythm` with a given `metricalDurationTree` and given `leaves`.
     public init(_ metricalDurationTree: MetricalDurationTree, _ leaves: [MetricalContext<T>]) {
         self.metricalDurationTree = metricalDurationTree
         self.leaves = zip(metricalDurationTree.leaves, leaves).map(Leaf.init)
+    }
+
+    /// Create a single-depth `Rhythm` with the given root `duration` and child `durations`, along
+    /// with the values for the leaves.
+    ///
+    /// - Precondition: `durations.count == `values.count`
+    init(_ duration: MetricalDuration, _ durations: [Int], _ values: [T]) {
+        precondition(durations.count == values.count)
+        self.init(duration * durations, values.map(event))
     }
 }
 
 extension Rhythm {
 
+    /// - Returns: `Rhythm` with each of its `event` (i.e., `.instance(.event(Element))`) values
+    /// updated by the given `transform`.
+    ///
+    /// - Each `continuation` remains so
+    /// - Each `.instance(.rest)` remains so
+    /// - Each `.instance(.event(T))` is transformed to a `.instance(.event(U))`
     public func map <U> (_ transform: @escaping (T) -> U) -> Rhythm<U> {
         return Rhythm<U>(
             metricalDurationTree: metricalDurationTree,
@@ -32,6 +75,27 @@ extension Rhythm {
         )
     }
 }
+
+extension Rhythm.Leaf {
+
+    /// - Returns: `Rhythm.Leaf` with its value updated by the given `transform`.
+    public func map <U> (_ transform: @escaping (T) -> U) -> Rhythm<U>.Leaf {
+
+        // FIXME: Extract this into func. Generics not happy.
+        var newContext: MetricalContext<U> {
+            switch context {
+            case .continuation:
+                return .continuation
+            case .instance(let instance):
+                return .instance(instance.map(transform))
+            }
+        }
+
+        return Rhythm<U>.Leaf(metricalDuration: metricalDuration, context: newContext)
+    }
+}
+
+extension Rhythm.Leaf: Equatable where T: Equatable { }
 
 public func lengths <S,T> (of rhythmTrees: S) -> [MetricalDuration]
     where S: Sequence, S.Element == Rhythm<T>
@@ -68,38 +132,6 @@ public func lengths <S,T> (of rhythmTrees: S) -> [MetricalDuration]
 
     return merge(ArraySlice(rhythmTrees.flatMap { $0.leaves }), into: [], tied: nil)
 }
-
-extension Rhythm {
-
-    /// Leaf item of a hierarchically-structured `Rhythm`.
-    public struct Leaf {
-
-        public let metricalDuration: MetricalDuration
-        public let context: MetricalContext<T>
-
-        public init(metricalDuration: MetricalDuration, context: MetricalContext<T>) {
-            self.metricalDuration = metricalDuration
-            self.context = context
-        }
-
-        public func map <U> (_ transform: @escaping (T) -> U) -> Rhythm<U>.Leaf {
-
-            // FIXME: Extract this into func. Generics not happy.
-            var newContext: MetricalContext<U> {
-                switch context {
-                case .continuation:
-                    return .continuation
-                case .instance(let instance):
-                    return .instance(instance.map(transform))
-                }
-            }
-
-            return Rhythm<U>.Leaf(metricalDuration: metricalDuration, context: newContext)
-        }
-    }
-}
-
-extension Rhythm.Leaf: Equatable where T: Equatable { }
 
 /// - returns: `RhythmTree` with the given `MetricalDurationTree` and `MetricalContext` values.
 public func * <T> (lhs: MetricalDurationTree, rhs: [MetricalContext<T>]) -> Rhythm<T> {

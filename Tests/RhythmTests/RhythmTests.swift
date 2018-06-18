@@ -12,15 +12,9 @@ import Rhythm
 class RhythmTests: XCTestCase {
     
     func testUsage() {
-        let tree = 4/>8 * [1,2,3,4,1,1]
-        let leaves: [MetricalContext<()>] = [
-            .instance(.event(())),
-            .instance(.event(())),
-            .instance(.event(())),
-            .instance(.event(())),
-            .instance(.event(())),
-            rest()
-        ]
+        let durations = [1,2,3,4,1,1]
+        let tree = 4/>8 * durations
+        let leaves = durations.map { _ in event(1) }
         let rhythm = tree * leaves
     }
 }
