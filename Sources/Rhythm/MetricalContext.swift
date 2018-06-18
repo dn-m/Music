@@ -14,10 +14,10 @@ public func tie <T> () -> MetricalContext<T> {
     return .continuation
 }
 
-public func event <T> (_ value: T) -> MetricalContext<T> {
-    return .instance(.event(value))
-}
-
 public func rest <T> () -> MetricalContext<T> {
     return .instance(.absence)
+}
+
+public func event <T> (_ value: T) -> MetricalContext<T> {
+    return .instance(.event(value))
 }

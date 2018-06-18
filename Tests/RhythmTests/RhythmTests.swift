@@ -24,6 +24,3 @@ class RhythmTests: XCTestCase {
         let rhythm = tree * leaves
     }
 }
-
-
-
