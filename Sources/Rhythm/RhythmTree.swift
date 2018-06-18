@@ -17,19 +17,19 @@ public struct Rhythm <T> {
 
 extension Rhythm {
 
-    public func map <U> (_ transform: @escaping (T) -> U) -> Rhythm<U> {
-        return Rhythm<U>(
-            metricalDurationTree: metricalDurationTree,
-            leaves: leaves.map { $0.map(transform) }
-        )
+    public init(_ metricalDurationTree: MetricalDurationTree, _ leaves: [MetricalContext<T>]) {
+        self.metricalDurationTree = metricalDurationTree
+        self.leaves = zip(metricalDurationTree.leaves, leaves).map(Leaf.init)
     }
 }
 
 extension Rhythm {
 
-    public init(_ metricalDurationTree: MetricalDurationTree, _ leaves: [MetricalContext<T>]) {
-        self.metricalDurationTree = metricalDurationTree
-        self.leaves = zip(metricalDurationTree.leaves, leaves).map(Leaf.init)
+    public func map <U> (_ transform: @escaping (T) -> U) -> Rhythm<U> {
+        return Rhythm<U>(
+            metricalDurationTree: metricalDurationTree,
+            leaves: leaves.map { $0.map(transform) }
+        )
     }
 }
 
