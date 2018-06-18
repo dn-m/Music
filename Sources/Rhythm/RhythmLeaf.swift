@@ -9,7 +9,7 @@ import MetricalDuration
 
 /// - Note: At some point, nest this within `Rhythm`, inheriting `T`. Currently, this produces
 /// "Runtime Error: cyclic metadata dependency detected, aborting" (SR-4383).
-public struct RhythmLeaf <T: Equatable> {
+public struct RhythmLeaf <T> {
 
     public let metricalDuration: MetricalDuration
     public let context: MetricalContext<T>
@@ -38,9 +38,4 @@ extension RhythmLeaf {
     }
 }
 
-extension RhythmLeaf: Equatable {
-
-    public static func == (lhs: RhythmLeaf<T>, rhs: RhythmLeaf<T>) -> Bool {
-        return lhs.metricalDuration == rhs.metricalDuration && lhs.context == rhs.context
-    }
-}
+extension RhythmLeaf: Equatable where T: Equatable { }

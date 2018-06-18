@@ -10,7 +10,7 @@ import Restructure
 import Math
 import MetricalDuration
 
-public struct Rhythm <T: Equatable> {
+public struct Rhythm <T> {
     public let metricalDurationTree: MetricalDurationTree
     public let leaves: [RhythmLeaf<T>]
 }
