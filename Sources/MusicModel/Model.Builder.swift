@@ -252,7 +252,7 @@ extension Model {
 }
 
 /// - TODO: Move to `dn-m/Rhythm`.
-extension Rhythm {
+extension Rhythm where T: Equatable {
     
     var events: [T] {
         return leaves.compactMap { leaf in
