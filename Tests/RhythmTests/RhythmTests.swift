@@ -10,7 +10,16 @@ import MetricalDuration
 import Rhythm
 
 class RhythmTests: XCTestCase {
-    
+
+    func testInitUsage() {
+        let _ = Rhythm(3/>16, [
+            (1, { print("play c natural") }),
+            (2, { print("turn on the lights") }),
+            (2, { print("make it go boom") }),
+            (4, { print("make it stoppp") })
+        ])
+    }
+
     func testLengthsAllTies() {
         let durations = 4/>8 * [1,1,1,1]
         let contexts = (0..<4).map { _ in MetricalContext<Int>.continuation }
