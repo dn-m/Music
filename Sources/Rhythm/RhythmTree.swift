@@ -59,15 +59,6 @@ extension Rhythm {
         self.init(duration * leaves.map { $0.duration}, leaves.map { $0.context} )
     }
 
-    /// Create a single-depth `Rhythm` with the given root `duration` and child `durations`, along
-    /// with the values for the leaves.
-    ///
-    /// - Precondition: `durations.count == `values.count`
-    public init(_ duration: MetricalDuration, _ durations: [Int], _ values: [T]) {
-        precondition(durations.count == values.count)
-        self.init(duration * durations, values.map(event))
-    }
-
     /// Create an isochronic `Rhythm` with the given `duration` and the given `contexts`.
     public init(_ duration: MetricalDuration, _ contexts: [MetricalContext<T>]) {
         self.init(duration * contexts.map { _ in 1 }, contexts)
