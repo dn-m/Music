@@ -11,12 +11,32 @@ import Rhythm
 
 class RhythmTests: XCTestCase {
 
-    func testInitUsage() {
+    func testInitWithDurationAndValueTupleUsage() {
         let _ = Rhythm(3/>16, [
-            (1, { print("play c natural") }),
-            (2, { print("turn on the lights") }),
-            (2, { print("make it go boom") }),
-            (4, { print("make it stoppp") })
+            (1, event({ print("play c natural") })),
+            (2, event({ print("turn on the lights") })),
+            (2, event({ print("make it go boom") })),
+            (4, event({ print("make it stoppp") }))
+        ])
+    }
+
+    func testInitWithDurationAndContextTupleUsage() {
+        let _ = Rhythm(5/>32, [
+            (1, event("ta")),
+            (1, rest()),
+            (1, event("di")),
+            (1, tie()),
+            (1, event("ti"))
+        ])
+    }
+
+    func testInitWithDurationAndContextsUsage() {
+        let _ = Rhythm(1/>4, [
+            event("yup"),
+            event("mhmm"),
+            event("yeah"),
+            event("ok"),
+            event("fine"),
         ])
     }
 

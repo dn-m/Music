@@ -50,6 +50,15 @@ extension Rhythm {
         self.leaves = zip(metricalDurationTree.leaves, leaves).map(Leaf.init)
     }
 
+    /// Create a `Rhythm` with a given `duration` and `leaves.
+    public init(
+        _ duration: MetricalDuration,
+        _ leaves: [(duration: Int, context: MetricalContext<T>)]
+    )
+    {
+        self.init(duration * leaves.map { $0.duration}, leaves.map { $0.context} )
+    }
+
     /// Create a single-depth `Rhythm` with the given root `duration` and child `durations`, along
     /// with the values for the leaves.
     ///
@@ -59,10 +68,9 @@ extension Rhythm {
         self.init(duration * durations, values.map(event))
     }
 
-    /// Create a single-depth `Rhythm` with the given root `duration` and an array of leaf values,
-    /// composed of relative durational value and value.
-    public init(_ duration: MetricalDuration, _ leaves: [(duration: Int, value: T)]) {
-        self.init(duration * leaves.map { $0.duration }, leaves.map { event($0.value) })
+    /// Create an isochronic `Rhythm` with the given `duration` and the given `contexts`.
+    public init(_ duration: MetricalDuration, _ contexts: [MetricalContext<T>]) {
+        self.init(duration * contexts.map { _ in 1 }, contexts)
     }
 }
 
