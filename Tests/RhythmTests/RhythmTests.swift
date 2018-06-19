@@ -41,10 +41,8 @@ class RhythmTests: XCTestCase {
     }
 
     func testLengthsAllTies() {
-        let durations = 4/>8 * [1,1,1,1]
-        let contexts = (0..<4).map { _ in MetricalContext<Int>.continuation }
-        let rhythmTree = Rhythm(durations, contexts)
-        XCTAssertEqual(lengths(of: [rhythmTree]), [4/>8])
+        let rhythm = Rhythm<Int>(4/>8, (0..<4).map { _ in tie() })
+        XCTAssertEqual(lengths(of: [rhythm]), [4/>8])
     }
 
     func testLengthsTiesAndEvents() {
