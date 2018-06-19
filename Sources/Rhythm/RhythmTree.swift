@@ -54,9 +54,15 @@ extension Rhythm {
     /// with the values for the leaves.
     ///
     /// - Precondition: `durations.count == `values.count`
-    init(_ duration: MetricalDuration, _ durations: [Int], _ values: [T]) {
+    public init(_ duration: MetricalDuration, _ durations: [Int], _ values: [T]) {
         precondition(durations.count == values.count)
         self.init(duration * durations, values.map(event))
+    }
+
+    /// Create a single-depth `Rhythm` with the given root `duration` and an array of leaf values,
+    /// composed of relative durational value and value.
+    public init(_ duration: MetricalDuration, _ leaves: [(duration: Int, value: T)]) {
+        self.init(duration * leaves.map { $0.duration }, leaves.map { event($0.value) })
     }
 }
 
@@ -97,7 +103,8 @@ extension Rhythm.Leaf {
 
 extension Rhythm.Leaf: Equatable where T: Equatable { }
 
-public func lengths <S,T> (of rhythmTrees: S) -> [MetricalDuration]
+/// - Returns: The `MetricalDuration` values of the leaves of the given `rhythms`.
+public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
     where S: Sequence, S.Element == Rhythm<T>
 {
     func merge(
@@ -130,7 +137,7 @@ public func lengths <S,T> (of rhythmTrees: S) -> [MetricalDuration]
         }
     }
 
-    return merge(ArraySlice(rhythmTrees.flatMap { $0.leaves }), into: [], tied: nil)
+    return merge(ArraySlice(rhythms.flatMap { $0.leaves }), into: [], tied: nil)
 }
 
 /// - returns: `RhythmTree` with the given `MetricalDurationTree` and `MetricalContext` values.
