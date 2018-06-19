@@ -111,7 +111,8 @@ extension Rhythm.Leaf {
 
 extension Rhythm.Leaf: Equatable where T: Equatable { }
 
-/// - Returns: The `MetricalDuration` values of the leaves of the given `rhythms`.
+/// - Returns: The `MetricalDuration` values of the leaves of the given `rhythms`, by merging
+/// `tied` leaves to their predecesors.
 public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
     where S: Sequence, S.Element == Rhythm<T>
 {
