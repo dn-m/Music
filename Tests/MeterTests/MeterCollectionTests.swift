@@ -7,9 +7,7 @@
 //
 
 import XCTest
-import Restructure
-import StructureWrapping
-import Combinatorics
+import DataStructures
 import Math
 import Meter
 

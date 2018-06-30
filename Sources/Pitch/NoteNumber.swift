@@ -7,7 +7,7 @@
 //
 
 import Darwin
-import StructureWrapping
+import DataStructures
 
 /**
  MIDI NoteNumber.

@@ -6,7 +6,7 @@
 //
 //
 
-import StructureWrapping
+import DataStructures
 
 /// - TODO: Add instrument specifications (`vn`, `vc`, `tpt`, `bfl cl`, etc.)
 /// - TODO: Add rich naming `(Name(long:, short:)`)

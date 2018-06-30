@@ -6,7 +6,7 @@
 //
 //
 import XCTest
-import StructureWrapping
+import DataStructures
 import Math
 @testable import Tempo
 

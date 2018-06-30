@@ -7,7 +7,7 @@
 //
 
 import struct Foundation.UUID
-import StructureWrapping
+import DataStructures
 
 /// Model of a single `Performer` in a `PerformanceContext`.
 public struct Performer: Equatable, Hashable {

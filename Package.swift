@@ -23,22 +23,24 @@ let package = Package(
 
         // Sources
         .target(name: "Articulations", dependencies: []),
-        .target(name: "Dynamics", dependencies: ["Destructure", "Predicates"]),
-        .target(name: "Pitch", dependencies: ["Math", "StructureWrapping", "Combinatorics"]),
+        .target(name: "Dynamics", dependencies: ["Destructure", "DataStructures"]),
+        .target(name: "Pitch", dependencies: ["Math", "DataStructures"]),
         .target(name: "Rhythm", dependencies: ["MetricalDuration"]),
         .target(name: "MetricalDuration", dependencies: ["Math", "DataStructures"]),
         .target(name: "Tempo", dependencies: ["Rhythm"]),
         .target(name: "Meter", dependencies: ["Rhythm", "Tempo"]),
-        .target(name: "MusicModel", dependencies: [
-            "Algebra",
-            "StructureWrapping",
-            "DataStructures",
-            "Articulations",
-            "Pitch",
-            "Rhythm",
-            "Tempo",
-            "Meter"
-        ]),
+        .target(
+            name: "MusicModel", 
+            dependencies: [
+                "Algebra",
+                "DataStructures",
+                "Articulations",
+                "Pitch",
+                "Rhythm",
+                "Tempo",
+                "Meter"
+            ]
+        ),
 
         // Tests
         .testTarget(name: "ArticulationsTests", dependencies: ["Articulations"]),

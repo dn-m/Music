@@ -6,9 +6,8 @@
 //  Copyright © 2017 James Bean. All rights reserved.
 //
 
+import DataStructures
 import Math
-import Combinatorics
-import Predicates
 
 extension Collection where Element: NoteNumberRepresentable {
 
