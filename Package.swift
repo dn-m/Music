@@ -17,7 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", from: "0.3.0"),
-        .package(url: "https://github.com/dn-m/Math", from: "0.1.0")
+        .package(url: "https://github.com/dn-m/Math", from: "0.1.3")
     ],
     targets: [
 
