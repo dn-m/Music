@@ -10,7 +10,7 @@ import MetricalDuration
 
 extension Meter {
 
-    public struct Context {
+    public struct Context: Equatable {
 
         public let meter: Meter.Fragment
         public let offset: MetricalDuration

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import StructureWrapping
+import DataStructures
 @testable import Pitch
 
 class PitchClassTests: XCTestCase {

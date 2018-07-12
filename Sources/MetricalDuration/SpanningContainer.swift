@@ -9,8 +9,6 @@
 // FIXME: Move to `dn-m/Structure`
 
 import Algebra
-import StructureWrapping
-import Restructure
 import DataStructures
 import Math
 

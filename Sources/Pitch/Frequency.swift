@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import StructureWrapping
+import DataStructures
 
 /// Periodic vibration in Hertz.
 public struct Frequency: DoubleWrapping {

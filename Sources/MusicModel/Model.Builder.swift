@@ -252,10 +252,10 @@ extension Model {
 }
 
 /// - TODO: Move to `dn-m/Rhythm`.
-extension Rhythm {
+extension Rhythm where T: Equatable {
     
     var events: [T] {
-        return leaves.flatMap { leaf in
+        return leaves.compactMap { leaf in
             guard case let .instance(.event(value)) = leaf.context else { return nil }
             return value
         }

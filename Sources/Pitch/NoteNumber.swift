@@ -7,7 +7,7 @@
 //
 
 import Darwin
-import StructureWrapping
+import DataStructures
 
 /**
  MIDI NoteNumber.
@@ -22,7 +22,7 @@ public struct NoteNumber: DoubleWrapping {
      - TODO: Implement `inRange: _` or similar.
      */
     public static func random(resolution: Double = 1) -> NoteNumber {
-        return NoteNumber(Double.random(min: 60, max: 72))
+        return NoteNumber(Double.random(in: 60..<72))
     }
     
     // MARK: - Instance Properties

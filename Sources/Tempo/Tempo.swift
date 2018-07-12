@@ -10,7 +10,7 @@ import Rhythm
 import MetricalDuration
 
 /// Model of a `Tempo`.
-public struct Tempo {
+public struct Tempo: Equatable {
 
     // MARK: - Associated Types
     
@@ -66,16 +66,6 @@ public struct Tempo {
     }
 }
 
-extension Tempo: Equatable {
-
-    // MARK: - Equatable
-
-    /// - returns: `true` if `Tempo` values are equivalent. Otherwise, `false`.
-    public static func == (lhs: Tempo, rhs: Tempo) -> Bool {
-        return lhs.doubleValue == rhs.doubleValue
-    }
-}
-
 // FIXME: Move to own file (Tempo.Interpolation) when Swift compiler build-order bug resolved.
 import Darwin
 import Math
@@ -83,7 +73,7 @@ import Math
 extension Tempo {
 
     /// Interpolation between two `Tempo` values.
-    public struct Interpolation: MetricalDurationSpanning {
+    public struct Interpolation: Equatable, MetricalDurationSpanning {
 
         // MARK: Instance Properties
 
@@ -283,7 +273,7 @@ import DataStructures
 extension Tempo.Interpolation {
 
     /// Easing of `Interpolation`.
-    public enum Easing {
+    public enum Easing: Equatable {
 
         /// Linear interpolation.
         case linear

@@ -7,8 +7,7 @@
 //
 
 import XCTest
-import Restructure
-import StructureWrapping
+import DataStructures
 import Math
 import Meter
 
@@ -17,8 +16,8 @@ class MeterCollectionTests: XCTestCase {
     var meters: Meter.Collection {
         let builder = Meter.Collection.Builder()
         (0..<500).forEach { _ in
-            let beats = Int.random(min: 3, max: 9)
-            let subdivision = [16,8,4].random
+            let beats = Int.random(in: 3..<9)
+            let subdivision = [16,8,4].randomElement()!
             builder.add(.init(Meter(beats,subdivision)))
         }
         return builder.build()
@@ -418,12 +417,5 @@ class MeterCollectionTests: XCTestCase {
         XCTAssertEqual(fragments.count, 66)
         XCTAssertEqual(meters.base.count, flattenedFragments.count)
         zip(meters.base.map { $0.1 }, flattenedFragments).forEach { XCTAssertEqual($0,$1) }
-    }
-}
-
-extension Array {
-
-    var random: Element {
-        return self[Int.random(min: startIndex, max: endIndex - 1)]
     }
 }

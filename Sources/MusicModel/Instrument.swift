@@ -6,11 +6,11 @@
 //
 //
 
-import StructureWrapping
+import DataStructures
 
 /// - TODO: Add instrument specifications (`vn`, `vc`, `tpt`, `bfl cl`, etc.)
 /// - TODO: Add rich naming `(Name(long:, short:)`)
-public struct Instrument {
+public struct Instrument: Equatable, Hashable {
     
     // MARK: - Associated Types
     
@@ -51,19 +51,5 @@ extension Instrument: CollectionWrapping {
     
     public var base: [Voice.Identifier: Voice] {
         return voices
-    }
-}
-
-extension Instrument: Equatable {
-    
-    public static func == (lhs: Instrument, rhs: Instrument) -> Bool {
-        return lhs.voices == rhs.voices
-    }
-}
-
-extension Instrument: Hashable {
-    
-    public var hashValue: Int {
-        return identifier.hashValue
     }
 }

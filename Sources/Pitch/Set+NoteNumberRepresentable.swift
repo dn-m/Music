@@ -6,6 +6,7 @@
 //  Copyright © 2017 James Bean. All rights reserved.
 //
 
+import DataStructures
 import Math
 
 extension Collection where Element: NoteNumberRepresentable {

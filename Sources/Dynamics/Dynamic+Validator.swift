@@ -7,7 +7,7 @@
 //
 
 import Destructure
-import Structure
+import DataStructures
 
 extension Dynamic {
     
