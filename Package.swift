@@ -16,8 +16,8 @@ let package = Package(
         .library(name: "MusicModel", targets: ["MusicModel"])
     ],
     dependencies: [
-        .package(url: "https://github.com/dn-m/Structure", .branch("swift-4.2")),
-        .package(url: "https://github.com/dn-m/Math", .branch("swift-4.2"))
+        .package(url: "https://github.com/dn-m/Structure", from: "0.3.0"),
+        .package(url: "https://github.com/dn-m/Math", from: "0.1.0")
     ],
     targets: [
 
