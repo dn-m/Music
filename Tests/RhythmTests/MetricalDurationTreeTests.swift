@@ -31,7 +31,6 @@ class MetricalDurationTreeTests: XCTestCase {
             .leaf(2/>16),
             .leaf(3/>16)
         ])
-
         XCTAssertEqual(result, expected)
     }
 
@@ -51,7 +50,6 @@ class MetricalDurationTreeTests: XCTestCase {
             .leaf(4/>64),
             .leaf(6/>64)
         ])
-
         XCTAssertEqual(result, expected)
     }
 
