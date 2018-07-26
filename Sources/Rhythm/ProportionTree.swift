@@ -132,6 +132,11 @@ extension Tree where Branch == Int, Leaf == Int {
 
 extension Tree where Branch == Int, Leaf == Int {
 
+    /// Create a single-depth `ProportionTree` with the given root `duration` and child `durations`.
+    public init(_ duration: Int, _ durations: [Int]) {
+        self = Tree.branch(duration, durations.map(Tree.leaf)).normalized
+    }
+
     /// Create an arbitrarily-nested `ProportionTree` with an array.
     ///
     /// Modeled after OpenMusic's `RhythmTree` notation.
