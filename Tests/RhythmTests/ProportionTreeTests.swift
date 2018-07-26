@@ -118,16 +118,12 @@ class ProportionTreeTests: XCTestCase {
 	}
 
     func testmatchingParentsToChildrenSingleDepthUp() {
-
         let tree = Tree.branch(1, [.leaf(8),.leaf(3)])
-
         XCTAssertEqual(tree.matchingParentsToChildren.value, 8)
     }
 
     func testMatchParentsVeryNestedMultipleCases() {
-
         let result = veryNested.reducingSiblings.matchingParentsToChildren
-
         let expected = Tree.branch(8, [
             .branch(4, [
                 .branch(2, [
@@ -158,12 +154,10 @@ class ProportionTreeTests: XCTestCase {
                 ])
             ])
         ])
-
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testNormalizeVeryNested() {
-
         let expected = Tree.branch(512, [
             .branch(128, [
                 .branch(64, [
@@ -194,13 +188,11 @@ class ProportionTreeTests: XCTestCase {
                 ])
             ])
         ])
-
         let result = veryNested.normalized
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testNormalizedNested() {
-
         let tree = Tree.branch(1, [
             .branch(2, [
                 .leaf(3),
@@ -216,7 +208,6 @@ class ProportionTreeTests: XCTestCase {
                 .leaf(1)
             ])
         ])
-
         let expected = Tree.branch(32, [
             .branch(8, [
                 .leaf(6),
@@ -232,39 +223,28 @@ class ProportionTreeTests: XCTestCase {
                 .leaf(2)
             ])
         ])
-
-        XCTAssert(tree.normalized == expected)
+        XCTAssertEqual(tree.normalized, expected)
     }
 
     func testNormalizeSingleDepth() {
-
-        let tree = Tree.branch(5, [
-            .leaf(1),
-            .leaf(1)
-        ])
-
+        let tree = Tree.branch(5, [.leaf(1), .leaf(1)])
         XCTAssertEqual(tree.normalized.leaves, [2,2])
     }
 
     func testNormalizeSingleDepthBranchOfSingleLeafOf3() {
-
         let tree = Tree.branch(3, [.leaf(3)])
         let normalizedTree = tree.normalized
-
-        XCTAssert(tree == normalizedTree)
+        XCTAssertEqual(tree, normalizedTree)
     }
 
     func testScaleSimple() {
-
         let tree = ProportionTree(1,[1,1,1])
-
         let value = Fraction(2,3)
         let expected = Tree<Fraction,Fraction>.branch(1, [
             .leaf(value),
             .leaf(value),
             .leaf(value)
         ])
-
-        XCTAssert(tree.scaling == expected)
+        XCTAssertEqual(tree.scaling, expected)
     }
 }
