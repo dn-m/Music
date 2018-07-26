@@ -22,9 +22,9 @@ extension Dynamic {
             
             switch head {
             case .niente:
-                return tail.isEmpty
+                return Array(tail).isEmpty
             case .mezzo:
-                return tail == [.forte] || tail == [.piano]
+                return Array(tail) == [.forte] || Array(tail) == [.piano]
             default:
                 return tail.isHomogeneous
             }

@@ -168,14 +168,14 @@ extension Tree where Branch == Int, Leaf == Int {
             case let value as Leaf:
 
                 // Input: `[T]`
-                if tail.isEmpty {
+                if Array(tail).isEmpty {
                     return .branch(value, branch.map(traverse))
                 }
 
                 // Input: `[T, [...]]`
                 guard
-                    tail.count == 1,
-                    let children = tail.first as? [Any]
+                    Array(tail).count == 1,
+                    let children = Array(tail).first as? [Any]
                 else {
                     fatalError("Ill-formed nested array")
                 }
