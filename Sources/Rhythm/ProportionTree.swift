@@ -155,13 +155,13 @@ extension Tree where Branch == Int, Leaf == Int {
     fileprivate var propagated: DistanceTree {
 
         /// Propagate up and accumulate the maximum of the sums of children values
-        func propagateUp(_ tree: DistanceTree) -> DistanceTree {
+        func propagatedUp(_ tree: DistanceTree) -> DistanceTree {
             
             guard case .branch(let value, let trees) = tree else {
                 return tree
             }
 
-            let newTrees = trees.map(propagateUp)
+            let newTrees = trees.map(propagatedUp)
             let max = newTrees.map { $0.value }.max()!
             return .branch(value + max, newTrees)
         }
@@ -202,7 +202,7 @@ extension Tree where Branch == Int, Leaf == Int {
             return propagatedUp
         }
 
-        let propagatedUp = propagateUp(self)
+        let propagatedUp = propagatedUp(self)
         return propagateDown(self, propagatedUp, inherited: nil)
     }
 }
