@@ -277,7 +277,7 @@ class ProportionTreeTests: XCTestCase {
 
     func testScaleSimple() {
 
-        let tree = ProportionTree([1,[1,1,1]])
+        let tree = ProportionTree(1,[1,1,1])
 
         let value = Fraction(2,3)
         let expected = Tree<Fraction,Fraction>.branch(1, [

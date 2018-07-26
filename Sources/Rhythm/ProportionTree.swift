@@ -136,73 +136,11 @@ extension Tree where Branch == Int, Leaf == Int {
     public init(_ duration: Int, _ durations: [Int]) {
         self = Tree.branch(duration, durations.map(Tree.leaf)).normalized
     }
-
-    /// Create an arbitrarily-nested `ProportionTree` with an array.
-    ///
-    /// Modeled after OpenMusic's `RhythmTree` notation.
-    ///
-    /// A single-depth tree looks like this:
-    ///
-    ///     let singleDepth = [1, [1,2,3]]
-    ///
-    /// A multi-depth tree looks like this:
-    ///
-    ///     let multiDepth = [1, [1,[2,[1,2,[3,[1,2,3]]]],3]]
-    ///
-    /// Good luck.
-    public init(_ value: [Any]) {
-
-        func traverse(_ value: Any) -> ProportionTree {
-
-            // Input: `T`
-            if let leaf = value as? Leaf {
-                return .leaf(leaf)
-            }
-
-            // Input: `[Any]`
-            guard
-                let branch = value as? [Any],
-                let (head, tail) = branch.destructured
-            else {
-                fatalError("Ill-formed nested array")
-            }
-
-            switch head {
-
-            // Input: `[T, ...]`
-            case let value as Leaf:
-
-                // Input: `[T]`
-                if Array(tail).isEmpty {
-                    return .branch(value, branch.map(traverse))
-                }
-
-                // Input: `[T, [...]]`
-                guard
-                    Array(tail).count == 1,
-                    let children = Array(tail).first as? [Any]
-                else {
-                    fatalError("Ill-formed nested array")
-                }
-
-                return .branch(value, children.map(traverse))
-
-            // Input: `[[T ... ], ... ]`
-            case let branch as [Any]:
-                return traverse(branch)
-
-            default:
-                fatalError("Ill-formed nested array")
-            }
-        }
-
-        self = traverse(value).normalized
-    }
 }
 
 /// Create a single-depth `ProportionTree` with the given root `duration` and child `durations`.
 public func * (duration: Int, durations: [Int]) -> ProportionTree {
-    return ProportionTree(duration,durations)
+    return ProportionTree.init(duration,durations)
 }
 
 /// Tree recording the change (in degree of power-of-two) needed to normalize a 
