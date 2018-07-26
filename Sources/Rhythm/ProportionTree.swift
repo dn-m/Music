@@ -32,33 +32,14 @@ extension Tree where Branch == Int, Leaf == Int {
         return traverse(self, accum: 1)
     }
     
-    /// - returns: A new `ProportionTree` in which the value of each node can be represented
+    /// - Returns: A new `ProportionTree` in which the value of each node can be represented
     /// with the same subdivision-level (denominator).
     public var normalized: ProportionTree {
-
-        // Pre-processing
-
-        // Reduce each level of children by their `gcd`
         let siblingsReduced = reducingSiblings
-
-        // Match parent values to the closest power-of-two to the sum of their children values.
         let parentsMatched = siblingsReduced.matchingParentsToChildren
-
-        // Generate a tree which contains the values necessary to multiply each node of a
-        // `reduced` tree to properly match the values in a `parentsMatched` tree.
         let distances = zip(siblingsReduced, parentsMatched, encodeDistance).propagated
-
-        // Processing
-
-        /// Multiply each value in `siblingsReduced` by the corrosponding multiplier in the
-        /// `ProportionTree`.
         let updatedTree = zip(siblingsReduced, distances, decodeDuration)
-
-        // Post-processing
-
-        /// Ensure there are no leaves dangling unmatched to their parents.
         let childrenMatched = updatedTree.matchingChildrenToParents
-
         return childrenMatched
     }
     
