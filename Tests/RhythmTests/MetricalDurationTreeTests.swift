@@ -25,16 +25,14 @@ class MetricalDurationTreeTests: XCTestCase {
     }
 
     func testInitSubdivisionOperator() {
-
-        let result = 16 * [[1,[1,2,3]]]
-
+        let result = MetricalDurationTree(16, ProportionTree(1,[1,2,3]))
         let expected = MetricalDurationTree.branch(4/>16, [
             .leaf(1/>16),
             .leaf(2/>16),
             .leaf(3/>16)
         ])
 
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testInitMetricalDuration() {
