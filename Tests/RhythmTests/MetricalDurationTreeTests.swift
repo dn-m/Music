@@ -54,16 +54,13 @@ class MetricalDurationTreeTests: XCTestCase {
     }
 
     func testInitMetricalDurationProportionTreeOperator() {
-
-        let result = 17/>64 * [1,[1,2,3]]
-
+        let result = MetricalDurationTree(17/>64, ProportionTree(1,[1,2,3]))
         let expected = MetricalDurationTree.branch(17/>64, [
             .leaf(2/>64),
             .leaf(4/>64),
             .leaf(6/>64)
         ])
-
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testInitEmptyArray() {
