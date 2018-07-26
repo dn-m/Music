@@ -107,11 +107,11 @@ extension Rhythm.Leaf: Equatable where T: Equatable { }
 public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
     where S: Sequence, S.Element == Rhythm<T>
 {
-    func merge(
-        _ leaves: ArraySlice<Rhythm<T>.Leaf>,
+    func merge <S> (
+        _ leaves: S,
         into accum: [MetricalDuration],
         tied: MetricalDuration?
-    ) -> [MetricalDuration]
+    ) -> [MetricalDuration] where S: Sequence, S.Element == Rhythm<T>.Leaf
     {
         guard let (leaf, remaining) = leaves.destructured else { return accum + tied }
 
