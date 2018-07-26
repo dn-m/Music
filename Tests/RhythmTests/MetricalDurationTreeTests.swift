@@ -64,7 +64,6 @@ class MetricalDurationTreeTests: XCTestCase {
     }
 
     func testInitEmptyArray() {
-
         let tree = 3/>16 * []
 
         guard case .branch(let duration, let trees) = tree else {

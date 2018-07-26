@@ -76,8 +76,8 @@ extension Tree where Branch == MetricalDuration, Leaf == MetricalDuration {
 }
 
 /// - returns: A `MetricalDurationTree` with the given `subdivision` applied to each node.
-public func * (_ subdivision: Int, proportions: [Any]) -> MetricalDurationTree {
-    return MetricalDurationTree(subdivision, ProportionTree(proportions))
+public func * (_ subdivision: Int, proportions: [Int]) -> MetricalDurationTree {
+    return MetricalDurationTree(subdivision, ProportionTree(subdivision,proportions))
 }
 
 /// - returns: A `MetricalDurationTree` with the given `metricalDuration` as the value of the
