@@ -200,6 +200,11 @@ extension Tree where Branch == Int, Leaf == Int {
     }
 }
 
+/// Create a single-depth `ProportionTree` with the given root `duration` and child `durations`.
+public func * (duration: Int, durations: [Int]) -> ProportionTree {
+    return ProportionTree(duration,durations)
+}
+
 /// Tree recording the change (in degree of power-of-two) needed to normalize a 
 /// `ProprtionTree`.
 private typealias DistanceTree = Tree<Int,Int>
