@@ -12,13 +12,12 @@ import DataStructures
 import Math
 
 /// Similar to the proportional aspect of the `OpenMusic` `Rhythm Tree` structure.
-public typealias ProportionTree = Tree<Int, Int>
+public typealias ProportionTree = Tree<Int,Int>
 
 extension Tree where Branch == Int, Leaf == Int {
 
-    /// - returns: `Tree` containing the inherited scale of each node contained herein.
+    /// - Returns: `Tree` containing the inherited scale of each node contained herein.
     public var scaling: Tree<Fraction, Fraction> {
-
         func traverse(_ tree: ProportionTree, accum: Fraction) -> Tree<Fraction, Fraction> {
             switch tree {
             case .leaf:
@@ -33,33 +32,14 @@ extension Tree where Branch == Int, Leaf == Int {
         return traverse(self, accum: 1)
     }
     
-    /// - returns: A new `ProportionTree` in which the value of each node can be represented
+    /// - Returns: A new `ProportionTree` in which the value of each node can be represented
     /// with the same subdivision-level (denominator).
     public var normalized: ProportionTree {
-
-        // Pre-processing
-
-        // Reduce each level of children by their `gcd`
         let siblingsReduced = reducingSiblings
-
-        // Match parent values to the closest power-of-two to the sum of their children values.
         let parentsMatched = siblingsReduced.matchingParentsToChildren
-
-        // Generate a tree which contains the values necessary to multiply each node of a
-        // `reduced` tree to properly match the values in a `parentsMatched` tree.
         let distances = zip(siblingsReduced, parentsMatched, encodeDistance).propagated
-
-        // Processing
-
-        /// Multiply each value in `siblingsReduced` by the corrosponding multiplier in the
-        /// `ProportionTree`.
         let updatedTree = zip(siblingsReduced, distances, decodeDuration)
-
-        // Post-processing
-
-        /// Ensure there are no leaves dangling unmatched to their parents.
         let childrenMatched = updatedTree.matchingChildrenToParents
-
         return childrenMatched
     }
     
@@ -68,13 +48,11 @@ extension Tree where Branch == Int, Leaf == Int {
     ///
     /// - note: In the case of parents with a single child, no reduction occurs.
     internal var reducingSiblings: ProportionTree {
-
         func reduced(_ trees: [ProportionTree]) -> [ProportionTree] {
             let values = trees.map { $0.value }
             let reduced = values.map { $0 / values.gcd }
             return zip(trees, reduced).map { $0.updating(value: $1) }
         }
-
         guard case .branch(let value, let trees) = self, trees.count > 1 else { return self }
         return .branch(value, reduced(trees).map { $0.reducingSiblings } )
     }
@@ -87,14 +65,12 @@ extension Tree where Branch == Int, Leaf == Int {
     /// - Parent is required scaled _up_ to match the sum of its children
     /// - Parent is required scaled _down_ to match the sum of its children
     internal var matchingParentsToChildren: ProportionTree {
-
         func updateDuration(_ original: Int, _ children: [ProportionTree]) -> Int {
             let relativeDurations = children.map { $0.value }
             let sum = relativeDurations.sum
             let coefficient = original >> countTrailingZeros(original)
             return closestPowerOfTwo(coefficient: coefficient, to: sum)!
         }
-
         guard case .branch(let duration, let trees) = self else { return self }
         let newDuration = updateDuration(duration, trees)
         return .branch(newDuration, trees.map { $0.matchingParentsToChildren })
@@ -132,67 +108,15 @@ extension Tree where Branch == Int, Leaf == Int {
 
 extension Tree where Branch == Int, Leaf == Int {
 
-    /// Create an arbitrarily-nested `ProportionTree` with an array.
-    ///
-    /// Modeled after OpenMusic's `RhythmTree` notation.
-    ///
-    /// A single-depth tree looks like this:
-    ///
-    ///     let singleDepth = [1, [1,2,3]]
-    ///
-    /// A multi-depth tree looks like this:
-    ///
-    ///     let multiDepth = [1, [1,[2,[1,2,[3,[1,2,3]]]],3]]
-    ///
-    /// Good luck.
-    public init(_ value: [Any]) {
-
-        func traverse(_ value: Any) -> ProportionTree {
-
-            // Input: `T`
-            if let leaf = value as? Leaf {
-                return .leaf(leaf)
-            }
-
-            // Input: `[Any]`
-            guard
-                let branch = value as? [Any],
-                let (head, tail) = branch.destructured
-            else {
-                fatalError("Ill-formed nested array")
-            }
-
-            switch head {
-
-            // Input: `[T, ...]`
-            case let value as Leaf:
-
-                // Input: `[T]`
-                if Array(tail).isEmpty {
-                    return .branch(value, branch.map(traverse))
-                }
-
-                // Input: `[T, [...]]`
-                guard
-                    Array(tail).count == 1,
-                    let children = Array(tail).first as? [Any]
-                else {
-                    fatalError("Ill-formed nested array")
-                }
-
-                return .branch(value, children.map(traverse))
-
-            // Input: `[[T ... ], ... ]`
-            case let branch as [Any]:
-                return traverse(branch)
-
-            default:
-                fatalError("Ill-formed nested array")
-            }
-        }
-
-        self = traverse(value).normalized
+    /// Create a single-depth `ProportionTree` with the given root `duration` and child `durations`.
+    public init(_ duration: Int, _ durations: [Int]) {
+        self = Tree.branch(duration, durations.map(Tree.leaf)).normalized
     }
+}
+
+/// Create a single-depth `ProportionTree` with the given root `duration` and child `durations`.
+public func * (duration: Int, durations: [Int]) -> ProportionTree {
+    return ProportionTree.init(duration,durations)
 }
 
 /// Tree recording the change (in degree of power-of-two) needed to normalize a 
@@ -207,13 +131,9 @@ extension Tree where Branch == Int, Leaf == Int {
     fileprivate var propagated: DistanceTree {
 
         /// Propagate up and accumulate the maximum of the sums of children values
-        func propagateUp(_ tree: DistanceTree) -> DistanceTree {
-            
-            guard case .branch(let value, let trees) = tree else {
-                return tree
-            }
-
-            let newTrees = trees.map(propagateUp)
+        func propagatedUp(_ tree: DistanceTree) -> DistanceTree {
+            guard case .branch(let value, let trees) = tree else { return tree }
+            let newTrees = trees.map(propagatedUp)
             let max = newTrees.map { $0.value }.max()!
             return .branch(value + max, newTrees)
         }
@@ -223,38 +143,27 @@ extension Tree where Branch == Int, Leaf == Int {
         /// along between levels.
         ///
         /// - note: Need to make inherited optional? // this smells
-        func propagateDown(
-            _ original: DistanceTree,
-            _ propagatedUp: DistanceTree,
-            inherited: Int?
-        ) -> DistanceTree
+        func propagatedDown(_ original: DistanceTree, _ propagatedUp: DistanceTree, inherited: Int?)
+            -> DistanceTree
         {
-
             switch (original, propagatedUp) {
-
             // If we are leaf,
             case (.leaf, .leaf):
                 return .leaf(inherited!)
-
             // Replace value with inherited (if present), or already propagated
             case (.branch(let original, let oTrees), .branch(let propagated, let pTrees)):
-
                 let value = inherited ?? propagated
                 let subTrees = zip(oTrees, pTrees).map { o, p in
-                    propagateDown(o, p, inherited: value - original)
+                    propagatedDown(o, p, inherited: value - original)
                 }
-
                 return .branch(value, subTrees)
-
             // Enforce same-shaped trees
             default:
                 fatalError("Incompatible trees")
             }
-
             return propagatedUp
         }
 
-        let propagatedUp = propagateUp(self)
-        return propagateDown(self, propagatedUp, inherited: nil)
+        return propagatedDown(self, propagatedUp(self), inherited: nil)
     }
 }

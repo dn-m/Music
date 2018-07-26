@@ -76,16 +76,8 @@ extension Tree where Branch == MetricalDuration, Leaf == MetricalDuration {
 }
 
 /// - returns: A `MetricalDurationTree` with the given `subdivision` applied to each node.
-public func * (_ subdivision: Int, proportions: [Any]) -> MetricalDurationTree {
-    return MetricalDurationTree(subdivision, ProportionTree(proportions))
-}
-
-/// - returns: A `MetricalDurationTree` with the given `metricalDuration` as the value of the
-/// root node, and the given `proportions` scaled appropriately.
-public func * (_ metricalDuration: MetricalDuration, _ proportions: [Any])
-    -> MetricalDurationTree
-{
-    return MetricalDurationTree(metricalDuration, ProportionTree(proportions))
+public func * (_ subdivision: Int, proportions: [Int]) -> MetricalDurationTree {
+    return MetricalDurationTree(subdivision, ProportionTree(subdivision,proportions))
 }
 
 /// - returns: A single-depth `MetricalDurationTree` with the given `metricalDuration` as the 
@@ -102,6 +94,6 @@ public func * (_ metricalDuration: MetricalDuration, _ proportions: [Int])
     }
 
     let beats = metricalDuration.numerator
-    let proportionTree = ProportionTree([beats, proportions])
+    let proportionTree = ProportionTree(beats, proportions)
     return MetricalDurationTree(metricalDuration, proportionTree)
 }

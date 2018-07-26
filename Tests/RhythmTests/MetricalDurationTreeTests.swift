@@ -15,37 +15,32 @@ import Rhythm
 class MetricalDurationTreeTests: XCTestCase {
 
     func testInitSubdivisionAndProportionTree() {
-
-        let proportionTree = ProportionTree([1,[1,2,3]])
-        let result = MetricalDurationTree(16, proportionTree)
-
+        let result = MetricalDurationTree(16, ProportionTree(1, [1,2,3]))
         let expected = MetricalDurationTree.branch(4/>16, [
             .leaf(1/>16),
             .leaf(2/>16),
             .leaf(3/>16)
         ])
-
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testInitSubdivisionOperator() {
-
-        let result = 16 * [[1,[1,2,3]]]
-
+        let result = MetricalDurationTree(16, ProportionTree(1,[1,2,3]))
         let expected = MetricalDurationTree.branch(4/>16, [
             .leaf(1/>16),
             .leaf(2/>16),
             .leaf(3/>16)
         ])
-
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testInitMetricalDuration() {
-
-        let proportionTree = ProportionTree([1,[[1,[1,1,1]],2,3]])
+        let proportionTree: ProportionTree = .branch(1, [
+            .branch(1, [.leaf(1), .leaf(1), .leaf(1)]),
+            .leaf(2),
+            .leaf(3)
+        ])
         let result = MetricalDurationTree(5/>32, proportionTree)
-
         let expected = MetricalDurationTree.branch(10/>64, [
             .branch(2/>64, [
                 .leaf(1/>64),
@@ -55,25 +50,20 @@ class MetricalDurationTreeTests: XCTestCase {
             .leaf(4/>64),
             .leaf(6/>64)
         ])
-
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testInitMetricalDurationProportionTreeOperator() {
-
-        let result = 17/>64 * [1,[1,2,3]]
-
+        let result = MetricalDurationTree(17/>64, ProportionTree(1,[1,2,3]))
         let expected = MetricalDurationTree.branch(17/>64, [
             .leaf(2/>64),
             .leaf(4/>64),
             .leaf(6/>64)
         ])
-
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testInitEmptyArray() {
-
         let tree = 3/>16 * []
 
         guard case .branch(let duration, let trees) = tree else {
@@ -147,11 +137,5 @@ class MetricalDurationTreeTests: XCTestCase {
     func testLeafOffsets() {
         let tree = 1/>8 * [1,1,1]
         XCTAssertEqual(tree.offsets, [Fraction(0,1), Fraction(1,24), Fraction(1,12)])
-    }
-
-    func testScaled() {
-        let tree = 4/>4 * [1,[1,[2,[1,1,1]],1,1]]
-        let scaled = tree.scaled
-        print(scaled)
     }
 }
