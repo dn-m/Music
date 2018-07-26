@@ -14,7 +14,6 @@ import Math
 class ProportionTreeTests: XCTestCase {
 
     var veryNested: Tree<Int,Int> {
-
         return Tree.branch(1, [
             .branch(2, [
                 .branch(16, [
@@ -52,18 +51,15 @@ class ProportionTreeTests: XCTestCase {
     }
 
     func testReducedSingleDepth() {
-
         let tree = Tree.branch(1, [
             .leaf(2),
             .leaf(4),
             .leaf(6)
         ])
-
         XCTAssertEqual(tree.reducingSiblings.leaves, [1,2,3])
     }
 
     func testReducedNested() {
-
         let tree = Tree.branch(1, [
             .leaf(2),
             .branch(4, [
@@ -73,14 +69,11 @@ class ProportionTreeTests: XCTestCase {
             ]),
             .leaf(8)
         ])
-
         XCTAssertEqual(tree.reducingSiblings.leaves, [1,3,1,2,4])
     }
 
     func testReducedVeryNested() {
-
         let result = veryNested.reducingSiblings
-
         let expected = Tree.branch(1, [
             .branch(2, [
                 .branch(2, [
@@ -111,36 +104,22 @@ class ProportionTreeTests: XCTestCase {
                 ])
             ])
         ])
-
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testmatchingParentsToChildrenSingleDepthDownTwo() {
-
-        let tree = Tree.branch(6, [
-            .leaf(1),
-            .leaf(1)
-        ])
-
+        let tree = Tree.branch(6, [.leaf(1), .leaf(1)])
         XCTAssertEqual(tree.matchingParentsToChildren.value, 3)
     }
 
 	func testmatchingParentsToChildrenSingleDepthDownThree() {
-
-		let tree = Tree.branch(6, [
-			.leaf(1),
-			.leaf(2)
-			])
-
+		let tree = Tree.branch(6, [.leaf(1),.leaf(2)])
 		XCTAssertEqual(tree.matchingParentsToChildren.value, 3)
 	}
 
     func testmatchingParentsToChildrenSingleDepthUp() {
 
-        let tree = Tree.branch(1, [
-            .leaf(8),
-            .leaf(3)
-        ])
+        let tree = Tree.branch(1, [.leaf(8),.leaf(3)])
 
         XCTAssertEqual(tree.matchingParentsToChildren.value, 8)
     }

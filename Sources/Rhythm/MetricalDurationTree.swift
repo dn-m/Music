@@ -80,14 +80,6 @@ public func * (_ subdivision: Int, proportions: [Int]) -> MetricalDurationTree {
     return MetricalDurationTree(subdivision, ProportionTree(subdivision,proportions))
 }
 
-/// - returns: A `MetricalDurationTree` with the given `metricalDuration` as the value of the
-/// root node, and the given `proportions` scaled appropriately.
-public func * (_ metricalDuration: MetricalDuration, _ proportions: [Any])
-    -> MetricalDurationTree
-{
-    return MetricalDurationTree(metricalDuration, ProportionTree(proportions))
-}
-
 /// - returns: A single-depth `MetricalDurationTree` with the given `metricalDuration` as the 
 /// value of the root node, and the given `proportions` mapped accordingly as the children.
 ///
