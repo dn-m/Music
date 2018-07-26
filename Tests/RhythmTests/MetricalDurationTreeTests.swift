@@ -36,10 +36,12 @@ class MetricalDurationTreeTests: XCTestCase {
     }
 
     func testInitMetricalDuration() {
-
-        let proportionTree = ProportionTree([1,[[1,[1,1,1]],2,3]])
+        let proportionTree: ProportionTree = .branch(1, [
+            .branch(1, [.leaf(1), .leaf(1), .leaf(1)]),
+            .leaf(2),
+            .leaf(3)
+        ])
         let result = MetricalDurationTree(5/>32, proportionTree)
-
         let expected = MetricalDurationTree.branch(10/>64, [
             .branch(2/>64, [
                 .leaf(1/>64),
@@ -50,7 +52,7 @@ class MetricalDurationTreeTests: XCTestCase {
             .leaf(6/>64)
         ])
 
-        XCTAssert(result == expected)
+        XCTAssertEqual(result, expected)
     }
 
     func testInitMetricalDurationProportionTreeOperator() {
