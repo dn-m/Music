@@ -12,7 +12,7 @@ import DataStructures
 import Math
 
 /// Similar to the proportional aspect of the `OpenMusic` `Rhythm Tree` structure.
-public typealias ProportionTree = Tree<Int, Int>
+public typealias ProportionTree = Tree<Int,Int>
 
 extension Tree where Branch == Int, Leaf == Int {
 
