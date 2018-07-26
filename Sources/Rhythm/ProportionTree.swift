@@ -171,11 +171,8 @@ extension Tree where Branch == Int, Leaf == Int {
         /// along between levels.
         ///
         /// - note: Need to make inherited optional? // this smells
-        func propagatedDown(
-            _ original: DistanceTree,
-            _ propagatedUp: DistanceTree,
-            inherited: Int?
-        ) -> DistanceTree
+        func propagatedDown(_ original: DistanceTree, _ propagatedUp: DistanceTree, inherited: Int?)
+            -> DistanceTree
         {
 
             switch (original, propagatedUp) {
