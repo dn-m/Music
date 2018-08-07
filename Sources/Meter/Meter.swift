@@ -104,13 +104,26 @@ extension Meter.Collection: Equatable { }
 
 extension Meter.Collection {
 
+    /// Stateful building of a `Meter.Collection`.
     public final class Builder: MetricalDurationSpanningContainerBuilder {
 
+        // MARK: - Associated Types
+
+        /// The end product of this `Meter.Collection.Builder`.
         public typealias Product = Meter.Collection
 
+        // MARK: - Instance Properties
+
+        /// The value which will ultimately be the underlying storage of a `Meter.Collection`.
         public var intermediate: SortedDictionary<Fraction,Meter.Fragment>
+
+        /// The accumulating offset of `Fraction` keys.
         public var offset: Fraction
 
+        // MARK: - Initializers
+
+        /// Create an empty `Meter.Collection.Builder` ready to help you build up a
+        /// `Meter.Collection`.
         public init() {
             self.intermediate = [:]
             self.offset = .zero
