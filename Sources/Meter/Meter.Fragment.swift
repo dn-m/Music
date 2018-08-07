@@ -11,7 +11,7 @@ import MetricalDuration
 
 extension Meter {
 
-    public struct Fragment: MetricalDurationSpanningFragment, Equatable {
+    public struct Fragment: MetricalDurationSpanningFragment {
 
         public typealias Metric = Fraction
         public typealias Fragment = Meter.Fragment
@@ -41,3 +41,6 @@ extension Meter.Fragment {
         self.range = .zero ..< Fraction(meter)
     }
 }
+
+
+extension Meter.Fragment: Equatable { }

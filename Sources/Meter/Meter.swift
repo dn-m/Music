@@ -100,12 +100,7 @@ extension Meter {
     }
 }
 
-extension Meter.Collection: Equatable {
-
-    public static func == (lhs: Meter.Collection, rhs: Meter.Collection) -> Bool {
-        return lhs.base == rhs.base
-    }
-}
+extension Meter.Collection: Equatable { }
 
 extension Meter.Collection {
 
