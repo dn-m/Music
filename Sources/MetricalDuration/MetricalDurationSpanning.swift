@@ -8,4 +8,5 @@
 
 import Math
 
+/// Interface for types which span over a `Fraction`.
 public protocol MetricalDurationSpanning: Spanning where Metric == Fraction { }
