@@ -20,7 +20,7 @@ public struct BeatContext: Equatable {
     public var metricalOffset: MetricalDuration {
         let rangeOffsetFraction = meterContext.meter.range.lowerBound
         let rangeOffset = rangeOffsetFraction.numerator /> rangeOffsetFraction.denominator
-        return meterContext.offset + offset - rangeOffset
+        return MetricalDuration(meterContext.offset.numerator, meterContext.offset.denominator) + offset - rangeOffset
     }
 
     /// Meter containing `BeatContext`.

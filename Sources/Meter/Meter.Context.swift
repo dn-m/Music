@@ -6,16 +6,16 @@
 //
 //
 
-import MetricalDuration
+import Math
 
 extension Meter {
 
     public struct Context: Equatable {
 
         public let meter: Meter.Fragment
-        public let offset: MetricalDuration
+        public let offset: Fraction
 
-        public init(meter: Meter.Fragment, at offset: MetricalDuration) {
+        public init(meter: Meter.Fragment, at offset: Fraction) {
             self.meter = meter
             self.offset = offset
         }
