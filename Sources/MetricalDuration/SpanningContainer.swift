@@ -25,12 +25,12 @@ public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fra
     // MARK: - Instance Properties
 
     /// Backing storage of spanners.
-    var base: SortedDictionary<Spanner.Metric,Spanner> { get }
+    var base: SortedDictionary<Metric,Spanner> { get }
 
     // MARK: - Initializers
 
     /// Creates a `SpanningContainer` with a pre-built internal representation of spanners.
-    init(_: SortedDictionary<Spanner.Metric,Spanner>)
+    init(_: SortedDictionary<Metric,Spanner>)
 
     /// Creates a `SpanningContainer` with a sequence of spanners.
     init <S> (_: S) where S: Sequence, S.Iterator.Element == Spanner
