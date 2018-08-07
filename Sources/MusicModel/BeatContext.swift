@@ -16,7 +16,7 @@ public struct BeatContext: Equatable {
 
     // MARK: - Instance Properties
 
-    /// - returns: Metrical offset from start of a `Meter.Structure`.
+    /// - Returns: Metrical offset from start of a `Meter.Structure`.
     public var metricalOffset: MetricalDuration {
         let rangeOffsetFraction = meterContext.meter.range.lowerBound
         let rangeOffset = rangeOffsetFraction.numerator /> rangeOffsetFraction.denominator
@@ -42,4 +42,3 @@ public struct BeatContext: Equatable {
         self.offset = offset
     }
 }
-
