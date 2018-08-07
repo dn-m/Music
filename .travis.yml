@@ -11,3 +11,8 @@ install:
 script:
   - swift build
   - swift test
+after_success: 
+  - git clone https://github.com/dn-m/Documentarian && cd Documentarian
+  - swift build -c release -Xswiftc -static-stdlib
+  - cd ../
+  - Documentarian/.build/Release/Documentarian
