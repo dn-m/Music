@@ -6,5 +6,6 @@
 //
 //
 
+/// Interface for types which contain contiguous spans of `Fraction`-spanning elements.
 public protocol MetricalDurationSpanningContainer: SpanningContainer
     where Spanner: MetricalDurationSpanningFragment { }

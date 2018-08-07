@@ -6,6 +6,5 @@
 //
 //
 
-/// Interface for `SpanningContainerBuilder`-types whose spanners are measures by 
-/// `MetricalDuration`.
+/// Interface for `SpanningContainerBuilder`-types whose elements spen over `Fraction` values.
 public protocol MetricalDurationSpanningContainerBuilder: SpanningContainerBuilder { }

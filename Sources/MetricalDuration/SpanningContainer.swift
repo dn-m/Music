@@ -13,8 +13,9 @@ import DataStructures
 import Math
 
 /// Interface for values that contain a sequence of `SpanningFragment` type values.
-// FIXME: Use constrained associated types in Swift 4
-public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fragmentable {
+public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fragmentable
+    where Spanner == Spanner.Fragment, Metric == Spanner.Metric
+{
 
     // MARK: - Associated Types
 
@@ -24,12 +25,12 @@ public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fra
     // MARK: - Instance Properties
 
     /// Backing storage of spanners.
-    var base: SortedDictionary<Spanner.Metric,Spanner> { get }
+    var base: SortedDictionary<Metric,Spanner> { get }
 
     // MARK: - Initializers
 
     /// Creates a `SpanningContainer` with a pre-built internal representation of spanners.
-    init(_: SortedDictionary<Spanner.Metric,Spanner>)
+    init(_: SortedDictionary<Metric,Spanner>)
 
     /// Creates a `SpanningContainer` with a sequence of spanners.
     init <S> (_: S) where S: Sequence, S.Iterator.Element == Spanner
@@ -44,9 +45,6 @@ extension SpanningContainer {
     public subscript(range: CountableClosedRange<Int>) -> [Spanner] {
         return range.map { base.values[$0] }
     }
-}
-
-extension SpanningContainer where Spanner == Spanner.Fragment, Metric == Spanner.Metric {
 
     /// Length of `SpanningContainer`.
     public var length: Metric {
