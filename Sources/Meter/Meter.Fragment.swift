@@ -14,10 +14,6 @@ extension Meter {
     /// A fragment of a `Meter`. Wrapping a `base` meter along with the `range` of the fragment.
     public struct Fragment: MetricalDurationSpanningFragment {
 
-        // MARK: - Associated Types
-        public typealias Metric = Fraction
-        public typealias Fragment = Meter.Fragment
-
         // MARK: - Instance Properties
 
         /// The meter of which this is a fragment.
