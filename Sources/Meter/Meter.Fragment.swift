@@ -11,19 +11,34 @@ import MetricalDuration
 
 extension Meter {
 
+    /// A fragment of a `Meter`. Wrapping a `base` meter along with the `range` of the fragment.
     public struct Fragment: MetricalDurationSpanningFragment {
 
+        // MARK: - Associated Types
         public typealias Metric = Fraction
         public typealias Fragment = Meter.Fragment
+
+        // MARK: - Instance Properties
 
         public let base: Meter
         public let range: Range<Fraction>
 
+        // MARK: - Initializers
+
+        /// Create a `Meter.Fragment` of the given `meter` in the given `range`.
         // FIXME: Add range sanitation.
         public init(_ meter: Meter, in range: Range<Fraction>? = nil) {
             self.base = meter
             self.range = range ?? .zero ..< Fraction(meter)
         }
+
+        /// Create a `Meter.Fragment` which encompasses the totality of the given `Meter`.
+        public init(_ meter: Meter) {
+            self.base = meter
+            self.range = .zero ..< Fraction(meter)
+        }
+
+        // MARK: - Subscripts
 
         /// - Returns: `Interpolation.Fragment` in the given `range`.
         public subscript (range: Range<Fraction>) -> Meter.Fragment {
@@ -33,14 +48,5 @@ extension Meter {
         }
     }
 }
-
-extension Meter.Fragment {
-
-    public init(_ meter: Meter) {
-        self.base = meter
-        self.range = .zero ..< Fraction(meter)
-    }
-}
-
 
 extension Meter.Fragment: Equatable { }
