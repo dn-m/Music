@@ -20,7 +20,10 @@ extension Meter {
 
         // MARK: - Instance Properties
 
+        /// The meter of which this is a fragment.
         public let base: Meter
+
+        /// The range of the fragment in the base meter.
         public let range: Range<Fraction>
 
         // MARK: - Initializers
