@@ -14,7 +14,7 @@ public struct Meter: Rational {
 
     // MARK: - Instance Properties
 
-    /// - returns: Array of `MetricalDuration` offsets of each beat in a meter.
+    /// - Returns: Array of `MetricalDuration` offsets of each beat in a meter.
     public var beatOffsets: [MetricalDuration] {
         return (0..<numerator).map { beat in MetricalDuration(beat, denominator) }
     }
@@ -37,13 +37,17 @@ public struct Meter: Rational {
 
 extension Meter: MetricalDurationSpanning {
 
-    /// - returns: The `MetricalDuration` of the `Meter`.
+    // MARK: - MetricalDurationSpanning
+
+    /// - Returns: The `MetricalDuration` of the `Meter`.
     public var length: Fraction {
         return Fraction(self)
     }
 }
 
 extension Meter: Fragmentable {
+
+    // MARK: - Fragmentable
 
     /// - Returns: `Meter.Fragment`
     public subscript(range: Range<Fraction>) -> Fragment {
@@ -66,20 +70,30 @@ import DataStructures
 
 extension Meter {
 
+    /// A dictionary-like collections with `Meter.Fragment` values indexed by `Fraction` keys`.
     public struct Collection: SpanningContainer {
+
+        // MARK: - Associated Types
 
         public typealias Metric = Fraction
 
+        // MARK: - Instance Properties
+
         public let base: SortedDictionary<Fraction,Meter.Fragment>
 
+        // MARK: - Initializers
+
+        /// Create a `Meter.Collection` with the given `base`.
         public init(_ base: SortedDictionary<Fraction, Meter.Fragment>) {
             self.base = base
         }
 
+        /// Create a `Meter.Collection` with the given `base`.
         public init <S> (_ base: S) where S: Sequence, S.Iterator.Element == Meter.Fragment {
             self = Builder().add(base).build()
         }
 
+        /// Create a `Meter.Collection` with the given `base`.
         public init <S> (_ base: S) where S: Sequence, S.Iterator.Element == Meter {
             self.init(base.map(Meter.Fragment.init))
         }
