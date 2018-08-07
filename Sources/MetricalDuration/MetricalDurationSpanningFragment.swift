@@ -6,4 +6,5 @@
 //
 //
 
+/// Interface for types which are fragments of `Fraction`-spanning types.
 public protocol MetricalDurationSpanningFragment: SpanningFragment, MetricalDurationSpanning { }
