@@ -73,7 +73,7 @@ extension Pitch.Class {
     ///
     ///     let pcs: Pitch.Class.Collection = [8,0,4,6]
     ///     let inversion = pcs.inversion // => [4,0,8,6]
-    ///     let retrograde = pcs.inversion // => [6,4,0,8]
+    ///     let retrograde = retrograde // => [6,4,0,8]
     ///     let normalForm = pcs.normalForm // => [4,6,8,0]
     ///     let primeForm = pcs.primeForm // => [0,2,4,8]
     ///
