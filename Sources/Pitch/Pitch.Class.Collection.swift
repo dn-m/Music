@@ -131,17 +131,6 @@ extension Collection where Element == Pitch.Class.Collection {
     }
 }
 
-func mostCompact(_ values: [Pitch.Class.Collection]) -> [Pitch.Class.Collection] {
-    return values.extrema(property: { $0.span }, areInIncreasingOrder: <)
-}
-
-// TODO: Return array or arrays, not single array (dont call `.first!` at end)
-func mostLeftPacked(_ values: [[Pitch.Class]]) -> [Pitch.Class] {
-    assert(!values.isEmpty)
-    guard values.count > 1 else { return values.first! }
-    return values.sorted { $0.intervals.lexicographicallyPrecedes($1.intervals) }.first!
-}
-
 extension Collection where Element: NoteNumberRepresentable {
 
     public var intervals: [OrderedInterval<Element>] {
