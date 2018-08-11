@@ -61,6 +61,22 @@ extension Pitch.Class {
 
 extension Pitch.Class {
 
+    /// A non-empty collection of `Pitch.Class` elements.
+    ///
+    /// *Example Usage*
+    ///
+    /// Create a `Pitch.Class.Collection` with an array literal of integer literals.
+    ///
+    ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
+    ///
+    /// Perform post-tonal theoretical operations on a `Pitch.Class.Collection`.
+    ///
+    ///     let pcs: Pitch.Class.Collection = [8,0,4,6]
+    ///     let inversion = pcs.inversion // => [4,0,8,6]
+    ///     let retrograde = pcs.inversion // => [6,4,0,8]
+    ///     let normalForm = pcs.normalForm // => [4,6,8,0]
+    ///     let primeForm = pcs.primeForm // => [0,2,4,8]
+    ///
     public struct Collection: RandomAccessCollectionWrapping {
 
         // MARK: - Instance Properties
