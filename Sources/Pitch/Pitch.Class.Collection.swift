@@ -122,12 +122,13 @@ extension Pitch.Class.Collection: ExpressibleByArrayLiteral {
 }
 
 extension Collection where Element == Pitch.Class.Collection {
+
     var mostCompact: [Pitch.Class.Collection] {
         return extrema(property: { $0.span }, areInIncreasingOrder: <)
     }
 
     var mostLeftPacked: Pitch.Class.Collection {
-        return sorted { $0.intervals.lexicographicallyPrecedes($1.intervals) }.first!
+        return self.min { $0.intervals.lexicographicallyPrecedes($1.intervals) }!
     }
 }
 
