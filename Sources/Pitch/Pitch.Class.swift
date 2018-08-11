@@ -26,7 +26,7 @@ extension Pitch {
 
         // MARK: - Initializers
 
-        //// Create a `Pitch.Class` with a given `noteNumber`.
+        /// Create a `Pitch.Class` with a given `noteNumber`.
         public init(noteNumber: NoteNumber) {
             self.noteNumber = NoteNumber(mod(noteNumber.value, 12))
         }
