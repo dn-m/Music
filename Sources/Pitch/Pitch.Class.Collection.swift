@@ -20,6 +20,14 @@ extension Pitch.Class {
             return base.rotations.map(Collection.init)
         }
 
+        /// - Returns: The most "left-packed" (i.e., smaller intervals toward the beginning) of the
+        /// `normalForm` and the `normalForm` of the `inversion`.
+        ///
+        /// *Example Usage*
+        ///
+        ///     let pcs: Pitch.Class.Collection = [8,0,4,6]
+        ///     let primeForm = pcs.primeForm // => [0,2,4,8]
+        ///
         public var primeForm: Collection {
             return [normalForm, inversion.normalForm].mostLeftPacked.reduced
         }
@@ -30,7 +38,7 @@ extension Pitch.Class {
         /// *Example Usage*
         ///
         ///     let pcs: Pitch.Class.Collection = [8,0,4,6]
-        ///     let normalForm = pcs.normalForm // => [0,2,4,8]
+        ///     let normalForm = pcs.normalForm // => [4,6,8,0]
         ///
         public var normalForm: Collection {
             return sorted().rotations.mostCompact.mostLeftPacked
