@@ -24,9 +24,18 @@ extension Pitch.Class {
             return [normalForm, inversion.normalForm].mostLeftPacked.reduced
         }
 
+        /// - Returns: The the most compactly ordered representation of this
+        /// `Pitch.Class.Collection`.
+        ///
+        /// *Example Usage*
+        ///
+        ///     let pcs: Pitch.Class.Collection = [8,0,4,6]
+        ///     let normalForm = pcs.normalForm // => [0,2,4,8]
+        ///
         public var normalForm: Collection {
             return sorted().rotations.mostCompact.mostLeftPacked
         }
+
 
         public var reduced: Collection {
             return map { $0 - first! }
