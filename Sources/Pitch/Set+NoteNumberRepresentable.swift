@@ -11,11 +11,11 @@ import Math
 
 extension Collection where Element: NoteNumberRepresentable {
 
-    public var intervals: [OrderedInterval<Iterator.Element>] {
+    public var intervals: [OrderedInterval<Element>] {
         return pairs.map(OrderedInterval.init)
     }
 
-    public var dyads: [Dyad<Iterator.Element>] {
+    public var dyads: [Dyad<Element>] {
         return subsets(cardinality: 2).map(Dyad.init)
     }
 }

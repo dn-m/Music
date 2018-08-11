@@ -33,7 +33,7 @@ public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fra
     init(_: SortedDictionary<Metric,Spanner>)
 
     /// Creates a `SpanningContainer` with a sequence of spanners.
-    init <S> (_: S) where S: Sequence, S.Iterator.Element == Spanner
+    init <S> (_: S) where S: Sequence, S.Element == Spanner
 }
 
 extension SpanningContainer {

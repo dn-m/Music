@@ -89,12 +89,12 @@ extension Meter {
         }
 
         /// Create a `Meter.Collection` with the given `base`.
-        public init <S> (_ base: S) where S: Sequence, S.Iterator.Element == Meter.Fragment {
+        public init <S> (_ base: S) where S: Sequence, S.Element == Meter.Fragment {
             self = Builder().add(base).build()
         }
 
         /// Create a `Meter.Collection` with the given `base`.
-        public init <S> (_ base: S) where S: Sequence, S.Iterator.Element == Meter {
+        public init <S> (_ base: S) where S: Sequence, S.Element == Meter {
             self.init(base.map(Meter.Fragment.init))
         }
     }
