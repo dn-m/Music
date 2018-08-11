@@ -117,6 +117,17 @@ extension Pitch.Class {
             return map { $0.inversion }
         }
 
+        /// - Returns: The retrograde of this `Pitch.Class.Collection`.
+        ///
+        /// *Example Usage*
+        ///
+        ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
+        ///     let retrograde = webern24.retrograde // => [10,2,1,6,5,9,7,8,4,3,11,0]
+        ///
+        public var retrograde: Collection {
+            return Collection(reversed())
+        }
+
         /// - Returns: The distance between the highest and lowest elements.
         public var span: Pitch.Class {
             return last! - first!
