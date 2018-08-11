@@ -137,7 +137,7 @@ public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
         }
     }
 
-    return merge(ArraySlice(rhythms.flatMap { $0.leaves }), into: [], tied: nil)
+    return merge(rhythms.flatMap { $0.leaves }, into: [], tied: nil)
 }
 
 /// - returns: `RhythmTree` with the given `MetricalDurationTree` and `MetricalContext` values.
