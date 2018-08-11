@@ -16,6 +16,13 @@ extension Pitch.Class {
 
         // MARK: - Instance Properties
 
+        /// - Returns: Each of the possible rotations for the given `Pitch.Class.Collection`.
+        ///
+        /// *Example Usage*
+        ///
+        ///     let pcs: Pitch.Class.Collection = [8,0,2,4]
+        ///     let rotations = pcs.rotations // [[8,0,2,4],[0,2,4,8],[2,4,8,0],[4,8,0,2]]
+        ///
         public var rotations: [Collection] {
             return base.rotations.map(Collection.init)
         }
@@ -44,7 +51,8 @@ extension Pitch.Class {
             return sorted().rotations.mostCompact.mostLeftPacked
         }
 
-
+        /// - Returns: A `Pitch.Class.Collection` in which each element is lowered by the amount
+        /// of the first element (and thereby making the first element `0`).
         public var reduced: Collection {
             return map { $0 - first! }
         }
@@ -60,6 +68,7 @@ extension Pitch.Class {
             return map { $0.inversion }
         }
 
+        /// - Returns: The distance between the highest and lowest elements.
         public var span: Pitch.Class {
             let sorted = self.sorted()
             return sorted.last! - sorted.first!
