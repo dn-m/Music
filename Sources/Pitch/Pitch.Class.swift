@@ -11,7 +11,8 @@ import DataStructures
 
 extension Pitch {
 
-    public struct Class: NoteNumberRepresentable, PitchConvertible {
+    /// A `Pitch` viewed within a modulo-12 space.
+    public struct Class: NoteNumberRepresentable {
 
         // MARK: - Instance Properties
 
@@ -29,31 +30,31 @@ extension Pitch {
         public init(noteNumber: NoteNumber) {
             self.noteNumber = NoteNumber(mod(noteNumber.value, 12))
         }
+    }
+}
 
-        // MARK: - `PitchConvertible`
+extension Pitch.Class: PitchConvertible {
 
-        /**
-         Create a `Pitch.Class` with a `Pitch` object.
+    // MARK: - PitchConvertible
 
-         **Example:**
-
-         ```
-         let pitch = Pitch(noteNumber: 65.5)
-         Pitch.Class(pitch) // => 5.5
-         ```
-         */
-        public init(_ pitch: Pitch) {
-            self.init(noteNumber: pitch.noteNumber)
-        }
+    /// Create a `Pitch.Class` with a `Pitch` value.
+    ///
+    ///     let pitch = Pitch(noteNumber: 65.5)
+    ///     let pitchClass = Pitch.Class(pitch) // => 5.5
+    ///
+    public init(_ pitch: Pitch) {
+        self.init(noteNumber: pitch.noteNumber)
     }
 }
 
 extension Pitch.Class {
 
+    /// - Returns: The sum of two `Pitch.Class` values.
     public static func + (lhs: Pitch.Class, rhs: Pitch.Class) -> Pitch.Class {
         return Pitch.Class(noteNumber: NoteNumber(lhs.noteNumber.value + rhs.noteNumber.value))
     }
 
+    /// - Returns: The difference between two `Pitch.Class` values.
     public static func - (lhs: Pitch.Class, rhs: Pitch.Class) -> Pitch.Class {
         return Pitch.Class(noteNumber: NoteNumber(lhs.noteNumber.value - rhs.noteNumber.value))
     }
@@ -63,7 +64,7 @@ extension Pitch.Class {
 
     /// A non-empty collection of `Pitch.Class` elements.
     ///
-    /// *Example Usage*
+    /// **Example Usage**
     ///
     /// Create a `Pitch.Class.Collection` with an array literal of integer literals.
     ///
@@ -83,7 +84,7 @@ extension Pitch.Class {
 
         /// - Returns: Each of the possible rotations for the given `Pitch.Class.Collection`.
         ///
-        /// *Example Usage*
+        /// **Example Usage**
         ///
         ///     let pcs: Pitch.Class.Collection = [8,0,2,4]
         ///     let rotations = pcs.rotations // [[8,0,2,4],[0,2,4,8],[2,4,8,0],[4,8,0,2]]
@@ -95,7 +96,7 @@ extension Pitch.Class {
         /// - Returns: The most "left-packed" (i.e., smaller intervals toward the beginning) of the
         /// `normalForm` and the `normalForm` of the `inversion`.
         ///
-        /// *Example Usage*
+        /// **Example Usage**
         ///
         ///     let pcs: Pitch.Class.Collection = [8,0,4,6]
         ///     let primeForm = pcs.primeForm // => [0,2,4,8]
@@ -107,7 +108,7 @@ extension Pitch.Class {
         /// - Returns: The the most compactly ordered representation of this
         /// `Pitch.Class.Collection`.
         ///
-        /// *Example Usage*
+        /// **Example Usage**
         ///
         ///     let pcs: Pitch.Class.Collection = [8,0,4,6]
         ///     let normalForm = pcs.normalForm // => [4,6,8,0]
@@ -124,7 +125,7 @@ extension Pitch.Class {
 
         /// - Returns: The inversion of this `Pitch.Class.Collection`.
         ///
-        /// *Example Usage*
+        /// **Example Usage**
         ///
         ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
         ///     let inversion = webern24.inversion // => [0,4,5,1,2,3,9,11,8,10,6,7]
@@ -135,7 +136,7 @@ extension Pitch.Class {
 
         /// - Returns: The retrograde of this `Pitch.Class.Collection`.
         ///
-        /// *Example Usage*
+        /// **Example Usage**
         ///
         ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
         ///     let retrograde = webern24.retrograde // => [10,2,1,6,5,9,7,8,4,3,11,0]
@@ -156,7 +157,7 @@ extension Pitch.Class {
 
         /// Create a `Pitch.Class.Collection` with the given `pitchClasses`.
         ///
-        /// *Example Usage*
+        /// **Example Usage**
         ///
         ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
         ///     let webern27: Pitch.Class.Collection = [0,8,7,11,10,9,3,1,4,2,6,5]
