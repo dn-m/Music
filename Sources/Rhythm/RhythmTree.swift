@@ -11,7 +11,7 @@ import Math
 import MetricalDuration
 
 /// Hierachical organization of metrical durations and their metrical contexts.
-public struct Rhythm <T> {
+public struct Rhythm <Element> {
 
     /// Leaf item of a hierarchically-structured `Rhythm`.
     public struct Leaf {
@@ -22,12 +22,12 @@ public struct Rhythm <T> {
         public let metricalDuration: MetricalDuration
 
         /// `MetricalContext` of `Rhythm.Leaf`
-        public let context: MetricalContext<T>
+        public let context: MetricalContext<Element>
 
         // MARK: - Initializers
 
         /// Create a `Rhythm.Leaf` with a given `metricalDuration` and `context`.
-        public init(metricalDuration: MetricalDuration, context: MetricalContext<T>) {
+        public init(metricalDuration: MetricalDuration, context: MetricalContext<Element>) {
             self.metricalDuration = metricalDuration
             self.context = context
         }
@@ -45,7 +45,7 @@ extension Rhythm {
     // MARK: - Initializers
 
     /// Create a `Rhythm` with a given `metricalDurationTree` and given `leaves`.
-    public init(_ metricalDurationTree: MetricalDurationTree, _ leaves: [MetricalContext<T>]) {
+    public init(_ metricalDurationTree: MetricalDurationTree, _ leaves: [MetricalContext<Element>]) {
         self.metricalDurationTree = metricalDurationTree
         self.leaves = zip(metricalDurationTree.leaves, leaves).map(Leaf.init)
     }
@@ -53,14 +53,14 @@ extension Rhythm {
     /// Create a `Rhythm` with a given `duration` and `leaves.
     public init(
         _ duration: MetricalDuration,
-        _ leaves: [(duration: Int, context: MetricalContext<T>)]
+        _ leaves: [(duration: Int, context: MetricalContext<Element>)]
     )
     {
         self.init(duration * leaves.map { $0.duration}, leaves.map { $0.context} )
     }
 
     /// Create an isochronic `Rhythm` with the given `duration` and the given `contexts`.
-    public init(_ duration: MetricalDuration, _ contexts: [MetricalContext<T>]) {
+    public init(_ duration: MetricalDuration, _ contexts: [MetricalContext<Element>]) {
         self.init(duration * contexts.map { _ in 1 }, contexts)
     }
 }
@@ -73,7 +73,7 @@ extension Rhythm {
     /// - Each `continuation` remains so
     /// - Each `.instance(.rest)` remains so
     /// - Each `.instance(.event(T))` is transformed to a `.instance(.event(U))`
-    public func map <U> (_ transform: @escaping (T) -> U) -> Rhythm<U> {
+    public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U> {
         return Rhythm<U>(
             metricalDurationTree: metricalDurationTree,
             leaves: leaves.map { $0.map(transform) }
@@ -84,7 +84,7 @@ extension Rhythm {
 extension Rhythm.Leaf {
 
     /// - Returns: `Rhythm.Leaf` with its value updated by the given `transform`.
-    public func map <U> (_ transform: @escaping (T) -> U) -> Rhythm<U>.Leaf {
+    public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U>.Leaf {
 
         // FIXME: Extract this into func. Generics not happy.
         var newContext: MetricalContext<U> {
@@ -100,7 +100,7 @@ extension Rhythm.Leaf {
     }
 }
 
-extension Rhythm.Leaf: Equatable where T: Equatable { }
+extension Rhythm.Leaf: Equatable where Element: Equatable { }
 
 /// - Returns: The `MetricalDuration` values of the leaves of the given `rhythms`, by merging
 /// `tied` leaves to their predecesors.
@@ -141,6 +141,6 @@ public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
 }
 
 /// - returns: `RhythmTree` with the given `MetricalDurationTree` and `MetricalContext` values.
-public func * <T> (lhs: MetricalDurationTree, rhs: [MetricalContext<T>]) -> Rhythm<T> {
+public func * <Element> (lhs: MetricalDurationTree, rhs: [MetricalContext<Element>]) -> Rhythm<Element> {
     return Rhythm(lhs, rhs)
 }
