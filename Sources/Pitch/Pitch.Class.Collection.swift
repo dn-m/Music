@@ -44,6 +44,13 @@ extension Pitch.Class {
 
         // MARK: - Initializers
 
+        /// Create a `Pitch.Class.Collection` with the given `pitchClasses`.
+        ///
+        /// *Example Usage*
+        ///
+        ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
+        ///     let webern27: Pitch.Class.Collection = [0,8,7,11,10,9,3,1,4,2,6,5]
+        ///
         public init <C> (_ pitchClasses: C) where C: Swift.Collection, C.Element == Pitch.Class {
             precondition(!pitchClasses.isEmpty)
             self.base = Array(pitchClasses)
