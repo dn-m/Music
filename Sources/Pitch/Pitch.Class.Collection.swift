@@ -91,10 +91,14 @@ extension Pitch.Class {
             self.base = Array(pitchClasses)
         }
 
+        /// - Returns: A `Pitch.Class.Collection` in which each element is updated by the given
+        /// `transform`.
         public func map (_ transform: (Element) -> Element) -> Collection {
             return Collection(base.map(transform))
         }
 
+        /// - Returns: A `Pitch.Class.Collection` in which the elements are sorted by the given
+        /// `areInIncreasingOrder`.
         public func sorted(
             by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool
         ) rethrows -> Collection
@@ -102,6 +106,7 @@ extension Pitch.Class {
             return Collection(try base.sorted(by: areInIncreasingOrder))
         }
 
+        /// - Returns: A `Pitch.Class.Collection` in which the elements are sorted from low to high.
         public func sorted() -> Collection {
             return sorted(by: <)
         }
