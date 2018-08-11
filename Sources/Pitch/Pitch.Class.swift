@@ -149,7 +149,7 @@ extension Pitch.Class {
         /// `areInIncreasingOrder`.
         public func sorted(
             by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool
-            ) rethrows -> Collection
+        ) rethrows -> Collection
         {
             return Collection(try base.sorted(by: areInIncreasingOrder))
         }
@@ -164,6 +164,10 @@ extension Pitch.Class {
 extension Pitch.Class.Collection: Equatable { }
 
 extension Pitch.Class.Collection: ExpressibleByArrayLiteral {
+
+    // MARK: - ExpressibleByArrayLiteral
+
+    /// Create a `Pitch.Class.Collection` with an array literal.
     public init(arrayLiteral elements: Pitch.Class...) {
         self.base = elements
     }
@@ -186,10 +190,12 @@ extension Collection where Element == Pitch.Class.Collection {
 
 extension Collection where Element: NoteNumberRepresentable {
 
+    /// - Returns: The intervals between each adjacent pair of pitches contained herein.
     public var intervals: [OrderedInterval<Element>] {
         return pairs.map(OrderedInterval.init)
     }
 
+    /// - Returns: The dyads between each pitch and each other pitch contained herein.
     public var dyads: [Dyad<Element>] {
         return subsets(cardinality: 2).map(Dyad.init)
     }
