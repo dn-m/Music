@@ -55,7 +55,7 @@ extension SpanningContainerBuilder {
     ///
     /// - Returns: `Self`.
     @discardableResult public func add <S: Sequence> (_ elements: S) -> Self
-        where S.Iterator.Element == Spanner
+        where S.Element == Spanner
     {
         elements.forEach { _ = add($0) }
         return self

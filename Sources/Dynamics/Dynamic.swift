@@ -21,7 +21,7 @@ public struct Dynamic: Equatable {
     // MARK: - Initializers
 
     /// Create a `Dynamic` with a sequence of `Dynamic.Element` values.
-    public init <S: Sequence> (_ elements: S) where S.Iterator.Element == Element {
+    public init <S: Sequence> (_ elements: S) where S.Element == Element {
         let elements = Array(elements)
         precondition(Validator.elementsAreWellFormed(elements))
         self.elements = elements

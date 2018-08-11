@@ -370,7 +370,7 @@ public extension Tempo.Interpolation {
             self.base = base
         }
 
-        public init <S> (_ base: S) where S: Sequence, S.Iterator.Element == Spanner {
+        public init <S> (_ base: S) where S: Sequence, S.Element == Spanner {
             self = Builder().add(base).build()
         }
 
