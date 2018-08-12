@@ -80,7 +80,13 @@ extension NoteNumberRepresentable {
 
 // MARK: - Transposition
 
-/// - returns: A `NoteNumberRepresentable` value that is the difference between the two given
+/// - Returns: A `NoteNumberRepresentable` value that is the sum of the two given
+/// values.
+public func + <T: NoteNumberRepresentable> (lhs: T, rhs: T) -> T {
+    return T(noteNumber: NoteNumber(lhs.noteNumber.value + rhs.noteNumber.value))
+}
+
+/// - Returns: A `NoteNumberRepresentable` value that is the difference between the two given
 /// values.
 public func - <T: NoteNumberRepresentable> (lhs: T, rhs: T) -> T {
     return T(noteNumber: NoteNumber(lhs.noteNumber.value - rhs.noteNumber.value))

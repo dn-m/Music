@@ -13,6 +13,7 @@ public struct MetricalDuration: Rational {
 
     // MARK: - Type Properties
 
+    /// A `MetricalDuration` with zero length.
     public static let zero = MetricalDuration(0,1)
 
     // MARK: - Instance Properties
