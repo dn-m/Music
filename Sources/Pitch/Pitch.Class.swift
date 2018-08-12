@@ -128,7 +128,7 @@ extension Pitch.Class {
         /// **Example Usage**
         ///
         ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
-        ///     let inversion = webern24.inversion // => [0,4,5,1,2,3,9,11,8,10,6,7]
+        ///     let inversion = webern24.inversion // => [0,1,9,8,4,5,3,7,6,11,10,2]
         ///
         public var inversion: Collection {
             return map { $0.inversion }
