@@ -49,19 +49,6 @@ extension Pitch.Class: PitchConvertible {
 
 extension Pitch.Class {
 
-    /// - Returns: The sum of two `Pitch.Class` values.
-    public static func + (lhs: Pitch.Class, rhs: Pitch.Class) -> Pitch.Class {
-        return Pitch.Class(noteNumber: NoteNumber(lhs.noteNumber.value + rhs.noteNumber.value))
-    }
-
-    /// - Returns: The difference between two `Pitch.Class` values.
-    public static func - (lhs: Pitch.Class, rhs: Pitch.Class) -> Pitch.Class {
-        return Pitch.Class(noteNumber: NoteNumber(lhs.noteNumber.value - rhs.noteNumber.value))
-    }
-}
-
-extension Pitch.Class {
-
     /// A non-empty collection of `Pitch.Class` elements.
     ///
     /// **Example Usage**
@@ -130,6 +117,7 @@ extension Pitch.Class {
         ///     let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
         ///     let inversion = webern24.inversion // => [0,1,9,8,4,5,3,7,6,11,10,2]
         ///
+        /// - TODO: Make a function which takes an axis over which pcs are inverted.
         public var inversion: Collection {
             return map { $0.inversion }
         }
