@@ -15,6 +15,8 @@ public struct Rhythm <Element> {
     /// Leaf item of a hierarchically-structured `Rhythm`.
     public struct Leaf {
 
+        // MARK: - Associated Types
+
         /// The metrical identity of a given `Leaf`.
         ///
         /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
