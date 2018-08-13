@@ -43,6 +43,9 @@ public struct Tempo: Equatable {
     /// - 16: sixteenth note
     /// - ...
     public let subdivision: Subdivision
+}
+
+extension Tempo {
 
     // MARK: - Initializers
 
@@ -52,6 +55,9 @@ public struct Tempo: Equatable {
         self.beatsPerMinute = beatsPerMinute
         self.subdivision = subdivision
     }
+}
+
+extension Tempo {
 
     // MARK: - Instance Methods
 
@@ -131,7 +137,6 @@ extension Tempo {
         // MARK: - Instance Properties
 
         /// - Returns: The effective tempo at the given metrical `offset`.
-        ///
         public func tempo (at offset: Fraction) -> Tempo {
             let (start, end, _, _) = normalizedValues(offset: offset)
             let x = (offset / length).doubleValue
@@ -246,6 +251,7 @@ extension Tempo.Interpolation {
 
         // MARK: - Instance Properties
 
+        /// The duration in seconds of the `Tempo.Interpolation`.
         public var duration: Double {
             let start = base.secondsOffset(for: range.lowerBound)
             let end = base.secondsOffset(for: range.upperBound)
