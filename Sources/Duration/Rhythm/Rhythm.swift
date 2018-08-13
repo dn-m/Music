@@ -9,7 +9,7 @@
 import DataStructures
 import Math
 
-/// Hierachical organization of metrical durations and their metrical contexts.
+/// Hierarchical organization of metrical durations and their metrical contexts.
 public struct Rhythm <Element> {
 
     // MARK: - Instance Properties
