@@ -6,7 +6,12 @@
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 
-import Darwin
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 import DataStructures
 
 /**
