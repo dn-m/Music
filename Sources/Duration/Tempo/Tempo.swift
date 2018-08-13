@@ -55,6 +55,8 @@ public struct Tempo: Equatable {
 
     // MARK: - Instance Methods
 
+    /// - Returns: A `Tempo` with the numerator and denominator adjusted to match the given
+    /// `subdivision`.
     public func respelling(subdivision newSubdivision: Subdivision) -> Tempo {
         assert(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")
         guard newSubdivision != subdivision else { return self }
@@ -63,7 +65,7 @@ public struct Tempo: Equatable {
         return Tempo(newBeatsPerMinute, subdivision: newSubdivision)
     }
 
-    /// - returns: Duration for a beat at the given `subdivision`.
+    /// - Returns: Duration in seconds for a beat at the given `subdivision`.
     public func duration(forBeatAt subdivision: Subdivision) -> Double {
         assert(subdivision.isPowerOfTwo, "Subdivision must be a power-of-two")
         let quotient = Double(subdivision) / Double(self.subdivision)
@@ -79,12 +81,7 @@ extension Tempo {
     /// Interpolation between two `Tempo` values.
     public struct Interpolation: Equatable, DurationSpanning {
 
-        // MARK: Instance Properties
-
-        /// Concrete duration of `Interpolation`, in seconds.
-        public var duration: Double/*Seconds*/ {
-            return secondsOffset(for: length)
-        }
+        // MARK: - Cases
 
         /// Start tempo.
         public let start: Tempo
@@ -97,6 +94,13 @@ extension Tempo {
 
         /// Easing of `Interpolation`.
         public let easing: Easing
+
+        // MARK: Instance Properties
+
+        /// Concrete duration of `Interpolation`, in seconds.
+        public var duration: Double/*Seconds*/ {
+            return secondsOffset(for: length)
+        }
 
         // MARK: - Initializers
 
@@ -126,20 +130,18 @@ extension Tempo {
 
         // MARK: - Instance Properties
 
-        /// - returns: The effective tempo at the given `metricalOffset`.
+        /// - Returns: The effective tempo at the given metrical `offset`.
         ///
-        /// - TODO: Must incorporate non-linear interpolations if/when they are implemented!
-        ///
-        public func tempo (at metricalOffset: Fraction) -> Tempo {
-            let (start, end, _, _) = normalizedValues(offset: metricalOffset)
-            let x = (metricalOffset / length).doubleValue
+        public func tempo (at offset: Fraction) -> Tempo {
+            let (start, end, _, _) = normalizedValues(offset: offset)
+            let x = (offset / length).doubleValue
             let ratio = end.beatsPerMinute / start.beatsPerMinute
             let xEased = easing.evaluate(at: x)
             let scaledBpm = start.beatsPerMinute * pow(ratio, xEased)
             return Tempo(scaledBpm, subdivision: start.subdivision)
         }
 
-        /// - returns: The concrete offset in seconds of the given symbolic `Duration`
+        /// - Returns: The concrete offset in seconds of the given symbolic `Duration`
         /// `offset`. If the easing type is .linear, this method gives an exact answer;
         /// otherwise, it uses an approximation method with complexity linear in the
         /// magnitude of `metricalOffset`.
@@ -222,6 +224,9 @@ extension Tempo {
 
 extension Tempo.Interpolation: Fragmentable {
 
+    // MARK: - Fragmentable
+
+    /// - Returns: a `Tempo.Interpolation.Fragment` in the given `range`.
     public subscript(range: Range<Fraction>) -> Fragment {
         assert(range.lowerBound >= .zero)
         assert(range.upperBound <= length)
@@ -232,9 +237,14 @@ extension Tempo.Interpolation: Fragmentable {
 // FIXME: Move to own file (Tempo.Interpolation.Fragment)
 extension Tempo.Interpolation {
 
+    /// A fragment of a `Tempo.Interpolation`.
     public struct Fragment: DurationSpanningFragment {
 
+        // MARK: - Associated Types
+
         public typealias Metric = Fraction
+
+        // MARK: - Instance Properties
 
         public var duration: Double {
             let start = base.secondsOffset(for: range.lowerBound)
@@ -242,13 +252,22 @@ extension Tempo.Interpolation {
             return end - start
         }
 
+        /// The original `Tempo.Interpolation`.
         public let base: Tempo.Interpolation
+
+        /// The range within the original `Tempo.Interpolation` of this `Fragment`.
         public let range: Range<Fraction>
 
+        // MARK: - Initializers
+
+        /// Create a `Tempo.Interpolation.Fragment` with the given `interpolation` in the given
+        /// `range`.
         public init(_ interpolation: Tempo.Interpolation, in range: Range<Fraction>) {
             self.base = interpolation
             self.range = range
         }
+
+        // MARK: - Subscripts
 
         /// - Returns: `Interpolation.Fragment` in the given `range`.
         public subscript(range: Range<Fraction>) -> Tempo.Interpolation.Fragment {
@@ -257,14 +276,19 @@ extension Tempo.Interpolation {
             return Tempo.Interpolation.Fragment(base, in: range)
         }
 
-        public func secondsOffset(for metricalOffset: Fraction) -> Double {
-            return base.secondsOffset(for: metricalOffset)
+        // MARK: - Instance Methods
+
+        /// - Returns: The offset in seconds of the given metrical `offset`.
+        public func secondsOffset(for offset: Fraction) -> Double {
+            return base.secondsOffset(for: offset)
         }
     }
 }
 
 extension Tempo.Interpolation.Fragment {
 
+    /// Create a `Tempo.Interpolation.Fragment` which fills the entire length of the given
+    /// `interpolation`.
     public init(_ interpolation: Tempo.Interpolation) {
         self.base = interpolation
         self.range = .zero ..< interpolation.length
@@ -277,6 +301,8 @@ import DataStructures
 extension Tempo.Interpolation {
 
     /// Easing of `Interpolation`.
+    //
+    // TODO: Generalize this beyond tempi.
     public enum Easing: Equatable {
 
         /// Linear interpolation.
@@ -363,35 +389,60 @@ extension Tempo.Interpolation {
 // FIXME: Move to own file (Tempo.Interpolation.Collection)
 public extension Tempo.Interpolation {
 
+    /// An ordered, contiguous collection of `Tempo.Interpolation.Fragments` indexed by their
+    /// metrical offset.
     public struct Collection: SpanningContainer {
 
-        public typealias Metric = Spanner.Metric
+        // MARK: - Associated Types
+
+        /// The element of the collection.
         public typealias Spanner = Tempo.Interpolation.Fragment
 
+        /// The `Metric` of the `Tempo.Interpolation.Fragment`, and therefore the `Metric` of this
+        /// collection.
+        public typealias Metric = Spanner.Metric
+
+        // MARK: - Instance Properties
+
+        /// The underlying storage of the `Tempo.Interpolation.Fragment` values.
+        // FIXME: Consider using an `OrderedDictionary` re: performance.
         public let base: SortedDictionary<Spanner.Metric,Spanner>
 
+        // MARK: - Initializers
+
+        /// Create a `Tempo.Interpolation.Collection` with the given dictionary of
+        /// `Tempo.Interpolation.Fragment` values.
         public init(_ base: SortedDictionary<Spanner.Metric,Spanner>) {
             self.base = base
         }
 
+        /// Create a `Tempo.Interpolation.Collection` with the given sequence of
+        ///`Tempo.Interpolation.Fragment` values.
         public init <S> (_ base: S) where S: Sequence, S.Element == Spanner {
             self = Builder().add(base).build()
         }
 
+        /// Create a `Tempo.Interpolation.Collection` with the given sequence of
+        /// `Tempo.Interpolation` values.
         public init <S> (_ elements: S) where S: Sequence, S.Element == Tempo.Interpolation {
-            self.init(elements.map { Tempo.Interpolation.Fragment($0) })
+            self.init(elements.map(Tempo.Interpolation.Fragment.init))
         }
 
+        // MARK: - Instance Methods
+
+        /// - Returns: The offset in seconds of the given metrical `offset`.
         /// - FIXME: Use `Seconds` instead of `Double`
-        public func secondsOffset(for metricalOffset: Fraction) -> Double {
-            assert(contains(metricalOffset))
-            let index = indexOfElement(containing: metricalOffset)!
+        public func secondsOffset(for offset: Fraction) -> Double {
+            assert(contains(offset))
+            let index = indexOfElement(containing: offset)!
             let (globalOffset, interpolation) = base[index]
-            let internalOffset = metricalOffset - globalOffset
+            let internalOffset = offset - globalOffset
             let localSeconds = interpolation.secondsOffset(for: internalOffset)
             return secondsOffset(at: index) + localSeconds
         }
 
+        /// - Returns: The offset in seconds of the `Tempo.Interpolation.Fragment` starting at the
+        /// given `index`.
         public func secondsOffset(at index: Int) -> Double {
             assert(base.indices.contains(index))
             return (0..<index)
@@ -407,6 +458,8 @@ public extension Tempo.Interpolation {
 
 extension Tempo.Interpolation.Collection {
 
+    /// A class which encapsulates the stateful incremental building process of
+    /// a `Tempo.Interpolation.Collection`.
     public final class Builder: DurationSpanningContainerBuilder {
 
         public typealias Product = Tempo.Interpolation.Collection
