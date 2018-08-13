@@ -247,6 +247,7 @@ extension Tempo.Interpolation {
 
         // MARK: - Associated Types
 
+        /// The measurable unit of a `Tempo.Interpolation` is a `Fraction`.
         public typealias Metric = Fraction
 
         // MARK: - Instance Properties
@@ -264,15 +265,6 @@ extension Tempo.Interpolation {
         /// The range within the original `Tempo.Interpolation` of this `Fragment`.
         public let range: Range<Fraction>
 
-        // MARK: - Initializers
-
-        /// Create a `Tempo.Interpolation.Fragment` with the given `interpolation` in the given
-        /// `range`.
-        public init(_ interpolation: Tempo.Interpolation, in range: Range<Fraction>) {
-            self.base = interpolation
-            self.range = range
-        }
-
         // MARK: - Subscripts
 
         /// - Returns: `Interpolation.Fragment` in the given `range`.
@@ -281,23 +273,35 @@ extension Tempo.Interpolation {
             assert(range.upperBound <= self.range.upperBound)
             return Tempo.Interpolation.Fragment(base, in: range)
         }
-
-        // MARK: - Instance Methods
-
-        /// - Returns: The offset in seconds of the given metrical `offset`.
-        public func secondsOffset(for offset: Fraction) -> Double {
-            return base.secondsOffset(for: offset)
-        }
     }
 }
 
 extension Tempo.Interpolation.Fragment {
+
+    // MARK: - Initializers
+
+    /// Create a `Tempo.Interpolation.Fragment` with the given `interpolation` in the given
+    /// `range`.
+    public init(_ interpolation: Tempo.Interpolation, in range: Range<Fraction>) {
+        self.base = interpolation
+        self.range = range
+    }
 
     /// Create a `Tempo.Interpolation.Fragment` which fills the entire length of the given
     /// `interpolation`.
     public init(_ interpolation: Tempo.Interpolation) {
         self.base = interpolation
         self.range = .zero ..< interpolation.length
+    }
+}
+
+extension Tempo.Interpolation.Fragment {
+
+    // MARK: - Instance Methods
+
+    /// - Returns: The offset in seconds of the given metrical `offset`.
+    public func secondsOffset(for offset: Fraction) -> Double {
+        return base.secondsOffset(for: offset)
     }
 }
 
