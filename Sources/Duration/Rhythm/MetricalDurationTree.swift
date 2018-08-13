@@ -54,12 +54,12 @@ extension Tree where Branch == Duration, Leaf == Duration {
         self = proportionTree.map { $0 /> subdivision }
     }
 
-    /// Create a `DurationTree` with the given `metricalDuration` as the value of the
+    /// Create a `DurationTree` with the given `duration` as the value of the
     /// root node, and the given `proportions` scaled appropriately.
-    public init(_ metricalDuration: Duration, _ proportionTree: ProportionTree) {
+    public init(_ duration: Duration, _ proportionTree: ProportionTree) {
 
-        let beats = metricalDuration.numerator
-        let subdivision = metricalDuration.denominator
+        let beats = duration.numerator
+        let subdivision = duration.denominator
         
         // Update proportion tree
         let multiplier = lcm(beats, proportionTree.value) / proportionTree.value
@@ -79,20 +79,20 @@ public func * (_ subdivision: Int, proportions: [Int]) -> DurationTree {
     return DurationTree(subdivision, ProportionTree(subdivision,proportions))
 }
 
-/// - returns: A single-depth `DurationTree` with the given `metricalDuration` as the 
+/// - returns: A single-depth `DurationTree` with the given `duration` as the 
 /// value of the root node, and the given `proportions` mapped accordingly as the children.
 ///
 /// If an empty array is given, a single child is created with the same `Duration`
 /// value as the root.
-public func * (_ metricalDuration: Duration, _ proportions: [Int])
+public func * (_ duration: Duration, _ proportions: [Int])
     -> DurationTree
 {
 
     if proportions.isEmpty {
-        return .branch(metricalDuration, [.leaf(metricalDuration)])
+        return .branch(duration, [.leaf(duration)])
     }
 
-    let beats = metricalDuration.numerator
+    let beats = duration.numerator
     let proportionTree = ProportionTree(beats, proportions)
-    return DurationTree(metricalDuration, proportionTree)
+    return DurationTree(duration, proportionTree)
 }

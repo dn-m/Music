@@ -13,12 +13,12 @@ import Duration
 class RhythmTreeTests: XCTestCase {
 
     func testInit() {
-        let metricalDurationTree = 1/>8 * [1,2,3]
-        let contexts: [MetricalContext<Int>] = [
+        let durationTree = 1/>8 * [1,2,3]
+        let contexts: [Rhythm<Int>.Leaf.Kind] = [
             .instance(.event(1)),
             .continuation,
             .instance(.absence)
         ]
-        _ = metricalDurationTree * contexts
+        _ = durationTree * contexts
     }
 }

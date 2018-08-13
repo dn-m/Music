@@ -253,7 +253,7 @@ extension Rhythm where Element: Equatable {
     
     var events: [Element] {
         return leaves.compactMap { leaf in
-            guard case let .instance(.event(value)) = leaf.context else { return nil }
+            guard case let .instance(.event(value)) = leaf.kind else { return nil }
             return value
         }
     }
@@ -267,7 +267,7 @@ extension Rhythm where Element: Equatable {
         var current: Duration = 0/>4
         for (l,leaf) in leaves.enumerated() {
 
-            switch leaf.context {
+            switch leaf.kind {
             case .continuation:
                 break
             case .instance(let absenceOrEvent):
@@ -276,12 +276,12 @@ extension Rhythm where Element: Equatable {
                     if current > .zero {
                         result.append(start ... current)
                     }
-                    start = current + leaf.metricalDuration
+                    start = current + leaf.duration
                 case .event:
                     
                     if let previous = leaves[safe: l-1] {
                         
-                        if previous.context != .instance(.absence) {
+                        if previous.kind != .instance(.absence) {
                             result.append(start ... current)
                         }
                     }
@@ -290,10 +290,10 @@ extension Rhythm where Element: Equatable {
                 }
             }
             
-            current += leaf.metricalDuration
+            current += leaf.duration
         }
         
-        if leaves.last!.context != .instance(.absence) {
+        if leaves.last!.kind != .instance(.absence) {
             result.append(start ... current)
         }
         

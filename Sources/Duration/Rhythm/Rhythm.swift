@@ -15,25 +15,33 @@ public struct Rhythm <Element> {
     /// Leaf item of a hierarchically-structured `Rhythm`.
     public struct Leaf {
 
+        /// The metrical identity of a given `Leaf`.
+        ///
+        /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
+        /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
+        /// - "event": if a leaf is a measured non-silence (`.instance(.event(...))`)
+        ///
+        public typealias Kind = ContinuationOrInstance<AbsenceOrEvent<Element>>
+
         // MARK: - Instance Properties
 
         /// `Duration` of `Rhythm.Leaf`.
-        public let metricalDuration: Duration
+        public let duration: Duration
 
         /// `MetricalContext` of `Rhythm.Leaf`
-        public let context: MetricalContext<Element>
+        public let kind: Kind
 
         // MARK: - Initializers
 
-        /// Create a `Rhythm.Leaf` with a given `metricalDuration` and `context`.
-        public init(metricalDuration: Duration, context: MetricalContext<Element>) {
-            self.metricalDuration = metricalDuration
-            self.context = context
+        /// Create a `Rhythm.Leaf` with a given `duration` and `context`.
+        public init(duration: Duration, kind: Leaf.Kind) {
+            self.duration = duration
+            self.kind = kind
         }
     }
 
     /// Hierarchical representation of metrical durations.
-    public let metricalDurationTree: DurationTree
+    public let durationTree: DurationTree
 
     /// Leaf items containing metrical context.
     public let leaves: [Leaf]
@@ -43,23 +51,23 @@ extension Rhythm {
 
     // MARK: - Initializers
 
-    /// Create a `Rhythm` with a given `metricalDurationTree` and given `leaves`.
-    public init(_ metricalDurationTree: DurationTree, _ leaves: [MetricalContext<Element>]) {
-        self.metricalDurationTree = metricalDurationTree
-        self.leaves = zip(metricalDurationTree.leaves, leaves).map(Leaf.init)
+    /// Create a `Rhythm` with a given `durationTree` and given `leaves`.
+    public init(_ durationTree: DurationTree, _ kinds: [Leaf.Kind]) {
+        self.durationTree = durationTree
+        self.leaves = zip(durationTree.leaves, kinds).map(Leaf.init)
     }
 
     /// Create a `Rhythm` with a given `duration` and `leaves.
     public init(
         _ duration: Duration,
-        _ leaves: [(duration: Int, context: MetricalContext<Element>)]
+        _ leaves: [(duration: Int, context: Leaf.Kind)]
     )
     {
         self.init(duration * leaves.map { $0.duration}, leaves.map { $0.context} )
     }
 
     /// Create an isochronic `Rhythm` with the given `duration` and the given `contexts`.
-    public init(_ duration: Duration, _ contexts: [MetricalContext<Element>]) {
+    public init(_ duration: Duration, _ contexts: [Leaf.Kind]) {
         self.init(duration * contexts.map { _ in 1 }, contexts)
     }
 }
@@ -74,7 +82,7 @@ extension Rhythm {
     /// - Each `.instance(.event(T))` is transformed to a `.instance(.event(U))`
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U> {
         return Rhythm<U>(
-            metricalDurationTree: metricalDurationTree,
+            durationTree: durationTree,
             leaves: leaves.map { $0.map(transform) }
         )
     }
@@ -86,8 +94,8 @@ extension Rhythm.Leaf {
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U>.Leaf {
 
         // FIXME: Extract this into func. Generics not happy.
-        var newContext: MetricalContext<U> {
-            switch context {
+        var newKind: Rhythm<U>.Leaf.Kind {
+            switch kind {
             case .continuation:
                 return .continuation
             case .instance(let instance):
@@ -95,7 +103,7 @@ extension Rhythm.Leaf {
             }
         }
 
-        return Rhythm<U>.Leaf(metricalDuration: metricalDuration, context: newContext)
+        return Rhythm<U>.Leaf(duration: duration, kind: newKind)
     }
 }
 
@@ -113,25 +121,21 @@ public func lengths <S,T> (of rhythms: S) -> [Duration]
     ) -> [Duration] where S: Sequence, S.Element == Rhythm<T>.Leaf
     {
         guard let (leaf, remaining) = leaves.destructured else { return accum + tied }
-
-        switch leaf.context {
-
+        switch leaf.kind {
         case .continuation:
-            let tied = (tied ?? .zero) + leaf.metricalDuration
+            let tied = (tied ?? .zero) + leaf.duration
             return merge(remaining, into: accum, tied: tied)
-
         case .instance(let absenceOrEvent):
             let newAccum: [Duration]
             let newTied: Duration?
             switch absenceOrEvent {
             case .absence:
-                newAccum = accum + tied + leaf.metricalDuration
+                newAccum = accum + tied + leaf.duration
                 newTied = nil
             case .event:
                 newAccum = accum + tied
-                newTied = leaf.metricalDuration
+                newTied = leaf.duration
             }
-            
             return merge(remaining, into: newAccum, tied: newTied)
         }
     }
@@ -140,6 +144,21 @@ public func lengths <S,T> (of rhythms: S) -> [Duration]
 }
 
 /// - returns: `RhythmTree` with the given `DurationTree` and `MetricalContext` values.
-public func * <Element> (lhs: DurationTree, rhs: [MetricalContext<Element>]) -> Rhythm<Element> {
+public func * <Element> (lhs: DurationTree, rhs: [Rhythm<Element>.Leaf.Kind]) -> Rhythm<Element> {
     return Rhythm(lhs, rhs)
+}
+
+/// - Returns: `.continuation` with generic context provided by the external environment.
+public func tie <T> () -> Rhythm<T>.Leaf.Kind {
+    return .continuation
+}
+
+/// - Returns: `.instance(.absence)` with generic context provided by the external environment.
+public func rest <T> () -> Rhythm<T>.Leaf.Kind {
+    return .instance(.absence)
+}
+
+/// - Returns: `.instance(.event(T))` wrapping the given `value`.
+public func event <T> (_ value: T) -> Rhythm<T>.Leaf.Kind {
+    return .instance(.event(value))
 }
