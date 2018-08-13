@@ -19,7 +19,7 @@ public struct Rhythm <Element> {
         ///
         /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
         /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
-        /// - "event": if a leaf is a measured non-silence (`.instance(.event(...))`)
+        /// - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
         ///
         public typealias Kind = ContinuationOrInstance<AbsenceOrEvent<Element>>
 
