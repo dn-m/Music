@@ -462,18 +462,39 @@ extension Tempo.Interpolation.Collection {
     /// a `Tempo.Interpolation.Collection`.
     public final class Builder: DurationSpanningContainerBuilder {
 
+        // MARK: - Associated Types
+
+        /// The end result of the building process (`Tempo.Interpolation.Collection`).
         public typealias Product = Tempo.Interpolation.Collection
 
-        public var intermediate: SortedDictionary<Fraction,Tempo.Interpolation.Fragment>
-        public var offset: Fraction
+        // MARK: - Instance Properties
 
         private var last: (Fraction, Tempo, Bool)?
 
+        /// The stateful, accumulating `offset` which becomes the metrical offset of a
+        ///`Tempo.Interpolation.Fragment` value.
+        public var offset: Fraction
+
+        /// The intermediate storage of `Tempo.Interpolation.Fragment` values indexed by their
+        /// `Fraction` offsets.
+        // FIXME: Consider using an `OrderedDictionary` re: performance.
+        public var intermediate: SortedDictionary<Fraction,Tempo.Interpolation.Fragment>
+
+        // MARK: - Initializers
+
+        /// Create an empty `Tempo.Interpolation.Collection.Builder` ready to construct a nice
+        /// little `Tempo.Interpolation.Collection` for you.
         public init() {
             self.intermediate = [:]
             self.offset = .zero
         }
 
+        // MARK: - Instance Methods
+
+        /// Add the given `interpolation` to the accumulating storage of
+        /// `Tempo.Interpolation.Fragment` values.
+        ///
+        /// - Returns: Self
         @discardableResult public func add(_ interpolation: Tempo.Interpolation.Fragment)
             -> Builder
         {
@@ -483,6 +504,10 @@ extension Tempo.Interpolation.Collection {
             return self
         }
 
+        /// Add the given `tempo` at the given metrical `offset`, along with the information
+        /// whether the given `tempo` interpolates into the next.
+        //
+        // FIXME: Replace `interpolating: Bool` with `interpolation: Tempo.Interpolation.Easing?`.
         @discardableResult public func add(
             _ tempo: Tempo,
             at offset: Fraction,
@@ -503,4 +528,3 @@ extension Tempo.Interpolation.Collection {
         }
     }
 }
-
