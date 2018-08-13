@@ -112,11 +112,10 @@ extension Rhythm.Leaf: Equatable where Element: Equatable { }
 /// - Returns: The `Duration` values of the leaves of the given `rhythms`, by merging
 /// `tied` leaves to their predecesors.
 public func lengths <S,T> (of rhythms: S) -> [Duration] where S: Sequence, S.Element == Rhythm<T> {
-    func merge <S> (
-        _ leaves: S,
-        into accum: [Duration],
-        tied: Duration?
-    ) -> [Duration] where S: Sequence, S.Element == Rhythm<T>.Leaf
+
+    // FIXME: Consider using `inout [Duration]` for `accum` re: performance.
+    func merge <S> (_ leaves: S, into accum: [Duration], tied: Duration?) -> [Duration]
+        where S: Sequence, S.Element == Rhythm<T>.Leaf
     {
         guard let (leaf, remaining) = leaves.destructured else { return accum + tied }
         switch leaf.kind {
