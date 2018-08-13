@@ -8,7 +8,7 @@
 import XCTest
 import DataStructures
 import Math
-@testable import Tempo
+@testable import Duration
 
 class TempoInterpolationTests: XCTestCase {
 

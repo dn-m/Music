@@ -8,8 +8,7 @@
 
 import XCTest
 import DataStructures
-import MetricalDuration
-import Rhythm
+import Duration
 
 class RhythmTreeTests: XCTestCase {
 

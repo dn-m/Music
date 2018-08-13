@@ -11,10 +11,7 @@ import Algebra
 import DataStructures
 import Math
 import Pitch
-import MetricalDuration
-import Rhythm
-import Tempo
-import Meter
+import Duration
 
 extension Model {
     
@@ -262,12 +259,12 @@ extension Rhythm where Element: Equatable {
     }
     
     // TODO: Refactor!!
-    var eventIntervals: [ClosedRange<MetricalDuration>] {
+    var eventIntervals: [ClosedRange<Duration>] {
         
-        var result: [ClosedRange<MetricalDuration>] = []
+        var result: [ClosedRange<Duration>] = []
         
-        var start: MetricalDuration = 0/>4
-        var current: MetricalDuration = 0/>4
+        var start: Duration = 0/>4
+        var current: Duration = 0/>4
         for (l,leaf) in leaves.enumerated() {
 
             switch leaf.context {

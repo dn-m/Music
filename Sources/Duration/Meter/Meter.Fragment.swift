@@ -7,12 +7,11 @@
 //
 
 import Math
-import MetricalDuration
 
 extension Meter {
 
     /// A fragment of a `Meter`. Wrapping a `base` meter along with the `range` of the fragment.
-    public struct Fragment: MetricalDurationSpanningFragment {
+    public struct Fragment: DurationSpanningFragment {
 
         // MARK: - Instance Properties
 

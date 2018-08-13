@@ -12,8 +12,6 @@
     import Darwin.C
 #endif
 
-import MetricalDuration
-
 /// Model of a `Tempo`.
 public struct Tempo: Equatable {
 
@@ -77,7 +75,7 @@ import Math
 extension Tempo {
 
     /// Interpolation between two `Tempo` values.
-    public struct Interpolation: Equatable, MetricalDurationSpanning {
+    public struct Interpolation: Equatable, DurationSpanning {
 
         // MARK: Instance Properties
 
@@ -139,7 +137,7 @@ extension Tempo {
             return Tempo(scaledBpm, subdivision: start.subdivision)
         }
 
-        /// - returns: The concrete offset in seconds of the given symbolic `MetricalDuration`
+        /// - returns: The concrete offset in seconds of the given symbolic `Duration`
         /// `offset`. If the easing type is .linear, this method gives an exact answer;
         /// otherwise, it uses an approximation method with complexity linear in the
         /// magnitude of `metricalOffset`.
@@ -191,9 +189,9 @@ extension Tempo {
                 // Add on bit that doesn't fit right
                 let remainingOffset = Fraction(segmentsCount, resolution)
                 let remainingTempo = tempo(at: remainingOffset)
-                let remainingMetricalDuration = offset - remainingOffset
-                let beats = remainingMetricalDuration.numerator
-                let subdivision = remainingMetricalDuration.denominator
+                let remainingDuration = offset - remainingOffset
+                let beats = remainingDuration.numerator
+                let subdivision = remainingDuration.denominator
                 let remaining = remainingTempo.duration(forBeatAt: subdivision) * Double(beats)
                 return accum + remaining
             }
@@ -232,7 +230,7 @@ extension Tempo.Interpolation: Fragmentable {
 // FIXME: Move to own file (Tempo.Interpolation.Fragment)
 extension Tempo.Interpolation {
 
-    public struct Fragment: MetricalDurationSpanningFragment {
+    public struct Fragment: DurationSpanningFragment {
 
         public typealias Metric = Fraction
 
@@ -407,7 +405,7 @@ public extension Tempo.Interpolation {
 
 extension Tempo.Interpolation.Collection {
 
-    public final class Builder: MetricalDurationSpanningContainerBuilder {
+    public final class Builder: DurationSpanningContainerBuilder {
 
         public typealias Product = Tempo.Interpolation.Collection
 

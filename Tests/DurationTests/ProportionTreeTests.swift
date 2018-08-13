@@ -9,7 +9,7 @@
 import XCTest
 import DataStructures
 import Math
-@testable import Rhythm
+@testable import Duration
 
 class ProportionTreeTests: XCTestCase {
 

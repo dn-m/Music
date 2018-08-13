@@ -8,7 +8,7 @@
 
 import XCTest
 import Math
-@testable import Tempo
+@testable import Duration
 
 class TempoTests: XCTestCase {
 

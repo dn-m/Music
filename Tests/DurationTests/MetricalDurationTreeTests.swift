@@ -1,5 +1,5 @@
 //
-//  MetricalDurationTreeTests.swift
+//  DurationTreeTests.swift
 //  Rhythm
 //
 //  Created by James Bean on 2/10/17.
@@ -9,14 +9,13 @@
 import XCTest
 import DataStructures
 import Math
-import MetricalDuration
-import Rhythm
+import Duration
 
-class MetricalDurationTreeTests: XCTestCase {
+class DurationTreeTests: XCTestCase {
 
     func testInitSubdivisionAndProportionTree() {
-        let result = MetricalDurationTree(16, ProportionTree(1, [1,2,3]))
-        let expected = MetricalDurationTree.branch(4/>16, [
+        let result = DurationTree(16, ProportionTree(1, [1,2,3]))
+        let expected = DurationTree.branch(4/>16, [
             .leaf(1/>16),
             .leaf(2/>16),
             .leaf(3/>16)
@@ -25,8 +24,8 @@ class MetricalDurationTreeTests: XCTestCase {
     }
 
     func testInitSubdivisionOperator() {
-        let result = MetricalDurationTree(16, ProportionTree(1,[1,2,3]))
-        let expected = MetricalDurationTree.branch(4/>16, [
+        let result = DurationTree(16, ProportionTree(1,[1,2,3]))
+        let expected = DurationTree.branch(4/>16, [
             .leaf(1/>16),
             .leaf(2/>16),
             .leaf(3/>16)
@@ -34,14 +33,14 @@ class MetricalDurationTreeTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
-    func testInitMetricalDuration() {
+    func testInitDuration() {
         let proportionTree: ProportionTree = .branch(1, [
             .branch(1, [.leaf(1), .leaf(1), .leaf(1)]),
             .leaf(2),
             .leaf(3)
         ])
-        let result = MetricalDurationTree(5/>32, proportionTree)
-        let expected = MetricalDurationTree.branch(10/>64, [
+        let result = DurationTree(5/>32, proportionTree)
+        let expected = DurationTree.branch(10/>64, [
             .branch(2/>64, [
                 .leaf(1/>64),
                 .leaf(1/>64),
@@ -53,9 +52,9 @@ class MetricalDurationTreeTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
-    func testInitMetricalDurationProportionTreeOperator() {
-        let result = MetricalDurationTree(17/>64, ProportionTree(1,[1,2,3]))
-        let expected = MetricalDurationTree.branch(17/>64, [
+    func testInitDurationProportionTreeOperator() {
+        let result = DurationTree(17/>64, ProportionTree(1,[1,2,3]))
+        let expected = DurationTree.branch(17/>64, [
             .leaf(2/>64),
             .leaf(4/>64),
             .leaf(6/>64)

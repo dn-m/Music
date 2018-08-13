@@ -6,7 +6,7 @@
 //
 //
 import XCTest
-@testable import Tempo
+@testable import Duration
 
 class EasingIntegrateTests: XCTestCase {
 

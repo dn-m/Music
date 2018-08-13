@@ -1,6 +1,6 @@
 import XCTest
 
-extension MetricalDurationTests {
+extension DurationTests {
     static let __allTests = [
         ("testComparableReduced", testComparableReduced),
         ("testInitOperator", testInitOperator),
@@ -11,7 +11,7 @@ extension MetricalDurationTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
-        testCase(MetricalDurationTests.__allTests),
+        testCase(DurationTests.__allTests),
     ]
 }
 #endif

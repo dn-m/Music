@@ -9,7 +9,7 @@
 import XCTest
 import DataStructures
 import Math
-import Meter
+import Duration
 
 class MeterCollectionTests: XCTestCase {
 

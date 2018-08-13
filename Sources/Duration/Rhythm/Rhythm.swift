@@ -8,7 +8,6 @@
 
 import DataStructures
 import Math
-import MetricalDuration
 
 /// Hierachical organization of metrical durations and their metrical contexts.
 public struct Rhythm <Element> {
@@ -18,8 +17,8 @@ public struct Rhythm <Element> {
 
         // MARK: - Instance Properties
 
-        /// `MetricalDuration` of `Rhythm.Leaf`.
-        public let metricalDuration: MetricalDuration
+        /// `Duration` of `Rhythm.Leaf`.
+        public let metricalDuration: Duration
 
         /// `MetricalContext` of `Rhythm.Leaf`
         public let context: MetricalContext<Element>
@@ -27,14 +26,14 @@ public struct Rhythm <Element> {
         // MARK: - Initializers
 
         /// Create a `Rhythm.Leaf` with a given `metricalDuration` and `context`.
-        public init(metricalDuration: MetricalDuration, context: MetricalContext<Element>) {
+        public init(metricalDuration: Duration, context: MetricalContext<Element>) {
             self.metricalDuration = metricalDuration
             self.context = context
         }
     }
 
     /// Hierarchical representation of metrical durations.
-    public let metricalDurationTree: MetricalDurationTree
+    public let metricalDurationTree: DurationTree
 
     /// Leaf items containing metrical context.
     public let leaves: [Leaf]
@@ -45,14 +44,14 @@ extension Rhythm {
     // MARK: - Initializers
 
     /// Create a `Rhythm` with a given `metricalDurationTree` and given `leaves`.
-    public init(_ metricalDurationTree: MetricalDurationTree, _ leaves: [MetricalContext<Element>]) {
+    public init(_ metricalDurationTree: DurationTree, _ leaves: [MetricalContext<Element>]) {
         self.metricalDurationTree = metricalDurationTree
         self.leaves = zip(metricalDurationTree.leaves, leaves).map(Leaf.init)
     }
 
     /// Create a `Rhythm` with a given `duration` and `leaves.
     public init(
-        _ duration: MetricalDuration,
+        _ duration: Duration,
         _ leaves: [(duration: Int, context: MetricalContext<Element>)]
     )
     {
@@ -60,7 +59,7 @@ extension Rhythm {
     }
 
     /// Create an isochronic `Rhythm` with the given `duration` and the given `contexts`.
-    public init(_ duration: MetricalDuration, _ contexts: [MetricalContext<Element>]) {
+    public init(_ duration: Duration, _ contexts: [MetricalContext<Element>]) {
         self.init(duration * contexts.map { _ in 1 }, contexts)
     }
 }
@@ -102,16 +101,16 @@ extension Rhythm.Leaf {
 
 extension Rhythm.Leaf: Equatable where Element: Equatable { }
 
-/// - Returns: The `MetricalDuration` values of the leaves of the given `rhythms`, by merging
+/// - Returns: The `Duration` values of the leaves of the given `rhythms`, by merging
 /// `tied` leaves to their predecesors.
-public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
+public func lengths <S,T> (of rhythms: S) -> [Duration]
     where S: Sequence, S.Element == Rhythm<T>
 {
     func merge <S> (
         _ leaves: S,
-        into accum: [MetricalDuration],
-        tied: MetricalDuration?
-    ) -> [MetricalDuration] where S: Sequence, S.Element == Rhythm<T>.Leaf
+        into accum: [Duration],
+        tied: Duration?
+    ) -> [Duration] where S: Sequence, S.Element == Rhythm<T>.Leaf
     {
         guard let (leaf, remaining) = leaves.destructured else { return accum + tied }
 
@@ -122,8 +121,8 @@ public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
             return merge(remaining, into: accum, tied: tied)
 
         case .instance(let absenceOrEvent):
-            let newAccum: [MetricalDuration]
-            let newTied: MetricalDuration?
+            let newAccum: [Duration]
+            let newTied: Duration?
             switch absenceOrEvent {
             case .absence:
                 newAccum = accum + tied + leaf.metricalDuration
@@ -140,7 +139,7 @@ public func lengths <S,T> (of rhythms: S) -> [MetricalDuration]
     return merge(rhythms.flatMap { $0.leaves }, into: [], tied: nil)
 }
 
-/// - returns: `RhythmTree` with the given `MetricalDurationTree` and `MetricalContext` values.
-public func * <Element> (lhs: MetricalDurationTree, rhs: [MetricalContext<Element>]) -> Rhythm<Element> {
+/// - returns: `RhythmTree` with the given `DurationTree` and `MetricalContext` values.
+public func * <Element> (lhs: DurationTree, rhs: [MetricalContext<Element>]) -> Rhythm<Element> {
     return Rhythm(lhs, rhs)
 }

@@ -1,5 +1,5 @@
 //
-//  MetricalDurationTree.swift
+//  DurationTree.swift
 //  Rhythm
 //
 //  Created by James Bean on 2/7/17.
@@ -9,16 +9,15 @@
 import Algebra
 import DataStructures
 import Math
-import MetricalDuration
 
-/// Tree containing `MetricalDuration` values.
-public typealias MetricalDurationTree = Tree<MetricalDuration, MetricalDuration>
+/// Tree containing `Duration` values.
+public typealias DurationTree = Tree<Duration, Duration>
 
-/// - Note: Use extension MetricalDurationTree when Swift allows it.
-extension Tree where Branch == MetricalDuration, Leaf == MetricalDuration {
+/// - Note: Use extension DurationTree when Swift allows it.
+extension Tree where Branch == Duration, Leaf == Duration {
 
-    /// `MetricalDuration` value of this `MetricalDurationTree` node.
-    public var duration: MetricalDuration {
+    /// `Duration` value of this `DurationTree` node.
+    public var duration: Duration {
         switch self {
         case .leaf(let duration):
             return duration
@@ -32,22 +31,22 @@ extension Tree where Branch == MetricalDuration, Leaf == MetricalDuration {
         return map { $0.numerator }.scaling
     }
 
-    /// - Returns: `MetricalDurationTree` with the durations scaled by context.
+    /// - Returns: `DurationTree` with the durations scaled by context.
     public var scaled: Tree<Fraction,Fraction> {
         return zip(self, scaling) { duration, scaling in (Fraction(duration) * scaling).reduced }
     }
 
     /// - returns: Array of tuples containing the scaled offset from the start of this
-    /// `MetricalDurationTree`.
+    /// `DurationTree`.
     ///
     /// - TODO: Change to concrete offsets.
     /// - TODO: Refactor to 
-    /// `concreteOffsets(startingAt: MetricalDuration, in structure: Meter.Structure)`
+    /// `concreteOffsets(startingAt: Duration, in structure: Meter.Structure)`
     public var offsets: [Fraction] {
         return scaled.leaves.accumulatingSum
     }
 
-    /// Create a `MetricalDurationTree` with the beat values of the given `proportionTree`
+    /// Create a `DurationTree` with the beat values of the given `proportionTree`
     /// with the given `subdivision`.
     ///
     /// - note: Ensure the given `proportionTree` has been normalized.
@@ -55,9 +54,9 @@ extension Tree where Branch == MetricalDuration, Leaf == MetricalDuration {
         self = proportionTree.map { $0 /> subdivision }
     }
 
-    /// Create a `MetricalDurationTree` with the given `metricalDuration` as the value of the
+    /// Create a `DurationTree` with the given `metricalDuration` as the value of the
     /// root node, and the given `proportions` scaled appropriately.
-    public init(_ metricalDuration: MetricalDuration, _ proportionTree: ProportionTree) {
+    public init(_ metricalDuration: Duration, _ proportionTree: ProportionTree) {
 
         let beats = metricalDuration.numerator
         let subdivision = metricalDuration.denominator
@@ -75,18 +74,18 @@ extension Tree where Branch == MetricalDuration, Leaf == MetricalDuration {
     }
 }
 
-/// - returns: A `MetricalDurationTree` with the given `subdivision` applied to each node.
-public func * (_ subdivision: Int, proportions: [Int]) -> MetricalDurationTree {
-    return MetricalDurationTree(subdivision, ProportionTree(subdivision,proportions))
+/// - returns: A `DurationTree` with the given `subdivision` applied to each node.
+public func * (_ subdivision: Int, proportions: [Int]) -> DurationTree {
+    return DurationTree(subdivision, ProportionTree(subdivision,proportions))
 }
 
-/// - returns: A single-depth `MetricalDurationTree` with the given `metricalDuration` as the 
+/// - returns: A single-depth `DurationTree` with the given `metricalDuration` as the 
 /// value of the root node, and the given `proportions` mapped accordingly as the children.
 ///
-/// If an empty array is given, a single child is created with the same `MetricalDuration`
+/// If an empty array is given, a single child is created with the same `Duration`
 /// value as the root.
-public func * (_ metricalDuration: MetricalDuration, _ proportions: [Int])
-    -> MetricalDurationTree
+public func * (_ metricalDuration: Duration, _ proportions: [Int])
+    -> DurationTree
 {
 
     if proportions.isEmpty {
@@ -95,5 +94,5 @@ public func * (_ metricalDuration: MetricalDuration, _ proportions: [Int])
 
     let beats = metricalDuration.numerator
     let proportionTree = ProportionTree(beats, proportions)
-    return MetricalDurationTree(metricalDuration, proportionTree)
+    return DurationTree(metricalDuration, proportionTree)
 }

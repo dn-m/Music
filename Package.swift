@@ -29,7 +29,8 @@ let package = Package(
                 "Algebra",
                 "DataStructures",
                 "Articulations",
-                "Pitch"
+                "Pitch",
+                "Duration"
             ]
         ),
 

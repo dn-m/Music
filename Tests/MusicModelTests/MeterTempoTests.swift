@@ -6,10 +6,7 @@
 //
 
 import XCTest
-import Rhythm
-import Tempo
-import Meter
-import MetricalDuration
+import Duration
 
 class MeterTempoTests: XCTestCase {
 

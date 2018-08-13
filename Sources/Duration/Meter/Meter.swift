@@ -7,16 +7,15 @@
 //
 
 import Math
-import MetricalDuration
 
 /// Model of a `Meter`.
 public struct Meter: Rational {
 
     // MARK: - Instance Properties
 
-    /// - Returns: Array of `MetricalDuration` offsets of each beat in a meter.
-    public var beatOffsets: [MetricalDuration] {
-        return (0..<numerator).map { beat in MetricalDuration(beat, denominator) }
+    /// - Returns: Array of `Duration` offsets of each beat in a meter.
+    public var beatOffsets: [Duration] {
+        return (0..<numerator).map { beat in Duration(beat, denominator) }
     }
 
     /// Numerator.
@@ -35,11 +34,11 @@ public struct Meter: Rational {
     }
 }
 
-extension Meter: MetricalDurationSpanning {
+extension Meter: DurationSpanning {
 
-    // MARK: - MetricalDurationSpanning
+    // MARK: - DurationSpanning
 
-    /// - Returns: The `MetricalDuration` of the `Meter`.
+    /// - Returns: The `Duration` of the `Meter`.
     public var length: Fraction {
         return Fraction(self)
     }
@@ -105,7 +104,7 @@ extension Meter.Collection: Equatable { }
 extension Meter.Collection {
 
     /// Stateful building of a `Meter.Collection`.
-    public final class Builder: MetricalDurationSpanningContainerBuilder {
+    public final class Builder: DurationSpanningContainerBuilder {
 
         // MARK: - Associated Types
 

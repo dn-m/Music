@@ -1,5 +1,5 @@
 //
-//  MetricalDurationTests.swift
+//  DurationTests.swift
 //  Rhythm
 //
 //  Created by James Bean on 1/28/17.
@@ -8,13 +8,13 @@
 
 import XCTest
 import Math
-import MetricalDuration
+import Duration
 
-class MetricalDurationTests: XCTestCase {
+class DurationTests: XCTestCase {
 
     func testComparableReduced() {
-        let a = MetricalDuration(1,8)
-        let b = MetricalDuration(1,16)
+        let a = Duration(1,8)
+        let b = Duration(1,16)
         XCTAssertLessThan(b,a)
     }
 
