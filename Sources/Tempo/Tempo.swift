@@ -72,7 +72,6 @@ public struct Tempo: Equatable {
 }
 
 // FIXME: Move to own file (Tempo.Interpolation) when Swift compiler build-order bug resolved.
-import Darwin
 import Math
 
 extension Tempo {
