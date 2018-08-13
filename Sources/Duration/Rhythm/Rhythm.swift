@@ -12,6 +12,17 @@ import Math
 /// Hierachical organization of metrical durations and their metrical contexts.
 public struct Rhythm <Element> {
 
+    // MARK: - Instance Properties
+
+    /// Hierarchical representation of metrical durations.
+    public let durationTree: DurationTree
+
+    /// Leaf items containing metrical context.
+    public let leaves: [Leaf]
+}
+
+extension Rhythm {
+
     /// Leaf item of a hierarchically-structured `Rhythm`.
     public struct Leaf {
 
@@ -41,12 +52,6 @@ public struct Rhythm <Element> {
             self.kind = kind
         }
     }
-
-    /// Hierarchical representation of metrical durations.
-    public let durationTree: DurationTree
-
-    /// Leaf items containing metrical context.
-    public let leaves: [Leaf]
 }
 
 extension Rhythm {
