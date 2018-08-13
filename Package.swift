@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "Articulations", targets: ["Articulations"]),
         .library(name: "Dynamics", targets: ["Dynamics"]),
         .library(name: "Pitch", targets: ["Pitch"]),
-        .library(name: "MetricalDuration", targets: ["MetricalDuration"]),
+        .library(name: "Duration", targets: ["Duration"]),
         .library(name: "Rhythm", targets: ["Rhythm"]),
         .library(name: "Tempo", targets: ["Tempo"]),
         .library(name: "Meter", targets: ["Meter"]),
@@ -25,8 +25,8 @@ let package = Package(
         .target(name: "Articulations", dependencies: []),
         .target(name: "Dynamics", dependencies: ["Destructure", "DataStructures"]),
         .target(name: "Pitch", dependencies: ["Math", "DataStructures"]),
-        .target(name: "Rhythm", dependencies: ["MetricalDuration"]),
-        .target(name: "MetricalDuration", dependencies: ["Math", "DataStructures"]),
+        .target(name: "Rhythm", dependencies: ["Duration"]),
+        .target(name: "Duration", dependencies: ["Math", "DataStructures"]),
         .target(name: "Tempo", dependencies: ["Rhythm"]),
         .target(name: "Meter", dependencies: ["Rhythm", "Tempo"]),
         .target(
@@ -47,7 +47,7 @@ let package = Package(
         .testTarget(name: "DynamicsTests", dependencies: ["Dynamics"]),
         .testTarget(name: "PitchTests", dependencies: ["Pitch"]),
         .testTarget(name: "RhythmTests", dependencies: ["Rhythm"]),
-        .testTarget(name: "MetricalDurationTests", dependencies: ["MetricalDuration"]),
+        .testTarget(name: "DurationTests", dependencies: ["Duration"]),
         .testTarget(name: "TempoTests", dependencies: ["Tempo"]),
         .testTarget(name: "MeterTests", dependencies: ["Meter"]),
         .testTarget(name: "MusicModelTests", dependencies: ["MusicModel"])
