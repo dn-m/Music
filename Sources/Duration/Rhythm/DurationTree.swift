@@ -11,7 +11,7 @@ import DataStructures
 import Math
 
 /// Tree containing `Duration` values.
-public typealias DurationTree = Tree<Duration, Duration>
+public typealias DurationTree = Tree<Duration,Duration>
 
 /// - Note: Use extension DurationTree when Swift allows it.
 extension Tree where Branch == Duration, Leaf == Duration {
