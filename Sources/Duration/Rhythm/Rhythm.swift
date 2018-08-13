@@ -137,7 +137,6 @@ public func lengths <S,T> (of rhythms: S) -> [Duration] where S: Sequence, S.Ele
             return merge(remaining, into: newAccum, tied: newTied)
         }
     }
-
     return merge(rhythms.flatMap { $0.leaves }, into: [], tied: nil)
 }
 
