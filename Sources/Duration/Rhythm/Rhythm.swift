@@ -81,11 +81,13 @@ extension Rhythm {
 
 extension Rhythm {
 
+    // MARK: - Instance Methods
+
     /// - Returns: `Rhythm` with each of its `event` (i.e., `.instance(.event(Element))`) values
     /// updated by the given `transform`.
     ///
-    /// - Each `continuation` remains so
-    /// - Each `.instance(.rest)` remains so
+    /// - Each `/continuation` remains as such
+    /// - Each `.instance(.rest)` remains as such
     /// - Each `.instance(.event(T))` is transformed to a `.instance(.event(U))`
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U> {
         return Rhythm<U>(
@@ -96,6 +98,8 @@ extension Rhythm {
 }
 
 extension Rhythm.Leaf {
+
+    // MARK: - Instance Methods
 
     /// - Returns: `Rhythm.Leaf` with its value updated by the given `transform`.
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U>.Leaf {

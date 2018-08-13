@@ -21,6 +21,8 @@ public typealias ProportionTree = Tree<Int,Int>
 
 extension Tree where Branch == Int, Leaf == Int {
 
+    // MARK: - Instance Properties
+
     /// - Returns: `Tree` containing the inherited scale of each node contained herein.
     public var scaling: Tree<Fraction, Fraction> {
         func traverse(_ tree: ProportionTree, accum: Fraction) -> Tree<Fraction, Fraction> {
@@ -112,6 +114,8 @@ extension Tree where Branch == Int, Leaf == Int {
 }
 
 extension Tree where Branch == Int, Leaf == Int {
+
+    // MARK: - Initializers
 
     /// Create a single-depth `ProportionTree` with the given root `duration` and child `durations`.
     public init(_ duration: Int, _ durations: [Int]) {

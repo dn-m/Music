@@ -5,7 +5,7 @@
 //  Created by James Bean on 5/17/18.
 //
 
-/// Whether a context is a "rest" or an actual event of type `T`.
+/// Whether a context is a "rest" or an actual event of type `Element`.
 public enum AbsenceOrEvent <Element> {
 
     /// "Rest".

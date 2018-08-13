@@ -13,8 +13,42 @@ import Math
 /// Tree containing `Duration` values.
 public typealias DurationTree = Tree<Duration,Duration>
 
+extension Tree where Branch == Duration, Leaf == Duration {
+
+    // MARK: - Initializers
+
+    /// Create a `DurationTree` with the beat values of the given `proportionTree`
+    /// with the given `subdivision`.
+    ///
+    /// - note: Ensure the given `proportionTree` has been normalized.
+    public init(_ subdivision: Int, _ proportionTree: ProportionTree) {
+        self = proportionTree.map { $0 /> subdivision }
+    }
+
+    /// Create a `DurationTree` with the given `duration` as the value of the
+    /// root node, and the given `proportions` scaled appropriately.
+    public init(_ duration: Duration, _ proportionTree: ProportionTree) {
+
+        let beats = duration.numerator
+        let subdivision = duration.denominator
+
+        // Update proportion tree
+        let multiplier = lcm(beats, proportionTree.value) / proportionTree.value
+        let scaled = proportionTree.map { $0 * multiplier }
+        let normalized = scaled.normalized
+
+        // Update subdivision given updated proportions
+        let quotient = Double(normalized.value) / Double(beats)
+        let newSubdivision = Int(Double(subdivision) * Double(quotient))
+
+        self.init(newSubdivision, normalized)
+    }
+}
+
 /// - Note: Use extension DurationTree when Swift allows it.
 extension Tree where Branch == Duration, Leaf == Duration {
+
+    // MARK: - Instance Properties
 
     /// `Duration` value of this `DurationTree` node.
     public var duration: Duration {
@@ -45,41 +79,14 @@ extension Tree where Branch == Duration, Leaf == Duration {
     public var offsets: [Fraction] {
         return scaled.leaves.accumulatingSum
     }
-
-    /// Create a `DurationTree` with the beat values of the given `proportionTree`
-    /// with the given `subdivision`.
-    ///
-    /// - note: Ensure the given `proportionTree` has been normalized.
-    public init(_ subdivision: Int, _ proportionTree: ProportionTree) {
-        self = proportionTree.map { $0 /> subdivision }
-    }
-
-    /// Create a `DurationTree` with the given `duration` as the value of the
-    /// root node, and the given `proportions` scaled appropriately.
-    public init(_ duration: Duration, _ proportionTree: ProportionTree) {
-
-        let beats = duration.numerator
-        let subdivision = duration.denominator
-        
-        // Update proportion tree
-        let multiplier = lcm(beats, proportionTree.value) / proportionTree.value
-        let scaled = proportionTree.map { $0 * multiplier }
-        let normalized = scaled.normalized
-
-        // Update subdivision given updated proportions
-        let quotient = Double(normalized.value) / Double(beats)
-        let newSubdivision = Int(Double(subdivision) * Double(quotient))
-
-        self.init(newSubdivision, normalized)
-    }
 }
 
-/// - returns: A `DurationTree` with the given `subdivision` applied to each node.
+/// - Returns: A `DurationTree` with the given `subdivision` applied to each node.
 public func * (_ subdivision: Int, proportions: [Int]) -> DurationTree {
     return DurationTree(subdivision, ProportionTree(subdivision,proportions))
 }
 
-/// - returns: A single-depth `DurationTree` with the given `duration` as the 
+/// - Returns: A single-depth `DurationTree` with the given `duration` as the 
 /// value of the root node, and the given `proportions` mapped accordingly as the children.
 ///
 /// If an empty array is given, a single child is created with the same `Duration`
