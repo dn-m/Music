@@ -23,35 +23,37 @@ public struct Rhythm <Element> {
 
 extension Rhythm {
 
-    /// Leaf item of a hierarchically-structured `Rhythm`.
-    public struct Leaf {
+    public typealias Leaf = ContinuationOrInstance<AbsenceOrEvent<Element>>
 
-        // MARK: - Associated Types
+//    /// Leaf item of a hierarchically-structured `Rhythm`.
+//    public struct Leaf {
+//
+//        // MARK: - Associated Types
+//
+//        /// The metrical identity of a given `Leaf`.
+//        ///
+//        /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
+//        /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
+//        /// - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
+//        ///
 
-        /// The metrical identity of a given `Leaf`.
-        ///
-        /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
-        /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
-        /// - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
-        ///
-        public typealias Kind = ContinuationOrInstance<AbsenceOrEvent<Element>>
-
-        // MARK: - Instance Properties
-
-        /// `Duration` of `Rhythm.Leaf`.
-        public let duration: Duration
-
-        /// `Kind` of `Rhythm.Leaf`
-        public let kind: Kind
-
-        // MARK: - Initializers
-
-        /// Create a `Rhythm.Leaf` with a given `duration` and `context`.
-        public init(duration: Duration, kind: Leaf.Kind) {
-            self.duration = duration
-            self.kind = kind
-        }
-    }
+//
+//        // MARK: - Instance Properties
+//
+//        /// `Duration` of `Rhythm.Leaf`.
+//        public let duration: Duration
+//
+//        /// `Kind` of `Rhythm.Leaf`
+//        public let kind: Kind
+//
+//        // MARK: - Initializers
+//
+//        /// Create a `Rhythm.Leaf` with a given `duration` and `context`.
+//        public init(duration: Duration, kind: Leaf.Kind) {
+//            self.duration = duration
+//            self.kind = kind
+//        }
+//    }
 }
 
 extension Rhythm {
@@ -59,22 +61,22 @@ extension Rhythm {
     // MARK: - Initializers
 
     /// Create a `Rhythm` with a given `durationTree` and given `leaves`.
-    public init(_ durationTree: DurationTree, _ kinds: [Leaf.Kind]) {
+    public init(_ durationTree: DurationTree, _ leaves: [Leaf]) {
         self.durationTree = durationTree
-        self.leaves = zip(durationTree.leaves, kinds).map(Leaf.init)
+        self.leaves = leaves
     }
 
     /// Create a `Rhythm` with a given `duration` and `leaves.
     public init(
         _ duration: Duration,
-        _ leaves: [(duration: Int, context: Leaf.Kind)]
+        _ leaves: [(duration: Int, context: Leaf)]
     )
     {
         self.init(duration * leaves.map { $0.duration}, leaves.map { $0.context} )
     }
 
     /// Create an isochronic `Rhythm` with the given `duration` and the given `contexts`.
-    public init(_ duration: Duration, _ contexts: [Leaf.Kind]) {
+    public init(_ duration: Duration, _ contexts: [Leaf]) {
         self.init(duration * contexts.map { _ in 1 }, contexts)
     }
 }
@@ -92,30 +94,19 @@ extension Rhythm {
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U> {
         return Rhythm<U>(
             durationTree: durationTree,
-            leaves: leaves.map { $0.map(transform) }
+            leaves: leaves.map { leafMap($0,transform) }
         )
     }
 }
 
-extension Rhythm.Leaf {
-
-    // MARK: - Instance Methods
-
-    /// - Returns: `Rhythm.Leaf` with its value updated by the given `transform`.
-    public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U>.Leaf {
-        var newKind: Rhythm<U>.Leaf.Kind {
-            switch kind {
-            case .continuation:
-                return .continuation
-            case .instance(let instance):
-                return .instance(instance.map(transform))
-            }
-        }
-        return Rhythm<U>.Leaf(duration: duration, kind: newKind)
+func leafMap <T,U> (_ leaf: Rhythm<T>.Leaf, _ transform: (T) -> U) -> Rhythm<U>.Leaf {
+    switch leaf {
+    case .continuation:
+        return .continuation
+    case .instance(let instance):
+        return .instance(instance.map(transform))
     }
 }
-
-extension Rhythm.Leaf: Equatable where Element: Equatable { }
 
 /// - Returns: The `Duration` values of the leaves of the given `rhythms`, by merging
 /// `tied` leaves to their predecesors.
@@ -123,46 +114,51 @@ public func lengths <S,T> (of rhythms: S) -> [Duration] where S: Sequence, S.Ele
 
     // FIXME: Consider using `inout [Duration]` for `accum` re: performance.
     func merge <S> (_ leaves: S, into accum: [Duration], tied: Duration?) -> [Duration]
-        where S: Sequence, S.Element == Rhythm<T>.Leaf
+        where S: Sequence, S.Element == (Duration, Rhythm<T>.Leaf)
     {
-        guard let (leaf, remaining) = leaves.destructured else { return accum + tied }
-        switch leaf.kind {
+        guard let (duratedLeaf, remaining) = leaves.destructured else { return accum + tied }
+        let (duration, leaf) = duratedLeaf
+        switch leaf {
         case .continuation:
-            let tied = (tied ?? .zero) + leaf.duration
+            let tied = (tied ?? .zero) + duration
             return merge(remaining, into: accum, tied: tied)
         case .instance(let absenceOrEvent):
             let newAccum: [Duration]
             let newTied: Duration?
             switch absenceOrEvent {
             case .absence:
-                newAccum = accum + tied + leaf.duration
+                newAccum = accum + tied + duration
                 newTied = nil
             case .event:
                 newAccum = accum + tied
-                newTied = leaf.duration
+                newTied = duration
             }
             return merge(remaining, into: newAccum, tied: newTied)
         }
     }
-    return merge(rhythms.flatMap { $0.leaves }, into: [], tied: nil)
+    return merge(
+        rhythms.flatMap { rhythm in zip(rhythm.durationTree.leaves,rhythm.leaves) },
+        into: [],
+        tied: nil
+    )
 }
 
 /// - Returns: `Rhythm` with the given `DurationTree` and `Rhythm.Leaf.Kind` values.
-public func * <Element> (lhs: DurationTree, rhs: [Rhythm<Element>.Leaf.Kind]) -> Rhythm<Element> {
+public func * <Element> (lhs: DurationTree, rhs: [Rhythm<Element>.Leaf]) -> Rhythm<Element> {
     return Rhythm(lhs, rhs)
 }
 
 /// - Returns: `.continuation` with generic context provided by the external environment.
-public func tie <T> () -> Rhythm<T>.Leaf.Kind {
+public func tie <T> () -> Rhythm<T>.Leaf {
     return .continuation
 }
 
 /// - Returns: `.instance(.absence)` with generic context provided by the external environment.
-public func rest <T> () -> Rhythm<T>.Leaf.Kind {
+public func rest <T> () -> Rhythm<T>.Leaf {
     return .instance(.absence)
 }
 
 /// - Returns: `.instance(.event(T))` wrapping the given `value`.
-public func event <T> (_ value: T) -> Rhythm<T>.Leaf.Kind {
+public func event <T> (_ value: T) -> Rhythm<T>.Leaf {
     return .instance(.event(value))
 }

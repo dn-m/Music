@@ -28,6 +28,8 @@ let dur = 17/>64
 
 ## Rhythm
 
+Hierachical organization of metrical durations and their metrical contexts. The `Rhythm` structure is the composition of a `DurationTree` and an array of `Rhythm.Leaf`
+
 ### DurationTree
 
 ### Rhythm.Leaf
