@@ -92,8 +92,6 @@ extension Rhythm.Leaf {
 
     /// - Returns: `Rhythm.Leaf` with its value updated by the given `transform`.
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U>.Leaf {
-
-        // FIXME: Extract this into func. Generics not happy.
         var newKind: Rhythm<U>.Leaf.Kind {
             switch kind {
             case .continuation:
@@ -102,7 +100,6 @@ extension Rhythm.Leaf {
                 return .instance(instance.map(transform))
             }
         }
-
         return Rhythm<U>.Leaf(duration: duration, kind: newKind)
     }
 }
