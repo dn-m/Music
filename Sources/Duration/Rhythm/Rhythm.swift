@@ -28,7 +28,7 @@ public struct Rhythm <Element> {
         /// `Duration` of `Rhythm.Leaf`.
         public let duration: Duration
 
-        /// `MetricalContext` of `Rhythm.Leaf`
+        /// `Kind` of `Rhythm.Leaf`
         public let kind: Kind
 
         // MARK: - Initializers
@@ -143,7 +143,7 @@ public func lengths <S,T> (of rhythms: S) -> [Duration]
     return merge(rhythms.flatMap { $0.leaves }, into: [], tied: nil)
 }
 
-/// - returns: `RhythmTree` with the given `DurationTree` and `MetricalContext` values.
+/// - returns: `Rhythm` with the given `DurationTree` and `Rhythm.Leaf.Kind` values.
 public func * <Element> (lhs: DurationTree, rhs: [Rhythm<Element>.Leaf.Kind]) -> Rhythm<Element> {
     return Rhythm(lhs, rhs)
 }
