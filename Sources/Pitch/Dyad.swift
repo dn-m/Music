@@ -6,7 +6,7 @@
 //  Copyright © 2017 James Bean. All rights reserved.
 //
 
-import Math
+import Algorithms
 
 public struct Dyad <Element: NoteNumberRepresentable>: Equatable {
 
