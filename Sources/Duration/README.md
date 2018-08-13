@@ -28,4 +28,22 @@ let dur = 17/>64
 
 ## Rhythm
 
+### DurationTree
 
+### Rhythm.Leaf
+
+### Rhythm.Leaf.Kind
+
+## Meter
+
+## Tempo
+
+### Tempo.Interpolation
+
+### Tempo.Interpolation.Easing
+
+### Tempo.Interpolation.Fragment
+
+### Tempo.Interpolation.Collection
+
+#### Tempo.Interpolation.Collection.Builder
