@@ -6,7 +6,12 @@
 //
 //
 
-import Rhythm
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 import MetricalDuration
 
 /// Model of a `Tempo`.
@@ -67,7 +72,6 @@ public struct Tempo: Equatable {
 }
 
 // FIXME: Move to own file (Tempo.Interpolation) when Swift compiler build-order bug resolved.
-import Darwin
 import Math
 
 extension Tempo {

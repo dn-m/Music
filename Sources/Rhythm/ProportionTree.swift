@@ -7,7 +7,12 @@
 //  Formalized by Brian Heim.
 //
 
-import Darwin
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 import DataStructures
 import Math
 

@@ -6,8 +6,6 @@
 //  Copyright © 2017 James Bean. All rights reserved.
 //
 
-import Darwin
-
 public struct UnorderedInterval <Element: NoteNumberRepresentable>: NoteNumberRepresentable {
 
     public init(noteNumber: NoteNumber) {

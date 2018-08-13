@@ -6,8 +6,12 @@
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 
-#warning("Conditionally compile Darwin.C or Glibc for pow(_:_:)")
-import Darwin
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 import DataStructures
 
 /// Periodic vibration in Hertz.
