@@ -136,7 +136,7 @@ public func lengths <S,T> (of rhythms: S) -> [Duration] where S: Sequence, S.Ele
     return merge(rhythms.flatMap { $0.leaves }, into: [], tied: nil)
 }
 
-/// - returns: `Rhythm` with the given `DurationTree` and `Rhythm.Leaf.Kind` values.
+/// - Returns: `Rhythm` with the given `DurationTree` and `Rhythm.Leaf.Kind` values.
 public func * <Element> (lhs: DurationTree, rhs: [Rhythm<Element>.Leaf.Kind]) -> Rhythm<Element> {
     return Rhythm(lhs, rhs)
 }
