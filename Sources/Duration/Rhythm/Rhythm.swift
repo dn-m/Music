@@ -14,6 +14,12 @@ public struct Rhythm <Element> {
 
     // MARK: - Instance Properties
 
+    /// - Returns: A sequence of tuples containing the `Duration` and `Leaf` information of each
+    /// leaf item.
+    public var duratedLeaves: AnySequence<(Duration,Leaf)> {
+        return AnySequence(zip(durationTree.leaves,leaves))
+    }
+
     /// Hierarchical representation of metrical durations.
     public let durationTree: DurationTree
 
@@ -23,37 +29,15 @@ public struct Rhythm <Element> {
 
 extension Rhythm {
 
+    // MARK: - Associated Types
+
+    /// The metrical identity of a given rhythmic leaf item.
+    ///
+    /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
+    /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
+    /// - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
+    ///
     public typealias Leaf = ContinuationOrInstance<AbsenceOrEvent<Element>>
-
-//    /// Leaf item of a hierarchically-structured `Rhythm`.
-//    public struct Leaf {
-//
-//        // MARK: - Associated Types
-//
-//        /// The metrical identity of a given `Leaf`.
-//        ///
-//        /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
-//        /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
-//        /// - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
-//        ///
-
-//
-//        // MARK: - Instance Properties
-//
-//        /// `Duration` of `Rhythm.Leaf`.
-//        public let duration: Duration
-//
-//        /// `Kind` of `Rhythm.Leaf`
-//        public let kind: Kind
-//
-//        // MARK: - Initializers
-//
-//        /// Create a `Rhythm.Leaf` with a given `duration` and `context`.
-//        public init(duration: Duration, kind: Leaf.Kind) {
-//            self.duration = duration
-//            self.kind = kind
-//        }
-//    }
 }
 
 extension Rhythm {
