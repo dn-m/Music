@@ -6,7 +6,12 @@
 //
 //
 
-import Rhythm
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 import MetricalDuration
 
 /// Model of a `Tempo`.
