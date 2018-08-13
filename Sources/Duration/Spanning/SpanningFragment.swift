@@ -11,7 +11,7 @@
 import Math
 
 /// Interface extending `Spanning` types, which also carry with them a range of operation.
-public protocol SpanningFragment: Spanning, Fragmentable {
+public protocol SpanningFragment: Spanning, Fragmentable where Fragment == Self {
 
     // MARK: - Instance Properties
 
@@ -27,7 +27,7 @@ extension SpanningFragment {
     }
 }
 
-extension SpanningFragment where Fragment == Self {
+extension SpanningFragment {
 
     /// - Returns: A fragment of self from lower bound to the given `offset`.
     public func to(_ offset: Metric) -> Self {
