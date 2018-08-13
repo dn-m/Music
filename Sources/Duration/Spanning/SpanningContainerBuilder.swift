@@ -26,6 +26,8 @@ public protocol SpanningContainerBuilder: class {
     // MARK: - Instance Properties
 
     /// Intermediate storage which is converted into the `Product`.
+    //
+    // FIXME: Consider using `OrderedDictionary` re: performance.
     var intermediate: SortedDictionary<Spanner.Metric,Spanner> { get set }
 
     /// Cumulative offset of spanners contained in `intermediate`.
