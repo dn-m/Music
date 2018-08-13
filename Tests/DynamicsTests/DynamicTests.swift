@@ -9,7 +9,8 @@
 import XCTest
 @testable import Dynamics
 
-class DynamicTests: XCTestCase {
+#warning("Reimplement DynamicTests")
+//class DynamicTests: XCTestCase {
 
     // MARK: - Init with Elements
     
@@ -97,4 +98,4 @@ class DynamicTests: XCTestCase {
         do { let _ = try Dynamic("o") } catch { XCTFail() }
     }
     */
-}
+//}

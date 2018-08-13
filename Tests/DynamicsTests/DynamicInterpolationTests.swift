@@ -9,7 +9,8 @@
 import XCTest
 @testable import Dynamics
 
-class DynamicInterpolationTests: XCTestCase {
+#warning("Reimplement DynamicInterpolationTests")
+//class DynamicInterpolationTests: XCTestCase {
 
     /*
     func testInit() {
@@ -32,4 +33,4 @@ class DynamicInterpolationTests: XCTestCase {
         XCTAssert(i.direction == .decrescendo)
     }
     */
-}
+//}
