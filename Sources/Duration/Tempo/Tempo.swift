@@ -53,6 +53,8 @@ public struct Tempo: Equatable {
         self.subdivision = subdivision
     }
 
+    // MARK: - Instance Methods
+
     public func respelling(subdivision newSubdivision: Subdivision) -> Tempo {
         assert(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")
         guard newSubdivision != subdivision else { return self }

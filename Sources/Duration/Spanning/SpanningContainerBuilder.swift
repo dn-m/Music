@@ -44,7 +44,7 @@ public protocol SpanningContainerBuilder: class {
 
 extension SpanningContainerBuilder {
 
-    /// Adds the given `element` to the `intermediate` with accumulativng offsets.
+    /// Adds the given `element` to the `intermediate` with accumulating offsets.
     ///
     /// - Returns: `Self`.
     @discardableResult public func add(_ element: Spanner) -> Self {

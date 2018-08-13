@@ -14,7 +14,7 @@ import Math
 
 /// Interface for values that contain a sequence of `SpanningFragment` type values.
 public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fragmentable
-    where Spanner == Spanner.Fragment, Metric == Spanner.Metric
+    where Metric == Spanner.Metric
 {
 
     // MARK: - Associated Types
