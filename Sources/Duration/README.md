@@ -90,7 +90,7 @@ durationTree // => .branch(13/>64, [
 ])
 ```
 
-for a resulting tuplet ratio of `14/13`.
+for a resulting tuplet ratio of `14:13`.
 
 ### Rhythm.Leaf
 
