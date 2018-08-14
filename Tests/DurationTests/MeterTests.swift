@@ -17,6 +17,7 @@ class MeterTests: XCTestCase {
     }
 
     func testIrrationalMeter() {
+        let _ = Meter(4,1)
         let _ = Meter(5,3)
         let _ = Meter(5,6)
         let _ = Meter(5,28)
