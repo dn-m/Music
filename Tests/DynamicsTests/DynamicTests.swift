@@ -9,93 +9,58 @@
 import XCTest
 @testable import Dynamics
 
-#warning("Reimplement DynamicTests")
-//class DynamicTests: XCTestCase {
+class DynamicTests: XCTestCase {
 
-    // MARK: - Init with Elements
-    
-    /*
-    func testInitWithEmptyElements() {
-        do {
-            let _ = try Dynamic([])
-            XCTFail()
-        } catch {
-            
-        }
+    func testAPI() {
+        let forte = Dynamic.f
+        XCTAssertEqual("\(forte)", "f")
+        let piano = Dynamic.p
+        XCTAssertEqual("\(piano)", "p")
+        let mezzoForte = Dynamic.mf
+        XCTAssertEqual("\(mezzoForte)", "mf")
+        let mezzoPiano = Dynamic.mp
+        XCTAssertEqual("\(mezzoPiano)", "mp")
+        let triplePiano = Dynamic.p(3)
+        XCTAssertEqual("\(triplePiano)", "ppp")
+        let septupleForte = Dynamic.f(7)
+        XCTAssertEqual("\(septupleForte)", "fffffff")
+        let fortePiano = Dynamic.fp
+        XCTAssertEqual("\(fortePiano)", "fp")
+        let sforzando = Dynamic.sfz
+        XCTAssertEqual("\(sforzando)", "sfz")
+        let sfffffffz = Dynamic.s(.f(7)).z
+        XCTAssertEqual("\(sfffffffz)", "sfffffffz")
+        let rf = Dynamic.rf
+        XCTAssertEqual("\(rf)", "rf")
+        let rfz = Dynamic.rfz
+        XCTAssertEqual("\(rfz)", "rfz")
+        let rffff = Dynamic.r(.f(4))
+        XCTAssertEqual("\(rffff)", "rffff")
+        let sfp = Dynamic.s(.f,.p)
+        XCTAssertEqual("\(sfp)", "sfp")
+        let _: [Dynamic] = [.p, .f(4), .fff, .p(3), .mf, .s(.f,.p), .p(11), .r(.f(4))]
+        //                   p   ffff   fff   ppp    mf   sfp        p       rfff
     }
-    
-    func testInitWithElementsPiano() {
-        do { let _ = try Dynamic([.piano]) } catch { XCTFail() }
+
+    func testNumericValues() {
+        XCTAssertEqual(Dynamic.f.numericValues.anterior, 1)
+        XCTAssertEqual(Dynamic.f.numericValues.posterior, 1)
+        XCTAssertEqual(Dynamic.p.numericValues.anterior, -1)
+        XCTAssertEqual(Dynamic.p.numericValues.posterior, -1)
+        XCTAssertEqual(Dynamic.mp.numericValues.anterior, -0.5)
+        XCTAssertEqual(Dynamic.mp.numericValues.posterior, -0.5)
+        XCTAssertEqual(Dynamic.mf.numericValues.anterior, 0.5)
+        XCTAssertEqual(Dynamic.mf.numericValues.posterior, 0.5)
+        XCTAssertEqual(Dynamic.fff.numericValues.anterior, 3)
+        XCTAssertEqual(Dynamic.fff.numericValues.posterior, 3)
+        XCTAssertEqual(Dynamic.ppp.numericValues.anterior, -3)
+        XCTAssertEqual(Dynamic.ppp.numericValues.posterior, -3)
+        XCTAssertEqual(Dynamic.fp.numericValues.anterior, 1)
+        XCTAssertEqual(Dynamic.fp.numericValues.posterior, -1)
+        XCTAssertEqual(Dynamic.sfffp.numericValues.anterior, 3)
+        XCTAssertEqual(Dynamic.sfffp.numericValues.posterior, -1)
+        XCTAssertEqual(Dynamic.sfppp.numericValues.anterior, 1)
+        XCTAssertEqual(Dynamic.sfppp.numericValues.posterior, -3)
+        XCTAssertGreaterThan(Dynamic.f.numericValues.posterior, Dynamic.p.numericValues.anterior)
     }
-    
-    func testInitWithElementsForte() {
-        do { let _ = try Dynamic([.forte]) } catch { XCTFail() }
-    }
-    
-    func testInitWithElementsNiente() {
-        do { let _ = try Dynamic([.niete]) } catch { XCTFail() }
-    }
-    
-    func testInitWithElementsMezzoPiano() {
-        do { let _ = try Dynamic([.mezzo, .piano]) } catch { XCTFail() }
-    }
-    
-    func testInitWithElementsMezzoForte() {
-        do { let _ = try Dynamic([.mezzo, .forte]) } catch { XCTFail() }
-    }
-    
-    func testInitWithElementsFortissimo() {
-        do { let _ = try Dynamic([.forte, .forte]) } catch { XCTFail() }
-    }
-    
-    func testInitWithElementsPianissimo() {
-        do { let _ = try Dynamic([.piano, .piano]) } catch { XCTFail() }
-    }
-    
-    func testInitWithNienteFollowedByPiano() {
-        do {
-            let _ = try Dynamic([.niete, .piano])
-            XCTFail()
-        } catch { }
-    }
-    
-    func testInitWithNienteFollowedByForte() {
-        do {
-            let _ = try Dynamic([.niete, .forte])
-            XCTFail()
-        } catch { }
-    }
-    
-    // MARK: - Init with String
-    
-    func testInitWithEmptyThrows() {
-        do {
-            let _ = try Dynamic("")
-            XCTFail()
-        } catch { }
-    }
-    
-    func testInitWithStringP() {
-        do { let _ = try Dynamic("p") } catch { XCTFail() }
-    }
-    
-    func testInitWithStringPPP() {
-        do { let _ = try Dynamic("ppp") } catch {
-            print(error)
-            XCTFail()
-        }
-    }
-    
-    func testInitWithStringF() {
-        do { let _ = try Dynamic("f") } catch { XCTFail() }
-    }
-    
-    func testInitWithStringFFF() {
-        do { let _ = try Dynamic("fff") } catch { XCTFail() }
-    }
-    
-    func testInitWithStringO() {
-        do { let _ = try Dynamic("o") } catch { XCTFail() }
-    }
-    */
-//}
+}
