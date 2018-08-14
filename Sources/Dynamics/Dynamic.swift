@@ -199,23 +199,28 @@ extension Dynamic {
     static let mp = Dynamic(elements: .single(.mezzo(.p)))
     static let mf = Dynamic(elements: .single(.mezzo(.f)))
 
+    /// - Returns: A `Dynamic` with the amount of forte elements, with the given `annotation`.
     static func f(_ count: Int, _ annotation: String? = nil) -> Dynamic {
         return .init(annotation: annotation, elements: .single(.f(count)))
     }
 
+    /// - Returns: A `Dynamic` with the amount of piano elements, with the given `annotation`.
     static func p(_ count: Int, _ annotation: String? = nil) -> Dynamic {
         return .init(annotation: annotation, elements: .single(.p(count)))
     }
 
+    /// - Returns: A `Dynamic` which prepends a `r` to the given `element`, with the given
+    /// `annotation`.
     static func r(
         _ element: Element,
-        _ count: Int = 1,
         _ annotation: String? = nil
     ) -> Dynamic
     {
         return .init(annotation: annotation, anteriorModifier: .r, elements: .single(element))
     }
 
+    /// - Returns: A `Dynamic` with prepends an `s` to the given `element`, with the given
+    /// `annotation`.
     static func s(
         _ element: Element,
         _ annotation: String? = nil
@@ -224,6 +229,8 @@ extension Dynamic {
         return .init(annotation: annotation, anteriorModifier: .s, elements: .single(element))
     }
 
+    /// - Returns: A `Dynamic` with the given `anterior` and `posterior` `Elements` joined together
+    /// in a compound `Elements`, with the given `annotation`.
     static func s(
         _ anterior: Element,
         _ posterior: Element,
@@ -236,6 +243,8 @@ extension Dynamic {
         )
     }
 
+    /// - Returns: A `Dynamic` with the same attributes as self, with an appended `z` for a
+    /// rinforzando / sforzando.
     var z: Dynamic {
         precondition(posteriorModifier == nil, "You cannot make a zinger zing again!")
         return .init(
@@ -248,6 +257,10 @@ extension Dynamic {
 }
 
 extension Dynamic: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Dynamic`.
     public var description: String {
         var result = ""
         if let anterior = anteriorModifier { result += anterior.rawValue }
@@ -259,6 +272,10 @@ extension Dynamic: CustomStringConvertible {
 }
 
 extension Dynamic.Elements: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Dynamic.Elements`.
     public var description: String {
         switch self {
         case .single(let element):
@@ -270,6 +287,10 @@ extension Dynamic.Elements: CustomStringConvertible {
 }
 
 extension Dynamic.Element: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Dynamic.Element`.
     public var description: String {
         switch self {
         case .mezzo(let direction):
@@ -281,6 +302,10 @@ extension Dynamic.Element: CustomStringConvertible {
 }
 
 extension Dynamic.Element.Direction: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Dynamic.Element.Direction`.
     public var description: String {
         return self == .p ? "p" : "f"
     }

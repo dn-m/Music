@@ -41,6 +41,4 @@ class DynamicTests: XCTestCase {
         let _: [Dynamic] = [.p, .f(4), .fff, .p(3), .mf, .s(.f,.p), .p(11), .r(.f(4))]
         //                   p   ffff   fff   ppp    mf   sfp        p       rfff
     }
-
-
 }
