@@ -24,7 +24,6 @@ let dur = 17/>64
 
 ## Rhythm
 
-A `Rhythm` is a hierarchical organization of metrical durations with their metrical contexts for the purpose of defining arbitrarily-nested tuplet values. The `Rhythm` structure is the composition of a `DurationTree` and an array of `Rhythm.Leaf` values.
 
 ### ProportionTree
 
@@ -108,6 +107,22 @@ Whether a rhythmic item is "tied-over" from its preceeding item (`.continuation`
 #### AbsenceOrEvent<Element>
 
 Whether a rhythmic item is a "rest" (`.absence`) or a "note" (`.event(Element)`).
+
+### Rhythm
+ 
+A `Rhythm` is the composition of a `DurationTree` and an array of `Rhythm.Leaf` values (with a length equivalent to the leaves of the `durationTree`). The `Rhythm.Leaf` values can store any value generically.
+
+We can decorate the `durationTree` above like so:
+
+```Swift
+let rhythm = Rhythm<String>(durationTree, [
+    .instance(.absence),        // rest
+    .instance(.event("BANG")),  // start event
+    .continuation               // tied from previous event
+])
+```
+
+
 
 ## Meter
 
