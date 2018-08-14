@@ -46,111 +46,6 @@ public struct Dynamic {
 
 extension Dynamic {
 
-    // MARK: - Associated Types
-
-    /// Whether a `Dynamic` consistes a single element or a compound of two elements.
-    public enum Elements {
-        case single(Element)
-        case compound(Element,Element)
-    }
-
-    /// A modifier for defining the `s` or `r` in `sforzando`, or `rinforzando`.
-    public enum AnteriorModifier: String {
-
-        // MARK: - Cases
-
-        /// `r` for `rinforzando`
-        case r
-
-        /// `s` for `sforzando` or `subito`
-        case s
-    }
-
-    /// A modifier for defining the `z` in `sforzando`, or `rinforzando`.
-    public enum PosteriorModifier: String {
-
-        /// MARK: - Cases
-
-        /// The trailing `z` in a `rinforzando` or `sforzando`.
-        case z
-    }
-
-    // FIXME: Add `.niente` case
-    public enum Element {
-
-        // MARK: - Type Properties
-
-        /// Single piano dynamic element.
-        static var p: Element {
-            return .vector(.p, 1)
-        }
-
-        /// Single forte dynamic element.
-        static var f: Element {
-            return .vector(.f, 1)
-        }
-
-        // MARK: - Type Methods
-
-        /// Piano vector dynamic element.
-        static func p(_ count: Int = 1) -> Element {
-            precondition(count >= 1)
-            return vector(.p, count)
-        }
-
-        /// Forte vector dynamic element.
-        static func f(_ count: Int = 1) -> Element {
-            precondition(count >= 1)
-            return vector(.f, count)
-        }
-
-        // MARK: - Associated Types
-
-        /// The direction of a dynamic element.
-        public enum Direction: Double {
-            case p = -1
-            case f = 1
-        }
-
-        // MARK: - Cases
-
-        /// A mezzo forte or mezzo piano.
-        case mezzo(Direction)
-
-        /// A vector of a given `direction` with the given `magnitude`.
-        case vector(_ direction: Direction, _ magnitude: Int)
-
-        // MARK: - Instance Properties
-
-        /// Numerical value of an `Element`.
-        var value: Double {
-            switch self {
-            case .mezzo(let direction):
-                return 0.5 * direction.rawValue
-            case .vector(let direction, let magnitude):
-                return direction.rawValue * Double(magnitude)
-            }
-        }
-    }
-}
-
-extension Dynamic {
-
-    // MARK: - Numeric Representation
-
-    /// - Returns: The numerical values of the anterior and posterior dynamic elements. If
-    var numericValues: (anterior: Double, posterior: Double) {
-        switch elements {
-        case .single(let element):
-            return (element.value, element.value)
-        case .compound(let anterior, let posterior):
-            return (anterior.value, posterior.value)
-        }
-    }
-}
-
-extension Dynamic {
-
     static let rf = Dynamic.r(.f(1))
     static let rff = Dynamic.r(.f(2))
     static let rfff = Dynamic.r(.f(3))
@@ -253,6 +148,111 @@ extension Dynamic {
             elements: elements,
             posteriorModifier: .z
         )
+    }
+}
+
+extension Dynamic {
+
+    // MARK: - Numeric Representation
+
+    /// - Returns: The numerical values of the anterior and posterior dynamic elements. If
+    var numericValues: (anterior: Double, posterior: Double) {
+        switch elements {
+        case .single(let element):
+            return (element.value, element.value)
+        case .compound(let anterior, let posterior):
+            return (anterior.value, posterior.value)
+        }
+    }
+}
+
+extension Dynamic {
+
+    // MARK: - Associated Types
+
+    /// Whether a `Dynamic` consistes a single element or a compound of two elements.
+    public enum Elements {
+        case single(Element)
+        case compound(Element,Element)
+    }
+
+    /// A modifier for defining the `s` or `r` in `sforzando`, or `rinforzando`.
+    public enum AnteriorModifier: String {
+
+        // MARK: - Cases
+
+        /// `r` for `rinforzando`
+        case r
+
+        /// `s` for `sforzando` or `subito`
+        case s
+    }
+
+    /// A modifier for defining the `z` in `sforzando`, or `rinforzando`.
+    public enum PosteriorModifier: String {
+
+        /// MARK: - Cases
+
+        /// The trailing `z` in a `rinforzando` or `sforzando`.
+        case z
+    }
+
+    // FIXME: Add `.niente` case
+    public enum Element {
+
+        // MARK: - Type Properties
+
+        /// Single piano dynamic element.
+        static var p: Element {
+            return .vector(.p, 1)
+        }
+
+        /// Single forte dynamic element.
+        static var f: Element {
+            return .vector(.f, 1)
+        }
+
+        // MARK: - Type Methods
+
+        /// Piano vector dynamic element.
+        static func p(_ count: Int = 1) -> Element {
+            precondition(count >= 1)
+            return vector(.p, count)
+        }
+
+        /// Forte vector dynamic element.
+        static func f(_ count: Int = 1) -> Element {
+            precondition(count >= 1)
+            return vector(.f, count)
+        }
+
+        // MARK: - Associated Types
+
+        /// The direction of a dynamic element.
+        public enum Direction: Double {
+            case p = -1
+            case f = 1
+        }
+
+        // MARK: - Cases
+
+        /// A mezzo forte or mezzo piano.
+        case mezzo(Direction)
+
+        /// A vector of a given `direction` with the given `magnitude`.
+        case vector(_ direction: Direction, _ magnitude: Int)
+
+        // MARK: - Instance Properties
+
+        /// Numerical value of an `Element`.
+        var value: Double {
+            switch self {
+            case .mezzo(let direction):
+                return 0.5 * direction.rawValue
+            case .vector(let direction, let magnitude):
+                return direction.rawValue * Double(magnitude)
+            }
+        }
     }
 }
 
