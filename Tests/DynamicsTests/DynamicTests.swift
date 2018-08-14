@@ -41,4 +41,26 @@ class DynamicTests: XCTestCase {
         let _: [Dynamic] = [.p, .f(4), .fff, .p(3), .mf, .s(.f,.p), .p(11), .r(.f(4))]
         //                   p   ffff   fff   ppp    mf   sfp        p       rfff
     }
+
+    func testNumericValues() {
+        XCTAssertEqual(Dynamic.f.numericValues.anterior, 1)
+        XCTAssertEqual(Dynamic.f.numericValues.posterior, 1)
+        XCTAssertEqual(Dynamic.p.numericValues.anterior, -1)
+        XCTAssertEqual(Dynamic.p.numericValues.posterior, -1)
+        XCTAssertEqual(Dynamic.mp.numericValues.anterior, -0.5)
+        XCTAssertEqual(Dynamic.mp.numericValues.posterior, -0.5)
+        XCTAssertEqual(Dynamic.mf.numericValues.anterior, 0.5)
+        XCTAssertEqual(Dynamic.mf.numericValues.posterior, 0.5)
+        XCTAssertEqual(Dynamic.fff.numericValues.anterior, 3)
+        XCTAssertEqual(Dynamic.fff.numericValues.posterior, 3)
+        XCTAssertEqual(Dynamic.ppp.numericValues.anterior, -3)
+        XCTAssertEqual(Dynamic.ppp.numericValues.posterior, -3)
+        XCTAssertEqual(Dynamic.fp.numericValues.anterior, 1)
+        XCTAssertEqual(Dynamic.fp.numericValues.posterior, -1)
+        XCTAssertEqual(Dynamic.sfffp.numericValues.anterior, 3)
+        XCTAssertEqual(Dynamic.sfffp.numericValues.posterior, -1)
+        XCTAssertEqual(Dynamic.sfppp.numericValues.anterior, 1)
+        XCTAssertEqual(Dynamic.sfppp.numericValues.posterior, -3)
+        XCTAssertGreaterThan(Dynamic.f.numericValues.posterior, Dynamic.p.numericValues.anterior)
+    }
 }
