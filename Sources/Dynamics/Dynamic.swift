@@ -6,64 +6,271 @@
 //
 //
 
-/**
- Structure defining a single instance of a musical dynamic (e.g., f, p, o, mp, mf, ppp).
- 
- - One or more `Dynamic.Element` objects are aggregated to create a `Dynamic`.
- - One or more `Dynamic` objects are aggregated to create a `Dynamic.Cluster`.
- */
-public struct Dynamic: Equatable {
+/// The performed loudness of a musical event.
+///
+// FIXME: Add effort dynamic flag
+public struct Dynamic {
 
     // MARK: - Instance Properties
 
-    internal let elements: [Element]
-    
+    /// A textual comment (e.g., "più", "forcefully", "gently", etc.)
+    var annotation: String?
+
+    /// A modifier for defining the `s` or `r` in `sforzando`, or `rinforzando`.
+    var anteriorModifier: AnteriorModifier?
+
+    /// A structure of the Dynamic.Element values contained herein.
+    var elements: Elements
+
+    /// A modifier for defining the `z` in `sforzando`, or `rinforzando`.
+    var posteriorModifier: PosteriorModifier?
+
     // MARK: - Initializers
 
-    /// Create a `Dynamic` with a sequence of `Dynamic.Element` values.
-    public init <S: Sequence> (_ elements: S) where S.Element == Element {
-        let elements = Array(elements)
-        precondition(Validator.elementsAreWellFormed(elements))
+    public init(
+        annotation: String? = nil,
+        anteriorModifier: AnteriorModifier? = nil,
+        elements: Elements,
+        posteriorModifier: PosteriorModifier? = nil
+    )
+    {
+        self.annotation = annotation
+        self.anteriorModifier = anteriorModifier
         self.elements = elements
+        self.posteriorModifier = posteriorModifier
     }
 }
 
 extension Dynamic {
-    
-    public var integerValue: Int {
-        if elements == [.niente] {
-            return Int.min
-        } else if elements == [.mezzo, .forte] {
-            return 1
-        } else if elements == [.mezzo, .piano] {
-            return -1
-        } else if elements.first == .forte {
-            return elements.count + 1
-        } else if elements.first == .piano {
-            return -1 * (elements.count + 1)
+
+    // MARK: - Associated Types
+
+    /// Whether a `Dynamic` consistes a single element or a compound of two elements.
+    public enum Elements {
+        case single(Element)
+        case compound(Element,Element)
+    }
+
+    /// A modifier for defining the `s` or `r` in `sforzando`, or `rinforzando`.
+    public enum AnteriorModifier: String {
+        case r
+        case s
+    }
+
+    /// A modifier for defining the `z` in `sforzando`, or `rinforzando`.
+    public enum PosteriorModifier: String {
+        case z
+    }
+
+    // FIXME: Add `.niente` case
+    public enum Element {
+
+        // MARK: - Type Properties
+
+        /// Single piano dynamic element.
+        static var p: Element {
+            return .vector(.p, 1)
         }
-        
-        fatalError("Poorly formed Dynamic")
+
+        /// Single forte dynamic element.
+        static var f: Element {
+            return .vector(.f, 1)
+        }
+
+        // MARK: - Type Methods
+
+        /// Piano vector dynamic element.
+        static func p(_ count: Int = 1) -> Element {
+            precondition(count >= 1)
+            return vector(.p, count)
+        }
+
+        /// Forte vector dynamic element.
+        static func f(_ count: Int = 1) -> Element {
+            precondition(count >= 1)
+            return vector(.f, count)
+        }
+
+        // MARK: - Associated Types
+
+        /// The direction of a dynamic element.
+        public enum Direction: Double {
+            case p = -1
+            case f = 1
+        }
+
+        // MARK: - Cases
+
+        /// A mezzo forte or mezzo piano.
+        case mezzo(Direction)
+
+        /// A vector of a given `direction` with the given `magnitude`.
+        case vector(_ direction: Direction, _ magnitude: Int)
+
+        // MARK: - Instance Properties
+
+        /// Numerical value of an `Element`.
+        var value: Double {
+            switch self {
+            case .mezzo(let direction):
+                return 0.5 * direction.rawValue
+            case .vector(let direction, let magnitude):
+                return direction.rawValue * Double(magnitude)
+            }
+        }
     }
 }
 
-extension Dynamic: Comparable {
+extension Dynamic {
 
-    // MARK: - `Comparable`
-    
-    /// - returns: `true` if the left `Dynamic` value is logically less than the right.
-    /// Otherwise `false`.
-    public static func < (lhs: Dynamic, rhs: Dynamic) -> Bool {
-        return lhs.integerValue < rhs.integerValue
+    // MARK: - Numeric Representation
+
+    /// - Returns: The numerical values of the anterior and posterior dynamic elements. If
+    var numericValues: (anterior: Double, posterior: Double) {
+        switch elements {
+        case .single(let element):
+            return (element.value, element.value)
+        case .compound(let anterior, let posterior):
+            return (anterior.value, posterior.value)
+        }
+    }
+}
+
+extension Dynamic {
+
+    static var rf: Dynamic {
+        return Dynamic.r(.f(1))
+    }
+
+    static var rfz: Dynamic {
+        return Dynamic.rf.z
+    }
+
+    static var sf: Dynamic {
+        return Dynamic.s(.f(1))
+    }
+
+    static var sfz: Dynamic {
+        return Dynamic.sf.z
+    }
+
+    static var sfp: Dynamic {
+        return Dynamic.s(.f,.p)
+    }
+
+    static var f: Dynamic { return .init(elements: .single(.f)) }
+    static var ff: Dynamic { return .init(elements: .single(.f(2))) }
+    static var fff: Dynamic { return .init(elements: .single(.f(3))) }
+    static var ffff: Dynamic { return .init(elements: .single(.f(4))) }
+    static var fffff: Dynamic { return .init(elements: .single(.f(5))) }
+    static var ffffff: Dynamic { return .init(elements: .single(.f(6))) }
+    static var fffffff: Dynamic { return .init(elements: .single(.f(7))) }
+    static var ffffffff: Dynamic { return .init(elements: .single(.f(8))) }
+
+    static var p: Dynamic { return .init(elements: .single(.p)) }
+    static var pp: Dynamic { return .init(elements: .single(.p(2))) }
+    static var ppp: Dynamic { return .init(elements: .single(.p(3))) }
+    static var pppp: Dynamic { return .init(elements: .single(.p(4))) }
+    static var ppppp: Dynamic { return .init(elements: .single(.p(5))) }
+    static var pppppp: Dynamic { return .init(elements: .single(.p(6))) }
+    static var ppppppp: Dynamic { return .init(elements: .single(.p(7))) }
+    static var pppppppp: Dynamic { return .init(elements: .single(.p(8))) }
+
+    static var fp: Dynamic {
+        return .init(elements: .compound(.f,.p))
+    }
+
+    static var mp: Dynamic {
+        return .init(elements: .single(.mezzo(.p)))
+    }
+
+    static var mf: Dynamic {
+        return .init(elements: .single(.mezzo(.f)))
+    }
+
+    static func f(_ count: Int, _ annotation: String? = nil) -> Dynamic {
+        return .init(annotation: annotation, elements: .single(.f(count)))
+    }
+
+    static func p(_ count: Int, _ annotation: String? = nil) -> Dynamic {
+        return .init(annotation: annotation, elements: .single(.p(count)))
+    }
+
+    static func r(
+        _ element: Element,
+        _ count: Int = 1,
+        _ annotation: String? = nil
+    ) -> Dynamic
+    {
+        return .init(annotation: annotation, anteriorModifier: .r, elements: .single(element))
+    }
+
+    static func s(
+        _ element: Element,
+        _ annotation: String? = nil
+    ) -> Dynamic
+    {
+        return .init(annotation: annotation, anteriorModifier: .s, elements: .single(element))
+    }
+
+    static func s(
+        _ anterior: Element,
+        _ posterior: Element,
+        _ annotation: String? = nil
+    ) -> Dynamic {
+        return .init(
+            annotation: annotation,
+            anteriorModifier: .s,
+            elements: .compound(anterior, posterior)
+        )
+    }
+
+    var z: Dynamic {
+        precondition(posteriorModifier == nil, "You cannot make a zinger zing again!")
+        return .init(
+            annotation: annotation,
+            anteriorModifier: anteriorModifier,
+            elements: elements,
+            posteriorModifier: .z
+        )
     }
 }
 
 extension Dynamic: CustomStringConvertible {
-    
-    // MARK: - `CustomStringConvertible`
-    
-    /// Printable description
     public var description: String {
-        return elements.reduce("") { accum, element in accum + element.rawValue }
+        var result = ""
+        if let anterior = anteriorModifier { result += anterior.rawValue }
+        result += elements.description
+        if let posterior = posteriorModifier { result += posterior.rawValue }
+        if let annotation = annotation { result += ": " + annotation }
+        return result
+    }
+}
+
+extension Dynamic.Elements: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .single(let element):
+            return element.description
+        case .compound(let a, let b):
+            return a.description + b.description
+        }
+    }
+}
+
+extension Dynamic.Element: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .mezzo(let direction):
+            return "m" + direction.description
+        case .vector(let direction, let magnitude):
+            return String(repeating: direction.description, count: magnitude)
+        }
+    }
+}
+
+extension Dynamic.Element.Direction: CustomStringConvertible {
+    public var description: String {
+        return self == .p ? "p" : "f"
     }
 }
