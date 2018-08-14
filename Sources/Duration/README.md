@@ -16,7 +16,7 @@ let dur = Duration(5,32)
 let notDur = Duration(4,17) // boom
 ```
 
-A `Duration` can be created with a shorthand via the operator `/>`.
+A `Duration` can be created with a shorthand via the `/>` operator.
 
 ```Swift
 let dur = 17/>64
