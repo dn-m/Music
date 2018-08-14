@@ -138,6 +138,8 @@ or maybe something a little more fun.
 let meter = Meter(31,256)
 ```
 
+> Note: Currently, `Meter` has the same `power-of-two` (with a coefficient of `2`) requirement of its denominator, as with `Duration`. It is planned to relieve this to a requirement of a `power-of-two` with any coefficient, so as to allow `Meter(13,12)` or `Meter(19,28)`.
+
 ## Tempo
 
 A `Tempo` is the definition of a pulse occurring at a given frequency (`beatsPerMinute`) at a given `Subdivision` level (e.g., quarter, sixteenth, etc.).
