@@ -108,7 +108,7 @@ Whether a rhythmic item is "tied-over" from its preceeding item (`.continuation`
 
 Whether a rhythmic item is a "rest" (`.absence`) or a "note" (`.event(Element)`).
 
-### Rhythm
+## Rhythm
  
 A `Rhythm` is the composition of a `DurationTree` and an array of `Rhythm.Leaf` values (with a length equivalent to the leaves of the `durationTree`). The `Rhythm.Leaf` values can store any value generically.
 
@@ -142,9 +142,9 @@ let meter = Meter(31,256)
 
 A `Tempo` is the definition of a pulse occurring at a given frequency (`beatsPerMinute`) at a given `Subdivision` level (e.g., quarter, sixteenth, etc.).
 
-### Tempo.Interpolation
-
-A `Tempo.Interpolation` defines a transition between two `Tempo` values, over a given `length`, with a specified `easing`.
+```Swift
+let stayinAlive = Tempo(100, subdivision: 4) // remember this for CPR
+```
 
 ### Tempo.Interpolation.Easing
 
@@ -156,9 +156,39 @@ A `Tempo.Interpolation.Easing` specifies the curve of a `Tempo.Interpolation`.
 - `exponentialIn`
 - `sineInOut`
 
+### Tempo.Interpolation
+
+A `Tempo.Interpolation` defines a transition between two `Tempo` values, over a given `length`, with a specified `easing`.
+
+```Swift
+let startTempo = Tempo(24, subdivision: 4)
+let endTempo = Tempo(192, subdivision: 8) // subdivisions needn't be the same
+let interpolation = Tempo.Interpolation(
+    start: startTempo,
+    end: endTempo,
+    length: Fraction(37,4),
+    easing: .sineInOut
+)  
+```
+
 ### Tempo.Interpolation.Fragment
 
 A `Tempo.Interpolation.Fragment` is a portion of a `Tempo.Interpolation` within a given `range`.
+
+```Swift
+let startTempo = Tempo(24, subdivision: 4)
+let endTempo = Tempo(72, subdivision: 4) 
+let interpolation = Tempo.Interpolation(
+    start: startTempo,
+    end: endTempo,
+    length: Fraction(13,4),
+    easing: .linear
+)
+let fragment = Tempo.Interpolation.Fragment(
+    interpolation, 
+    in: Fraction(5,4) ..< Fraction(11,4)
+)
+```
 
 ### Tempo.Interpolation.Collection
 
