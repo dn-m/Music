@@ -33,7 +33,7 @@ extension Rhythm {
 
     /// The metrical identity of a given rhythmic leaf item.
     ///
-    /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
+    /// - "tied": if a leaf is "tied" over from the previous event (`.continuation`)
     /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
     /// - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
     ///
@@ -72,7 +72,7 @@ extension Rhythm {
     /// - Returns: `Rhythm` with each of its `event` (i.e., `.instance(.event(Element))`) values
     /// updated by the given `transform`.
     ///
-    /// - Each `/continuation` remains as such
+    /// - Each `.continuation` remains as such
     /// - Each `.instance(.rest)` remains as such
     /// - Each `.instance(.event(T))` is transformed to a `.instance(.event(U))`
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U> {
