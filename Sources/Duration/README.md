@@ -200,7 +200,7 @@ A `Tempo.Interpolation.Collection` defines a contiguous collection of `Tempo.Int
 
 #### Tempo.Interpolation.Collection.Builder
 
-A helper class `Tempo.Interpolation.Collection.Builder` is provided to decouple the stateful process of creating `Tempo.Interpolation.Collection` and reading from it.
+A helper class `Tempo.Interpolation.Collection.Builder` is provided to encapsulate the stateful construction process of a `Tempo.Interpolation.Collection`.
 
 You can start with an empty `Builder`,
 
