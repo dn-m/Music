@@ -27,6 +27,9 @@ public struct Dynamic {
 
     // MARK: - Initializers
 
+    /// Create a `Dynamic` with the given `annotation`, `anteriorModifier`, `elements`, and
+    /// `posteriorModifier`.
+    ///
     public init(
         annotation: String? = nil,
         anteriorModifier: AnteriorModifier? = nil,
@@ -138,55 +141,45 @@ extension Dynamic {
 
 extension Dynamic {
 
-    static var rf: Dynamic {
-        return Dynamic.r(.f(1))
-    }
+    static let rf = Dynamic.r(.f(1))
+    static let rff = Dynamic.r(.f(2))
+    static let rfff = Dynamic.r(.f(3))
 
-    static var rfz: Dynamic {
-        return Dynamic.rf.z
-    }
+    static let rfz = Dynamic.rf.z
+    static let rffz = Dynamic.r(.f(2)).z
+    static let rfffz = Dynamic.r(.f(3)).z
 
-    static var sf: Dynamic {
-        return Dynamic.s(.f(1))
-    }
+    static let sf = Dynamic.s(.f(1))
+    static let sff = Dynamic.s(.f(2))
+    static let sfff = Dynamic.s(.f(3))
 
-    static var sfz: Dynamic {
-        return Dynamic.sf.z
-    }
+    static let sfz = Dynamic.sf.z
+    static let sffz = Dynamic.s(.f(2)).z
+    static let sfffz = Dynamic.s(.f(3)).z
 
-    static var sfp: Dynamic {
-        return Dynamic.s(.f,.p)
-    }
+    static let sfp = Dynamic.s(.f,.p)
 
-    static var f: Dynamic { return .init(elements: .single(.f)) }
-    static var ff: Dynamic { return .init(elements: .single(.f(2))) }
-    static var fff: Dynamic { return .init(elements: .single(.f(3))) }
-    static var ffff: Dynamic { return .init(elements: .single(.f(4))) }
-    static var fffff: Dynamic { return .init(elements: .single(.f(5))) }
-    static var ffffff: Dynamic { return .init(elements: .single(.f(6))) }
-    static var fffffff: Dynamic { return .init(elements: .single(.f(7))) }
-    static var ffffffff: Dynamic { return .init(elements: .single(.f(8))) }
+    static let f = Dynamic(elements: .single(.f))
+    static let ff = Dynamic(elements: .single(.f(2)))
+    static let fff = Dynamic(elements: .single(.f(3)))
+    static var ffff = Dynamic(elements: .single(.f(4)))
+    static var fffff = Dynamic(elements: .single(.f(5)))
+    static var ffffff = Dynamic(elements: .single(.f(6)))
+    static var fffffff = Dynamic(elements: .single(.f(7)))
+    static var ffffffff = Dynamic(elements: .single(.f(8)))
 
-    static var p: Dynamic { return .init(elements: .single(.p)) }
-    static var pp: Dynamic { return .init(elements: .single(.p(2))) }
-    static var ppp: Dynamic { return .init(elements: .single(.p(3))) }
-    static var pppp: Dynamic { return .init(elements: .single(.p(4))) }
-    static var ppppp: Dynamic { return .init(elements: .single(.p(5))) }
-    static var pppppp: Dynamic { return .init(elements: .single(.p(6))) }
-    static var ppppppp: Dynamic { return .init(elements: .single(.p(7))) }
-    static var pppppppp: Dynamic { return .init(elements: .single(.p(8))) }
+    static var p = Dynamic(elements: .single(.p))
+    static var pp = Dynamic(elements: .single(.p(2)))
+    static var ppp = Dynamic(elements: .single(.p(3)))
+    static var pppp = Dynamic(elements: .single(.p(4)))
+    static var ppppp = Dynamic(elements: .single(.p(5)))
+    static var pppppp = Dynamic(elements: .single(.p(6)))
+    static var ppppppp = Dynamic(elements: .single(.p(7)))
+    static var pppppppp = Dynamic(elements: .single(.p(8)))
 
-    static var fp: Dynamic {
-        return .init(elements: .compound(.f,.p))
-    }
-
-    static var mp: Dynamic {
-        return .init(elements: .single(.mezzo(.p)))
-    }
-
-    static var mf: Dynamic {
-        return .init(elements: .single(.mezzo(.f)))
-    }
+    static let fp = Dynamic(elements: .compound(.f,.p))
+    static let mp = Dynamic(elements: .single(.mezzo(.p)))
+    static let mf = Dynamic(elements: .single(.mezzo(.f)))
 
     static func f(_ count: Int, _ annotation: String? = nil) -> Dynamic {
         return .init(annotation: annotation, elements: .single(.f(count)))
