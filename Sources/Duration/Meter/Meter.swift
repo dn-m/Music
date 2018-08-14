@@ -36,7 +36,7 @@ public struct Meter: Rational {
 
 extension FixedWidthInteger {
     var isPowerOfTwoWithAnyCoefficient: Bool {
-        guard !isPowerOfTwo else { return true }
+        if isPowerOfTwo { return true }
         return (1...self).lazy
             .filter { $0.isOdd }
             .flatMap { PowerSequence(coefficient: $0, max: self, doOvershoot: true) }
