@@ -1,8 +1,6 @@
 # Duration
 
-The `Duration` module defines basic structures for describing a symbolic representation of time through hierarchical subdivision.
-
-The building blocks of the `Duration` module are the `Duration`, `Rhythm`, `Tempo`, and `Meter`.
+The `Duration` module defines basic structures for describing a symbolic representation of time by hierarchical subdivision. The building blocks of the `Duration` module are the `Duration`, `Rhythm`, `Tempo`, and `Meter` structures.
 
 ## Duration
 
