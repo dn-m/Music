@@ -51,11 +51,7 @@ extension Rhythm {
     }
 
     /// Create a `Rhythm` with a given `duration` and `leaves.
-    public init(
-        _ duration: Duration,
-        _ leaves: [(duration: Int, context: Leaf)]
-    )
-    {
+    public init(_ duration: Duration, _ leaves: [(duration: Int, context: Leaf)]) {
         self.init(duration * leaves.map { $0.duration}, leaves.map { $0.context} )
     }
 
