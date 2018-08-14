@@ -122,11 +122,21 @@ let rhythm = Rhythm<String>(durationTree, [
 ])
 ```
 
-
-
 ## Meter
 
 Like a `Duration`, a `Meter` is a `Rational` type, used for defining the metrical context of measure.
+
+You can create a "common time" meter,
+
+```Swift
+let meter = Meter(4,4)
+```
+
+or maybe something a little more fun.
+
+```Swift
+let meter = Meter(31,256)
+```
 
 ## Tempo
 
