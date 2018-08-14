@@ -26,9 +26,72 @@ let dur = 17/>64
 
 A `Rhythm` is a hierarchical organization of metrical durations with their metrical contexts for the purpose of defining arbitrarily-nested tuplet values. The `Rhythm` structure is the composition of a `DurationTree` and an array of `Rhythm.Leaf` values.
 
+### ProportionTree
+
+A `ProportionTree` is a hierarchical model of relative durational values without a specificed `Duration` container size. A `ProportionTree` can be as simple as a pair of eighth notes,
+
+```Swift
+let eighthPair: ProportionTree = .branch(1, [1,1])
+```
+
+or as complicated as a deeply nested tuplet.
+
+```Swift
+let nested: ProportionTree = .branch(1, [
+    .branch(2, [
+        .branch(2, [
+            .leaf(1),
+            .leaf(1)
+        ]),
+        .leaf(3)
+    ]),
+    .branch(4, [
+        .leaf(3),
+        .leaf(4),
+        .branch(6, [
+            .leaf(1),
+            .leaf(1)
+        ]),
+        .leaf(2),
+        .branch(2, [
+            .leaf(3),
+            .leaf(5)
+        ])
+    ]),
+    .branch(3, [
+        .leaf(2),
+        .leaf(4),
+        .branch(1, [
+            .leaf(16),
+            .leaf(17)
+        ])
+    ])
+])
+```
+
 ### DurationTree
 
 A `DurationTree` is a `typealias` for `Tree<Duration,Duration>`, from the [`dn-m/Structure/DataStructures`](https://dn-m.github.io/Packages/Structure/Modules/DataStructures/index.html) module.
+
+A `DurationTree` is often not needed to be created by user, but is often the composition of a `ProportionTree` along with a user-specified `Duration` container size.
+
+```Swift
+let proportions: ProportionTree = .branch(1, [1,2,4])
+let duration = 13/>64
+let durationTree = DurationTree(duration, proportions)
+```
+
+The beat and subdivision values of each node of the resulting `DurationTree` will be normalized automatically
+
+```Swift
+durationTree // => .branch(13/>64, [
+    .leaf(2/>64),
+    .leaf(4/>64),
+    .leaf(8/>64)
+])
+```
+
+for a resulting tuplet ratio of `14/13`.
 
 ### Rhythm.Leaf
 
