@@ -96,9 +96,9 @@ for a resulting tuplet ratio of `14/13`.
 
 A `Rhythm.Leaf` models the metrical identity of a given rhythmic leaf item. It is a `typealias` for `ContinuationOrInstance<AbsenceOrEvent<Element>>`.
 
- - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
- - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
- - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
+ - `.continuation` if a leaf is "tied" over from the previous event 
+ - `.instance(.rest)` if a leaf is a "rest", a measured silence
+ - `.instance(.event(Element))` if a leaf is a measured non-silence
 
 #### ContinuationOrInstance<Element>
 
