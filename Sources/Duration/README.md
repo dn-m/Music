@@ -170,19 +170,19 @@ let interpolation = Tempo.Interpolation(
     easing: .sineInOut
 )  
 ```
+> Note: Subdivision values needn't be the same.
 
 ### Tempo.Interpolation.Fragment
 
 A `Tempo.Interpolation.Fragment` is a portion of a `Tempo.Interpolation` within a given `range`.
 
 ```Swift
-let startTempo = Tempo(24, subdivision: 4)
-let endTempo = Tempo(72, subdivision: 4) 
+let startTempo = Tempo(24)
+let endTempo = Tempo(72) 
 let interpolation = Tempo.Interpolation(
     start: startTempo,
     end: endTempo,
-    length: Fraction(13,4),
-    easing: .linear
+    length: Fraction(13,4)
 )
 let fragment = Tempo.Interpolation.Fragment(
     interpolation, 
@@ -190,6 +190,66 @@ let fragment = Tempo.Interpolation.Fragment(
 )
 ```
 
+> Note: The default `subdivision` value is `4` and the default `easing` value is `.linear`.
+
 ### Tempo.Interpolation.Collection
 
 A `Tempo.Interpolation.Collection` defines a contiguous collection of `Tempo.Interpolation.Fragment` values, which are indexed by the offset `Fraction` value.
+
+#### Tempo.Interpolation.Collection.Builder
+
+A helper class `Tempo.Interpolation.Collection.Builder` is provided to decouple the stateful process of creating `Tempo.Interpolation.Collection` and reading from it.
+
+You can start with an empty `Builder`,
+
+```Swift
+let builder = Tempo.Interpolation.Collection.Builder()
+```
+
+create a few interpolations (e.g., accelerando, ritardando, static),
+
+```Swift
+let a = Tempo.Interpolation(
+    start: Tempo(60), 
+    end: Tempo(120),
+    length: Fraction(4,4)
+)
+let b = Tempo.Interpolation(
+    start: Tempo(120), 
+    end: Tempo(60),
+    length: Fraction(4,4)
+)
+let c = Tempo.Interpolation(
+    start: Tempo(60), 
+    end: Tempo(60),
+    length: Fraction(4,4)
+)
+```
+
+then add them with the `Builder`.
+
+```Swift
+for interpolation in [a,b,c] {
+    builder.add(interpoation)
+}
+```
+
+Now we are ready for the `Builder` to give us a finished product.
+
+```Swift
+let collection = builder.build()
+```
+
+If it makes more sense, we can also create a `Tempo.Interpolation.Collection` directly.
+
+```Swift
+let collection = Tempo.Interpolation.Collection([a,b,c])
+```
+
+In the case that we need to retrieve a subsection of your `collection`, we can provide a subscript with a `Range<Fraction>` to get it out.
+
+```Swift
+let fragment = collection[Fraction(3,32)..<Fraction(19,8)]
+```
+
+This will produce a `Tempo.Interpolation.Collection` with three `Tempo.Interpolation.Fragments` representing the three subsections of the interpolations we created above.

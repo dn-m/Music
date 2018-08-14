@@ -501,16 +501,29 @@ extension Tempo.Interpolation.Collection {
 
         // MARK: - Instance Methods
 
+        /// Add the given `fragment` to the accumulating storage of
+        /// `Tempo.Interpolation.Fragment` values.
+        ///
+        /// - Returns: Self
+        @discardableResult public func add(_ fragment: Tempo.Interpolation.Fragment)
+            -> Builder
+        {
+            self.intermediate.insert(fragment, key: offset)
+            last = (offset, fragment.base.end, true)
+            offset += fragment.range.length
+            return self
+        }
+
         /// Add the given `interpolation` to the accumulating storage of
         /// `Tempo.Interpolation.Fragment` values.
         ///
         /// - Returns: Self
-        @discardableResult public func add(_ interpolation: Tempo.Interpolation.Fragment)
+        @discardableResult public func add(_ interpolation: Tempo.Interpolation)
             -> Builder
         {
-            self.intermediate.insert(interpolation, key: offset)
-            last = (offset, interpolation.base.end, true)
-            offset += interpolation.range.length
+            self.intermediate.insert(Tempo.Interpolation.Fragment(interpolation), key: offset)
+            last = (offset, interpolation.end, true)
+            offset += interpolation.length
             return self
         }
 
