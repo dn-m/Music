@@ -27,7 +27,7 @@ let dur = 17/>64
 
 ### ProportionTree
 
-A `ProportionTree` is a hierarchical model of relative durational values without a specificed `Duration` container size. A `ProportionTree` can be as simple as a pair of eighth notes,
+A `ProportionTree` is a `typealias` for `Tree<Int,Int>`, from the [`dn-m/Structure/DataStructures`](https://dn-m.github.io/Packages/Structure/Modules/DataStructures/index.html) module, which provides a hierarchical model of relative durational values without a specificed `Duration` container size. A `ProportionTree` can be as simple as a pair of eighth notes,
 
 ```Swift
 let eighthPair: ProportionTree = .branch(1, [1,1])
@@ -68,11 +68,13 @@ let nested: ProportionTree = .branch(1, [
 ])
 ```
 
+> Note: This type is useful for composing up arbitrarily simple or complex rhythms without having to commit to an overall `Duration`, or having to normalize the subdivision relationships between all of the nodes.
+
 ### DurationTree
 
 A `DurationTree` is a `typealias` for `Tree<Duration,Duration>`, from the [`dn-m/Structure/DataStructures`](https://dn-m.github.io/Packages/Structure/Modules/DataStructures/index.html) module.
 
-A `DurationTree` is often not needed to be created by user, but is often the composition of a `ProportionTree` along with a user-specified `Duration` container size.
+A `DurationTree` is often not needed to be created by user, but is often the composition of a `Duration` container size and a `ProportionTree`.
 
 ```Swift
 let proportions: ProportionTree = .branch(1, [1,2,4])
