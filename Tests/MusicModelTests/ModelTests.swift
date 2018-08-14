@@ -11,10 +11,7 @@ import DataStructures
 import Math
 import Pitch
 import Articulations
-import MetricalDuration
-import Meter
-import Tempo
-import Rhythm
+import Duration
 @testable import MusicModel
 
 class ModelTests: XCTestCase {

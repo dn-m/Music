@@ -11,10 +11,7 @@ import Algebra
 import DataStructures
 import Math
 import Pitch
-import MetricalDuration
-import Rhythm
-import Tempo
-import Meter
+import Duration
 
 extension Model {
     
@@ -256,21 +253,22 @@ extension Rhythm where Element: Equatable {
     
     var events: [Element] {
         return leaves.compactMap { leaf in
-            guard case let .instance(.event(value)) = leaf.context else { return nil }
+            guard case let .instance(.event(value)) = leaf else { return nil }
             return value
         }
     }
     
     // TODO: Refactor!!
-    var eventIntervals: [ClosedRange<MetricalDuration>] {
+    var eventIntervals: [ClosedRange<Duration>] {
         
-        var result: [ClosedRange<MetricalDuration>] = []
+        var result: [ClosedRange<Duration>] = []
         
-        var start: MetricalDuration = 0/>4
-        var current: MetricalDuration = 0/>4
-        for (l,leaf) in leaves.enumerated() {
+        var start: Duration = 0/>4
+        var current: Duration = 0/>4
 
-            switch leaf.context {
+        for (l, duratedLeaf) in zip(durationTree.leaves,leaves).enumerated() {
+            let (duration, leaf) = duratedLeaf
+            switch leaf {
             case .continuation:
                 break
             case .instance(let absenceOrEvent):
@@ -279,12 +277,12 @@ extension Rhythm where Element: Equatable {
                     if current > .zero {
                         result.append(start ... current)
                     }
-                    start = current + leaf.metricalDuration
+                    start = current + duration
                 case .event:
                     
                     if let previous = leaves[safe: l-1] {
                         
-                        if previous.context != .instance(.absence) {
+                        if previous != .instance(.absence) {
                             result.append(start ... current)
                         }
                     }
@@ -293,10 +291,10 @@ extension Rhythm where Element: Equatable {
                 }
             }
             
-            current += leaf.metricalDuration
+            current += duration
         }
         
-        if leaves.last!.context != .instance(.absence) {
+        if leaves.last! != .instance(.absence) {
             result.append(start ... current)
         }
         

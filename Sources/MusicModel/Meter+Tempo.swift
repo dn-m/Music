@@ -6,9 +6,7 @@
 //
 //
 
-import Rhythm
-import Tempo
-import Meter
+import Duration
 
 extension Meter {
 
