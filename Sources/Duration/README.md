@@ -164,7 +164,7 @@ A `Tempo.Interpolation` defines a transition between two `Tempo` values, over a 
 
 ```Swift
 let startTempo = Tempo(24, subdivision: 4)
-let endTempo = Tempo(192, subdivision: 8) // subdivisions needn't be the same
+let endTempo = Tempo(192, subdivision: 8)
 let interpolation = Tempo.Interpolation(
     start: startTempo,
     end: endTempo,
