@@ -102,11 +102,11 @@ A `Rhythm.Leaf` models the metrical identity of a given rhythmic leaf item. It i
 
 #### ContinuationOrInstance<Element>
 
-Whether a rhythmic item is "tied-over" from its preceeding item (`.continuation`), or if it a "rest" or a "note" (`.instance(Element)`).
+The `ContinuationOrInstance` enum describes whether a rhythmic item is "tied-over" from its preceeding item (`.continuation`), or if it a "rest" or a "note" (`.instance(Element)`).
 
 #### AbsenceOrEvent<Element>
 
-Whether a rhythmic item is a "rest" (`.absence`) or a "note" (`.event(Element)`).
+The `AbsenceOrEvent` enum describes whether a rhythmic item is a "rest" (`.absence`) or a "note" (`.event(Element)`).
 
 ## Rhythm
  
