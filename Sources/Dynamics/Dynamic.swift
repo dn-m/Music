@@ -56,12 +56,22 @@ extension Dynamic {
 
     /// A modifier for defining the `s` or `r` in `sforzando`, or `rinforzando`.
     public enum AnteriorModifier: String {
+
+        // MARK: - Cases
+
+        /// `r` for `rinforzando`
         case r
+
+        /// `s` for `sforzando` or `subito`
         case s
     }
 
     /// A modifier for defining the `z` in `sforzando`, or `rinforzando`.
     public enum PosteriorModifier: String {
+
+        /// MARK: - Cases
+
+        /// The trailing `z` in a `rinforzando` or `sforzando`.
         case z
     }
 
@@ -158,6 +168,14 @@ extension Dynamic {
     static let sfffz = Dynamic.s(.f(3)).z
 
     static let sfp = Dynamic.s(.f,.p)
+    static let sffp = Dynamic.s(.f(2),.p)
+    static let sfffp = Dynamic.s(.f(3),.p)
+    static let sfpp = Dynamic.s(.f,.p(2))
+    static let sfppp = Dynamic.s(.f,.p(3))
+    static let sffpp = Dynamic.s(.f(2),.p(2))
+    static let sffppp = Dynamic.s(.f(2),.p(3))
+    static let sfffpp = Dynamic.s(.f(3),.p(2))
+    static let sfffppp = Dynamic.s(.f(3),.p(3))
 
     static let f = Dynamic(elements: .single(.f))
     static let ff = Dynamic(elements: .single(.f(2)))
