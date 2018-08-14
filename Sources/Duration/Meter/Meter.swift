@@ -28,7 +28,7 @@ public struct Meter: Rational {
 
     /// Creates a `Meter` with the given `numerator` and `denominator`.
     public init(_ numerator: Beats, _ denominator: Subdivision) {
-        assert(denominator.isPowerOfTwoWithAnyCoefficient)
+        precondition(denominator.isPowerOfTwoWithAnyCoefficient)
         self.numerator = numerator
         self.denominator = denominator
     }
