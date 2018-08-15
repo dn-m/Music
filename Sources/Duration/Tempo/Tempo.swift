@@ -83,6 +83,26 @@ extension Tempo {
 
 extension Tempo: Equatable { }
 
+extension Tempo: ExpressibleByIntegerLiteral {
+
+    // MARK: - ExpressibleByIntegerLiterl
+
+    /// Create a `Tempo` with a `beatsPerMinute` of the given `value`, at the quarter-note level.
+    public init(integerLiteral value: Int) {
+        self.init(Double(value))
+    }
+}
+
+extension Tempo: ExpressibleByFloatLiteral {
+
+    // MARK: - ExpressibleByIntegerLiterl
+
+    /// Create a `Tempo` with a `beatsPerMinute` of the given `value`, at the quarter-note level.
+    public init(floatLiteral value: Double) {
+        self.init(value)
+    }
+}
+
 // FIXME: Move to own file (Tempo.Interpolation) when Swift compiler build-order bug resolved.
 import Math
 
