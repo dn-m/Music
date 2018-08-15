@@ -170,7 +170,7 @@ extension Dynamic {
 
     // MARK: - Associated Types
 
-    /// Whether a `Dynamic` consistes a single element or a compound of two elements.
+    /// Whether a `Dynamic` consists a single element or a compound of two elements.
     public enum Elements {
         case single(Element)
         case compound(Element,Element)
