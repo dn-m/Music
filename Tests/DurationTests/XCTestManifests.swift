@@ -106,7 +106,6 @@ extension RhythmTreeTests {
 
 extension TempoInterpolationCollectionTests {
     static let __allTests = [
-        ("testBuilderMultipleStatic", testBuilderMultipleStatic),
         ("testBuilderSingleInterpolation", testBuilderSingleInterpolation),
         ("testBuilderSingleStatic", testBuilderSingleStatic),
         ("testFragment", testFragment),
