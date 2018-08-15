@@ -45,13 +45,6 @@ class TempoInterpolationCollectionTests: XCTestCase {
         XCTAssertEqual(interpolations.map { _, values in values }, [expected])
     }
 
-    func testBuilderMultipleStatic() {
-        let builder = Tempo.Interpolation.Collection.Builder()
-        builder.add(Tempo(120), at: Fraction(3,4))
-        let stratum = builder.build()
-        #warning("Add assertion to testBuilderMultipleStatic()")
-    }
-
     func testSimpleFragment() {
         let builder = Tempo.Interpolation.Collection.Builder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
