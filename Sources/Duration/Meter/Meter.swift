@@ -88,12 +88,12 @@ extension Meter {
 
         // MARK: - Instance Properties
 
-        public let base: SortedDictionary<Fraction,Meter.Fragment>
+        public let base: SortedDictionary<Metric,Meter.Fragment>
 
         // MARK: - Initializers
 
         /// Create a `Meter.Collection` with the given `base`.
-        public init(_ base: SortedDictionary<Fraction, Meter.Fragment>) {
+        public init(_ base: SortedDictionary<Metric, Meter.Fragment>) {
             self.base = base
         }
 
