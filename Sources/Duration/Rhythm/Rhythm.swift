@@ -33,7 +33,7 @@ extension Rhythm {
 
     /// The metrical identity of a given rhythmic leaf item.
     ///
-    /// - "tied": if a leaf is "tied" over from the previous event (`.contiuation`)
+    /// - "tied": if a leaf is "tied" over from the previous event (`.continuation`)
     /// - "rest": if a leaf is a "rest", a measured silence (`.instance(.rest)`)
     /// - "event": if a leaf is a measured non-silence (`.instance(.event(Element))`)
     ///
@@ -51,11 +51,7 @@ extension Rhythm {
     }
 
     /// Create a `Rhythm` with a given `duration` and `leaves.
-    public init(
-        _ duration: Duration,
-        _ leaves: [(duration: Int, context: Leaf)]
-    )
-    {
+    public init(_ duration: Duration, _ leaves: [(duration: Int, context: Leaf)]) {
         self.init(duration * leaves.map { $0.duration}, leaves.map { $0.context} )
     }
 
@@ -72,7 +68,7 @@ extension Rhythm {
     /// - Returns: `Rhythm` with each of its `event` (i.e., `.instance(.event(Element))`) values
     /// updated by the given `transform`.
     ///
-    /// - Each `/continuation` remains as such
+    /// - Each `.continuation` remains as such
     /// - Each `.instance(.rest)` remains as such
     /// - Each `.instance(.event(T))` is transformed to a `.instance(.event(U))`
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U> {
@@ -83,6 +79,8 @@ extension Rhythm {
     }
 }
 
+// FIXME: Extend `Rhythm.Leaf` with a `map` once this is resolved:
+// https://gist.github.com/mbrandonw/5e4f475c4e0e2caa1ce38c44531faf46
 func leafMap <T,U> (_ leaf: Rhythm<T>.Leaf, _ transform: (T) -> U) -> Rhythm<U>.Leaf {
     switch leaf {
     case .continuation:
