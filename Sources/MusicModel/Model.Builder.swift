@@ -144,10 +144,10 @@ extension Model {
         @discardableResult public func add(
             _ tempo: Tempo,
             at offset: Fraction,
-            interpolating: Bool = false
+            easing: Tempo.Interpolation.Easing? = nil
         ) -> Builder
         {
-            tempoInterpolationCollectionBuilder.add(tempo, at: offset, interpolating: interpolating)
+            tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
             return self
         }
 

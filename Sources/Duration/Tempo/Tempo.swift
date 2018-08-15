@@ -479,7 +479,7 @@ extension Tempo.Interpolation.Collection {
 
         // MARK: - Instance Properties
 
-        private var last: (Fraction, Tempo, Bool)?
+        private var last: (Fraction, Tempo, Tempo.Interpolation.Easing?)?
 
         /// The stateful, accumulating `offset` which becomes the metrical offset of a
         ///`Tempo.Interpolation.Fragment` value.
@@ -509,7 +509,7 @@ extension Tempo.Interpolation.Collection {
             -> Builder
         {
             self.intermediate.insert(fragment, key: offset)
-            last = (offset, fragment.base.end, true)
+            last = (offset, fragment.base.end, nil)
             offset += fragment.range.length
             return self
         }
@@ -522,7 +522,7 @@ extension Tempo.Interpolation.Collection {
             -> Builder
         {
             self.intermediate.insert(Tempo.Interpolation.Fragment(interpolation), key: offset)
-            last = (offset, interpolation.end, true)
+            last = (offset, interpolation.end, nil)
             offset += interpolation.length
             return self
         }
@@ -534,19 +534,19 @@ extension Tempo.Interpolation.Collection {
         @discardableResult public func add(
             _ tempo: Tempo,
             at offset: Fraction,
-            interpolating: Bool = false
+            easing: Tempo.Interpolation.Easing? = nil
         ) -> Builder
         {
             if let (startOffset, startTempo, startInterpolating) = last {
                 let interpolation = Tempo.Interpolation(
                     start: startTempo,
-                    end: startInterpolating ? tempo : startTempo,
+                    end: startInterpolating != nil ? tempo : startTempo,
                     length: offset - startOffset,
-                    easing: .linear
+                    easing: easing ?? .linear
                 )
                 add(.init(interpolation))
             }
-            last = (offset, tempo, interpolating)
+            last = (offset, tempo, easing)
             return self
         }
     }

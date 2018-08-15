@@ -22,7 +22,7 @@ class ModelTests: XCTestCase {
         let model = Model.Builder()
             .add(pitches, label: "pitch", with: PerformanceContext.Path(), in: interval)
             .build()
-        print(model)
+        #warning("Add assertion to testAddPitchArrayAttribute()")
     }
     
     func testPitchesAndAtriculations() {
@@ -36,6 +36,7 @@ class ModelTests: XCTestCase {
         zip(events, intervals).forEach { event, interval in builder.add(event, in: interval) }
         let model = builder.build()
         print(model)
+        #warning("Add assertion to testPitchesAndAtriculations()")
     }
     
     func testAddRhythm() {
@@ -68,6 +69,8 @@ class ModelTests: XCTestCase {
                 print(attributeIDs.map { model.values[$0] })
             }
         }
+
+        #warning("Add assertion to testAddRhythm()")
     }
     
     func testAddManyRhythms() {
@@ -95,6 +98,8 @@ class ModelTests: XCTestCase {
     
         let model = builder.build()
         print(model)
+
+        #warning("Add assertion to testAddManyRhythms()")
     }
     
     func testFilter() {
@@ -142,6 +147,8 @@ class ModelTests: XCTestCase {
             let context = model.performanceContexts[id]!
             print("\(value); interval: \(interval); contexts: \(context)")
         }
+
+        #warning("Add assertion to testFilter()")
     }
 
     
@@ -154,11 +161,13 @@ class ModelTests: XCTestCase {
         }
 
         builder.add(Tempo(90), at: .zero)
-        builder.add(Tempo(60), at: Fraction(4,4), interpolating: true)
-        builder.add(Tempo(120), at: Fraction(24,4), interpolating: false)
-        
+        builder.add(Tempo(60), at: Fraction(4,4), easing: .linear)
+        builder.add(Tempo(120), at: Fraction(24,4))
+
         let model = builder.build()
         print(model)
         // TODO: Assert something!
+
+        #warning("Add assertion to testAddMeterStructure()")
     }
 }

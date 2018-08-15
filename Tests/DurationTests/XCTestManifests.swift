@@ -61,6 +61,13 @@ extension MeterCollectionTests {
     ]
 }
 
+extension MeterTests {
+    static let __allTests = [
+        ("testIrrationalMeter", testIrrationalMeter),
+        ("testNormalMeter", testNormalMeter),
+    ]
+}
+
 extension ProportionTreeTests {
     static let __allTests = [
         ("testInit", testInit),
@@ -97,7 +104,7 @@ extension RhythmTreeTests {
     ]
 }
 
-extension StratumTests {
+extension TempoInterpolationCollectionTests {
     static let __allTests = [
         ("testBuilderMultipleStatic", testBuilderMultipleStatic),
         ("testBuilderSingleInterpolation", testBuilderSingleInterpolation),
@@ -143,10 +150,11 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(EasingEvaluateTests.__allTests),
         testCase(EasingIntegrateTests.__allTests),
         testCase(MeterCollectionTests.__allTests),
+        testCase(MeterTests.__allTests),
         testCase(ProportionTreeTests.__allTests),
         testCase(RhythmTests.__allTests),
         testCase(RhythmTreeTests.__allTests),
-        testCase(StratumTests.__allTests),
+        testCase(TempoInterpolationCollectionTests.__allTests),
         testCase(TempoInterpolationTests.__allTests),
         testCase(TempoTests.__allTests),
     ]
