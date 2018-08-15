@@ -499,8 +499,7 @@ extension Tempo.Interpolation.Collection {
 
         /// The intermediate storage of `Tempo.Interpolation.Fragment` values indexed by their
         /// `Fraction` offsets.
-        // FIXME: Consider using an `OrderedDictionary` re: performance.
-        public var intermediate: SortedDictionary<Fraction,Tempo.Interpolation.Fragment>
+        public var intermediate: OrderedDictionary<Fraction,Tempo.Interpolation.Fragment>
 
         // MARK: - Initializers
 
@@ -520,7 +519,7 @@ extension Tempo.Interpolation.Collection {
         @discardableResult public func add(_ fragment: Tempo.Interpolation.Fragment)
             -> Builder
         {
-            self.intermediate.insert(fragment, key: offset)
+            self.intermediate.append(fragment, key: offset)
             last = (offset, fragment.base.end, nil)
             offset += fragment.range.length
             return self
@@ -533,7 +532,7 @@ extension Tempo.Interpolation.Collection {
         @discardableResult public func add(_ interpolation: Tempo.Interpolation)
             -> Builder
         {
-            self.intermediate.insert(Tempo.Interpolation.Fragment(interpolation), key: offset)
+            self.intermediate.append(Tempo.Interpolation.Fragment(interpolation), key: offset)
             last = (offset, interpolation.end, nil)
             offset += interpolation.length
             return self

@@ -28,7 +28,7 @@ public protocol SpanningContainerBuilder: class {
     /// Intermediate storage which is converted into the `Product`.
     //
     // FIXME: Consider using `OrderedDictionary` re: performance.
-    var intermediate: SortedDictionary<Spanner.Metric,Spanner> { get set }
+    var intermediate: OrderedDictionary<Spanner.Metric,Spanner> { get set }
 
     /// Cumulative offset of spanners contained in `intermediate`.
     var offset: Spanner.Metric { get set }
@@ -48,7 +48,7 @@ extension SpanningContainerBuilder {
     ///
     /// - Returns: `Self`.
     @discardableResult public func add(_ element: Spanner) -> Self {
-        intermediate.insert(element, key: offset)
+        intermediate.append(element, key: offset)
         offset = offset + element.range.length
         return self
     }
@@ -65,6 +65,6 @@ extension SpanningContainerBuilder {
 
     /// Creates the final `Product` with the `intermediate`.
     public func build() -> Product {
-        return Product(intermediate)
+        return Product(SortedDictionary(intermediate.map { $0 }))
     }
 }
