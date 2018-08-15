@@ -12,22 +12,36 @@ import Math
 
 class TempoInterpolationCollectionTests: XCTestCase {
 
+    func testBuilderSingleStatic() {
+        let builder = Tempo.Interpolation.Collection.Builder()
+        builder.add(Tempo(60), at: .zero)
+        builder.add(Tempo(90), at: Fraction(4,4))
+        let interpolations = builder.build()
+        let expected = Tempo.Interpolation.Fragment(
+            Tempo.Interpolation(
+                start: Tempo(60),
+                end: Tempo(60),
+                length: Fraction(4,4),
+                easing: .linear
+            )
+        )
+        XCTAssertEqual(interpolations.map { _, values in values }, [expected])
+    }
+
     func testBuilderSingleInterpolation() {
         let builder = Tempo.Interpolation.Collection.Builder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
         builder.add(Tempo(90), at: Fraction(4,4))
         let interpolations = builder.build()
-        dump(interpolations)
-        #warning("Add assertion to testBuilderSingleInterpolation()")
-    }
-
-    func testBuilderSingleStatic() {
-        let builder = Tempo.Interpolation.Collection.Builder()
-        builder.add(Tempo(60), at: .zero)
-        builder.add(Tempo(90), at: Fraction(4,4))
-        let stratum = builder.build()
-        #warning("Add assertion to testBuilderSingleStatic()")
-        print(stratum)
+        let expected = Tempo.Interpolation.Fragment(
+            Tempo.Interpolation(
+                start: Tempo(60),
+                end: Tempo(90),
+                length: Fraction(4,4),
+                easing: .linear
+            )
+        )
+        XCTAssertEqual(interpolations.map { _, values in values }, [expected])
     }
 
     func testBuilderMultipleStatic() {
