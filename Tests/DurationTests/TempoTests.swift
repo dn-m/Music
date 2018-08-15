@@ -12,6 +12,16 @@ import Math
 
 class TempoTests: XCTestCase {
 
+    func testInitIntegerLiteral() {
+        let tempo: Tempo = 79
+        XCTAssertEqual(tempo, Tempo(79, subdivision: 4))
+    }
+
+    func testInitFloatLiteral() {
+        let tempo: Tempo = 3.14159
+        XCTAssertEqual(tempo, Tempo(3.14159, subdivision: 4))
+    }
+
     func testTempoRespellingSubdivision() {
         let original = Tempo(60, subdivision: 4)
         let respelled = original.respelling(subdivision: 16)

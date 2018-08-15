@@ -147,6 +147,8 @@ extension TempoInterpolationTests {
 
 extension TempoTests {
     static let __allTests = [
+        ("testInitFloatLiteral", testInitFloatLiteral),
+        ("testInitIntegerLiteral", testInitIntegerLiteral),
         ("testInterpolationStatic60BPMSecondsOffsets", testInterpolationStatic60BPMSecondsOffsets),
         ("testTempoRespellingSubdivision", testTempoRespellingSubdivision),
     ]
