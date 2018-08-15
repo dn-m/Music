@@ -34,12 +34,12 @@ extension Dynamic {
         // MARK: - Initializers
 
         /// Create a `Dynamic.Interpolation` with the given `direction`.
-        init(direction: Direction) {
+        public init(direction: Direction) {
             self.direction = direction
         }
 
         /// Create a `Dynamic.Interpolation` between the given `Dynamic` values.
-        init(from source: Dynamic, to destination: Dynamic) {
+        public init(from source: Dynamic, to destination: Dynamic) {
             let source = source.numericValues.posterior
             let destination = destination.numericValues.anterior
             if source < destination {

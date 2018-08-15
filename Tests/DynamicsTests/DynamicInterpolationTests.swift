@@ -7,8 +7,7 @@
 //
 
 import XCTest
-@testable import Dynamics
-
+import Dynamics
 
 class DynamicInterpolationTests: XCTestCase {
 
