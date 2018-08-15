@@ -23,4 +23,10 @@ class DynamicInterpolationTests: XCTestCase {
         let expected = Dynamic.Interpolation(direction: .crescendo)
         XCTAssertEqual(interp, expected)
     }
+
+    func testInitDescrescendo() {
+        let interp = Dynamic.Interpolation(from: .fff, to: .f)
+        let expected = Dynamic.Interpolation(direction: .decrescendo)
+        XCTAssertEqual(interp, expected)
+    }
 }
