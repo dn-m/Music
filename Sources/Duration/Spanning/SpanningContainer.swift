@@ -52,6 +52,11 @@ extension SpanningContainer {
         return AnyCollection(base.keys)
     }
 
+    /// - Returns: A collection of the spanners contained herein.
+    public var spanners: AnyCollection<Spanner> {
+        return AnyCollection(base.values)
+    }
+
     /// Length of `SpanningContainer`.
     public var length: Metric {
         return base.values.map { $0.length }.sum

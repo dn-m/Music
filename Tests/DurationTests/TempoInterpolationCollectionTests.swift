@@ -25,7 +25,8 @@ class TempoInterpolationCollectionTests: XCTestCase {
                 easing: .linear
             )
         )
-        XCTAssertEqual(interpolations.map { _, values in values }, [expected])
+        XCTAssertEqual(Array(interpolations.offsets), [Fraction(0,4)])
+        XCTAssertEqual(Array(interpolations.spanners), [expected])
     }
 
     func testBuilderSingleInterpolation() {
