@@ -288,4 +288,9 @@ class TempoInterpolationTests: XCTestCase {
             XCTAssertEqual(secsAtOffset, expected, accuracy: 0.01)
         }
     }
+
+    func testDurationStatic60BPM() {
+        let interp = Tempo.Interpolation(start: Tempo(60), end: Tempo(60), length: Fraction(4,4))
+        XCTAssertEqual(interp.duration, 4)
+    }
 }

@@ -19,7 +19,7 @@ class TempoTests: XCTestCase {
         XCTAssertEqual(respelled, expected)
     }
 
-    func testInterpolationStatic60BPM() {
+    func testInterpolationStatic60BPMSecondsOffsets() {
         let interpolation = Tempo.Interpolation(
             start: Tempo(60),
             end: Tempo(60),
