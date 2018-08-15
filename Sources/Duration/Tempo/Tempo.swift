@@ -76,7 +76,6 @@ extension Tempo {
     /// - Returns: Duration in seconds for a beat at the given `subdivision`.
     public func duration(forBeatAt subdivision: Subdivision) -> Double {
         precondition(subdivision.isPowerOfTwo, "Subdivision must be a power-of-two")
-        #warning("FIXME: Assert that subdivision is within bounds")
         let quotient = Double(subdivision) / Double(self.subdivision)
         return durationOfBeat / quotient
     }
