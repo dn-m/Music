@@ -12,8 +12,10 @@
     import Darwin.C
 #endif
 
+import DataStructures
+
 /// Model of a `Tempo`.
-public struct Tempo: Equatable {
+public struct Tempo {
 
     // MARK: - Associated Types
     
@@ -79,13 +81,15 @@ extension Tempo {
     }
 }
 
+extension Tempo: Equatable { }
+
 // FIXME: Move to own file (Tempo.Interpolation) when Swift compiler build-order bug resolved.
 import Math
 
 extension Tempo {
 
     /// Interpolation between two `Tempo` values.
-    public struct Interpolation: Equatable, DurationSpanning {
+    public struct Interpolation: DurationSpanning {
 
         // MARK: - Cases
 
@@ -227,6 +231,8 @@ extension Tempo {
     }
 }
 
+extension Tempo.Interpolation: Equatable { }
+
 extension Tempo.Interpolation: Fragmentable {
 
     // MARK: - Fragmentable
@@ -305,6 +311,8 @@ extension Tempo.Interpolation.Fragment {
     }
 }
 
+extension Tempo.Interpolation.Fragment: Equatable { }
+
 // FIXME: Move to own file (Tempo.Interpolation.Easing)
 import DataStructures
 
@@ -313,7 +321,7 @@ extension Tempo.Interpolation {
     /// Easing of `Interpolation`.
     //
     // TODO: Generalize this beyond tempi.
-    public enum Easing: Equatable {
+    public enum Easing {
 
         /// Linear interpolation.
         case linear
@@ -396,6 +404,8 @@ extension Tempo.Interpolation {
     }
 }
 
+extension Tempo.Interpolation.Easing: Equatable { }
+
 // FIXME: Move to own file (Tempo.Interpolation.Collection)
 public extension Tempo.Interpolation {
 
@@ -463,6 +473,8 @@ public extension Tempo.Interpolation {
         }
     }
 }
+
+extension Tempo.Interpolation.Collection: Equatable { }
 
 // FIXME: Move to own file (Tempo.Interpolation.Collection.Builder)
 
