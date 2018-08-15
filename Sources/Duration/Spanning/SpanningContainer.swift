@@ -44,7 +44,7 @@ extension SpanningContainer {
 
     /// - Returns: An array of spanners in the given `range` of indices.
     public subscript(range: CountableClosedRange<Int>) -> [Spanner] {
-        return range.map { base.values[$0] }
+        return range.map { base.values.map { $0 }[$0] }
     }
 
     /// - Returns: A collection of the offsets of each spanner contained herein.
