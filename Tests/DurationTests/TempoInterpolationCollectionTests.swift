@@ -16,7 +16,8 @@ class TempoInterpolationCollectionTests: XCTestCase {
         let builder = Tempo.Interpolation.Collection.Builder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
         builder.add(Tempo(90), at: Fraction(4,4))
-        _ = builder.build()
+        let interpolations = builder.build()
+        dump(interpolations)
         #warning("Add assertion to testBuilderSingleInterpolation()")
     }
 

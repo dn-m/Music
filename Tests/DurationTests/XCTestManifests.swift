@@ -137,7 +137,7 @@ extension TempoInterpolationTests {
 
 extension TempoTests {
     static let __allTests = [
-        ("testInterpolationNoChange", testInterpolationNoChange),
+        ("testInterpolationNoChange", testInterpolationStatic60BPM),
         ("testTempoRespellingSubdivision", testTempoRespellingSubdivision),
     ]
 }

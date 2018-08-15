@@ -14,23 +14,21 @@ class TempoTests: XCTestCase {
 
     func testTempoRespellingSubdivision() {
         let original = Tempo(60, subdivision: 4)
-        XCTAssertEqual(original.respelling(subdivision: 16), Tempo(240, subdivision: 16))
+        let respelled = original.respelling(subdivision: 16)
+        let expected = Tempo(240, subdivision: 16)
+        XCTAssertEqual(respelled, expected)
     }
 
-    func testInterpolationNoChange() {
-
+    func testInterpolationStatic60BPM() {
         let interpolation = Tempo.Interpolation(
             start: Tempo(60),
             end: Tempo(60),
-            length: Fraction(4,4)
+            length: Fraction(4,4),
+            easing: .linear
         )
-
-        for beatOffset in 0...4 {
-            let durationOffset = Fraction(beatOffset, 4)
-            XCTAssertEqual(
-                interpolation.secondsOffset(for: durationOffset),
-                Double(beatOffset)
-            )
-        }
+        let beatOffsets = (0...4).map { Fraction($0,4) }
+        let secondsOffsets = beatOffsets.map(interpolation.secondsOffset)
+        let expected = (0...4).map { Double($0) }
+        XCTAssertEqual(secondsOffsets, expected)
     }
 }
