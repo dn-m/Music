@@ -34,7 +34,7 @@ public struct Meter: Rational {
     }
 }
 
-extension FixedWidthInteger {
+extension Subdivision {
     var isPowerOfTwoWithAnyCoefficient: Bool {
         if isPowerOfTwo { return true }
         return (1...self).lazy
