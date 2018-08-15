@@ -12,8 +12,10 @@
     import Darwin.C
 #endif
 
+import DataStructures
+
 /// Model of a `Tempo`.
-public struct Tempo: Equatable {
+public struct Tempo {
 
     // MARK: - Associated Types
     
@@ -64,7 +66,7 @@ extension Tempo {
     /// - Returns: A `Tempo` with the numerator and denominator adjusted to match the given
     /// `subdivision`.
     public func respelling(subdivision newSubdivision: Subdivision) -> Tempo {
-        assert(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")
+        precondition(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")
         guard newSubdivision != subdivision else { return self }
         let quotient = Double(newSubdivision) / Double(subdivision)
         let newBeatsPerMinute = beatsPerMinute * quotient
@@ -73,11 +75,13 @@ extension Tempo {
 
     /// - Returns: Duration in seconds for a beat at the given `subdivision`.
     public func duration(forBeatAt subdivision: Subdivision) -> Double {
-        assert(subdivision.isPowerOfTwo, "Subdivision must be a power-of-two")
+        precondition(subdivision.isPowerOfTwo, "Subdivision must be a power-of-two")
         let quotient = Double(subdivision) / Double(self.subdivision)
         return durationOfBeat / quotient
     }
 }
+
+extension Tempo: Equatable { }
 
 // FIXME: Move to own file (Tempo.Interpolation) when Swift compiler build-order bug resolved.
 import Math
@@ -85,7 +89,7 @@ import Math
 extension Tempo {
 
     /// Interpolation between two `Tempo` values.
-    public struct Interpolation: Equatable, DurationSpanning {
+    public struct Interpolation: DurationSpanning {
 
         // MARK: - Cases
 
@@ -227,6 +231,8 @@ extension Tempo {
     }
 }
 
+extension Tempo.Interpolation: Equatable { }
+
 extension Tempo.Interpolation: Fragmentable {
 
     // MARK: - Fragmentable
@@ -305,6 +311,8 @@ extension Tempo.Interpolation.Fragment {
     }
 }
 
+extension Tempo.Interpolation.Fragment: Equatable { }
+
 // FIXME: Move to own file (Tempo.Interpolation.Easing)
 import DataStructures
 
@@ -313,7 +321,7 @@ extension Tempo.Interpolation {
     /// Easing of `Interpolation`.
     //
     // TODO: Generalize this beyond tempi.
-    public enum Easing: Equatable {
+    public enum Easing {
 
         /// Linear interpolation.
         case linear
@@ -396,6 +404,8 @@ extension Tempo.Interpolation {
     }
 }
 
+extension Tempo.Interpolation.Easing: Equatable { }
+
 // FIXME: Move to own file (Tempo.Interpolation.Collection)
 public extension Tempo.Interpolation {
 
@@ -464,6 +474,8 @@ public extension Tempo.Interpolation {
     }
 }
 
+extension Tempo.Interpolation.Collection: Equatable { }
+
 // FIXME: Move to own file (Tempo.Interpolation.Collection.Builder)
 
 extension Tempo.Interpolation.Collection {
@@ -479,7 +491,7 @@ extension Tempo.Interpolation.Collection {
 
         // MARK: - Instance Properties
 
-        private var last: (Fraction, Tempo, Bool)?
+        private var last: (Fraction, Tempo, Tempo.Interpolation.Easing?)?
 
         /// The stateful, accumulating `offset` which becomes the metrical offset of a
         ///`Tempo.Interpolation.Fragment` value.
@@ -509,7 +521,7 @@ extension Tempo.Interpolation.Collection {
             -> Builder
         {
             self.intermediate.insert(fragment, key: offset)
-            last = (offset, fragment.base.end, true)
+            last = (offset, fragment.base.end, nil)
             offset += fragment.range.length
             return self
         }
@@ -522,7 +534,7 @@ extension Tempo.Interpolation.Collection {
             -> Builder
         {
             self.intermediate.insert(Tempo.Interpolation.Fragment(interpolation), key: offset)
-            last = (offset, interpolation.end, true)
+            last = (offset, interpolation.end, nil)
             offset += interpolation.length
             return self
         }
@@ -534,19 +546,19 @@ extension Tempo.Interpolation.Collection {
         @discardableResult public func add(
             _ tempo: Tempo,
             at offset: Fraction,
-            interpolating: Bool = false
+            easing: Tempo.Interpolation.Easing? = nil
         ) -> Builder
         {
             if let (startOffset, startTempo, startInterpolating) = last {
                 let interpolation = Tempo.Interpolation(
                     start: startTempo,
-                    end: startInterpolating ? tempo : startTempo,
+                    end: startInterpolating != nil ? tempo : startTempo,
                     length: offset - startOffset,
-                    easing: .linear
+                    easing: easing ?? .linear
                 )
                 add(.init(interpolation))
             }
-            last = (offset, tempo, interpolating)
+            last = (offset, tempo, easing)
             return self
         }
     }

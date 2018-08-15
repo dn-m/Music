@@ -61,6 +61,13 @@ extension MeterCollectionTests {
     ]
 }
 
+extension MeterTests {
+    static let __allTests = [
+        ("testIrrationalMeter", testIrrationalMeter),
+        ("testNormalMeter", testNormalMeter),
+    ]
+}
+
 extension ProportionTreeTests {
     static let __allTests = [
         ("testInit", testInit),
@@ -97,9 +104,8 @@ extension RhythmTreeTests {
     ]
 }
 
-extension StratumTests {
+extension TempoInterpolationCollectionTests {
     static let __allTests = [
-        ("testBuilderMultipleStatic", testBuilderMultipleStatic),
         ("testBuilderSingleInterpolation", testBuilderSingleInterpolation),
         ("testBuilderSingleStatic", testBuilderSingleStatic),
         ("testFragment", testFragment),
@@ -108,8 +114,19 @@ extension StratumTests {
     ]
 }
 
+extension TempoInterpolationFragmentTests {
+    static let __allTests = [
+        ("testSecondsOffsetStatic120BPMFirstBeats", testSecondsOffsetStatic120BPMFirstBeats),
+        ("testSecondsOffsetStatic120BPMLastBeats", testSecondsOffsetStatic120BPMLastBeats),
+        ("testSecondsOffsetStatic120BPMMiddleBeats", testSecondsOffsetStatic120BPMMiddleBeats),
+    ]
+}
+
 extension TempoInterpolationTests {
     static let __allTests = [
+        ("testDurationStatic120BPM", testDurationStatic120BPM),
+        ("testDurationStatic30BPM", testDurationStatic30BPM),
+        ("testDurationStatic60BPM", testDurationStatic60BPM),
         ("testSecondsOffsetLinear_120to120", testSecondsOffsetLinear_120to120),
         ("testSecondsOffsetLinear_120to60_wholeNoteDuration", testSecondsOffsetLinear_120to60_wholeNoteDuration),
         ("testSecondsOffsetLinear_60to120_dottedHalfDuration", testSecondsOffsetLinear_60to120_dottedHalfDuration),
@@ -130,7 +147,7 @@ extension TempoInterpolationTests {
 
 extension TempoTests {
     static let __allTests = [
-        ("testInterpolationNoChange", testInterpolationNoChange),
+        ("testInterpolationStatic60BPMSecondsOffsets", testInterpolationStatic60BPMSecondsOffsets),
         ("testTempoRespellingSubdivision", testTempoRespellingSubdivision),
     ]
 }
@@ -143,10 +160,12 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(EasingEvaluateTests.__allTests),
         testCase(EasingIntegrateTests.__allTests),
         testCase(MeterCollectionTests.__allTests),
+        testCase(MeterTests.__allTests),
         testCase(ProportionTreeTests.__allTests),
         testCase(RhythmTests.__allTests),
         testCase(RhythmTreeTests.__allTests),
-        testCase(StratumTests.__allTests),
+        testCase(TempoInterpolationCollectionTests.__allTests),
+        testCase(TempoInterpolationFragmentTests.__allTests),
         testCase(TempoInterpolationTests.__allTests),
         testCase(TempoTests.__allTests),
     ]

@@ -13,6 +13,7 @@ import DataStructures
 import Math
 
 /// Interface for values that contain a sequence of `SpanningFragment` type values.
+#warning("Rename SpanningContainer to IntervalCollection")
 public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fragmentable
     where Metric == Spanner.Metric
 {
@@ -44,6 +45,16 @@ extension SpanningContainer {
     /// - Returns: An array of spanners in the given `range` of indices.
     public subscript(range: CountableClosedRange<Int>) -> [Spanner] {
         return range.map { base.values[$0] }
+    }
+
+    /// - Returns: A collection of the offsets of each spanner contained herein.
+    public var offsets: AnyCollection<Metric> {
+        return AnyCollection(base.keys)
+    }
+
+    /// - Returns: A collection of the spanners contained herein.
+    public var spanners: AnyCollection<Spanner> {
+        return AnyCollection(base.values)
     }
 
     /// Length of `SpanningContainer`.
