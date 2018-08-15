@@ -66,7 +66,7 @@ extension Tempo {
     /// - Returns: A `Tempo` with the numerator and denominator adjusted to match the given
     /// `subdivision`.
     public func respelling(subdivision newSubdivision: Subdivision) -> Tempo {
-        assert(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")
+        precondition(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")
         guard newSubdivision != subdivision else { return self }
         let quotient = Double(newSubdivision) / Double(subdivision)
         let newBeatsPerMinute = beatsPerMinute * quotient
@@ -75,7 +75,7 @@ extension Tempo {
 
     /// - Returns: Duration in seconds for a beat at the given `subdivision`.
     public func duration(forBeatAt subdivision: Subdivision) -> Double {
-        assert(subdivision.isPowerOfTwo, "Subdivision must be a power-of-two")
+        precondition(subdivision.isPowerOfTwo, "Subdivision must be a power-of-two")
         #warning("FIXME: Assert that subdivision is within bounds")
         let quotient = Double(subdivision) / Double(self.subdivision)
         return durationOfBeat / quotient
