@@ -65,12 +65,16 @@ class TempoInterpolationCollectionTests: XCTestCase {
         builder.add(Tempo(120), at: Fraction(16,4), easing: nil)
         builder.add(Tempo(120), at: Fraction(32,4), easing: .linear)
         builder.add(Tempo(120), at: Fraction(48,4), easing: .linear)
-        let stratum = builder.build()
-        let fragment = stratum[Fraction(8,4) ..< Fraction(48,4)]
-
-        // [8 -> 16, 16 -> 32, 32 -> 48]
-        XCTAssertEqual(fragment.count, 3)
-        #warning("Add assertion to testMoreComplexFragment()")
+        let interpolations = builder.build()
+        let fragment = interpolations[Fraction(8,4) ..< Fraction(48,4)]
+        let a = Tempo.Interpolation(start: Tempo(240), end: Tempo(240), length: Fraction(12,4))
+        let b = Tempo.Interpolation(start: Tempo(120), end: Tempo(120), length: Fraction(16,4))
+        let c = Tempo.Interpolation(start: Tempo(120), end: Tempo(120), length: Fraction(16,4))
+        let fragmentA = Tempo.Interpolation.Fragment(a, in: Fraction(4,4)..<Fraction(12,4))
+        let fragmentB = Tempo.Interpolation.Fragment(b)
+        let fragmentC = Tempo.Interpolation.Fragment(c)
+        let expected = [fragmentA, fragmentB, fragmentC]
+        XCTAssertEqual(Array(fragment.spanners), expected)
     }
 
     func testFragment() {
