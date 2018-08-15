@@ -27,11 +27,20 @@ public struct Meter: Rational {
     // MARK: Initializers
 
     /// Creates a `Meter` with the given `numerator` and `denominator`.
-    #warning("TODO: Allow non-2-coefficient powers-of-two for Meter.denominator")
     public init(_ numerator: Beats, _ denominator: Subdivision) {
-        assert(denominator.isPowerOfTwo, "Cannot create Meter with a non power-of-two denominator")
+        precondition(denominator.isPowerOfTwoWithAnyCoefficient)
         self.numerator = numerator
         self.denominator = denominator
+    }
+}
+
+extension Subdivision {
+    var isPowerOfTwoWithAnyCoefficient: Bool {
+        if isPowerOfTwo { return true }
+        return (1...self).lazy
+            .filter { $0.isOdd }
+            .flatMap { PowerSequence(coefficient: $0, max: self, doOvershoot: true) }
+            .contains(self)
     }
 }
 
