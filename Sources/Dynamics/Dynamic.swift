@@ -46,67 +46,80 @@ public struct Dynamic {
 
 extension Dynamic {
 
-    static let rf = Dynamic.r(.f(1))
-    static let rff = Dynamic.r(.f(2))
-    static let rfff = Dynamic.r(.f(3))
+    init(_ anterior: Element, _ posterior: Element) {
+        self.init(elements: .compound(anterior, posterior))
+    }
 
-    static let rfz = Dynamic.rf.z
-    static let rffz = Dynamic.r(.f(2)).z
-    static let rfffz = Dynamic.r(.f(3)).z
+    public static let rf = Dynamic.r(.f(1))
+    public static let rff = Dynamic.r(.f(2))
+    public static let rfff = Dynamic.r(.f(3))
 
-    static let sf = Dynamic.s(.f(1))
-    static let sff = Dynamic.s(.f(2))
-    static let sfff = Dynamic.s(.f(3))
+    public static let rfz = Dynamic.rf.z
+    public static let rffz = Dynamic.r(.f(2)).z
+    public static let rfffz = Dynamic.r(.f(3)).z
 
-    static let sfz = Dynamic.sf.z
-    static let sffz = Dynamic.s(.f(2)).z
-    static let sfffz = Dynamic.s(.f(3)).z
+    public static let sf = Dynamic.s(.f(1))
+    public static let sff = Dynamic.s(.f(2))
+    public static let sfff = Dynamic.s(.f(3))
 
-    static let sfp = Dynamic.s(.f,.p)
-    static let sffp = Dynamic.s(.f(2),.p)
-    static let sfffp = Dynamic.s(.f(3),.p)
-    static let sfpp = Dynamic.s(.f,.p(2))
-    static let sfppp = Dynamic.s(.f,.p(3))
-    static let sffpp = Dynamic.s(.f(2),.p(2))
-    static let sffppp = Dynamic.s(.f(2),.p(3))
-    static let sfffpp = Dynamic.s(.f(3),.p(2))
-    static let sfffppp = Dynamic.s(.f(3),.p(3))
+    public static let sfz = Dynamic.sf.z
+    public static let sffz = Dynamic.s(.f(2)).z
+    public static let sfffz = Dynamic.s(.f(3)).z
 
-    static let f = Dynamic(elements: .single(.f))
-    static let ff = Dynamic(elements: .single(.f(2)))
-    static let fff = Dynamic(elements: .single(.f(3)))
-    static var ffff = Dynamic(elements: .single(.f(4)))
-    static var fffff = Dynamic(elements: .single(.f(5)))
-    static var ffffff = Dynamic(elements: .single(.f(6)))
-    static var fffffff = Dynamic(elements: .single(.f(7)))
-    static var ffffffff = Dynamic(elements: .single(.f(8)))
+    public static let fp = Dynamic(.f,.p)
+    public static let ffp = Dynamic(.f(2),.p)
+    public static let fffp = Dynamic(.f(3),.p)
+    public static let fpp = Dynamic(.f,.p(2))
+    public static let fppp = Dynamic(.f,.p(3))
+    public static let ffpp = Dynamic(.f(2),.p(2))
+    public static let ffppp = Dynamic(.f(2),.p(3))
+    public static let fffpp = Dynamic(.f(3),.p(2))
+    public static let fffppp = Dynamic(.f(3),.p(3))
 
-    static var p = Dynamic(elements: .single(.p))
-    static var pp = Dynamic(elements: .single(.p(2)))
-    static var ppp = Dynamic(elements: .single(.p(3)))
-    static var pppp = Dynamic(elements: .single(.p(4)))
-    static var ppppp = Dynamic(elements: .single(.p(5)))
-    static var pppppp = Dynamic(elements: .single(.p(6)))
-    static var ppppppp = Dynamic(elements: .single(.p(7)))
-    static var pppppppp = Dynamic(elements: .single(.p(8)))
+    public static let sfp = Dynamic.s(.f,.p)
+    public static let sffp = Dynamic.s(.f(2),.p)
+    public static let sfffp = Dynamic.s(.f(3),.p)
+    public static let sfpp = Dynamic.s(.f,.p(2))
+    public static let sfppp = Dynamic.s(.f,.p(3))
+    public static let sffpp = Dynamic.s(.f(2),.p(2))
+    public static let sffppp = Dynamic.s(.f(2),.p(3))
+    public static let sfffpp = Dynamic.s(.f(3),.p(2))
+    public static let sfffppp = Dynamic.s(.f(3),.p(3))
 
-    static let fp = Dynamic(elements: .compound(.f,.p))
-    static let mp = Dynamic(elements: .single(.mezzo(.p)))
-    static let mf = Dynamic(elements: .single(.mezzo(.f)))
+    public static let f = Dynamic(elements: .single(.f))
+    public static let ff = Dynamic(elements: .single(.f(2)))
+    public static let fff = Dynamic(elements: .single(.f(3)))
+    public static var ffff = Dynamic(elements: .single(.f(4)))
+    public static var fffff = Dynamic(elements: .single(.f(5)))
+    public static var ffffff = Dynamic(elements: .single(.f(6)))
+    public static var fffffff = Dynamic(elements: .single(.f(7)))
+    public static var ffffffff = Dynamic(elements: .single(.f(8)))
+
+    public static var p = Dynamic(elements: .single(.p))
+    public static var pp = Dynamic(elements: .single(.p(2)))
+    public static var ppp = Dynamic(elements: .single(.p(3)))
+    public static var pppp = Dynamic(elements: .single(.p(4)))
+    public static var ppppp = Dynamic(elements: .single(.p(5)))
+    public static var pppppp = Dynamic(elements: .single(.p(6)))
+    public static var ppppppp = Dynamic(elements: .single(.p(7)))
+    public static var pppppppp = Dynamic(elements: .single(.p(8)))
+
+    public static let mp = Dynamic(elements: .single(.mezzo(.p)))
+    public static let mf = Dynamic(elements: .single(.mezzo(.f)))
 
     /// - Returns: A `Dynamic` with the amount of forte elements, with the given `annotation`.
-    static func f(_ count: Int, _ annotation: String? = nil) -> Dynamic {
+    public static func f(_ count: Int, _ annotation: String? = nil) -> Dynamic {
         return .init(annotation: annotation, elements: .single(.f(count)))
     }
 
     /// - Returns: A `Dynamic` with the amount of piano elements, with the given `annotation`.
-    static func p(_ count: Int, _ annotation: String? = nil) -> Dynamic {
+    public static func p(_ count: Int, _ annotation: String? = nil) -> Dynamic {
         return .init(annotation: annotation, elements: .single(.p(count)))
     }
 
     /// - Returns: A `Dynamic` which prepends a `r` to the given `element`, with the given
     /// `annotation`.
-    static func r(
+    public static func r(
         _ element: Element,
         _ annotation: String? = nil
     ) -> Dynamic
@@ -116,7 +129,7 @@ extension Dynamic {
 
     /// - Returns: A `Dynamic` with prepends an `s` to the given `element`, with the given
     /// `annotation`.
-    static func s(
+    public static func s(
         _ element: Element,
         _ annotation: String? = nil
     ) -> Dynamic
@@ -126,7 +139,7 @@ extension Dynamic {
 
     /// - Returns: A `Dynamic` with the given `anterior` and `posterior` `Elements` joined together
     /// in a compound `Elements`, with the given `annotation`.
-    static func s(
+    public static func s(
         _ anterior: Element,
         _ posterior: Element,
         _ annotation: String? = nil
@@ -156,7 +169,7 @@ extension Dynamic {
     // MARK: - Numeric Representation
 
     /// - Returns: The numerical values of the anterior and posterior dynamic elements. If
-    var numericValues: (anterior: Double, posterior: Double) {
+    public var numericValues: (anterior: Double, posterior: Double) {
         switch elements {
         case .single(let element):
             return (element.value, element.value)
@@ -170,7 +183,7 @@ extension Dynamic {
 
     // MARK: - Associated Types
 
-    /// Whether a `Dynamic` consistes a single element or a compound of two elements.
+    /// Whether a `Dynamic` consists a single element or a compound of two elements.
     public enum Elements {
         case single(Element)
         case compound(Element,Element)
@@ -203,25 +216,25 @@ extension Dynamic {
         // MARK: - Type Properties
 
         /// Single piano dynamic element.
-        static var p: Element {
+        public static var p: Element {
             return .vector(.p, 1)
         }
 
         /// Single forte dynamic element.
-        static var f: Element {
+        public static var f: Element {
             return .vector(.f, 1)
         }
 
         // MARK: - Type Methods
 
         /// Piano vector dynamic element.
-        static func p(_ count: Int = 1) -> Element {
+        public static func p(_ count: Int = 1) -> Element {
             precondition(count >= 1)
             return vector(.p, count)
         }
 
         /// Forte vector dynamic element.
-        static func f(_ count: Int = 1) -> Element {
+        public static func f(_ count: Int = 1) -> Element {
             precondition(count >= 1)
             return vector(.f, count)
         }
