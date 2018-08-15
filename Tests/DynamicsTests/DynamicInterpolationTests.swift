@@ -9,28 +9,18 @@
 import XCTest
 @testable import Dynamics
 
-#warning("Reimplement DynamicInterpolationTests")
-//class DynamicInterpolationTests: XCTestCase {
 
-    /*
-    func testInit() {
-        let i = DynamicInterpolation(from: try! Dynamic("ff"), to: try! Dynamic("pp"))
-        print(i)
+class DynamicInterpolationTests: XCTestCase {
+
+    func testInitStatic() {
+        let interp = Dynamic.Interpolation(from: .sfff, to: .fff)
+        let expected = Dynamic.Interpolation(direction: .none)
+        XCTAssertEqual(interp, expected)
     }
-    
-    func testDirectionStatic() {
-        let i = DynamicInterpolation(from: try! Dynamic("pp"), to: try! Dynamic("pp"))
-        XCTAssert(i.direction == .static)
+
+    func testInitCrescendo() {
+        let interp = Dynamic.Interpolation(from: .fppp, to: .rffz)
+        let expected = Dynamic.Interpolation(direction: .crescendo)
+        XCTAssertEqual(interp, expected)
     }
-    
-    func testDirectionCrescendo() {
-        let i = DynamicInterpolation(from: try! Dynamic("pp"), to: try! Dynamic("ff"))
-        XCTAssert(i.direction == .crescendo)
-    }
-    
-    func testDirectionDecrescendo() {
-        let i = DynamicInterpolation(from: try! Dynamic("ff"), to: try! Dynamic("pp"))
-        XCTAssert(i.direction == .decrescendo)
-    }
-    */
-//}
+}

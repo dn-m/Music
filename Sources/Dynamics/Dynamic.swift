@@ -46,6 +46,10 @@ public struct Dynamic {
 
 extension Dynamic {
 
+    init(_ anterior: Element, _ posterior: Element) {
+        self.init(elements: .compound(anterior, posterior))
+    }
+
     public static let rf = Dynamic.r(.f(1))
     public static let rff = Dynamic.r(.f(2))
     public static let rfff = Dynamic.r(.f(3))
@@ -61,6 +65,16 @@ extension Dynamic {
     public static let sfz = Dynamic.sf.z
     public static let sffz = Dynamic.s(.f(2)).z
     public static let sfffz = Dynamic.s(.f(3)).z
+
+    public static let fp = Dynamic(.f,.p)
+    public static let ffp = Dynamic(.f(2),.p)
+    public static let fffp = Dynamic(.f(3),.p)
+    public static let fpp = Dynamic(.f,.p(2))
+    public static let fppp = Dynamic(.f,.p(3))
+    public static let ffpp = Dynamic(.f(2),.p(2))
+    public static let ffppp = Dynamic(.f(2),.p(3))
+    public static let fffpp = Dynamic(.f(3),.p(2))
+    public static let fffppp = Dynamic(.f(3),.p(3))
 
     public static let sfp = Dynamic.s(.f,.p)
     public static let sffp = Dynamic.s(.f(2),.p)
@@ -90,7 +104,6 @@ extension Dynamic {
     public static var ppppppp = Dynamic(elements: .single(.p(7)))
     public static var pppppppp = Dynamic(elements: .single(.p(8)))
 
-    public static let fp = Dynamic(elements: .compound(.f,.p))
     public static let mp = Dynamic(elements: .single(.mezzo(.p)))
     public static let mf = Dynamic(elements: .single(.mezzo(.f)))
 
