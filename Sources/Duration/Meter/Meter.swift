@@ -124,7 +124,7 @@ extension Meter.Collection {
         // MARK: - Instance Properties
 
         /// The value which will ultimately be the underlying storage of a `Meter.Collection`.
-        public var intermediate: SortedDictionary<Fraction,Meter.Fragment>
+        public var intermediate: OrderedDictionary<Fraction,Meter.Fragment>
 
         /// The accumulating offset of `Fraction` keys.
         public var offset: Fraction
