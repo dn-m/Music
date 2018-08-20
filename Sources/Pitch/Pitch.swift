@@ -11,11 +11,6 @@ import Math
 /// The quality of a sound governed by the rate of vibrations producing it.
 public struct Pitch: NoteNumberRepresentable {
 
-    // MARK: - Type Properties
-    
-    /// Middle C.
-    public static let middleC = Pitch(noteNumber: 60.0)
-    
     // MARK: - Type Methods
     
     /**
