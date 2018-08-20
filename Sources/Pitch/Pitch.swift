@@ -11,115 +11,42 @@ import Math
 /// The quality of a sound governed by the rate of vibrations producing it.
 public struct Pitch: NoteNumberRepresentable {
 
-
-    /// Modulo-12 representation of `NoteNumber` representation of `Pitch`.
-    public var `class`: Pitch.Class {
-        return Pitch.Class(self)
-    }
-    
     // MARK: - Instance Properties
-    
-    /// `NoteNumber` representation of `Pitch`.
-    public let noteNumber: NoteNumber
-    
-    /// `Frequency` representation of `Pitch`.
-    public let frequency: Frequency
-    
+
+    /// The `NoteNumber` representation of this `Pitch`.
+    public let value: NoteNumber
+
     // MARK: - Initializers
-    
-    /**
-     Create a `Pitch` with a `NoteNumber` value.
-     
-     **Example:**
-     ```
-     let p = Pitch(noteNumber: 60) // => middle C
-     ```
-     */
-    public init(noteNumber: NoteNumber) {
-        self.noteNumber = noteNumber
-        self.frequency = Frequency(noteNumber)
+
+    /// Creates a `Pitch` with the given `NoteNumber` value.
+    public init(_ value: NoteNumber) {
+        self.value = value
     }
-    
-    /**
-     Create a `Pitch` with a `Frequency` value.
-     
-     **Example:**
-     ```
-     let p = Pitch(frequency: 440) // => A below middle C
-     ```
-     */
-    public init(frequency: Frequency) {
-        self.frequency = frequency
-        self.noteNumber = NoteNumber(frequency)
+
+}
+
+extension Pitch {
+
+    // MARK: Computed Properties
+
+    /// - Returns: The `mod 12` representation of this `Pitch`.
+    public var `class`: Pitch.Class {
+        return Pitch.Class(value)
     }
 }
 
-extension Pitch: PitchConvertible {
-    
-    // MARK: - `PitchConvertible`
-    
-    /// Create a `Pitch` with another `Pitch`.
-    public init(_ pitch: Pitch) {
-        self.frequency = pitch.frequency
-        self.noteNumber = NoteNumber(pitch.frequency)
+extension Pitch {
+
+    // MARK: - Instance Methods
+
+    /// The `Frequency` representation of this `Pitch`, with the given tuning `referenceFrequency`
+    /// at the given `referenceNoteNumber`.
+    public func frequency(with referenceFrequency: Frequency, referenceNoteNumber: NoteNumber)
+        -> Frequency
+    {
+        return value.frequency(with: referenceFrequency, at: referenceNoteNumber)
     }
 }
 
-extension Pitch: ExpressibleByFloatLiteral {
-    
-    // MARK: - `ExpressibleByFloatLiteral`
-    
-    /// Create a `Pitch` with a `FloatLiteral`. This value is the `NoteNumber` value.
-    public init(floatLiteral value: Double) {
-        self.init(noteNumber: NoteNumber(value))
-    }
-}
-
-extension Pitch: ExpressibleByIntegerLiteral {
-    
-    // MARK: - `ExpressibleByIntegerLiteral`
-    
-    /// Create a `Pitch` with an `IntegerLiteral`. This value is the `NoteNumber` value.
-    public init(integerLiteral value: Int) {
-        self.init(noteNumber: NoteNumber(Double(value)))
-    }
-}
-
-extension Pitch: Hashable {
-    
-    // MARK: - `Hashable`
-
-    /// Hash value.
-    public var hashValue: Int {
-        return noteNumber.hashValue
-    }
-}
-
-extension Pitch: CustomStringConvertible {
- 
-    // MARK: - `CustomStringConvertible`
-    
-    /// Printed description.
-    public var description: String {
-        return "\(noteNumber.value)"
-    }
-}
-
-// MARK: - Transposition
-
-func + (lhs: Pitch, rhs: Double) -> Pitch {
-    return Pitch(noteNumber: NoteNumber(lhs.noteNumber.value + rhs))
-}
-
-func + (lhs: Double, rhs: Pitch) -> Pitch {
-    return Pitch(noteNumber: NoteNumber(lhs + rhs.noteNumber.value))
-}
-
-func - (lhs: Pitch, rhs: Double) -> Pitch {
-    return Pitch(noteNumber: NoteNumber(lhs.noteNumber.value - rhs))
-}
-
-func - (lhs: Double, rhs: Pitch) -> Pitch {
-    return Pitch(noteNumber: NoteNumber(lhs - rhs.noteNumber.value))
-}
-
+extension Pitch: Equatable { }
+extension Pitch: Hashable { }

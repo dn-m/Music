@@ -8,11 +8,11 @@
 
 import Math
 
-/// Protocol defining types that can be initialized with a `Pitch` value.
-public protocol PitchConvertible {
-    
-    // MARK: - Initializers
-
-    /// Initialize with a `Pitch` value.
-    init(_: Pitch)
-}
+///// Protocol defining types that can be initialized with a `Pitch` value.
+//public protocol PitchConvertible {
+//    
+//    // MARK: - Initializers
+//
+//    /// Initialize with a `Pitch` value.
+//    init(_: Pitch)
+//}

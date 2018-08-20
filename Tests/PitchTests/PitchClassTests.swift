@@ -13,7 +13,7 @@ import DataStructures
 class PitchClassTests: XCTestCase {
 
     func testPitchClass() {
-        let pitch = Pitch(noteNumber: 60.0)
+        let pitch = Pitch(60.0)
         XCTAssertEqual(pitch.class, 0.0)
     }
     

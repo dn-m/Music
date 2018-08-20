@@ -18,34 +18,55 @@ extension Pitch {
 
         /// Inversion of `Pitch.Class`.
         public var inversion: Pitch.Class {
-            return Pitch.Class(12 - noteNumber.value)
+            return Pitch.Class(NoteNumber(12) - value)
         }
 
         /// Value of `Pitch.Class`.
-        public var noteNumber: NoteNumber
+        public var value: NoteNumber
 
         // MARK: - Initializers
 
         /// Create a `Pitch.Class` with a given `noteNumber`.
-        public init(noteNumber: NoteNumber) {
-            self.noteNumber = NoteNumber(mod(noteNumber.value, 12))
+        public init(_ noteNumber: NoteNumber) {
+            self.value = NoteNumber(mod(noteNumber.value, 12))
         }
     }
 }
 
-extension Pitch.Class: PitchConvertible {
+extension Pitch.Class: Equatable { }
+extension Pitch.Class: Hashable { }
 
-    // MARK: - PitchConvertible
+//extension Pitch.Class: Comparable {
+//    public static func < (lhs: Pitch.Class, rhs: Pitch.Class) -> Bool {
+//        return lhs.noteNumber < rhs.noteNumber
+//    }
+//}
 
-    /// Create a `Pitch.Class` with a `Pitch` value.
-    ///
-    ///     let pitch = Pitch(noteNumber: 65.5)
-    ///     let pitchClass = Pitch.Class(pitch) // => 5.5
-    ///
-    public init(_ pitch: Pitch) {
-        self.init(noteNumber: pitch.noteNumber)
-    }
-}
+//extension Pitch.Class: ExpressibleByIntegerLiteral {
+//    public init(integerLiteral value: Int) {
+//        self.init(noteNumber: NoteNumber(mod(Double(value),12)))
+//    }
+//}
+//
+//extension Pitch.Class: ExpressibleByFloatLiteral {
+//    public init(floatLiteral value: Double) {
+//        self.init(noteNumber: NoteNumber(mod(value,12)))
+//    }
+//}
+
+//extension Pitch.Class: PitchConvertible {
+//
+//    // MARK: - PitchConvertible
+//
+//    /// Create a `Pitch.Class` with a `Pitch` value.
+//    ///
+//    ///     let pitch = Pitch(noteNumber: 65.5)
+//    ///     let pitchClass = Pitch.Class(pitch) // => 5.5
+//    ///
+//    public init(_ pitch: Pitch) {
+//        self.init(noteNumber: pitch.noteNumber)
+//    }
+//}
 
 extension Pitch.Class {
 
@@ -163,9 +184,7 @@ extension Pitch.Class {
 
         /// - Returns: A `Pitch.Class.Collection` in which the elements are sorted by the given
         /// `areInIncreasingOrder`.
-        public func sorted(
-            by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool
-        ) rethrows -> Collection
+        public func sorted(by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool) rethrows -> Collection
         {
             return Collection(try base.sorted(by: areInIncreasingOrder))
         }
@@ -193,13 +212,13 @@ extension Collection where Element == Pitch.Class.Collection {
 
     /// - Returns: The `Pitch.Class.Collection` values which have the least difference from the last
     /// element to the first element.
-    var mostCompact: [Pitch.Class.Collection] {
+    var mostCompact: [Element] {
         return min(property: { $0.span })
     }
 
     /// - Returns: The `Pitch.Class.Collection` which has the least difference between its first
     /// elements.
-    var mostLeftPacked: Pitch.Class.Collection {
+    var mostLeftPacked: Element {
         return self.min { $0.intervals.lexicographicallyPrecedes($1.intervals) }!
     }
 }

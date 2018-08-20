@@ -8,8 +8,46 @@
 /// Interface for tuning systems.
 public protocol TuningSystem { }
 
-protocol EDO: TuningSystem { }
+public protocol EDO: TuningSystem {
+    static var divisions: Int { get }
+    static func frequency(_ noteNumber: NoteNumber) -> Frequency
+    static func noteNumber(_ frequency: Frequency) -> NoteNumber
+}
 
-protocol EDO12: EDO { }
-protocol EDO24: EDO { }
-protocol EDO48: EDO { }
+/// Cents
+enum EDO1200 { }
+
+enum EDOMAX { }
+
+public enum EDO12: EDO {
+    public static var divisions: Int { return 12 }
+    public static func frequency(_ noteNumber: NoteNumber) -> Frequency {
+        return 0
+    }
+
+    public static func noteNumber(_ frequency: Frequency) -> NoteNumber {
+        return 0
+    }
+}
+
+public enum EDO24: EDO {
+    public static var divisions: Int { return 24 }
+    public static func frequency(_ noteNumber: NoteNumber) -> Frequency {
+        return 0
+    }
+
+    public static func noteNumber(_ frequency: Frequency) -> NoteNumber {
+        return 0
+    }
+}
+
+public enum EDO48: EDO {
+    public static var divisions: Int { return 48 }
+    public static func frequency(_ noteNumber: NoteNumber) -> Frequency {
+        return 0
+    }
+
+    public static func noteNumber(_ frequency: Frequency) -> NoteNumber {
+        return 0
+    }
+}

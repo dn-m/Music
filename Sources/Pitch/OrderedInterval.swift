@@ -8,17 +8,13 @@
 
 public struct OrderedInterval <Element: NoteNumberRepresentable>: NoteNumberRepresentable {
 
-    public init(noteNumber: NoteNumber) {
-        self.value = Element(noteNumber: noteNumber)
-    }
+    public let value: NoteNumber
 
-    public var noteNumber: NoteNumber {
-        return value.noteNumber
+    public init(_ noteNumber: NoteNumber) {
+        self.value = noteNumber
     }
-
-    let value: Element
 
     init(_ a: Element, _ b: Element) {
-        self.value = b - a
+        self.value = (b - a).value
     }
 }

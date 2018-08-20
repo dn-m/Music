@@ -22,7 +22,7 @@ class PitchSetTests: XCTestCase {
         let pcs2: Set<Pitch.Class> = [3.5,9.25]
         XCTAssertEqual(pcs, pcs2)
     }
-//    
+
 //    func testInitPitchSetUnion() {
 //        let pitchSet1: Set<Pitch> = [60, 61]
 //        let pitchSet2: Set<Pitch> = [62, 63]

@@ -14,91 +14,40 @@
 
 import DataStructures
 
-/**
- MIDI NoteNumber.
- */
-public struct NoteNumber: DoubleWrapping {
-    
-    // MARK: - Type Methods
-    
-    /**
-     - returns: NoteNumber with a random value between 60 and 72, with the given `resolution`.
-     
-     - TODO: Implement `inRange: _` or similar.
-     */
-    public static func random(resolution: Double = 1) -> NoteNumber {
-        return NoteNumber(Double.random(in: 60..<72))
-    }
-    
+public struct NoteNumber:
+    NewType,
+    Comparable,
+    SignedNumeric,
+    ExpressibleByFloatLiteral,
+    ExpressibleByIntegerLiteral
+{
     // MARK: - Instance Properties
-    
-    /// Value of this `NoteNumber`.
-    public var value: Double
-    
+
+    public let value: Double
+
     // MARK: - Initializers
-    
-    /**
-     Create a `NoteNumber` with `Frequency` value.
-     
-     **Example:**
-     
-     ```
-     let nn = NoteNumber(440) => A below middle c
-     ```
-     */
-    public init(_ frequency: Frequency) {
-        self.value = 69.0 + (12.0 * (log(frequency.value / 440.0) / log(2.0)))
-    }
- 
-    /**
-     - `1`: quantize to a half-tone
-     - `0.5`: quantize to a quarter-tone
-     - `0.25`: quantize to an eighth-tone
-     
-     - returns: `NoteNumber` that is quantized to the desired `resolution`.
-     */
-    public func quantized(to resolution: Double) -> NoteNumber {
-        return NoteNumber(floatLiteral: round(value / resolution) * resolution)
-    }
-}
 
-extension NoteNumber: ExpressibleByIntegerLiteral {
-    
-    // MARK: `ExpressibleByIntegerLiteral`
-    
-    /**
-     Create a `NoteNumber` with an `IntegerLiteralType`.
-     
-     **Example:**
-     
-     ```
-     let nn: NoteNumber = 65 => F above middle C
-     ```
-     */
-    public init(integerLiteral value: Int) {
-        self.value = Double(value)
-    }
-}
-
-extension NoteNumber: ExpressibleByFloatLiteral {
-    
-    // MARK: `ExpressibleByDoubleLiteral`
-    
-    /**
-     Create a `NoteNumber` with a `DoubleLiteralType`.
-     
-     **Example:**
-     
-     ```
-     let nn: NoteNumber = 65.5 // => F quarter sharp above middle C
-     ```
-     */
-    public init(floatLiteral value: Double) {
+    public init(value: Double) {
         self.value = value
     }
 }
 
-/// - returns: The difference between two `NoteNumber` values.
-public func - (lhs: NoteNumber, rhs: NoteNumber) -> NoteNumber {
-    return NoteNumber(lhs.value - rhs.value)
+extension NoteNumber {
+
+    // MARK: - Conversion to NoteNumber
+
+    /// Creates a `NoteNumber` from the given `frequency`, using the given reference `Frequency` for
+    /// the given reference `NoteNumber`.
+    public init(frequency: Frequency, with freqRef: Frequency = 440, at nnRef: NoteNumber) {
+        self.value = nnRef.value + (12 * (log(frequency.value / freqRef.value) / log(2)))
+    }
+
+    /// - Returns: A `Frequency` representation of this `NoteNumber`, using the given reference
+    /// `Frequency` for the given reference `NoteNumber`.
+    public func frequency(with freqRef: Frequency, at nnRef: NoteNumber) -> Frequency {
+        return Frequency(noteNumber: self, with: freqRef, at: nnRef)
+    }
 }
+
+extension NoteNumber: Equatable { }
+extension NoteNumber: Hashable { }
