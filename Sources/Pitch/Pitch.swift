@@ -11,17 +11,6 @@ import Math
 /// The quality of a sound governed by the rate of vibrations producing it.
 public struct Pitch: NoteNumberRepresentable {
 
-    // MARK: - Type Methods
-    
-    /**
-     - returns: NoteNumber with a random `NoteNumber` value between 60 and 72, with the given
-     `resolution`.
-     
-     - TODO: Add `inRange: _` or similar.
-     */
-    public static func random(resolution: Double = 1) -> Pitch {
-        return Pitch(noteNumber: NoteNumber.random(resolution: resolution))
-    }
 
     /// Modulo-12 representation of `NoteNumber` representation of `Pitch`.
     public var `class`: Pitch.Class {
