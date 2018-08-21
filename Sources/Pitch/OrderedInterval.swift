@@ -9,12 +9,12 @@
 /// The ordered interval between two `NoteNumberRepresentable`-conforming type values.
 public struct OrderedInterval <Element: NoteNumberRepresentable>: NoteNumberRepresentable {
 
-    /// MARK: - Instance Properties
+    // MARK: - Instance Properties
 
     /// The underlying `NoteNumber` value for this `OrderedInterval`.
     public let value: NoteNumber
 
-    /// MARK: - Initializers
+    // MARK: - Initializers
 
     /// Creates an `OrderedInterval` with the given `noteNumber` value.
     public init(_ noteNumber: NoteNumber) {

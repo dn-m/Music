@@ -20,7 +20,7 @@ import Math
 /// **Example Usage**
 ///
 ///     let nice = Frequency(440.0) // => "a 440"
-///     let mean: Frequency = 440.0
+///     let mean: Frequency = 440.0 // => "a 440"
 ///
 public struct Frequency: NewType, SignedNumeric {
 

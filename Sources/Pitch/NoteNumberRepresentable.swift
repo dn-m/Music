@@ -25,16 +25,22 @@ public protocol NoteNumberRepresentable:
 
     // MARK: - Initializers
 
-    /// Create a `NoteNumberRepresentable` value with `NoteNumber`.
+    /// Create a `NoteNumberRepresentable` value with given `NoteNumber`.
     init(_ noteNumber: NoteNumber)
 }
 
 extension NoteNumberRepresentable {
 
-    // MARK: - NewType
+    // MARK: - Initializers
 
+    /// Create a `NoteNumberRepresentable` value with given `NoteNumber`.
     public init(value: NoteNumber) {
         self.init(value)
+    }
+
+    /// Creates a `NoteNumberRepresentable`-conforming type value with the given `Double` value.
+    public init(_ value: Double) {
+        self.init(NoteNumber(value))
     }
 
     /// Creates a `NoteNumberRepresentable`-conforming type value with another.
@@ -45,7 +51,7 @@ extension NoteNumberRepresentable {
 
 extension NoteNumberRepresentable {
 
-    // MARK: - `Hashable`
+    // MARK: - Hashable
 
     /// - Returns: The hash value of a `NoteNumberRepresentable` type.
     public var hashValue: Int {
@@ -55,7 +61,7 @@ extension NoteNumberRepresentable {
 
 extension NoteNumberRepresentable {
 
-    // MARK: - `Equatable`
+    // MARK: - Equatable
 
     /// - Returns: `true` if both values are representable by the same `NoteNumber`.
     /// Otherwise, `false`.
@@ -66,7 +72,7 @@ extension NoteNumberRepresentable {
 
 extension NoteNumberRepresentable {
 
-    // MARK: - `Comparable`
+    // MARK: - Comparable
 
     /// - Returns: `true` if the first value is less than the second value. Otherwise, `false`.
     public static func < (lhs: Self, rhs: Self) -> Bool {
