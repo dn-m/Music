@@ -79,13 +79,38 @@ extension Meter: ExpressibleByIntegerLiteral {
     }
 }
 
+extension Meter {
+
+    public struct Additive: MeterProtocol {
+        public var beatOffsets: [Fraction] {
+            fatalError()
+        }
+        let meters: [MeterProtocol]
+        init(_ meters: [MeterProtocol]) {
+            self.meters = meters
+        }
+    }
+
+    public struct Fractional: MeterProtocol {
+        public var beatOffsets: [Fraction] {
+            fatalError()
+        }
+        let numerator: Fraction
+        let denominator: Subdivision
+        public init(_ numerator: Fraction, _ denominator: Subdivision) {
+            self.numerator = numerator
+            self.denominator = denominator
+        }
+    }
+}
+
 // FIXME: Move to own file when Swift build order bug is resolved
 import DataStructures
 
 extension Meter {
 
     /// A dictionary-like collections with `Meter.Fragment` values indexed by `Fraction` keys`.
-    public struct Collection: SpanningContainer {
+    public struct Collection: DurationSpanningContainer {
 
         // MARK: - Associated Types
 
