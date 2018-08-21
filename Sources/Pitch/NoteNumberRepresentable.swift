@@ -25,16 +25,22 @@ public protocol NoteNumberRepresentable:
 
     // MARK: - Initializers
 
-    /// Create a `NoteNumberRepresentable` value with `NoteNumber`.
+    /// Create a `NoteNumberRepresentable` value with given `NoteNumber`.
     init(_ noteNumber: NoteNumber)
 }
 
 extension NoteNumberRepresentable {
 
-    // MARK: - NewType
+    // MARK: - Initializers
 
+    /// Create a `NoteNumberRepresentable` value with given `NoteNumber`.
     public init(value: NoteNumber) {
         self.init(value)
+    }
+
+    /// Creates a `NoteNumberRepresentable`-conforming type value with the given `Double` value.
+    public init(_ value: Double) {
+        self.init(NoteNumber(value))
     }
 
     /// Creates a `NoteNumberRepresentable`-conforming type value with another.
