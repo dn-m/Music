@@ -9,6 +9,16 @@
 import Math
 
 /// The quality of a sound governed by the rate of vibrations producing it.
+///
+/// A `Pitch` is represented by a `NoteNumber` value. If offers an interface to represent this
+/// `NoteNumber` as a `Frequency` given different tuning conventions.
+///
+/// **Example Usage**
+///
+///     let middle = Pitch(60) // => middle c
+///     let high = Pitch(84) // => two octaves above middle c
+///     let lower = Pitch(69) // => a 440
+///
 public struct Pitch: NoteNumberRepresentable {
 
     // MARK: - Instance Properties
@@ -22,7 +32,6 @@ public struct Pitch: NoteNumberRepresentable {
     public init(_ value: NoteNumber) {
         self.value = value
     }
-
 }
 
 extension Pitch {

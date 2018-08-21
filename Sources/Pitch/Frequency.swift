@@ -16,6 +16,12 @@ import DataStructures
 import Math
 
 /// Periodic vibration in Hertz.
+///
+/// **Example Usage**
+///
+///     let nice = Frequency(440.0) // => "a 440"
+///     let mean: Frequency = 440.0
+///
 public struct Frequency: NewType, SignedNumeric {
 
     // MARK: - Instance Properties
@@ -28,16 +34,6 @@ public struct Frequency: NewType, SignedNumeric {
     /// Creates a `Frequency` with the given `value` in Hz (i.e., cycles per second).
     public init(value: Double) {
         self.value = value
-    }
-}
-
-extension Frequency {
-
-    // MARK: - Just Intonation
-
-    /// Creates a `Frequency` with the given `ratio` and the given `reference` `Frequency`.
-    public init(_ ratio: Fraction, reference: Frequency) {
-        self.value = ratio.doubleValue * reference.value
     }
 }
 
@@ -58,65 +54,15 @@ extension Frequency {
     }
 }
 
+extension Frequency {
+
+    // MARK: - Just Intonation
+
+    /// Creates a `Frequency` with the given `ratio` and the given `reference` `Frequency`.
+    public init(_ ratio: Fraction, reference: Frequency) {
+        self.value = ratio.doubleValue * reference.value
+    }
+}
+
 extension Frequency: Equatable { }
 extension Frequency: Hashable { }
-
-
-//public struct Frequency: DoubleWrapping {
-//
-//    // MARK: - Instance Properties
-//
-//    /// Value of this `Frequency` in Hertz.
-//    public var value: Double
-//
-//    // MARK: - Initializers
-//
-//    /**
-//     Create a `Frequency` with a `NoteNumber` value.
-//
-//     **Example:**
-//
-//     ```
-//     let freq = Frequency(57.0) // => A below middle c
-//     ```
-//     */
-//    public init(_ noteNumber: NoteNumber) {
-//        self.value = 440.0 * pow(2.0, (noteNumber.value - 69.0) / 12.0)
-//    }
-//}
-//
-//extension Frequency: ExpressibleByIntegerLiteral {
-//
-//    // MARK: - `ExpressibleByIntegerLiteral`
-//
-//    /**
-//     Create a `Frequency` with an `IntegerLiteralType`.
-//
-//     **Example:**
-//
-//     ```
-//     let freq: Frequency = 440 // => A below middle c
-//     ```
-//     */
-//    public init(integerLiteral value: Int) {
-//        self.value = Double(value)
-//    }
-//}
-//
-//extension Frequency: ExpressibleByFloatLiteral {
-//
-//    // MARK: - `FloatLiteralConvertible`
-//
-//    /**
-//     Create a `Frequency` with a `FloatLiteralType`.
-//
-//     **Example**:
-//
-//     ```
-//     let freq: Frequency = 440.0 // => A below middle c
-//     ```
-//     */
-//    public init(floatLiteral value: Double) {
-//        self.value = value
-//    }
-//}

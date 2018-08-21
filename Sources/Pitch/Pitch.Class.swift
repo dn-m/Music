@@ -17,6 +17,15 @@ extension Pitch {
         // MARK: - Instance Properties
 
         /// Inversion of `Pitch.Class`.
+        ///
+        /// **Example Usage**
+        ///
+        ///     let wet: Pitch.Class = 9
+        ///     let dry = wet.inversion // => 3
+        ///
+        ///     let dark: Pitch.Class = 4
+        ///     let light = dark.inversion // => 8
+        ///
         public var inversion: Pitch.Class {
             return Pitch.Class(NoteNumber(12) - value)
         }
@@ -27,6 +36,10 @@ extension Pitch {
         // MARK: - Initializers
 
         /// Create a `Pitch.Class` with a given `noteNumber`.
+        ///
+        /// > If the given `noteNumber` is not in the range [0,12), it will be updated to the mod 12
+        /// equivalent value.
+        ///
         public init(_ noteNumber: NoteNumber) {
             self.value = NoteNumber(mod(noteNumber.value, 12))
         }
@@ -35,38 +48,6 @@ extension Pitch {
 
 extension Pitch.Class: Equatable { }
 extension Pitch.Class: Hashable { }
-
-//extension Pitch.Class: Comparable {
-//    public static func < (lhs: Pitch.Class, rhs: Pitch.Class) -> Bool {
-//        return lhs.noteNumber < rhs.noteNumber
-//    }
-//}
-
-//extension Pitch.Class: ExpressibleByIntegerLiteral {
-//    public init(integerLiteral value: Int) {
-//        self.init(noteNumber: NoteNumber(mod(Double(value),12)))
-//    }
-//}
-//
-//extension Pitch.Class: ExpressibleByFloatLiteral {
-//    public init(floatLiteral value: Double) {
-//        self.init(noteNumber: NoteNumber(mod(value,12)))
-//    }
-//}
-
-//extension Pitch.Class: PitchConvertible {
-//
-//    // MARK: - PitchConvertible
-//
-//    /// Create a `Pitch.Class` with a `Pitch` value.
-//    ///
-//    ///     let pitch = Pitch(noteNumber: 65.5)
-//    ///     let pitchClass = Pitch.Class(pitch) // => 5.5
-//    ///
-//    public init(_ pitch: Pitch) {
-//        self.init(noteNumber: pitch.noteNumber)
-//    }
-//}
 
 extension Pitch.Class {
 
@@ -233,6 +214,16 @@ extension Collection where Element: NoteNumberRepresentable {
     /// - Returns: The dyads between each pitch and each other pitch contained herein.
     public var dyads: [Dyad<Element>] {
         return subsets(cardinality: 2).map(Dyad.init)
+    }
+}
+
+extension Dyad {
+
+    /// Creates a `Dyad` with an array of `NoteNumberRepresentable`-conforming type elements.
+    fileprivate init(_ elements: [Element]) {
+        assert(elements.count == 2)
+        let (a,b) = (elements[0], elements[1])
+        self.init(a,b)
     }
 }
 
