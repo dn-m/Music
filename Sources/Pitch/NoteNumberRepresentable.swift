@@ -36,6 +36,11 @@ extension NoteNumberRepresentable {
     public init(value: NoteNumber) {
         self.init(value)
     }
+
+    /// Creates a `NoteNumberRepresentable`-conforming type value with another.
+    public init <N> (_ value: N) where N: NoteNumberRepresentable {
+        self.init(value.value)
+    }
 }
 
 extension NoteNumberRepresentable {
