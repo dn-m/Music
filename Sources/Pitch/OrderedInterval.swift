@@ -30,7 +30,7 @@ public struct OrderedInterval <Element: NoteNumberRepresentable>: NoteNumberRepr
     ///     let tea: Pitch = 59
     ///     let _ = OrderedInterval(ray,tea) // => -3
     ///
-    init(_ a: Element, _ b: Element) {
+    public init(_ a: Element, _ b: Element) {
         self.value = (b - a).value
     }
 }

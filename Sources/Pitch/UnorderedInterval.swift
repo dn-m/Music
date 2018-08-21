@@ -36,7 +36,7 @@ public struct UnorderedInterval <Element: NoteNumberRepresentable>: NoteNumberRe
     ///     let lay: Pitch = 56
     ///     let _ = UnorderedInterval(soul,lay) // => 11
     ///
-    init(_ a: Element, _ b: Element) {
+    public init(_ a: Element, _ b: Element) {
         let (a,b) = ordered(a,b)
         self.value = (b - a).value
     }
