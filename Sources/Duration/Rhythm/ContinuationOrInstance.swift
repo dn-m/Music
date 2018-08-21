@@ -17,6 +17,7 @@ public enum ContinuationOrInstance <Element> {
 }
 
 extension ContinuationOrInstance: Equatable where Element: Equatable { }
+extension ContinuationOrInstance: Hashable where Element: Hashable { }
 
 extension ContinuationOrInstance: CustomStringConvertible {
 

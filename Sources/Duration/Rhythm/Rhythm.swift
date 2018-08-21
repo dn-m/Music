@@ -42,6 +42,23 @@ extension Rhythm {
 
 extension Rhythm {
 
+    // MARK: - Nested Types
+
+    /// A fragment of a `Rhythm` in a given range.
+    public struct Fragment <Element> {
+
+        // MARK: - Instance Properties
+
+        /// The base `Rhythm`.
+        let rhythm: Rhythm<Element>
+
+        /// The range of operation for the `Rhythm`.
+        let range: Range<Fraction>
+    }
+}
+
+extension Rhythm {
+
     // MARK: - Initializers
 
     /// Create a `Rhythm` with a given `durationTree` and given `leaves`.
@@ -78,6 +95,13 @@ extension Rhythm {
         )
     }
 }
+
+extension Rhythm: Equatable where Element: Equatable { }
+extension Rhythm: Hashable where Element: Hashable { }
+
+extension Rhythm.Fragment: Equatable where Element: Equatable { }
+extension Rhythm.Fragment: Hashable where Element: Hashable { }
+
 
 // FIXME: Extend `Rhythm.Leaf` with a `map` once this is resolved:
 // https://gist.github.com/mbrandonw/5e4f475c4e0e2caa1ce38c44531faf46

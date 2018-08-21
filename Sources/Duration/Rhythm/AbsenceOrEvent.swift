@@ -16,6 +16,7 @@ public enum AbsenceOrEvent <Element> {
 }
 
 extension AbsenceOrEvent: Equatable where Element: Equatable { }
+extension AbsenceOrEvent: Hashable where Element: Hashable { }
 
 extension AbsenceOrEvent: CustomStringConvertible {
 
