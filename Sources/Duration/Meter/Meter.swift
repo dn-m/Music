@@ -86,7 +86,7 @@ extension Meter {
             fatalError()
         }
         let meters: [MeterProtocol]
-        init(_ meters: [MeterProtocol]) {
+        init(_ meters: MeterProtocol...) {
             self.meters = meters
         }
     }
