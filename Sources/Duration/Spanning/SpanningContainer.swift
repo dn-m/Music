@@ -13,7 +13,6 @@ import DataStructures
 import Math
 
 /// Interface for values that contain a sequence of `SpanningFragment` type values.
-#warning("Rename SpanningContainer to IntervalCollection")
 public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fragmentable
     where Metric == Spanner.Metric
 {
