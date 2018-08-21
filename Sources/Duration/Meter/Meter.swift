@@ -8,8 +8,13 @@
 
 import Math
 
+/// Interface for `Meter`-like types (e.g., `Meter`, `AdditiveMeter`, `FractionalMeter`).
+public protocol MeterProtocol {
+    var beatOffsets: [Fraction] { get }
+}
+
 /// Model of a `Meter`.
-public struct Meter: Rational {
+public struct Meter: Rational, MeterProtocol {
 
     // MARK: - Instance Properties
 
