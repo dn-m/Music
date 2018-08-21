@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Math
 import Duration
 
 class MeterTempoTests: XCTestCase {
@@ -46,6 +47,6 @@ class MeterTempoTests: XCTestCase {
 
     func testMeterBeatOffsets() {
         let meter = Meter(7,16)
-        XCTAssertEqual(meter.beatOffsets, (0..<7).map { beat in beat/>16 })
+        XCTAssertEqual(meter.beatOffsets, (0..<7).map { beat in Fraction(beat,16) })
     }
 }

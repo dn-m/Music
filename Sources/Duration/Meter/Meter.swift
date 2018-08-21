@@ -14,8 +14,8 @@ public struct Meter: Rational {
     // MARK: - Instance Properties
 
     /// - Returns: Array of `Duration` offsets of each beat in a meter.
-    public var beatOffsets: [Duration] {
-        return (0..<numerator).map { beat in Duration(beat, denominator) }
+    public var beatOffsets: [Fraction] {
+        return (0..<numerator).map { beat in Fraction(beat, denominator) }
     }
 
     /// Numerator.
@@ -93,7 +93,7 @@ extension Meter {
         // MARK: - Initializers
 
         /// Create a `Meter.Collection` with the given `base`.
-        public init(_ base: SortedDictionary<Metric, Meter.Fragment>) {
+        public init(_ base: SortedDictionary<Metric,Meter.Fragment>) {
             self.base = base
         }
 
