@@ -6,57 +6,66 @@
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 
+import DataStructures
 import Math
-
-// FIXME: Add default conformances for `Numeric`.
 
 /// Protocol defining values representable by a `NoteNumber`.
 public protocol NoteNumberRepresentable:
-    Comparable,
+    NewType,
     Hashable,
-    ExpressibleByFloatLiteral,
-    ExpressibleByIntegerLiteral
+    Comparable,
+    SignedNumeric,
+    ExpressibleByFloatLiteral
 {
-    
+
     // MARK: - Instance Properties
-    
+
     /// The `NoteNumber` representation of the instance of `NoteNumberRepresentable` type.
-    var noteNumber: NoteNumber { get }
-    
+    var value: NoteNumber { get }
+
     // MARK: - Initializers
-    
+
     /// Create a `NoteNumberRepresentable` value with `NoteNumber`.
-    init(noteNumber: NoteNumber)
+    init(_ noteNumber: NoteNumber)
 }
 
 extension NoteNumberRepresentable {
-    
-    // MARK: - `Hashable`
-    
-    /// Hash value of a `NoteNumberRepresentable` type.
-    public var hashValue: Int {
-        return noteNumber.hashValue
+
+    // MARK: - NewType
+
+    public init(value: NoteNumber) {
+        self.init(value)
     }
 }
 
 extension NoteNumberRepresentable {
-    
+
+    // MARK: - `Hashable`
+
+    /// - Returns: The hash value of a `NoteNumberRepresentable` type.
+    public var hashValue: Int {
+        return value.hashValue
+    }
+}
+
+extension NoteNumberRepresentable {
+
     // MARK: - `Equatable`
-    
-    /// - returns: `true` if both values are representable by the same `NoteNumber`.
+
+    /// - Returns: `true` if both values are representable by the same `NoteNumber`.
     /// Otherwise, `false`.
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.noteNumber == rhs.noteNumber
+        return lhs.value == rhs.value
     }
 }
 
 extension NoteNumberRepresentable {
-    
+
     // MARK: - `Comparable`
-    
-    /// - returns: `true` if the first value is less than the second value. Otherwise, `false`.
+
+    /// - Returns: `true` if the first value is less than the second value. Otherwise, `false`.
     public static func < (lhs: Self, rhs: Self) -> Bool {
-        return lhs.noteNumber < rhs.noteNumber
+        return lhs.value < rhs.value
     }
 }
 
@@ -64,8 +73,9 @@ extension NoteNumberRepresentable {
 
     // MARK: - ExpressibleByFloatLiteral
 
+    /// Creates a `NoteNumberRepresentable`-conforming type with the given float literal.
     public init(floatLiteral value: Double) {
-        self.init(noteNumber: NoteNumber(value))
+        self.init(NoteNumber(value))
     }
 }
 
@@ -73,22 +83,54 @@ extension NoteNumberRepresentable {
 
     // MARK: - ExpressibleByIntegerLiteral
 
+    /// Creates a `NoteNumberRepresentable`-conforming type with the given integer literal.
     public init(integerLiteral value: Int) {
-        self.init(noteNumber: NoteNumber(Double(value)))
+        self.init(NoteNumber(Double(value)))
     }
 }
 
-// MARK: - Transposition
+extension NoteNumberRepresentable {
 
-/// - Returns: A `NoteNumberRepresentable` value that is the sum of the two given
-/// values.
-public func + <T: NoteNumberRepresentable> (lhs: T, rhs: T) -> T {
-    return T(noteNumber: NoteNumber(lhs.noteNumber.value + rhs.noteNumber.value))
+    // MARK: - SignedNumeric
+
+    /// - Returns: The magnitude of this `NoteNumberRepresentable`-conforming type value.
+    public var magnitude: NoteNumber.Magnitude {
+        return value.magnitude
+    }
+
+    /// - Returns: The sum of the two given `NoteNumberRepresentable`-conforming type values.
+    public static func + (lhs: Self, rhs: Self) -> Self {
+        return .init(lhs.value + rhs.value)
+    }
+
+    /// - Returns: Adds the right-hand-side value to the left-hand-side value.
+    public static func += (lhs: inout Self, rhs: Self) {
+        lhs = lhs + rhs
+    }
+
+    /// - Returns: The difference between the left-hand-side value and the right-hand-side value.
+    public static func - (lhs: Self, rhs: Self) -> Self {
+        return .init(lhs.value - rhs.value)
+    }
+
+    /// - Returns: Subtracts the right-hand-side value from the left-hand-side value.
+    public static func -= (lhs: inout Self, rhs: Self) {
+        lhs = lhs - rhs
+    }
+
+    /// - Returns: The product of the left-hand-side value and the right-hand-side value.
+    public static func * (lhs: Self, rhs: Self) -> Self {
+        return .init(lhs.value * rhs.value)
+    }
+
+    /// - Returns: Multiplies the right-hand-side value by the left-hand-side value.
+    public static func *= (lhs: inout Self, rhs: Self) {
+        lhs = lhs * rhs
+    }
+
+    /// Creates a `NoteNumberRepresentable`-conforming type value with the given `source` value.
+    public init?<T>(exactly source: T) where T: BinaryInteger {
+        guard let value = NoteNumber(exactly: source) else { return nil }
+        self.init(value)
+    }
 }
-
-/// - Returns: A `NoteNumberRepresentable` value that is the difference between the two given
-/// values.
-public func - <T: NoteNumberRepresentable> (lhs: T, rhs: T) -> T {
-    return T(noteNumber: NoteNumber(lhs.noteNumber.value - rhs.noteNumber.value))
-}
-

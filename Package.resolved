@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
           "branch": null,
-          "revision": "7617c38637cb8d5f2af3875ca7e5bc463b080d43",
-          "version": "0.3.0"
+          "revision": "044605330704860849ecebbe63d7c8854bc0c42e",
+          "version": "0.4.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
           "branch": null,
-          "revision": "ec0c57807165e1d66a7dc74fb1c768b22ccfd209",
-          "version": "0.9.0"
+          "revision": "f9bf1e3b3659ba418150e64c7c360910a14c5876",
+          "version": "0.10.2"
         }
       }
     ]

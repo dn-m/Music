@@ -6,19 +6,31 @@
 //  Copyright © 2017 James Bean. All rights reserved.
 //
 
+/// The ordered interval between two `NoteNumberRepresentable`-conforming type values.
 public struct OrderedInterval <Element: NoteNumberRepresentable>: NoteNumberRepresentable {
 
-    public init(noteNumber: NoteNumber) {
-        self.value = Element(noteNumber: noteNumber)
+    /// MARK: - Instance Properties
+
+    /// The underlying `NoteNumber` value for this `OrderedInterval`.
+    public let value: NoteNumber
+
+    /// MARK: - Initializers
+
+    /// Creates an `OrderedInterval` with the given `noteNumber` value.
+    public init(_ noteNumber: NoteNumber) {
+        self.value = noteNumber
     }
 
-    public var noteNumber: NoteNumber {
-        return value.noteNumber
-    }
-
-    let value: Element
-
+    /// Creates an `OrderedInterval` between the two given `NoteNumberRepresentable`-conforming
+    /// type values.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let ray: Pitch = 62
+    ///     let tea: Pitch = 59
+    ///     let _ = OrderedInterval(ray,tea) // => -3
+    ///
     init(_ a: Element, _ b: Element) {
-        self.value = b - a
+        self.value = (b - a).value
     }
 }

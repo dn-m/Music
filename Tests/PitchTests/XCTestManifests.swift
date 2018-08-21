@@ -9,11 +9,6 @@ extension FrequencyTests {
 extension NoteNumberTests {
     static let __allTests = [
         ("testNoteNumberInit", testNoteNumberInit),
-        ("testQuantizedFromArbitraryToEighthStep", testQuantizedFromArbitraryToEighthStep),
-        ("testQuantizedFromArbitraryToQuarterStep", testQuantizedFromArbitraryToQuarterStep),
-        ("testQuantizedFromArbitraryToWholeStep", testQuantizedFromArbitraryToWholeStep),
-        ("testQuantizedFromEighthToQuarterStep", testQuantizedFromEighthToQuarterStep),
-        ("testRandom", testRandom),
     ]
 }
 
@@ -53,7 +48,6 @@ extension PitchClassTests {
 
 extension PitchDyadTests {
     static let __allTests = [
-        ("testDescription", testDescription),
         ("testEqualityFalseHigherNotEqual", testEqualityFalseHigherNotEqual),
         ("testEqualityFalseLowerNotEqual", testEqualityFalseLowerNotEqual),
         ("testEqualityFalseNeitherEqual", testEqualityFalseNeitherEqual),
@@ -91,11 +85,7 @@ extension PitchTests {
         ("testFloatMinusPitch", testFloatMinusPitch),
         ("testFloatPlusPitch", testFloatPlusPitch),
         ("testInit", testInit),
-        ("testInitWithPitch", testInitWithPitch),
         ("testPitchMinusFloat", testPitchMinusFloat),
-        ("testPitchPlusFloat", testPitchPlusFloat),
-        ("testPrintDescription", testPrintDescription),
-        ("testRandom", testRandom),
     ]
 }
 

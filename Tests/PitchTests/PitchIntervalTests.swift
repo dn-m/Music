@@ -12,7 +12,7 @@ import XCTest
 class PitchIntervalTests: XCTestCase {
     
     func testInit() {
-        let _ = UnorderedInterval<Pitch>(noteNumber: 12.0)
+        let _ = UnorderedInterval<Pitch>(12.0)
         let _: UnorderedInterval<Pitch> = 12
         let _: UnorderedInterval<Pitch> = 12.0
     }

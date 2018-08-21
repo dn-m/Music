@@ -22,11 +22,6 @@ class PitchDyadTests: XCTestCase {
         XCTAssertEqual(dyad.interval, 2.0)
     }
     
-    func testDescription() {
-        let dyad = Dyad<Pitch>(Pitch(60.0), Pitch(62.0))
-        XCTAssertEqual(dyad.description, "(60.0, 62.0)")
-    }
-    
     func testEqualityTrue() {
         let a: Dyad<Pitch> = .init(60,62)
         let b: Dyad<Pitch> = .init(60,62)

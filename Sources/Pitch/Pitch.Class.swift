@@ -17,35 +17,37 @@ extension Pitch {
         // MARK: - Instance Properties
 
         /// Inversion of `Pitch.Class`.
+        ///
+        /// **Example Usage**
+        ///
+        ///     let wet: Pitch.Class = 9
+        ///     let dry = wet.inversion // => 3
+        ///
+        ///     let dark: Pitch.Class = 4
+        ///     let light = dark.inversion // => 8
+        ///
         public var inversion: Pitch.Class {
-            return Pitch.Class(12 - noteNumber.value)
+            return Pitch.Class(NoteNumber(12) - value)
         }
 
         /// Value of `Pitch.Class`.
-        public var noteNumber: NoteNumber
+        public var value: NoteNumber
 
         // MARK: - Initializers
 
         /// Create a `Pitch.Class` with a given `noteNumber`.
-        public init(noteNumber: NoteNumber) {
-            self.noteNumber = NoteNumber(mod(noteNumber.value, 12))
+        ///
+        /// > If the given `noteNumber` is not in the range [0,12), it will be updated to the mod 12
+        /// equivalent value.
+        ///
+        public init(_ noteNumber: NoteNumber) {
+            self.value = NoteNumber(mod(noteNumber.value, 12))
         }
     }
 }
 
-extension Pitch.Class: PitchConvertible {
-
-    // MARK: - PitchConvertible
-
-    /// Create a `Pitch.Class` with a `Pitch` value.
-    ///
-    ///     let pitch = Pitch(noteNumber: 65.5)
-    ///     let pitchClass = Pitch.Class(pitch) // => 5.5
-    ///
-    public init(_ pitch: Pitch) {
-        self.init(noteNumber: pitch.noteNumber)
-    }
-}
+extension Pitch.Class: Equatable { }
+extension Pitch.Class: Hashable { }
 
 extension Pitch.Class {
 
@@ -163,9 +165,7 @@ extension Pitch.Class {
 
         /// - Returns: A `Pitch.Class.Collection` in which the elements are sorted by the given
         /// `areInIncreasingOrder`.
-        public func sorted(
-            by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool
-        ) rethrows -> Collection
+        public func sorted(by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool) rethrows -> Collection
         {
             return Collection(try base.sorted(by: areInIncreasingOrder))
         }
@@ -193,13 +193,13 @@ extension Collection where Element == Pitch.Class.Collection {
 
     /// - Returns: The `Pitch.Class.Collection` values which have the least difference from the last
     /// element to the first element.
-    var mostCompact: [Pitch.Class.Collection] {
+    var mostCompact: [Element] {
         return min(property: { $0.span })
     }
 
     /// - Returns: The `Pitch.Class.Collection` which has the least difference between its first
     /// elements.
-    var mostLeftPacked: Pitch.Class.Collection {
+    var mostLeftPacked: Element {
         return self.min { $0.intervals.lexicographicallyPrecedes($1.intervals) }!
     }
 }
@@ -214,6 +214,16 @@ extension Collection where Element: NoteNumberRepresentable {
     /// - Returns: The dyads between each pitch and each other pitch contained herein.
     public var dyads: [Dyad<Element>] {
         return subsets(cardinality: 2).map(Dyad.init)
+    }
+}
+
+extension Dyad {
+
+    /// Creates a `Dyad` with an array of `NoteNumberRepresentable`-conforming type elements.
+    fileprivate init(_ elements: [Element]) {
+        assert(elements.count == 2)
+        let (a,b) = (elements[0], elements[1])
+        self.init(a,b)
     }
 }
 
