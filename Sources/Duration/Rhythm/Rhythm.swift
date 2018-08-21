@@ -42,7 +42,7 @@ extension Rhythm {
 
 extension Rhythm {
 
-    // MARK: - Nested Types
+    // MARK: - Fragment
 
     /// A fragment of a `Rhythm` in a given range.
     public struct Fragment <Element> {

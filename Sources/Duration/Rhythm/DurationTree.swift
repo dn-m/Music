@@ -103,3 +103,4 @@ public func * (_ duration: Duration, _ proportions: [Int])
     let proportionTree = ProportionTree(beats, proportions)
     return DurationTree(duration, proportionTree)
 }
+
