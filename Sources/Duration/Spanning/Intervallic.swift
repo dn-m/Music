@@ -1,5 +1,5 @@
 //
-//  Spanning.swift
+//  Intervallic.swift
 //  Rhythm
 //
 //  Created by James Bean on 7/13/17.
@@ -14,11 +14,11 @@ import Algebra
 ///
 /// - TODO: Move to dn-m/Collections
 ///
-public protocol Spanning {
+public protocol Intervallic {
 
     // MARK: - Associated Types
 
-    /// Type of the `length` of the `Spanning` type.
+    /// Type of the `length` of the `Intervallic` type.
     associatedtype Metric: SignedNumeric, Comparable, Additive, Hashable
 
     // MARK: - Instance Properties
