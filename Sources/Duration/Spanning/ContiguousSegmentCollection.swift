@@ -90,7 +90,7 @@ extension ContiguousSegmentCollection {
         }
 
         let start = segment(from: range.lowerBound, at: startIndex)
-        let end = spanner(to: range.upperBound, at: endIndex)
+        let end = segment(to: range.upperBound, at: endIndex)
 
         if endIndex == startIndex + 1 {
             return .init([start,end])
@@ -109,7 +109,7 @@ extension ContiguousSegmentCollection {
 
     /// - Returns: Segment at the given `index`, spanning from its lower bound, to the given 
     /// (global) offset.
-    public func spanner(to offset: Metric, at index: Int) -> Segment {
+    public func segment(to offset: Metric, at index: Int) -> Segment {
         let (elementOffset, fragment) = base[index]
         return fragment.to(offset - elementOffset)
     }
