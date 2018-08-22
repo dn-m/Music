@@ -20,8 +20,8 @@ public protocol SpanningContainerBuilder: class {
     /// Type of product which is built by `SpanningContainerBuilder`.
     associatedtype Product: ContiguousSegmentCollection
 
-    /// Spanner-type contained by the `Product`.
-    typealias Spanner = Product.Spanner
+    /// Segment-type contained by the `Product`.
+    typealias Spanner = Product.Segment
 
     // MARK: - Instance Properties
 
@@ -35,7 +35,7 @@ public protocol SpanningContainerBuilder: class {
 
     // MARK: - Instance Methods
 
-    /// Adds the given `Spanner` to the `intermediate`.
+    /// Adds the given `Segment` to the `intermediate`.
     func add(_: Spanner) -> Self
 
     /// Creates the final `Product`.

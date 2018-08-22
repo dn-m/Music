@@ -8,4 +8,4 @@
 
 /// Interface for types which contain contiguous spans of `Fraction`-spanning elements.
 public protocol DurationSpanningContainer: ContiguousSegmentCollection
-    where Spanner: DurationSpanningFragment { }
+    where Segment: DurationSpanningFragment { }

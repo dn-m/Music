@@ -436,29 +436,29 @@ public extension Tempo.Interpolation {
         // MARK: - Associated Types
 
         /// The element of the collection.
-        public typealias Spanner = Tempo.Interpolation.Fragment
+        public typealias Segment = Tempo.Interpolation.Fragment
 
         /// The `Metric` of the `Tempo.Interpolation.Fragment`, and therefore the `Metric` of this
         /// collection.
-        public typealias Metric = Spanner.Metric
+        public typealias Metric = Segment.Metric
 
         // MARK: - Instance Properties
 
         /// The underlying storage of the `Tempo.Interpolation.Fragment` values.
         // FIXME: Consider using an `OrderedDictionary` re: performance.
-        public let base: SortedDictionary<Spanner.Metric,Spanner>
+        public let base: SortedDictionary<Segment.Metric,Segment>
 
         // MARK: - Initializers
 
         /// Create a `Tempo.Interpolation.Collection` with the given dictionary of
         /// `Tempo.Interpolation.Fragment` values.
-        public init(_ base: SortedDictionary<Spanner.Metric,Spanner>) {
+        public init(_ base: SortedDictionary<Segment.Metric,Segment>) {
             self.base = base
         }
 
         /// Create a `Tempo.Interpolation.Collection` with the given sequence of
         ///`Tempo.Interpolation.Fragment` values.
-        public init <S> (_ base: S) where S: Sequence, S.Element == Spanner {
+        public init <S> (_ base: S) where S: Sequence, S.Element == Segment {
             self = Builder().add(base).build()
         }
 

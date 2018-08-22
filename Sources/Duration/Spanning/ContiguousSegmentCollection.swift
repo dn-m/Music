@@ -14,26 +14,26 @@ import Math
 
 /// Interface for values that contain a sequence of `SpanningFragment` type values.
 public protocol ContiguousSegmentCollection: RandomAccessCollectionWrapping, Spanning, Fragmentable
-    where Metric == Spanner.Metric
+    where Metric == Segment.Metric
 {
 
     // MARK: - Associated Types
 
     /// Type of value contained herein.
-    associatedtype Spanner: SpanningFragment
+    associatedtype Segment: SpanningFragment
 
     // MARK: - Instance Properties
 
     /// Backing storage of spanners.
-    var base: SortedDictionary<Metric,Spanner> { get }
+    var base: SortedDictionary<Metric,Segment> { get }
 
     // MARK: - Initializers
 
     /// Creates a `ContiguousSegmentCollection` with a pre-built internal representation of spanners.
-    init(_: SortedDictionary<Metric,Spanner>)
+    init(_: SortedDictionary<Metric,Segment>)
 
     /// Creates a `ContiguousSegmentCollection` with a sequence of spanners.
-    init <S> (_: S) where S: Sequence, S.Element == Spanner
+    init <S> (_: S) where S: Sequence, S.Element == Segment
 }
 
 extension ContiguousSegmentCollection {
@@ -42,7 +42,7 @@ extension ContiguousSegmentCollection {
     public static var empty: Self { return Self([]) }
 
     /// - Returns: An array of spanners in the given `range` of indices.
-    public subscript(range: CountableClosedRange<Int>) -> [Spanner] {
+    public subscript(range: CountableClosedRange<Int>) -> [Segment] {
         return range.map { base.values.map { $0 }[$0] }
     }
 
@@ -52,7 +52,7 @@ extension ContiguousSegmentCollection {
     }
 
     /// - Returns: A collection of the spanners contained herein.
-    public var spanners: AnyCollection<Spanner> {
+    public var spanners: AnyCollection<Segment> {
         return AnyCollection(base.values)
     }
 
@@ -100,16 +100,16 @@ extension ContiguousSegmentCollection {
         return .init(start + innards + end)
     }
 
-    /// - Returns: Spanner at the given `index`, spanning from the given (global) `offset` to its
+    /// - Returns: Segment at the given `index`, spanning from the given (global) `offset` to its
     /// upper bound.
-    public func spanner(from offset: Metric, at index: Int) -> Spanner {
+    public func spanner(from offset: Metric, at index: Int) -> Segment {
         let (elementOffset, fragment) = base[index]
         return fragment.from(offset - elementOffset)
     }
 
-    /// - Returns: Spanner at the given `index`, spanning from its lower bound, to the given 
+    /// - Returns: Segment at the given `index`, spanning from its lower bound, to the given 
     /// (global) offset.
-    public func spanner(to offset: Metric, at index: Int) -> Spanner {
+    public func spanner(to offset: Metric, at index: Int) -> Segment {
         let (elementOffset, fragment) = base[index]
         return fragment.to(offset - elementOffset)
     }
