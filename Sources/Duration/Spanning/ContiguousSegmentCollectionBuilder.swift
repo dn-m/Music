@@ -10,7 +10,6 @@
 
 import Algebra
 import DataStructures
-import Math
 
 /// Interface for types which can build `ContiguousSegmentCollection` types.
 public protocol ContiguousSegmentCollectionBuilder: class {
