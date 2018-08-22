@@ -1,5 +1,5 @@
 //
-//  SpanningContainer.swift
+//  ContiguousSegmentCollection.swift
 //  Rhythm
 //
 //  Created by James Bean on 7/13/17.
@@ -13,7 +13,7 @@ import DataStructures
 import Math
 
 /// Interface for values that contain a sequence of `SpanningFragment` type values.
-public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fragmentable
+public protocol ContiguousSegmentCollection: RandomAccessCollectionWrapping, Spanning, Fragmentable
     where Metric == Spanner.Metric
 {
 
@@ -29,14 +29,14 @@ public protocol SpanningContainer: RandomAccessCollectionWrapping, Spanning, Fra
 
     // MARK: - Initializers
 
-    /// Creates a `SpanningContainer` with a pre-built internal representation of spanners.
+    /// Creates a `ContiguousSegmentCollection` with a pre-built internal representation of spanners.
     init(_: SortedDictionary<Metric,Spanner>)
 
-    /// Creates a `SpanningContainer` with a sequence of spanners.
+    /// Creates a `ContiguousSegmentCollection` with a sequence of spanners.
     init <S> (_: S) where S: Sequence, S.Element == Spanner
 }
 
-extension SpanningContainer {
+extension ContiguousSegmentCollection {
 
     /// `SpanningContainer` with no spanners.
     public static var empty: Self { return Self([]) }
@@ -67,7 +67,7 @@ extension SpanningContainer {
         return (.zero ..< length).contains(target)
     }
 
-    /// - Returns: New `SpanningContainer` in the given `range` of metrics.
+    /// - Returns: New `ContiguousSegmentCollection` in the given `range` of metrics.
     public subscript (range: Range<Metric>) -> Self {
 
         assert(range.lowerBound >= .zero)

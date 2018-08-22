@@ -7,5 +7,5 @@
 //
 
 /// Interface for types which contain contiguous spans of `Fraction`-spanning elements.
-public protocol DurationSpanningContainer: SpanningContainer
+public protocol DurationSpanningContainer: ContiguousSegmentCollection
     where Spanner: DurationSpanningFragment { }

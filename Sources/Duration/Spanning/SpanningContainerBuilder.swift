@@ -12,13 +12,13 @@ import Algebra
 import DataStructures
 import Math
 
-/// Interface for types which can build `SpanningContainer` types.
+/// Interface for types which can build `ContiguousSegmentCollection` types.
 public protocol SpanningContainerBuilder: class {
 
     // MARK: - Associated Types
 
     /// Type of product which is built by `SpanningContainerBuilder`.
-    associatedtype Product: SpanningContainer
+    associatedtype Product: ContiguousSegmentCollection
 
     /// Spanner-type contained by the `Product`.
     typealias Spanner = Product.Spanner

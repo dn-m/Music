@@ -431,7 +431,7 @@ public extension Tempo.Interpolation {
 
     /// An ordered, contiguous collection of `Tempo.Interpolation.Fragments` indexed by their
     /// metrical offset.
-    public struct Collection: SpanningContainer {
+    public struct Collection: ContiguousSegmentCollection {
 
         // MARK: - Associated Types
 
