@@ -10,7 +10,6 @@
 
 import Algebra
 import DataStructures
-import Math
 
 /// Interface for values that contain a sequence of `IntervallicFragment` type values.
 public protocol ContiguousSegmentCollection: RandomAccessCollectionWrapping, Intervallic, Fragmentable
