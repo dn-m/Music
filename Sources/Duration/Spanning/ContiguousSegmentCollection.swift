@@ -12,7 +12,7 @@ import Algebra
 import DataStructures
 import Math
 
-/// Interface for values that contain a sequence of `SpanningFragment` type values.
+/// Interface for values that contain a sequence of `IntervallicFragment` type values.
 public protocol ContiguousSegmentCollection: RandomAccessCollectionWrapping, Intervallic, Fragmentable
     where Metric == Segment.Metric
 {
@@ -20,7 +20,7 @@ public protocol ContiguousSegmentCollection: RandomAccessCollectionWrapping, Int
     // MARK: - Associated Types
 
     /// Type of value contained herein.
-    associatedtype Segment: SpanningFragment
+    associatedtype Segment: IntervallicFragment
 
     // MARK: - Instance Properties
 
@@ -29,10 +29,10 @@ public protocol ContiguousSegmentCollection: RandomAccessCollectionWrapping, Int
 
     // MARK: - Initializers
 
-    /// Creates a `ContiguousSegmentCollection` with a pre-built internal representation of spanners.
+    /// Creates a `ContiguousSegmentCollection` with a pre-built internal representation of segments.
     init(_: SortedDictionary<Metric,Segment>)
 
-    /// Creates a `ContiguousSegmentCollection` with a sequence of spanners.
+    /// Creates a `ContiguousSegmentCollection` with a sequence of segments.
     init <S> (_: S) where S: Sequence, S.Element == Segment
 }
 
@@ -41,7 +41,7 @@ extension ContiguousSegmentCollection {
     /// `SpanningContainer` with no spanners.
     public static var empty: Self { return Self([]) }
 
-    /// - Returns: An array of spanners in the given `range` of indices.
+    /// - Returns: An array of segments in the given `range` of indices.
     public subscript(range: CountableClosedRange<Int>) -> [Segment] {
         return range.map { base.values.map { $0 }[$0] }
     }
@@ -52,7 +52,7 @@ extension ContiguousSegmentCollection {
     }
 
     /// - Returns: A collection of the spanners contained herein.
-    public var spanners: AnyCollection<Segment> {
+    public var segments: AnyCollection<Segment> {
         return AnyCollection(base.values)
     }
 
@@ -107,7 +107,7 @@ extension ContiguousSegmentCollection {
         return fragment.from(offset - elementOffset)
     }
 
-    /// - Returns: Segment at the given `index`, spanning from its lower bound, to the given 
+    /// - Returns: Segment at the given `index`, spanning from its lower bound, to the given
     /// (global) offset.
     public func segment(to offset: Metric, at index: Int) -> Segment {
         let (elementOffset, fragment) = base[index]

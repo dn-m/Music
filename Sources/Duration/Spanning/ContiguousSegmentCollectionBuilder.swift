@@ -1,5 +1,5 @@
 //
-//  SpanningContainerBuilder.swift
+//  ContiguousSegmentCollectionBuilder.swift
 //  Rhythm
 //
 //  Created by James Bean on 7/12/17.
@@ -13,11 +13,11 @@ import DataStructures
 import Math
 
 /// Interface for types which can build `ContiguousSegmentCollection` types.
-public protocol SpanningContainerBuilder: class {
+public protocol ContiguousSegmentCollectionBuilder: class {
 
     // MARK: - Associated Types
 
-    /// Type of product which is built by `SpanningContainerBuilder`.
+    /// Type of product which is built by `ContiguousSegmentCollectionBuilder`.
     associatedtype Product: ContiguousSegmentCollection
 
     /// Segment-type contained by the `Product`.
@@ -42,7 +42,7 @@ public protocol SpanningContainerBuilder: class {
     func build() -> Product
 }
 
-extension SpanningContainerBuilder {
+extension ContiguousSegmentCollectionBuilder {
 
     /// Adds the given `element` to the `intermediate` with accumulating offsets.
     ///

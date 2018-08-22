@@ -26,7 +26,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
             )
         )
         XCTAssertEqual(Array(interpolations.offsets), [Fraction(0,4)])
-        XCTAssertEqual(Array(interpolations.spanners), [expected])
+        XCTAssertEqual(Array(interpolations.segments), [expected])
     }
 
     func testBuilderSingleInterpolation() {
@@ -55,7 +55,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
             Tempo.Interpolation(start: Tempo(60), end: Tempo(120), length: Fraction(32,4))
         )
         XCTAssertEqual(fragment.count, 1)
-        XCTAssertEqual(fragment.spanners.first!, expected)
+        XCTAssertEqual(fragment.segments.first!, expected)
     }
 
     func testMoreComplexFragment() {
@@ -74,7 +74,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
         let fragmentB = Tempo.Interpolation.Fragment(b)
         let fragmentC = Tempo.Interpolation.Fragment(c)
         let expected = [fragmentA, fragmentB, fragmentC]
-        XCTAssertEqual(Array(fragment.spanners), expected)
+        XCTAssertEqual(Array(fragment.segments), expected)
     }
 
     func testFragment() {
@@ -92,6 +92,6 @@ class TempoInterpolationCollectionTests: XCTestCase {
         let fragmentB = Tempo.Interpolation.Fragment(b)
         let fragmentC = Tempo.Interpolation.Fragment(c, in: Fraction(0,4)..<Fraction(1,4))
         let expected = [fragmentA, fragmentB, fragmentC]
-        XCTAssertEqual(Array(fragment.spanners), expected)
+        XCTAssertEqual(Array(fragment.segments), expected)
     }
 }

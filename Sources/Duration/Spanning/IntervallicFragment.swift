@@ -1,5 +1,5 @@
 //
-//  SpanningFragment.swift
+//  IntervallicFragment.swift
 //  Rhythm
 //
 //  Created by James Bean on 7/18/17.
@@ -11,7 +11,7 @@
 import Math
 
 /// Interface extending `Intervallic` types, which also carry with them a range of operation.
-public protocol SpanningFragment: Intervallic, Fragmentable where Fragment == Self {
+public protocol IntervallicFragment: Intervallic, Fragmentable where Fragment == Self {
 
     // MARK: - Instance Properties
 
@@ -19,7 +19,7 @@ public protocol SpanningFragment: Intervallic, Fragmentable where Fragment == Se
     var range: Range<Metric> { get }
 }
 
-extension SpanningFragment {
+extension IntervallicFragment {
 
     /// The length of `SpanningFragment`.
     public var length: Metric {
@@ -27,7 +27,7 @@ extension SpanningFragment {
     }
 }
 
-extension SpanningFragment {
+extension IntervallicFragment {
 
     /// - Returns: A fragment of self from lower bound to the given `offset`.
     public func to(_ offset: Metric) -> Self {
