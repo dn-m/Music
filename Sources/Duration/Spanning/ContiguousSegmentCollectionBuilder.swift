@@ -23,8 +23,6 @@ public protocol ContiguousSegmentCollectionBuilder: class {
     // MARK: - Instance Properties
 
     /// Intermediate storage which is converted into the `Product`.
-    //
-    // FIXME: Consider using `OrderedDictionary` re: performance.
     var intermediate: OrderedDictionary<Product.Segment.Metric,Product.Segment> { get set }
 
     /// Cumulative offset of spanners contained in `intermediate`.
