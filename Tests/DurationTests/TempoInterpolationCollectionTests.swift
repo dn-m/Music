@@ -13,7 +13,7 @@ import Math
 class TempoInterpolationCollectionTests: XCTestCase {
 
     func testBuilderSingleStatic() {
-        let builder = Tempo.Interpolation.Collection.Builder()
+        let builder = TempoInterpolationCollectionBuilder()
         builder.add(Tempo(60), at: .zero)
         builder.add(Tempo(90), at: Fraction(4,4))
         let interpolations = builder.build()
@@ -28,7 +28,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
     }
 
     func testBuilderSingleInterpolation() {
-        let builder = Tempo.Interpolation.Collection.Builder()
+        let builder = TempoInterpolationCollectionBuilder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
         builder.add(Tempo(90), at: Fraction(4,4))
         let interpolations = builder.build()
@@ -42,7 +42,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
     }
 
     func testSimpleFragment() {
-        let builder = Tempo.Interpolation.Collection.Builder()
+        let builder = TempoInterpolationCollectionBuilder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
         builder.add(Tempo(120), at: Fraction(32,4))
         let interpolations: Tempo.Interpolation.Collection = builder.build()
@@ -55,7 +55,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
     }
 
     func testMoreComplexFragment() {
-        let builder = Tempo.Interpolation.Collection.Builder()
+        let builder = TempoInterpolationCollectionBuilder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
         builder.add(Tempo(240), at: Fraction(4,4), easing: nil)
         builder.add(Tempo(120), at: Fraction(16,4), easing: nil)
@@ -76,7 +76,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
     }
 
     func testFragment() {
-        let builder = Tempo.Interpolation.Collection.Builder()
+        let builder = TempoInterpolationCollectionBuilder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
         builder.add(Tempo(30), at: Fraction(4,4))
         builder.add(Tempo(120), at: Fraction(16,4), easing: .linear)

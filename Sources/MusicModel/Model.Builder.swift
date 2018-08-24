@@ -67,8 +67,8 @@ extension Model {
         internal var rhythmOffsets: [UUID: Fraction] = [:]
 
         #warning("Reintroduce meter and tempo collection builders")
-        internal let tempoInterpolationCollectionBuilder = Tempo.Interpolation.Collection.Builder()
-//        internal let meterCollectionBuilder = Meter.Collection.Builder()
+        internal let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
+        internal let meterCollectionBuilder = MeterCollectionBuilder()
 
         // MARK: - Initializers
         
