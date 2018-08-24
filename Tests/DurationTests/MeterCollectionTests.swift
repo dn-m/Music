@@ -13,15 +13,15 @@ import Duration
 
 class MeterCollectionTests: XCTestCase {
 
-    var meters: Meter.Collection {
-        let builder = Meter.Collection.Builder()
-        (0..<500).forEach { _ in
-            let beats = Int.random(in: 3..<9)
-            let subdivision = [16,8,4].randomElement()!
-            _ = builder.add((Meter(beats,subdivision)))
-        }
-        return builder.build()
-    }
+//    var meters: Meter.Collection {
+//        let builder = Meter.Collection.Builder()
+//        (0..<500).forEach { _ in
+//            let beats = Int.random(in: 3..<9)
+//            let subdivision = [16,8,4].randomElement()!
+//            _ = builder.add((Meter(beats,subdivision)))
+//        }
+//        return builder.build()
+//    }
 
     func testFragmentOutOfRange() {
         let meters = [(4,4),(3,4),(5,4)].map(Meter.init)
