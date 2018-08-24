@@ -520,7 +520,7 @@ extension ContiguousSegmentCollection where Segment == Tempo.Interpolation {
 
         /// - Returns: The completed `Tempo.Interpolation.Collection`.
         public func build() -> Tempo.Interpolation.Collection {
-            return Tempo.Interpolation.Collection(SortedDictionary(presorted: intermediate))
+            return .init(SortedDictionary(presorted: intermediate))
         }
     }
 }
