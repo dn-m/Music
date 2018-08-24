@@ -6,12 +6,13 @@
 //
 //
 
+import DataStructures
 import Math
 
 extension Meter {
 
     /// A fragment of a `Meter`. Wrapping a `base` meter along with the `range` of the fragment.
-    public struct Fragment: DurationSpanningFragment {
+    public struct Fragment {
 
         // MARK: - Instance Properties
 
@@ -44,6 +45,30 @@ extension Meter {
             assert(range.upperBound <= self.range.upperBound)
             return Meter.Fragment(base, in: range)
         }
+    }
+}
+
+extension Meter.Fragment: Intervallic {
+
+    public typealias Metric = Fraction
+
+    public var length: Fraction {
+        return range.length
+    }
+}
+
+extension Meter.Fragment: Totalizable {
+    public init(whole: Meter) {
+        self.init(whole)
+    }
+}
+
+extension Meter.Fragment: IntervallicFragmentable {
+
+    public typealias Fragment = Meter.Fragment
+
+    public func fragment(in range: Range<Fraction>) -> Fragment {
+        return Fragment(base, in: range)
     }
 }
 

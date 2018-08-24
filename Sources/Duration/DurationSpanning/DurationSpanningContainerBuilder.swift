@@ -6,5 +6,5 @@
 //
 //
 
-/// Interface for `ContiguousSegmentCollectionBuilder`-types whose elements spen over `Fraction` values.
-public protocol DurationSpanningContainerBuilder: ContiguousSegmentCollectionBuilder { }
+///// Interface for `ContiguousSegmentCollectionBuilder`-types whose elements spen over `Fraction` values.
+//public protocol DurationSpanningContainerBuilder: ContiguousSegmentCollectionBuilder { }

@@ -6,5 +6,5 @@
 //
 //
 
-/// Interface for types which are fragments of `Fraction`-spanning types.
-public protocol DurationSpanningFragment: IntervallicFragment, DurationSpanning { }
+///// Interface for types which are fragments of `Fraction`-spanning types.
+//public protocol DurationSpanningFragment: IntervallicFragment, DurationSpanning { }

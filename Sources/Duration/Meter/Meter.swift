@@ -6,6 +6,7 @@
 //
 //
 
+import DataStructures
 import Math
 
 /// Interface for `Meter`-like types (e.g., `Meter`, `AdditiveMeter`, `FractionalMeter`).
@@ -49,7 +50,9 @@ extension Subdivision {
     }
 }
 
-extension Meter: DurationSpanning {
+extension Meter: Intervallic {
+
+    public typealias Metric = Fraction
 
     // MARK: - DurationSpanning
 
@@ -59,12 +62,12 @@ extension Meter: DurationSpanning {
     }
 }
 
-extension Meter: Fragmentable {
+extension Meter: IntervallicFragmentable {
 
     // MARK: - Fragmentable
 
     /// - Returns: `Meter.Fragment`
-    public subscript(range: Range<Fraction>) -> Fragment {
+    public func fragment(in range: Range<Fraction>) -> Meter.Fragment {
         return Fragment(self, in: range)
     }
 }
@@ -104,68 +107,68 @@ extension Meter {
     }
 }
 
-// FIXME: Move to own file when Swift build order bug is resolved
-import DataStructures
-
 extension Meter {
 
-    /// A dictionary-like collections with `Meter.Fragment` values indexed by `Fraction` keys`.
-    public struct Collection: DurationSpanningContainer {
-
-        // MARK: - Associated Types
-
-        public typealias Metric = Fraction
-
-        // MARK: - Instance Properties
-
-        public let base: SortedDictionary<Metric,Meter.Fragment>
-
-        // MARK: - Initializers
-
-        /// Create a `Meter.Collection` with the given `base`.
-        public init(_ base: SortedDictionary<Metric,Meter.Fragment>) {
-            self.base = base
-        }
-
-        /// Create a `Meter.Collection` with the given `base`.
-        public init <S> (_ base: S) where S: Sequence, S.Element == Meter.Fragment {
-            self = Builder().add(base).build()
-        }
-
-        /// Create a `Meter.Collection` with the given `base`.
-        public init <S> (_ base: S) where S: Sequence, S.Element == Meter {
-            self.init(base.map(Meter.Fragment.init))
-        }
-    }
+    public typealias Collection = ContiguousSegmentCollection<Fraction,Meter>
+//    /// A dictionary-like collections with `Meter.Fragment` values indexed by `Fraction` keys`.
+//    public struct Collection: DurationSpanningContainer {
+//
+//        // MARK: - Associated Types
+//
+//        public typealias Metric = Fraction
+//
+//        // MARK: - Instance Properties
+//
+//        public let base: SortedDictionary<Metric,Meter.Fragment>
+//
+//        // MARK: - Initializers
+//
+//        /// Create a `Meter.Collection` with the given `base`.
+//        public init(_ base: SortedDictionary<Metric,Meter.Fragment>) {
+//            self.base = base
+//        }
+//
+//        /// Create a `Meter.Collection` with the given `base`.
+//        public init <S> (_ base: S) where S: Sequence, S.Element == Meter.Fragment {
+//            self = Builder().add(base).build()
+//        }
+//
+//        /// Create a `Meter.Collection` with the given `base`.
+//        public init <S> (_ base: S) where S: Sequence, S.Element == Meter {
+//            self.init(base.map(Meter.Fragment.init))
+//        }
+//    }
 }
 
-extension Meter.Collection: Equatable { }
 
-extension Meter.Collection {
-
-    /// Stateful building of a `Meter.Collection`.
-    public final class Builder: DurationSpanningContainerBuilder {
-
-        // MARK: - Associated Types
-
-        /// The end product of this `Meter.Collection.Builder`.
-        public typealias Product = Meter.Collection
-
-        // MARK: - Instance Properties
-
-        /// The value which will ultimately be the underlying storage of a `Meter.Collection`.
-        public var intermediate: OrderedDictionary<Fraction,Meter.Fragment>
-
-        /// The accumulating offset of `Fraction` keys.
-        public var offset: Fraction
-
-        // MARK: - Initializers
-
-        /// Create an empty `Meter.Collection.Builder` ready to help you build up a
-        /// `Meter.Collection`.
-        public init() {
-            self.intermediate = [:]
-            self.offset = .zero
-        }
-    }
-}
+//extension Meter.Collection: Equatable { }
+//extension Meter.Collection: Hashable { }
+//
+//extension Meter.Collection {
+//
+//    /// Stateful building of a `Meter.Collection`.
+//    public final class Builder: DurationSpanningContainerBuilder {
+//
+//        // MARK: - Associated Types
+//
+//        /// The end product of this `Meter.Collection.Builder`.
+//        public typealias Product = Meter.Collection
+//
+//        // MARK: - Instance Properties
+//
+//        /// The value which will ultimately be the underlying storage of a `Meter.Collection`.
+//        public var intermediate: OrderedDictionary<Fraction,Meter.Fragment>
+//
+//        /// The accumulating offset of `Fraction` keys.
+//        public var offset: Fraction
+//
+//        // MARK: - Initializers
+//
+//        /// Create an empty `Meter.Collection.Builder` ready to help you build up a
+//        /// `Meter.Collection`.
+//        public init() {
+//            self.intermediate = [:]
+//            self.offset = .zero
+//        }
+//    }
+//}

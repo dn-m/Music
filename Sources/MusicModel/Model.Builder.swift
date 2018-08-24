@@ -147,13 +147,14 @@ extension Model {
             easing: Tempo.Interpolation.Easing? = nil
         ) -> Builder
         {
-            tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
+            #warning("Bring back tempo interp builder")
+            //tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
             return self
         }
 
         /// Add the given `meter`.
         @discardableResult public func add(_ meter: Meter) -> Builder {
-            meterCollectionBuilder.add(.init(meter))
+            meterCollectionBuilder.add(meter)
             return self
         }
 
