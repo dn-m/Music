@@ -212,8 +212,8 @@ extension Model {
                 intervals: intervals,
                 events: events,
                 byLabel: byLabel,
-                meters: .empty, //makeMeters(),
-                tempi: .empty //makeTempi()
+                meters: makeMeters(),
+                tempi: makeTempi()
             )
         }
 
@@ -222,8 +222,7 @@ extension Model {
         }
 
         private func makeMeters() -> Meter.Collection {
-            //return meterCollectionBuilder.build()
-            fatalError()
+            return meterCollectionBuilder.build()
         }
 
         /// TODO: Needs testing!
