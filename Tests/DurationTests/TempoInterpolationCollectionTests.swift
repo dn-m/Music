@@ -50,8 +50,7 @@ class TempoInterpolationCollectionTests: XCTestCase {
         let single = Tempo.Interpolation.Fragment(
             Tempo.Interpolation(start: Tempo(60), end: Tempo(120), length: Fraction(32,4))
         )
-        let expected = Tempo.Interpolation.Collection.Fragment(.single(single))
-        XCTAssertEqual(fragment, expected)
+        XCTAssertEqual(fragment, .init(single))
     }
 
     func testMoreComplexFragment() {
@@ -69,7 +68,9 @@ class TempoInterpolationCollectionTests: XCTestCase {
         let fragmentA = Tempo.Interpolation.Fragment(a, in: Fraction(4,4)..<Fraction(12,4))
         let fragmentC = Tempo.Interpolation.Fragment(c)
         let expected = Tempo.Interpolation.Collection.Fragment(
-            .multiple(fragmentA, [b], fragmentC),
+            head: fragmentA,
+            body: [b],
+            tail: fragmentC,
             offsetBy: Fraction(8,4)
         )
         XCTAssertEqual(fragment, expected)
@@ -89,7 +90,9 @@ class TempoInterpolationCollectionTests: XCTestCase {
         let fragmentA = Tempo.Interpolation.Fragment(a, in: Fraction(3,4)..<Fraction(4,4))
         let fragmentC = Tempo.Interpolation.Fragment(c, in: Fraction(0,4)..<Fraction(1,4))
         let expected = Tempo.Interpolation.Collection.Fragment(
-            .multiple(fragmentA, [b], fragmentC),
+            head: fragmentA,
+            body: [b],
+            tail: fragmentC,
             offsetBy: Fraction(3,4)
         )
         XCTAssertEqual(fragment, expected)

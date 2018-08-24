@@ -36,7 +36,7 @@ class MeterCollectionTests: XCTestCase {
         let collection = Meter.Collection(meters)
         let fragment = collection.fragment(in: Fraction(5,4) ..< Fraction(6,4))
         let single = Meter.Fragment(Meter(3,4), in: Fraction(1,4)..<Fraction(2,4))
-        let expected = Meter.Collection.Fragment(.single(single), offsetBy: Fraction(5,4))
+        let expected = Meter.Collection.Fragment(single, offsetBy: Fraction(5,4))
         XCTAssertEqual(fragment, expected)
     }
 
@@ -44,11 +44,9 @@ class MeterCollectionTests: XCTestCase {
         let meters = Meter.Collection([(4,4),(3,4),(5,4)].map(Meter.init))
         let fragment = meters.fragment(in: Fraction(2,4) ..< Fraction(9,4))
         let expected = Meter.Collection.Fragment(
-            .multiple(
-                Meter.Fragment(Meter(4,4), in: Fraction(2,4)..<Fraction(4,4)),
-                [Meter(3,4)],
-                Meter.Fragment(Meter(5,4), in: Fraction(0,4)..<Fraction(2,4))
-            ),
+            head: Meter.Fragment(Meter(4,4), in: Fraction(2,4)..<Fraction(4,4)),
+            body: [Meter(3,4)],
+            tail: Meter.Fragment(Meter(5,4), in: Fraction(0,4)..<Fraction(2,4)),
             offsetBy: Fraction(2,4)
         )
         XCTAssertEqual(fragment, expected)
@@ -57,10 +55,8 @@ class MeterCollectionTests: XCTestCase {
     func testFragmentUpperBoundBeyondEnd() {
         let collection = Meter.Collection([(4,4),(3,4),(5,4)].map(Meter.init))
         let fragment = collection.fragment(in: Fraction(8,4) ..< Fraction(13,4))
-        let expected = Meter.Collection.Fragment(
-            .single(Meter.Fragment(Meter(5,4), in: Fraction(1,4)..<Fraction(5,4))),
-            offsetBy: Fraction(8,4)
-        )
+        let single = Meter.Fragment(Meter(5,4), in: Fraction(1,4)..<Fraction(5,4))
+        let expected = Meter.Collection.Fragment(single, offsetBy: Fraction(8,4))
         XCTAssertEqual(fragment, expected)
     }
 
