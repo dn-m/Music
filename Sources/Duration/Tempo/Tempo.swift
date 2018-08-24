@@ -255,18 +255,6 @@ extension Tempo {
 
 extension Tempo.Interpolation: Equatable { }
 
-extension Tempo.Interpolation: Fragmentable {
-
-    // MARK: - Fragmentable
-
-    /// - Returns: a `Tempo.Interpolation.Fragment` in the given `range`.
-    public subscript(range: Range<Fraction>) -> Fragment {
-        assert(range.lowerBound >= .zero)
-        assert(range.upperBound <= length)
-        return Fragment(self, in: range)
-    }
-}
-
 // FIXME: Move to own file (Tempo.Interpolation.Fragment)
 extension Tempo.Interpolation {
 
@@ -301,6 +289,18 @@ extension Tempo.Interpolation {
             assert(range.upperBound <= self.range.upperBound)
             return Tempo.Interpolation.Fragment(base, in: range)
         }
+    }
+}
+
+extension Tempo.Interpolation: IntervallicFragmentable {
+
+    // MARK: - Fragmentable
+
+    /// - Returns: a `Tempo.Interpolation.Fragment` in the given `range`.
+    public func fragment(in range: Range<Fraction>) -> Fragment {
+        assert(range.lowerBound >= .zero)
+        assert(range.upperBound <= length)
+        return Fragment(self, in: range)
     }
 }
 
