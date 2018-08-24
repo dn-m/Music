@@ -527,7 +527,8 @@ extension ContiguousSegmentCollection where Segment == Tempo.Interpolation {
     // MARK: - Instance Methods
 
     /// - Returns: The offset in seconds of the given metrical `offset`.
-    /// - FIXME: Use `Seconds` instead of `Double`
+    ///
+    // - FIXME: Use `Seconds` instead of `Double`
     public func secondsOffset(for offset: Fraction) -> Double {
         assert(contains(offset))
         let index = indexOfSegment(containing: offset)!
