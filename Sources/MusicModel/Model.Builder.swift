@@ -67,7 +67,7 @@ extension Model {
         internal var rhythmOffsets: [UUID: Fraction] = [:]
 
         #warning("Reintroduce meter and tempo collection builders")
-//        internal let tempoInterpolationCollectionBuilder = Tempo.Interpolation.Collection.Builder()
+        internal let tempoInterpolationCollectionBuilder = Tempo.Interpolation.Collection.Builder()
 //        internal let meterCollectionBuilder = Meter.Collection.Builder()
 
         // MARK: - Initializers
@@ -148,8 +148,7 @@ extension Model {
             easing: Tempo.Interpolation.Easing? = nil
         ) -> Builder
         {
-            #warning("Bring back tempo interp builder")
-            //tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
+            tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
             return self
         }
 
@@ -219,8 +218,7 @@ extension Model {
         }
 
         private func makeTempi() -> Tempo.Interpolation.Collection {
-            //return tempoInterpolationCollectionBuilder.build()
-            fatalError()
+            return tempoInterpolationCollectionBuilder.build()
         }
 
         private func makeMeters() -> Meter.Collection {
