@@ -39,7 +39,7 @@ extension Tree where Branch == Duration, Leaf == Duration {
 
         // Update subdivision given updated proportions
         let quotient = Double(normalized.value) / Double(beats)
-        let newSubdivision = Int(Double(subdivision) * Double(quotient))
+        let newSubdivision = Int(Double(subdivision) * quotient)
 
         self.init(newSubdivision, normalized)
     }

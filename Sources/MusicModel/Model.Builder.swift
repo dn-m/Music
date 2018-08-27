@@ -66,9 +66,10 @@ extension Model {
         // FIXME: Find better way of doing this.
         internal var rhythmOffsets: [UUID: Fraction] = [:]
 
-        internal let tempoInterpolationCollectionBuilder = Tempo.Interpolation.Collection.Builder()
-        internal let meterCollectionBuilder = Meter.Collection.Builder()
-        
+        #warning("Reintroduce meter and tempo collection builders")
+        internal let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
+        internal let meterCollectionBuilder = MeterCollectionBuilder()
+
         // MARK: - Initializers
         
         /// Creates `Builder` prepared to construct a `Model`.
@@ -153,7 +154,7 @@ extension Model {
 
         /// Add the given `meter`.
         @discardableResult public func add(_ meter: Meter) -> Builder {
-            meterCollectionBuilder.add(.init(meter))
+            //meterCollectionBuilder.add(meter)
             return self
         }
 
