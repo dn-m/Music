@@ -143,10 +143,8 @@ let meter = Meter(4,4)
 or maybe something a little more fun.
 
 ```Swift
-let meter = Meter(31,256)
+let meter = Meter(31,128)
 ```
-
-> Note: Currently, `Meter` has the same `power-of-two` (with a coefficient of `2`) requirement of its denominator as `Duration`. It is planned to relax this to a requirement of a `power-of-two` with _any_ coefficient, so as to allow `Meter(13,12)` or `Meter(19,28)`.
 
 ## Tempo
 
