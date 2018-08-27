@@ -59,6 +59,11 @@ extension Meter {
         precondition(subdivision.isPowerOfTwoWithAnyCoefficient)
         self = .init(kind: .fractional(fraction, subdivision))
     }
+
+    /// Creates a `Meter` by aggregating all of the given `meters`.
+    public init <C> (_ meters: C) where C: Swift.Collection, C.Element == Meter {
+        self = meters.sum
+    }
 }
 
 extension Meter {
