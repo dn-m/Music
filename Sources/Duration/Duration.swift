@@ -9,7 +9,7 @@
 import Math
 
 /// `Duration`.
-public struct Duration: Rational {
+public struct Duration {
 
     // MARK: - Type Properties
 
@@ -19,23 +19,38 @@ public struct Duration: Rational {
     // MARK: - Instance Properties
 
     /// Numerator.
-    public let numerator: Beats
+    public let beats: Beats
 
     /// Denominator.
-    public let denominator: Subdivision
+    public let subdivision: Subdivision
 
     // MARK: - Initializers
 
-    /// Create a `Duration` with a `numerator` and `denominator`.
+    /// Create a `Duration` with a `beats` and `subdivision`.
     public init(_ numerator: Beats, _ denominator: Subdivision) {
 
         assert(
             denominator.isPowerOfTwo,
-            "Cannot create Duration with non-power-of-two denominator: " + "\(denominator)"
+            "Cannot create Duration with non-power-of-two subdivision: " + "\(denominator)"
         )
 
-        self.numerator = numerator
-        self.denominator = denominator
+        self.beats = numerator
+        self.subdivision = denominator
+    }
+}
+
+extension Duration: Rational {
+
+    // MARK: - Rational
+
+    /// - Returns: The `beats` value for `Rational` arithmetic.
+    public var numerator: Int {
+        return beats
+    }
+
+    /// - Returns: The `subdivision` value for `Rational` arithmetic.
+    public var denominator: Int {
+        return subdivision
     }
 }
 

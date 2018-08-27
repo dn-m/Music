@@ -55,7 +55,7 @@ extension MeterCollectionTests {
     static let __allTests = [
         ("testFragmentOutOfRange", testFragmentOutOfRange),
         ("testFragmentRangeWithinSingleMeter", testFragmentRangeWithinSingleMeter),
-        ("testFragmentsFromTutschkuUnder", testFragmentsFromTutschkuUnder),
+        ("testFuzzManyFragments", testFuzzManyFragments),
         ("testFragmentUpperBoundBeyondEnd", testFragmentUpperBoundBeyondEnd),
         ("testTruncatingFragment", testTruncatingFragment),
     ]

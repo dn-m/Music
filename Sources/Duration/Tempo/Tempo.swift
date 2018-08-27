@@ -63,7 +63,7 @@ extension Tempo {
 
     // MARK: - Instance Methods
 
-    /// - Returns: A `Tempo` with the numerator and denominator adjusted to match the given
+    /// - Returns: A `Tempo` with the numerator and subdivision adjusted to match the given
     /// `subdivision`.
     public func respelling(subdivision newSubdivision: Subdivision) -> Tempo {
         precondition(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")
@@ -109,7 +109,9 @@ import Math
 extension Tempo {
 
     /// Interpolation between two `Tempo` values.
-    public struct Interpolation: DurationSpanning {
+    public struct Interpolation: Intervallic {
+
+        public typealias Metric = Fraction
 
         // MARK: - Cases
 
@@ -253,23 +255,11 @@ extension Tempo {
 
 extension Tempo.Interpolation: Equatable { }
 
-extension Tempo.Interpolation: Fragmentable {
-
-    // MARK: - Fragmentable
-
-    /// - Returns: a `Tempo.Interpolation.Fragment` in the given `range`.
-    public subscript(range: Range<Fraction>) -> Fragment {
-        assert(range.lowerBound >= .zero)
-        assert(range.upperBound <= length)
-        return Fragment(self, in: range)
-    }
-}
-
 // FIXME: Move to own file (Tempo.Interpolation.Fragment)
 extension Tempo.Interpolation {
 
     /// A fragment of a `Tempo.Interpolation`.
-    public struct Fragment: DurationSpanningFragment {
+    public struct Fragment {
 
         // MARK: - Associated Types
 
@@ -299,6 +289,49 @@ extension Tempo.Interpolation {
             assert(range.upperBound <= self.range.upperBound)
             return Tempo.Interpolation.Fragment(base, in: range)
         }
+    }
+}
+
+extension Tempo.Interpolation: IntervallicFragmentable {
+
+    // MARK: - Fragmentable
+
+    /// - Returns: a `Tempo.Interpolation.Fragment` in the given `range`.
+    public func fragment(in range: Range<Fraction>) -> Fragment {
+        assert(range.lowerBound >= .zero)
+        assert(range.upperBound <= length)
+        return Fragment(self, in: range)
+    }
+}
+
+extension Tempo.Interpolation.Fragment: Intervallic {
+
+    // MARK: - Intervallic
+
+    /// - Returns: The length of this `Tempo.Interpolation.Fragment` value.
+    public var length: Fraction {
+        return range.length
+    }
+}
+
+extension Tempo.Interpolation.Fragment: Totalizable {
+
+    // MARK: - Totalizable
+
+    /// Creates a `Tempo.Interpolation.Fragment` which is equivalent to the given `whole`
+    /// `Tempo.Interpolation`.
+    public init(whole: Tempo.Interpolation) {
+        self.init(whole)
+    }
+}
+
+extension Tempo.Interpolation.Fragment: IntervallicFragmentable {
+
+    // MARK: - IntervallicFragmentable
+
+    /// - Returns: A fragment in the given `range`.
+    public func fragment(in range: Range<Fraction>) -> Tempo.Interpolation.Fragment {
+        return .init(base, in: range.clamped(to: self.range))
     }
 }
 
@@ -430,155 +463,106 @@ extension Tempo.Interpolation.Easing: Equatable { }
 public extension Tempo.Interpolation {
 
     /// An ordered, contiguous collection of `Tempo.Interpolation.Fragments` indexed by their
-    /// metrical offset.
-    public struct Collection: SpanningContainer {
+    /// fractional offset.
+    public typealias Collection = ContiguousSegmentCollection<Tempo.Interpolation>
+}
 
-        // MARK: - Associated Types
+/// A class which encapsulates the stateful incremental building process of
+/// a `Tempo.Interpolation.Collection`.
+public final class TempoInterpolationCollectionBuilder {
 
-        /// The element of the collection.
-        public typealias Spanner = Tempo.Interpolation.Fragment
+    // MARK: - Associated Types
 
-        /// The `Metric` of the `Tempo.Interpolation.Fragment`, and therefore the `Metric` of this
-        /// collection.
-        public typealias Metric = Spanner.Metric
+    /// The end result of the building process (`Tempo.Interpolation.Collection`).
+    public typealias Product = Tempo.Interpolation.Collection
 
-        // MARK: - Instance Properties
+    // MARK: - Instance Properties
 
-        /// The underlying storage of the `Tempo.Interpolation.Fragment` values.
-        // FIXME: Consider using an `OrderedDictionary` re: performance.
-        public let base: SortedDictionary<Spanner.Metric,Spanner>
+    private var last: (Fraction, Tempo, Tempo.Interpolation.Easing?)?
 
-        // MARK: - Initializers
+    /// The stateful, accumulating `offset` which becomes the metrical offset of a
+    ///`Tempo.Interpolation.Fragment` value.
+    public var offset: Fraction
 
-        /// Create a `Tempo.Interpolation.Collection` with the given dictionary of
-        /// `Tempo.Interpolation.Fragment` values.
-        public init(_ base: SortedDictionary<Spanner.Metric,Spanner>) {
-            self.base = base
+    /// The intermediate storage of `Tempo.Interpolation.Fragment` values indexed by their
+    /// `Fraction` offsets.
+    public var intermediate: OrderedDictionary<Fraction,Tempo.Interpolation>
+
+    // MARK: - Initializers
+
+    /// Create an empty `Tempo.Interpolation.Collection.Builder` ready to construct a nice
+    /// little `Tempo.Interpolation.Collection` for you.
+    public init(offset: Fraction = .zero) {
+        self.intermediate = [:]
+        self.offset = offset
+    }
+
+    // MARK: - Instance Methods
+
+    /// Add the given `interpolation` to the accumulating storage of
+    /// `Tempo.Interpolation.Fragment` values.
+    ///
+    /// - Returns: Self
+    @discardableResult public func add(_ interpolation: Tempo.Interpolation)
+        -> TempoInterpolationCollectionBuilder
+    {
+        self.intermediate.append(interpolation, key: offset)
+        last = (offset, interpolation.end, nil)
+        offset += interpolation.length
+        return self
+    }
+
+    /// Add the given `tempo` at the given metrical `offset`, along with the information
+    /// whether the given `tempo` interpolates into the next.
+    @discardableResult public func add(
+        _ tempo: Tempo,
+        at offset: Fraction,
+        easing: Tempo.Interpolation.Easing? = nil
+    ) -> TempoInterpolationCollectionBuilder
+    {
+        if let (startOffset, startTempo, startInterpolating) = last {
+            let interpolation = Tempo.Interpolation(
+                start: startTempo,
+                end: startInterpolating != nil ? tempo : startTempo,
+                length: offset - startOffset,
+                easing: easing ?? .linear
+            )
+            add(interpolation)
         }
+        last = (offset, tempo, easing)
+        return self
+    }
 
-        /// Create a `Tempo.Interpolation.Collection` with the given sequence of
-        ///`Tempo.Interpolation.Fragment` values.
-        public init <S> (_ base: S) where S: Sequence, S.Element == Spanner {
-            self = Builder().add(base).build()
-        }
-
-        /// Create a `Tempo.Interpolation.Collection` with the given sequence of
-        /// `Tempo.Interpolation` values.
-        public init <S> (_ elements: S) where S: Sequence, S.Element == Tempo.Interpolation {
-            self.init(elements.map(Tempo.Interpolation.Fragment.init))
-        }
-
-        // MARK: - Instance Methods
-
-        /// - Returns: The offset in seconds of the given metrical `offset`.
-        /// - FIXME: Use `Seconds` instead of `Double`
-        public func secondsOffset(for offset: Fraction) -> Double {
-            assert(contains(offset))
-            let index = indexOfElement(containing: offset)!
-            let (globalOffset, interpolation) = base[index]
-            let internalOffset = offset - globalOffset
-            let localSeconds = interpolation.secondsOffset(for: internalOffset)
-            return secondsOffset(at: index) + localSeconds
-        }
-
-        /// - Returns: The offset in seconds of the `Tempo.Interpolation.Fragment` starting at the
-        /// given `index`.
-        public func secondsOffset(at index: Int) -> Double {
-            assert(base.indices.contains(index))
-            return (0..<index)
-                .lazy
-                .map { self.base[$0] }
-                .map { _, interp in interp.duration }
-                .sum
-        }
+    /// - Returns: The completed `Tempo.Interpolation.Collection`.
+    public func build() -> Tempo.Interpolation.Collection {
+        return .init(SortedDictionary(presorted: intermediate))
     }
 }
 
-extension Tempo.Interpolation.Collection: Equatable { }
+extension ContiguousSegmentCollection where Segment == Tempo.Interpolation {
 
-// FIXME: Move to own file (Tempo.Interpolation.Collection.Builder)
+    // MARK: - Instance Methods
 
-extension Tempo.Interpolation.Collection {
+    /// - Returns: The offset in seconds of the given metrical `offset`.
+    ///
+    // - FIXME: Use `Seconds` instead of `Double`
+    public func secondsOffset(for offset: Fraction) -> Double {
+        assert(contains(offset))
+        let index = indexOfSegment(containing: offset)!
+        let (globalOffset, interpolation) = base[index]
+        let internalOffset = offset - globalOffset
+        let localSeconds = interpolation.secondsOffset(for: internalOffset)
+        return secondsOffset(at: index) + localSeconds
+    }
 
-    /// A class which encapsulates the stateful incremental building process of
-    /// a `Tempo.Interpolation.Collection`.
-    public final class Builder: DurationSpanningContainerBuilder {
-
-        // MARK: - Associated Types
-
-        /// The end result of the building process (`Tempo.Interpolation.Collection`).
-        public typealias Product = Tempo.Interpolation.Collection
-
-        // MARK: - Instance Properties
-
-        private var last: (Fraction, Tempo, Tempo.Interpolation.Easing?)?
-
-        /// The stateful, accumulating `offset` which becomes the metrical offset of a
-        ///`Tempo.Interpolation.Fragment` value.
-        public var offset: Fraction
-
-        /// The intermediate storage of `Tempo.Interpolation.Fragment` values indexed by their
-        /// `Fraction` offsets.
-        public var intermediate: OrderedDictionary<Fraction,Tempo.Interpolation.Fragment>
-
-        // MARK: - Initializers
-
-        /// Create an empty `Tempo.Interpolation.Collection.Builder` ready to construct a nice
-        /// little `Tempo.Interpolation.Collection` for you.
-        public init() {
-            self.intermediate = [:]
-            self.offset = .zero
-        }
-
-        // MARK: - Instance Methods
-
-        /// Add the given `fragment` to the accumulating storage of
-        /// `Tempo.Interpolation.Fragment` values.
-        ///
-        /// - Returns: Self
-        @discardableResult public func add(_ fragment: Tempo.Interpolation.Fragment)
-            -> Builder
-        {
-            self.intermediate.append(fragment, key: offset)
-            last = (offset, fragment.base.end, nil)
-            offset += fragment.range.length
-            return self
-        }
-
-        /// Add the given `interpolation` to the accumulating storage of
-        /// `Tempo.Interpolation.Fragment` values.
-        ///
-        /// - Returns: Self
-        @discardableResult public func add(_ interpolation: Tempo.Interpolation)
-            -> Builder
-        {
-            self.intermediate.append(Tempo.Interpolation.Fragment(interpolation), key: offset)
-            last = (offset, interpolation.end, nil)
-            offset += interpolation.length
-            return self
-        }
-
-        /// Add the given `tempo` at the given metrical `offset`, along with the information
-        /// whether the given `tempo` interpolates into the next.
-        //
-        // FIXME: Replace `interpolating: Bool` with `interpolation: Tempo.Interpolation.Easing?`.
-        @discardableResult public func add(
-            _ tempo: Tempo,
-            at offset: Fraction,
-            easing: Tempo.Interpolation.Easing? = nil
-        ) -> Builder
-        {
-            if let (startOffset, startTempo, startInterpolating) = last {
-                let interpolation = Tempo.Interpolation(
-                    start: startTempo,
-                    end: startInterpolating != nil ? tempo : startTempo,
-                    length: offset - startOffset,
-                    easing: easing ?? .linear
-                )
-                add(.init(interpolation))
-            }
-            last = (offset, tempo, easing)
-            return self
-        }
+    /// - Returns: The offset in seconds of the `Tempo.Interpolation.Fragment` starting at the
+    /// given `index`.
+    public func secondsOffset(at index: Int) -> Double {
+        assert(base.indices.contains(index))
+        return (0..<index)
+            .lazy
+            .map { self.base[$0] }
+            .map { _, interp in interp.duration }
+            .sum
     }
 }

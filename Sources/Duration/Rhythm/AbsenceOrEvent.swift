@@ -8,6 +8,8 @@
 /// Whether a context is a "rest" or an actual event of type `Element`.
 public enum AbsenceOrEvent <Element> {
 
+    // MARK: - Cases
+
     /// "Rest".
     case absence
 

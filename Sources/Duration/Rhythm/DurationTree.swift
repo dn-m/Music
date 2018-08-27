@@ -29,8 +29,8 @@ extension Tree where Branch == Duration, Leaf == Duration {
     /// root node, and the given `proportions` scaled appropriately.
     public init(_ duration: Duration, _ proportionTree: ProportionTree) {
 
-        let beats = duration.numerator
-        let subdivision = duration.denominator
+        let beats = duration.beats
+        let subdivision = duration.subdivision
 
         // Update proportion tree
         let multiplier = lcm(beats, proportionTree.value) / proportionTree.value
@@ -39,7 +39,7 @@ extension Tree where Branch == Duration, Leaf == Duration {
 
         // Update subdivision given updated proportions
         let quotient = Double(normalized.value) / Double(beats)
-        let newSubdivision = Int(Double(subdivision) * Double(quotient))
+        let newSubdivision = Int(Double(subdivision) * quotient)
 
         self.init(newSubdivision, normalized)
     }
@@ -62,7 +62,7 @@ extension Tree where Branch == Duration, Leaf == Duration {
 
     /// - Returns: `Tree` containing the inherited scale of each node contained herein.
     public var scaling: Tree<Fraction,Fraction> {
-        return map { $0.numerator }.scaling
+        return map { $0.beats }.scaling
     }
 
     /// - Returns: `DurationTree` with the durations scaled by context.
@@ -99,7 +99,7 @@ public func * (_ duration: Duration, _ proportions: [Int])
         return .branch(duration, [.leaf(duration)])
     }
 
-    let beats = duration.numerator
+    let beats = duration.beats
     let proportionTree = ProportionTree(beats, proportions)
     return DurationTree(duration, proportionTree)
 }
