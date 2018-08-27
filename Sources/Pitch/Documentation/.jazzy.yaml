@@ -1,18 +1,18 @@
 theme: fullwidth
-custom_categories:
-  - name: "Basic Types"
-    children:
-      - "NoteNumber"
-      - "Frequency"
-      - "Pitch"
-  - name: "Collections"
-    children:
-      - "Dyad"
-      - "Collection"
-  - name: "Intervals"
-    children:
-      - "OrderedInterval"
-      - "UnorderedInterval"
-  - name: "Tuning Systems"
-    children:
-      - "TuningSystem"
+# custom_categories:
+#   - name: "Basic Types"
+#     children:
+#       - "NoteNumber"
+#       - "Frequency"
+#       - "Pitch"
+#   - name: "Collections"
+#     children:
+#       - "Dyad"
+#       - "Collection"
+#   - name: "Intervals"
+#     children:
+#       - "OrderedInterval"
+#       - "UnorderedInterval"
+#   - name: "Tuning Systems"
+#     children:
+#       - "TuningSystem"
