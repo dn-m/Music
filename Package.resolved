@@ -23,9 +23,9 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "segments",
-          "revision": "cd43fc37e0ad8a63f012adb2e951dde6f68ca493",
-          "version": null
+          "branch": null,
+          "revision": "15458ff245b2a20230378fc853064e6c5a15215f",
+          "version": "0.11.0"
         }
       }
     ]

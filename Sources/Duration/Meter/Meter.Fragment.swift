@@ -21,43 +21,45 @@ extension Meter {
 
         /// The range of the fragment in the base meter.
         public let range: Range<Fraction>
+    }
+}
 
-        // MARK: - Initializers
+extension Meter.Fragment {
 
-        /// Create a `Meter.Fragment` of the given `meter` in the given `range`.
-        // FIXME: Add range sanitation.
-        public init(_ meter: Meter, in range: Range<Fraction>? = nil) {
-            self.base = meter
-            self.range = range ?? .zero ..< Fraction(meter)
-        }
+    // MARK: - Initializers
 
-        /// Create a `Meter.Fragment` which encompasses the totality of the given `Meter`.
-        public init(_ meter: Meter) {
-            self.base = meter
-            self.range = .zero ..< Fraction(meter)
-        }
+    /// Create a `Meter.Fragment` of the given `meter` in the given `range`.
+    // FIXME: Add range sanitation.
+    public init(_ meter: Meter, in range: Range<Fraction>? = nil) {
+        self.base = meter
+        self.range = range ?? .zero ..< Fraction(meter)
+    }
 
-        // MARK: - Subscripts
-
-        /// - Returns: `Interpolation.Fragment` in the given `range`.
-        public subscript (range: Range<Fraction>) -> Meter.Fragment {
-            assert(range.lowerBound >= self.range.lowerBound)
-            assert(range.upperBound <= self.range.upperBound)
-            return Meter.Fragment(base, in: range)
-        }
+    /// Create a `Meter.Fragment` which encompasses the totality of the given `Meter`.
+    public init(_ meter: Meter) {
+        self.base = meter
+        self.range = .zero ..< Fraction(meter)
     }
 }
 
 extension Meter.Fragment: Intervallic {
 
+    // MARK: - Intervallic
+
+    /// A `Meter.Fragment` is measured by a `Fraction` value.
     public typealias Metric = Fraction
 
+    /// - Returns: The fractional length of this `Meter.Fraction`.
     public var length: Fraction {
         return range.length
     }
 }
 
 extension Meter.Fragment: Totalizable {
+
+    // MARK: - Totalizable
+
+    /// Creates a `Meter.Fragment` with the given `whole` `Meter`.
     public init(whole: Meter) {
         self.init(whole)
     }
@@ -65,11 +67,16 @@ extension Meter.Fragment: Totalizable {
 
 extension Meter.Fragment: IntervallicFragmentable {
 
+    // MARK: - IntervallicFragmentable
+
+    /// The fragment type of a `Meter.Fragment` is a `Meter.Fragment`.
     public typealias Fragment = Meter.Fragment
 
+    /// - Returns: A `Meter.Fragment` in the given `range`.
     public func fragment(in range: Range<Fraction>) -> Fragment {
         return Fragment(base, in: range)
     }
 }
 
 extension Meter.Fragment: Equatable { }
+extension Meter.Fragment: Hashable { }
