@@ -10,8 +10,6 @@ import Foundation
 import Algebra
 import Math
 import Duration
-import Duration
-import Duration
 
 /// The database of musical information contained in a single musical _work_.
 public final class Model {

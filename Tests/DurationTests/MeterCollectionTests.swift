@@ -14,52 +14,52 @@ import Duration
 class MeterCollectionTests: XCTestCase {
 
     var meters: Meter.Collection {
-        let builder = Meter.Collection.Builder()
+        let builder = MeterCollectionBuilder()
         (0..<500).forEach { _ in
             let beats = Int.random(in: 3..<9)
             let subdivision = [16,8,4].randomElement()!
-            builder.add(.init(Meter(beats,subdivision)))
+            _ = builder.add((Meter(beats,subdivision)))
         }
         return builder.build()
     }
 
     func testFragmentOutOfRange() {
-        let collection = Meter.Collection([(4,4),(3,4),(5,4)].map(Meter.init))
-        let fragment = collection[Fraction(13,4) ..< Fraction(14,4)]
-        XCTAssert(fragment.base.isEmpty)
+        let meters = [(4,4),(3,4),(5,4)].map(Meter.init)
+        let collection = Meter.Collection(meters)
+        let range = Fraction(13,4) ..< Fraction(14,4)
+        let fragment = collection.fragment(in: range)
+        XCTAssertEqual(fragment, .empty)
     }
 
     func testFragmentRangeWithinSingleMeter() {
-        let collection = Meter.Collection([(4,4),(3,4),(5,4)].map(Meter.init))
-        let fragment = collection[Fraction(5,4) ..< Fraction(6,4)]
-        let expected = Meter.Collection([
-            Meter.Fragment(Meter(3,4), in: Fraction(1,4)..<Fraction(2,4))
-        ])
+        let meters = [(4,4),(3,4),(5,4)].map(Meter.init)
+        let collection = Meter.Collection(meters)
+        let fragment = collection.fragment(in: Fraction(5,4) ..< Fraction(6,4))
+        let single = Meter.Fragment(Meter(3,4), in: Fraction(1,4)..<Fraction(2,4))
+        let expected = Meter.Collection.Fragment(single, offset: Fraction(5,4))
         XCTAssertEqual(fragment, expected)
     }
 
     func testTruncatingFragment() {
-
-        let collection = Meter.Collection([(4,4),(3,4),(5,4)].map(Meter.init))
-        let fragment = collection[Fraction(2,4) ..< Fraction(9,4)]
-
-        let expected = [
-            Meter.Fragment(Meter(4,4), in: Fraction(2,4)..<Fraction(4,4)),
-            Meter.Fragment(Meter(3,4)),
-            Meter.Fragment(Meter(5,4), in: Fraction(0,4)..<Fraction(2,4))
-        ]
-
-        XCTAssertEqual(fragment.base.map { $0.1 }, expected)
+        let meters = Meter.Collection([(4,4),(3,4),(5,4)].map(Meter.init))
+        let fragment = meters.fragment(in: Fraction(2,4) ..< Fraction(9,4))
+        let expected = Meter.Collection.Fragment(
+            head: Meter.Fragment(Meter(4,4), in: Fraction(2,4)..<Fraction(4,4)),
+            body: Meter.Collection([Meter(3,4)], offset: Fraction(4,4)),
+            tail: Meter.Fragment(Meter(5,4), in: Fraction(0,4)..<Fraction(2,4))
+        )
+        XCTAssertEqual(fragment, expected)
     }
 
     func testFragmentUpperBoundBeyondEnd() {
         let collection = Meter.Collection([(4,4),(3,4),(5,4)].map(Meter.init))
-        let fragment = collection[Fraction(8,4) ..< Fraction(13,4)]
-        let expected = [Meter.Fragment(Meter(5,4), in: Fraction(1,4)..<Fraction(5,4))]
-        XCTAssertEqual(fragment.base.map { $0.1 }, expected)
+        let fragment = collection.fragment(in: Fraction(8,4) ..< Fraction(13,4))
+        let single = Meter.Fragment(Meter(5,4), in: Fraction(1,4)..<Fraction(5,4))
+        let expected = Meter.Collection.Fragment(single, offset: Fraction(8,4))
+        XCTAssertEqual(fragment, expected)
     }
 
-    func testFragmentsFromTutschkuUnder() {
+    func testFuzzManyFragments() {
 
         let meters = Meter.Collection([
             Meter(1,8),
@@ -412,10 +412,9 @@ class MeterCollectionTests: XCTestCase {
         ]
 
         let ranges = (eventOffsets + meters.length).pairs
-        let fragments = ranges.map { start, end in meters[Fraction(start)..<Fraction(end)] }
-        let flattenedFragments = fragments.flatMap { fragment in fragment.base.map { $0.1 } }
+        let fragments = ranges.map { start, end in
+            meters.fragment(in: Fraction(start)..<Fraction(end))
+        }
         XCTAssertEqual(fragments.count, 66)
-        XCTAssertEqual(meters.base.count, flattenedFragments.count)
-        zip(meters.base.map { $0.1 }, flattenedFragments).forEach { XCTAssertEqual($0,$1) }
     }
 }
