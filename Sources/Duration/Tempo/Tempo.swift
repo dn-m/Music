@@ -63,7 +63,7 @@ extension Tempo {
 
     // MARK: - Instance Methods
 
-    /// - Returns: A `Tempo` with the numerator and denominator adjusted to match the given
+    /// - Returns: A `Tempo` with the numerator and subdivision adjusted to match the given
     /// `subdivision`.
     public func respelling(subdivision newSubdivision: Subdivision) -> Tempo {
         precondition(newSubdivision.isPowerOfTwo, "Non-power-of-two subdivisions not yet supported")

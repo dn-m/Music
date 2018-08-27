@@ -6,37 +6,146 @@
 //
 //
 
+import Algebra
 import DataStructures
 import Math
 
-/// Interface for `Meter`-like types (e.g., `Meter`, `AdditiveMeter`, `FractionalMeter`).
-public protocol MeterProtocol {
-    var beatOffsets: [Fraction] { get }
-}
+/// Abstract structure of beats which are concretely represented in a measure.
+///
+/// To create a basic meter, it is a simple as:
+///
+///     let common = Meter(4,4)
+///     let waltz = Meter(3,4)
+///     let ferneyhough = Meter(3,12)
+///
+/// A fractional meter can be created like so:
+///
+///     let fractional = Meter(Fraction(3,5),16)
+///
+/// Any number of meters can be combined into an additive meter:
+///
+///     let blueRondo = Meter(2,8) + Meter(2,8) + Meter(2,8) + Meter(3,8)
+///     let czernowinSQm5 = Meter(Meter(1,4),Meter(3,16))
+///
+/// Basic and fractional meters can also be combined:
+///
+///     let czernowinSQm7 = Meter(Meter(1,4),Meter(Fraction(2,3),4))
+///
+public struct Meter {
 
-/// Model of a `Meter`.
-public struct Meter: Rational, MeterProtocol {
+    let kind: Kind
 
-    // MARK: - Instance Properties
-
-    /// - Returns: Array of `Duration` offsets of each beat in a meter.
-    public var beatOffsets: [Fraction] {
-        return (0..<numerator).map { beat in Fraction(beat, denominator) }
+    private init(kind: Kind) {
+        self.kind = kind
     }
 
-    /// Numerator.
-    public let numerator: Beats
+    private init(kinds: [Kind]) {
+        self.init(kind: .additive(kinds))
+    }
+}
 
-    /// Denominator.
-    public let denominator: Subdivision
+extension Meter {
 
-    // MARK: Initializers
+    // MARK: - Initializers
 
-    /// Creates a `Meter` with the given `numerator` and `denominator`.
-    public init(_ numerator: Beats, _ denominator: Subdivision) {
-        precondition(denominator.isPowerOfTwoWithAnyCoefficient)
-        self.numerator = numerator
-        self.denominator = denominator
+    /// Creates a `Meter` with the given `beats` and `subdivision`.
+    public init(_ beats: Int, _ subdivision: Int) {
+        precondition(subdivision.isPowerOfTwoWithAnyCoefficient)
+        self = .init(kind: .single(beats, subdivision))
+    }
+
+    /// Creates a fractional meter, with the given `fraction` and `subdivision`.
+    public init(_ fraction: Fraction, _ subdivision: Int) {
+        precondition(subdivision.isPowerOfTwoWithAnyCoefficient)
+        self = .init(kind: .fractional(fraction, subdivision))
+    }
+}
+
+extension Meter {
+
+    // MARK: - Computed Properties
+
+    /// - Returns: The offsets of each beat contained herein.
+    public var beatOffsets: [Fraction] {
+        return kind.beatOffsets
+    }
+}
+
+extension Meter: Additive {
+
+    // MARK: - Additive
+
+    /// - Returns: A `Meter` with no duration.
+    public static var zero: Meter {
+        return .init(0,1)
+    }
+
+    /// - Returns: An additive meter composed of the two given meters.
+    public static func + (_ lhs: Meter, _ rhs: Meter) -> Meter {
+        return .init(kinds: [lhs.kind, rhs.kind])
+    }
+}
+
+extension Meter: Multiplicative {
+
+    // MARK: - Multiplicative
+
+    /// - Returns: A `Meter` with `beats` and `subdivision` values of `1`.
+    public static var one: Meter {
+        return .init(1,1)
+    }
+
+    /// - Returns: The multiplicative product of the given meters.
+    public static func * (lhs: Meter, _ rhs: Meter) -> Meter {
+        return Meter(kind: lhs.kind * rhs.kind)
+    }
+}
+
+extension Meter: Rational {
+
+    // MARK: - Rational
+
+    /// - Returns: The `numerator` for `Rational` arithmetic.
+    public var numerator: Int {
+        return kind.numerator
+    }
+
+    /// - Returns: The `denominator` for `Rational` arithmetic.
+    public var denominator: Int {
+        return kind.denominator
+    }
+}
+
+extension Meter: Intervallic {
+
+    // MARK: - Intervallic
+
+    /// A `Meter` is measured by a `Fraction`.
+    public typealias Metric = Fraction
+
+    /// - Returns: The fractional length of a `Meter`.
+    public var length: Fraction {
+        return kind.length
+    }
+}
+
+extension Meter: IntervallicFragmentable {
+
+    // MARK: - IntervallicFragmentable
+
+    /// - Returns: A `Meter.Fragment` in the given `range`.
+    public func fragment(in range: Range<Fraction>) -> Meter.Fragment {
+        return Meter.Fragment(self, in: range)
+    }
+}
+
+extension Meter: ExpressibleByIntegerLiteral {
+
+    // MARK: - ExpressibleByIntegerLiteral
+
+    /// Creates a `Meter` with the given amount of `beats` over a subdivision of `1`.
+    public init(integerLiteral beats: Int) {
+        self.init(beats,1)
     }
 }
 
@@ -47,117 +156,5 @@ extension Subdivision {
             .filter { $0.isOdd }
             .flatMap { PowerSequence(coefficient: $0, max: self, doOvershoot: true) }
             .contains(self)
-    }
-}
-
-extension Meter: Intervallic {
-
-    public typealias Metric = Fraction
-
-    // MARK: - DurationSpanning
-
-    /// - Returns: The `Duration` of the `Meter`.
-    public var length: Fraction {
-        return Fraction(self)
-    }
-}
-
-extension Meter: IntervallicFragmentable {
-
-    // MARK: - Fragmentable
-
-    /// - Returns: `Meter.Fragment`
-    public func fragment(in range: Range<Fraction>) -> Meter.Fragment {
-        return Fragment(self, in: range)
-    }
-}
-
-extension Meter: ExpressibleByIntegerLiteral {
-
-    // MARK: - ExpressibleByIntegerLiteral
-    
-    /// Creates a `Meter` with the given amount of `beats` at the quarter-note level.
-    public init(integerLiteral beats: Int) {
-        self.init(beats, 4)
-    }
-}
-
-extension Meter {
-
-    public struct Additive: MeterProtocol {
-        public var beatOffsets: [Fraction] {
-            fatalError()
-        }
-        let meters: [MeterProtocol]
-        init(_ meters: MeterProtocol...) {
-            self.meters = meters
-        }
-    }
-
-    public struct Fractional: MeterProtocol {
-        public var beatOffsets: [Fraction] {
-            fatalError()
-        }
-        let numerator: Fraction
-        let denominator: Subdivision
-        public init(_ numerator: Fraction, _ denominator: Subdivision) {
-            self.numerator = numerator
-            self.denominator = denominator
-        }
-    }
-}
-
-extension Meter {
-
-    // MARK: - Associated Types
-
-    /// A collection of contiguous `Meter` values indexed by their fractional offset.
-    public typealias Collection = ContiguousSegmentCollection<Meter>
-}
-
-/// Stateful building of a `Meter.Collection`.
-public final class MeterCollectionBuilder {
-
-    // MARK: - Associated Types
-    /// The end product of this `Meter.Collection.Builder`.
-    public typealias Product = Meter.Collection
-
-    // MARK: - Instance Properties
-    /// The value which will ultimately be the underlying storage of a `Meter.Collection`.
-    public var intermediate: OrderedDictionary<Fraction,Meter>
-
-    /// The accumulating offset of `Fraction` keys.
-    public var offset: Fraction
-
-    // MARK: - Initializers
-    /// Create an empty `Meter.Collection.Builder` ready to help you build up a
-    /// `Meter.Collection`.
-    public init() {
-        self.intermediate = [:]
-        self.offset = .zero
-    }
-
-    /// Adds the given `element` to the `intermediate` with accumulating offsets.
-    ///
-    /// - Returns: `Self`.
-    @discardableResult public func add(_ element: Meter) -> MeterCollectionBuilder {
-        intermediate.append(element, key: offset)
-        offset = offset + element.length
-        return self
-    }
-
-    /// Adds each of the given `elements` to the `intermediate` with accumulating offsets.
-    ///
-    /// - Returns: `Self`.
-    @discardableResult public func add <S: Sequence> (_ elements: S) -> Self
-        where S.Element == Meter
-    {
-        elements.forEach { _ = add($0) }
-        return self
-    }
-
-    /// Creates the final `Product` with the `intermediate`.
-    public func build() -> Product {
-        return Product(SortedDictionary(intermediate.map { $0 }))
     }
 }
