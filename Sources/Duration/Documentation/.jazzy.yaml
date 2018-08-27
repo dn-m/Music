@@ -1,25 +1,25 @@
 theme: fullwidth
 custom_categories:
-  - name: Basic Types
+  - name: "Basic Types"
     children: 
-      - Beats
-      - Subdivision
-      - Duration
-  - name: Meter
+      - "Beats"
+      - "Subdivision"
+      - "Duration"
+  - name: "Meter"
     children:
-      - Meter
-  - name: Tempo
+      - "Meter"
+  - name: "Tempo"
     children:
-      - Tempo
-  - name: Rhythm
+      - "Tempo"
+  - name: "Rhythm"
     children:
-      - ProportionTree
-      - DurationTree
-      - Rhythm
-      - AbsenceOrEvent
-      - ContinuationOrInstance
-      - event(_:)
-      - rest()
-      - tie()
-      - />(_:_:)
+      - "ProportionTree"
+      - "DurationTree"
+      - "Rhythm"
+      - "AbsenceOrEvent"
+      - "ContinuationOrInstance"
+      - "event(_:)"
+      - "rest()"
+      - "tie()"
+      - "/>(_:_:)"
       - "*(_:_)"
