@@ -9,8 +9,6 @@ custom_categories:
     children:
       - "Dyad"
       - "Collection"
-      - "intervals"
-      - "dyads"
   - name: "Intervals"
     children:
       - "OrderedInterval"
