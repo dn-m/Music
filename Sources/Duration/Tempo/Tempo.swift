@@ -306,6 +306,9 @@ extension Tempo.Interpolation: IntervallicFragmentable {
 
 extension Tempo.Interpolation.Fragment: Intervallic {
 
+    // MARK: - Intervallic
+
+    /// - Returns: The length of this `Tempo.Interpolation.Fragment` value.
     public var length: Fraction {
         return range.length
     }
@@ -313,8 +316,22 @@ extension Tempo.Interpolation.Fragment: Intervallic {
 
 extension Tempo.Interpolation.Fragment: Totalizable {
 
+    // MARK: - Totalizable
+
+    /// Creates a `Tempo.Interpolation.Fragment` which is equivalent to the given `whole`
+    /// `Tempo.Interpolation`.
     public init(whole: Tempo.Interpolation) {
         self.init(whole)
+    }
+}
+
+extension Tempo.Interpolation.Fragment: IntervallicFragmentable {
+
+    // MARK: - IntervallicFragmentable
+
+    /// - Returns: A fragment in the given `range`.
+    public func fragment(in range: Range<Fraction>) -> Tempo.Interpolation.Fragment {
+        return .init(base, in: range.clamped(to: self.range))
     }
 }
 
@@ -447,7 +464,7 @@ public extension Tempo.Interpolation {
 
     /// An ordered, contiguous collection of `Tempo.Interpolation.Fragments` indexed by their
     /// fractional offset.
-    public typealias Collection = ContiguousSegmentCollection<Fraction,Tempo.Interpolation>
+    public typealias Collection = ContiguousSegmentCollection<Tempo.Interpolation>
 }
 
 /// A class which encapsulates the stateful incremental building process of

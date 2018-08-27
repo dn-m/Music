@@ -112,7 +112,7 @@ extension Meter {
     // MARK: - Associated Types
 
     /// A collection of contiguous `Meter` values indexed by their fractional offset.
-    public typealias Collection = ContiguousSegmentCollection<Fraction,Meter>
+    public typealias Collection = ContiguousSegmentCollection<Meter>
 }
 
 /// Stateful building of a `Meter.Collection`.
