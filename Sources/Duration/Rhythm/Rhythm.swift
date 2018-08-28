@@ -55,6 +55,8 @@ import Math
 ///     // 1/>8 1/>8 2/>8 1/>8
 ///     //  <>   <2> <->   <>
 ///
+//
+// FIXME: Use graffle png instead of ASCII art
 public struct Rhythm <Element> {
 
     // MARK: - Instance Properties
