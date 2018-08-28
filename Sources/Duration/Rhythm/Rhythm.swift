@@ -9,7 +9,52 @@
 import DataStructures
 import Math
 
-/// Hierarchical organization of metrical durations and their metrical contexts.
+/// Hierarchical organization of metrical durations and their activation contexts.
+///
+/// The `Rhythm` structure composes a `DurationTree` and an array of `Leaf` values, each of which
+/// represent the metrical context (e.g., "tied", "rest", or "event") of a `Duration` in the
+/// `leaves` of the `durationTree.
+///
+/// **Example Usage**
+///
+/// First, construct a `DurationTree`:
+///
+///     let durations: DurationTree = .branch(Duration(4,8), [
+///         .leaf(Duration(1,8)),
+///         .leaf(Duration(1,8)),
+///         .leaf(Duration(2,8)),
+///         .leaf(Duration(1,8))
+///     ])
+///     // =>     4/>8  (5:4 tuplet)
+///     //     /  |  |  \
+///     // 1/>8 1/>8 2/>8 1/>8
+///
+/// Then, construct an array of `Leaf` values:
+///
+///     let leaves: [Duration<Int>.Leaf] = [
+///         rest(),
+///         event(1),
+///         tie(),
+///         rest()
+///     ]
+///     // => [<>,<1>,<->,<>]
+///
+/// Now, you can put them together:
+///
+///     let rhythm = Rhythm(durations,leaves) // =>
+///     //        4/>8
+///     //     /  |  |  \
+///     // 1/>8 1/>8 2/>8 1/>8
+///     //  <>   <1> <->   <>
+///
+/// It is easy to transform the `event` values contained in a `Rhythm`:
+///
+///     let more = rhythm.map { $0 + 1 } // =>
+///     //        4/>8
+///     //     /  |  |  \
+///     // 1/>8 1/>8 2/>8 1/>8
+///     //  <>   <2> <->   <>
+///
 public struct Rhythm <Element> {
 
     // MARK: - Instance Properties
@@ -71,6 +116,7 @@ extension Rhythm {
     /// - Each `.continuation` remains as such
     /// - Each `.instance(.rest)` remains as such
     /// - Each `.instance(.event(T))` is transformed to a `.instance(.event(U))`
+    ///
     public func map <U> (_ transform: @escaping (Element) -> U) -> Rhythm<U> {
         return Rhythm<U>(
             durationTree: durationTree,
