@@ -15,12 +15,12 @@ class PitchTests: XCTestCase {
         let _: Pitch = 60
         let _: Pitch = 60.0
     }
-    
-//    func testPitchPlusFloat() {
-//        let pitch = Pitch(60.0)
-//        let sum = pitch + 10.0
-//        XCTAssertEqual(sum, 70.0)
-//    }
+
+    func testPitchPlusFloat() {
+        let pitch = Pitch(60.0)
+        let sum = pitch + 10.0
+        XCTAssertEqual(sum, 70.0)
+    }
 
     func testFloatPlusPitch() {
         let pitch: Pitch = Pitch(60.0)
@@ -39,5 +39,4 @@ class PitchTests: XCTestCase {
         let sum = 60.0 - pitch
         XCTAssertEqual(sum, 50.0)
     }
-
 }
