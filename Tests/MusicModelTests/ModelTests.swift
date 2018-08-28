@@ -155,14 +155,21 @@ class ModelTests: XCTestCase {
     func testAddMeterStructure() {
 
         let builder = Model.Builder()
-        
-        for meter in [Meter(4,4), Meter(3,8), Meter(5,16), Meter(29,64), Meter(3,2)] {
+
+
+        let meters: [Meter] = (0..<1_000_000).map { _ in 
+            let randomBeats = Int.random(in: 1..<11)
+            let randomSubdivision = 8
+            return Meter(randomBeats, randomSubdivision)
+        }
+
+        for meter in meters {
             builder.add(meter)
         }
 
-        builder.add(Tempo(90), at: .zero)
-        builder.add(Tempo(60), at: Fraction(4,4), easing: .linear)
-        builder.add(Tempo(120), at: Fraction(24,4))
+//        builder.add(Tempo(90), at: .zero)
+//        builder.add(Tempo(60), at: Fraction(4,4), easing: .linear)
+//        builder.add(Tempo(120), at: Fraction(24,4))
 
         let model = builder.build()
         print(model)

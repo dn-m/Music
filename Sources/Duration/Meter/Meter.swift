@@ -50,13 +50,11 @@ extension Meter {
 
     /// Creates a `Meter` with the given `beats` and `subdivision`.
     public init(_ beats: Int, _ subdivision: Int) {
-        precondition(subdivision.isPowerOfTwoWithAnyCoefficient)
         self = .init(kind: .single(beats, subdivision))
     }
 
     /// Creates a fractional meter, with the given `fraction` and `subdivision`.
     public init(_ fraction: Fraction, _ subdivision: Int) {
-        precondition(subdivision.isPowerOfTwoWithAnyCoefficient)
         self = .init(kind: .fractional(fraction, subdivision))
     }
 
@@ -151,15 +149,5 @@ extension Meter: ExpressibleByIntegerLiteral {
     /// Creates a `Meter` with the given amount of `beats` over a subdivision of `1`.
     public init(integerLiteral beats: Int) {
         self.init(beats,1)
-    }
-}
-
-extension Subdivision {
-    var isPowerOfTwoWithAnyCoefficient: Bool {
-        if isPowerOfTwo { return true }
-        return (1...self).lazy
-            .filter { $0.isOdd }
-            .flatMap { PowerSequence(coefficient: $0, max: self, doOvershoot: true) }
-            .contains(self)
     }
 }
