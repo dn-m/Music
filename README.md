@@ -6,15 +6,15 @@
 
 Structures for the creation, analysis, and performance of music in Swift.
 
-The `Music` package leverages Swift's powerful generic type system to create a strongly-typed interface for describing music. A goal of `Music` is to encode as many of the logics of music as possible into the type system in order to enforce the validity of musical structures at compile time.
-
-The code herein is pure Swift and has no system-specific dependencies. It supports the Linux platform, along with the Apple platforms, and will extend support to other platforms as Swift does.
-
 ## Overview
 
 The `Music` package is part of the [**dn-m**](https://dn-m.github.io) (dynamic notation for music) project, but it's designed to be used as a standalone package for anyone wanting to write, inspect, or represent music using the Swift langage.
 
 The structures contained herein are not concerned with (or knowledgeable of) the sonic or visual representation of music. Instead, they focus on the abstract representation of music. By means of various backend solutions, these abstract representations are interpretable as sonic or visual entities. For representing these structures graphically, look into [dn-m/NotationModel](https://github.com/dn-m/NotationModel) and [dn-m/NotationView](https://github.com/dn-m).
+
+The `Music` package leverages Swift's powerful generic type system to create a strongly-typed interface for describing music. A goal of `Music` is to encode as many of the logics of music as possible into the type system in order to enforce the validity of musical structures at compile time.
+
+The code herein is pure Swift and has no system-specific dependencies. It supports the Linux platform, along with the Apple platforms, and will extend support to other platforms as Swift does.
 
 
 ## API Reference
