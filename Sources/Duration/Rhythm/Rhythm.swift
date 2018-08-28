@@ -106,6 +106,11 @@ extension Rhythm {
     public init(_ duration: Duration, _ contexts: [Leaf]) {
         self.init(duration * contexts.map { _ in 1 }, contexts)
     }
+
+    /// Creates a `Rhythm` with a single event with the given `context`.
+    public init(_ duration: Duration, _ context: Leaf) {
+        self.init(duration * [1], [context])
+    }
 }
 
 extension Rhythm {
