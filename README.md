@@ -43,10 +43,14 @@ let louder: Dynamic = .ffff
 let lessLoud: Dynamic = .p
 ```
 
+### Requirements
+
+- Swift 4.2 Toolchain
+- [Swift Package Manager](https://swift.org/package-manager/)
 
 ### Installation
 
-`Music` uses the [Swift Package Manager](https://swift.org/package-manager/) to manage its dependencies.
+
 
 
 In order to use the `Music` API, add it to the `dependencies` section of your `Package.swift` file:
