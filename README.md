@@ -19,7 +19,7 @@ The structures contained herein are not concerned with (or knowledgeable of) the
 
 ## API Reference
 
-Check out the [documentation](https://dn-m.github.io) automatically generated from the source code, updated with each push to the `master` branch.
+Check out the [documentation](https://dn-m.github.io/Packages/Music) automatically generated from the source code, updated with each push to the `master` branch.
 
 ## Usage
 
