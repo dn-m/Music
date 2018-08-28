@@ -65,7 +65,7 @@ let lessLoud: Dynamic = .p
 ## Development
 
 
-To contribute to the `Music` project, clone the `Music` package:
+To contribute to the `Music` package, clone the `git` repository:
 
 ```
 git clone https://github.com/dn-m/Music && cd Music
