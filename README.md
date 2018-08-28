@@ -6,7 +6,7 @@
 
 Structures for the creation, analysis, and performance of music in Swift.
 
-`Music` leverages Swift's powerful generic type system to create a strongly-typed interface for describing music. A goal of the `Music` package is to encode as many of the logics of music as possible into the type system in order to enforce the validity of musical structures at compile time.
+The `Music` package leverages Swift's powerful generic type system to create a strongly-typed interface for describing music. A goal of `Music` is to encode as many of the logics of music as possible into the type system in order to enforce the validity of musical structures at compile time.
 
 The code herein is pure Swift and has no system-specific dependencies. It supports the Linux platform, along with the Apple platforms, and will extend support to other platforms as Swift does.
 
@@ -42,7 +42,7 @@ let package = Package(
 )
 ```
 
-At the top of any file in which you'd like to use a module from the `Music` package, add `import` followed the name of the module:
+At the top of any file in which you'd like to use a module from the `Music` package, add `import` followed the name of the module: 
 
 ```Swift
 import Pitch
@@ -50,16 +50,12 @@ let c: Pitch = 60
 let d = c + 2 // => 62
 let pcs: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
 let retrograde = pcs.retrograde // => [10,2,1,6,5,9,7,8,4,3,11,0]
-```
 
-```Swift
 import Duration
 let duration = 3/>4
 let meter = Meter(15,16)
 let tempo = Tempo(120,8)
-```
 
-```Swift
 import Dynamics
 let loud: Dynamic = .ff
 let louder: Dynamic = .ffff
