@@ -99,4 +99,3 @@ public final class MeterCollectionBuilder {
         return Product(SortedDictionary(intermediate.map { $0 }))
     }
 }
-
