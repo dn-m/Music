@@ -66,7 +66,6 @@ extension Model {
         // FIXME: Find better way of doing this.
         internal var rhythmOffsets: [UUID: Fraction] = [:]
 
-        #warning("Reintroduce meter and tempo collection builders")
         internal let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
         internal let meterCollectionBuilder = MeterCollectionBuilder()
 
