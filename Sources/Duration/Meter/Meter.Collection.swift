@@ -10,9 +10,44 @@ import Math
 
 extension Meter {
 
-    // MARK: - Associated Types
+    // MARK: - Nested Types
 
     /// A collection of contiguous `Meter` values indexed by their fractional offset.
+    ///
+    /// **Example Usage**
+    ///
+    /// You can create a `Meter.Collection` in several different ways:
+    ///
+    /// With an array literal of `Meter` values:
+    ///
+    ///     let _: Meter.Collection = [Meter(3,4), Meter(5,16), Meter(5,8)]
+    ///
+    /// With the standard initializer:
+    ///
+    ///     let _ = Meter.Collection([Meter(3,4), Meter(5,16), Meter(5,8)])
+    ///
+    /// You can also add an fractional offset, if needed:
+    ///
+    ///     let _ = Meter.Collection([Meter(3,4), Meter(5,16), Meter(5,8)], offset: Fraction(3,64))
+    ///
+    /// Lastly, you can construct a `Meter.Collection` over time with a `MeterCollectionBuilder`:
+    ///
+    ///     let _ = MeterCollectionBuilder(offset: Fraction(21,16)
+    ///         .add(Meter(3,4)
+    ///         .add(Meter(2,4)
+    ///         .add(Meter(5,8)
+    ///         .add(Meter(13,64)
+    ///         .add(Meter(7,16)
+    ///         .build()
+    ///
+    /// To get a fragment of a `Meter.Collection`, supply a desired range:
+    ///
+    ///     let meters: Meter.Collection = [Meter(4,4), Meter(3,4), Meter(5,4)]
+    ///     let range = Fraction(7,16) ..< Fraction(31,16)
+    ///     let fragment = meters.fragment(in: range)
+    ///
+    /// This will return a collection of `Meter.Fragment` values in the given rage.
+    ///
     public typealias Collection = ContiguousSegmentCollection<Meter>
 }
 
@@ -32,11 +67,12 @@ public final class MeterCollectionBuilder {
     public var offset: Fraction
 
     // MARK: - Initializers
+
     /// Create an empty `Meter.Collection.Builder` ready to help you build up a
     /// `Meter.Collection`.
-    public init() {
+    public init(offset: Fraction = .zero) {
         self.intermediate = [:]
-        self.offset = .zero
+        self.offset = offset
     }
 
     /// Adds the given `element` to the `intermediate` with accumulating offsets.
