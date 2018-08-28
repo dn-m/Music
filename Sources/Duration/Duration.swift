@@ -10,7 +10,7 @@ import Math
 
 /// A unit of hierarchically-divided symbolic time.
 ///
-/// *Example Usage*
+/// **Example Usage**
 ///
 /// You can create a `Duration` value with an amount of `beats` at a given `subdivision` level.
 ///
