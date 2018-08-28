@@ -17,7 +17,7 @@ The `Music` package leverages Swift's powerful generic type system to create a s
 The code herein is pure Swift and has no system-specific dependencies. It supports the Linux platform, along with the Apple platforms, and will extend support to other platforms as Swift does.
 
 
-## API Reference
+## Documentation
 
 Check out the [documentation](https://dn-m.github.io/Packages/Music) automatically generated from the source code, updated with each push to the `master` branch.
 
