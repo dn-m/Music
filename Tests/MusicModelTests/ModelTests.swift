@@ -18,7 +18,7 @@ import Dynamics
 class ModelTests: XCTestCase {
 
     func testAddEntity() {
-        let identifier = UUID()
+        let identifier: Model.Builder.Identifier = 42
         let builder = Model.Builder()
         builder.addEntity(identifier, ofType: "ID")
         XCTAssertEqual(builder.entitiesByType, ["ID": [identifier]])
@@ -41,7 +41,7 @@ class ModelTests: XCTestCase {
     }
 
     func testCreateEventWithEntities() {
-        let entities = Set((0..<3).map { _ in UUID() })
+        let entities: Set = [0,1,2]
         let builder = Model.Builder()
         let identifier = builder.createEvent(with: entities)
         XCTAssertEqual(builder.events, [identifier: entities])

@@ -48,11 +48,11 @@ extension Model {
 
         private var identifier: Int = 0
 
-        var attributes: [UUID: Any] = [:]
-        var events: [UUID: Set<UUID>] = [:]
-        var eventsByRhythm: [UUID: [UUID]] = [:]
-        var entitiesByType: [String: Set<UUID>] = [:]
-        var entitiesByInterval: [Range<Fraction>: Set<UUID>] = [:]
+        var attributes: [Identifier: Any] = [:]
+        var events: [Identifier: Set<Identifier>] = [:]
+        var eventsByRhythm: [Identifier: [Identifier]] = [:]
+        var entitiesByType: [String: Set<Identifier>] = [:]
+        var entitiesByInterval: [Range<Fraction>: Set<Identifier>] = [:]
         let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
         let meterCollectionBuilder = MeterCollectionBuilder()
 
@@ -63,11 +63,11 @@ extension Model {
 
         // MARK: - Rhythm
 
-        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> UUID {
+        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> Identifier {
             let globalOffset = offset ?? meterCollectionBuilder.offset
-            let rhythmIdentifier = UUID()
+            let rhythmIdentifier = Identifier()
             let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
-            let identifiers: [UUID] = offsetsAndDuratedEvents.map { (localOffset, duratedEvent) in
+            let identifiers: [Identifier] = offsetsAndDuratedEvents.map { (localOffset, duratedEvent) in
                 let (duration, attributes) = duratedEvent
                 let localRange = Fraction(localOffset) ..< Fraction(localOffset + duration)
                 let range = localRange.shifted(by: globalOffset)
@@ -103,63 +103,63 @@ extension Model {
         // MARK: - Events and Attributes
 
         public func addEvent(with attributes: [Any], in interval: Range<Fraction>)
-            -> (event: UUID, attribute: [UUID])
+            -> (event: Identifier, attribute: [Identifier])
         {
             let attributeIdentifiers = attributes.map { add($0, in: interval) }
             let eventIdentifier = createEvent(with: Set(attributeIdentifiers), in: interval)
             return (eventIdentifier, attributeIdentifiers)
         }
 
-        public func addEvent(with attributes: [Any]) -> (event: UUID, attributes: [UUID]) {
+        public func addEvent(with attributes: [Any]) -> (event: Identifier, attributes: [Identifier]) {
             let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: Set(attributeIdentifiers))
             return (eventIdentifier, attributeIdentifiers)
         }
 
-        public func add(_ attribute: Any, in interval: Range<Fraction>) -> UUID {
-            let identifier = UUID()
+        public func add(_ attribute: Any, in interval: Range<Fraction>) -> Identifier {
+            let identifier = makeIdentifier()
             addAttribute(attribute, withIdentifier: identifier)
             entitiesByInterval.safelyInsert(identifier, forKey: interval)
             return identifier
         }
 
-        public func add(_ attribute: Any) -> UUID {
-            let identifier = UUID()
+        public func add(_ attribute: Any) -> Identifier {
+            let identifier = makeIdentifier()
             addAttribute(attribute, withIdentifier: identifier)
             return identifier
         }
 
-        public func createEvent(with entities: Set<UUID>, in interval: Range<Fraction>) -> UUID {
+        public func createEvent(with entities: Set<Identifier>, in interval: Range<Fraction>) -> Identifier {
             let identifier = createEvent(in: interval)
             events.safelyFormUnion(entities, forKey: identifier)
             return identifier
         }
 
-        public func createEvent(with entities: Set<UUID>) -> UUID {
+        public func createEvent(with entities: Set<Identifier>) -> Identifier {
             let identifier = createEvent()
             events.safelyFormUnion(entities, forKey: identifier)
             return identifier
         }
 
-        public func createEvent(in interval: Range<Fraction>) -> UUID {
+        public func createEvent(in interval: Range<Fraction>) -> Identifier {
             let identifier = createEvent()
             entitiesByInterval.safelyInsert(identifier, forKey: interval)
             return identifier
         }
 
-        public func createEvent() -> UUID {
-            let identifier = UUID()
+        public func createEvent() -> Identifier {
+            let identifier = makeIdentifier()
             events[identifier] = []
             addEntity(identifier, ofType: "EventContainer")
             return identifier
         }
 
-        func addAttribute(_ attribute: Any, withIdentifier identifier: UUID) {
+        func addAttribute(_ attribute: Any, withIdentifier identifier: Identifier) {
             attributes[identifier] = attribute
             addEntity(identifier, ofType: "\(type(of: attribute))")
         }
 
-        func addEntity(_ identifier: UUID, ofType type: String) {
+        func addEntity(_ identifier: Identifier, ofType type: String) {
             entitiesByType.safelyInsert(identifier, forKey: type)
         }
         
