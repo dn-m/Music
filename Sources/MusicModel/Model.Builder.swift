@@ -46,6 +46,7 @@ extension Model {
 
         var attributes: [UUID: Any] = [:]
         var events: [UUID: Set<UUID>] = [:]
+        var eventsByRhythm: [UUID: [UUID]] = [:]
         var entitiesByType: [String: Set<UUID>] = [:]
         var entitiesByInterval: [Range<Fraction>: Set<UUID>] = [:]
         let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
@@ -55,6 +56,18 @@ extension Model {
         
         /// Creates `Builder` prepared to construct a `Model`.
         public init() { }
+
+        // MARK: - Rhythm
+
+        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) {
+            let rhythmIdentifier = UUID()
+            
+            let r = rhythm.map { attrs in
+                return attrs.map { [unowned self] in self.add($0, in: .zero ..< .one) }
+            }
+
+            // for each event, addEvent with attributes
+        }
 
         // MARK: - Tempo & Meter
 
@@ -67,7 +80,6 @@ extension Model {
         ) -> Builder
         {
             let offset = offset ?? meterCollectionBuilder.offset
-            print(offset)
             tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
             return self
         }

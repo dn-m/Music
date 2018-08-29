@@ -115,6 +115,16 @@ extension Rhythm {
 
 extension Rhythm {
 
+    // MARK: - Instance Properties
+
+    /// - Returns: The effective duration of each `event`.
+    public var lengths: [Duration] {
+        return merge(duratedLeaves, into: [], tied: nil)
+    }
+}
+
+extension Rhythm {
+
     // MARK: - Instance Methods
 
     /// - Returns: `Rhythm` with each of its `event` (i.e., `.instance(.event(Element))`) values
@@ -129,6 +139,45 @@ extension Rhythm {
             durationTree: durationTree,
             leaves: leaves.map { leafMap($0,transform) }
         )
+    }
+
+    /// - Returns: `Rhythm` with each of the transforms applied to each of the event-containing
+    /// leaves contained herein.
+    public func mapEvents <U> (_ transforms: [(Element) -> U]) -> Rhythm<U> {
+
+        func replace <S,T> (_ leaves: S, with transforms: T, into result: [Rhythm<U>.Leaf])
+            -> [Rhythm<U>.Leaf] where
+            S: Sequence, S.Element == Leaf, T: Sequence, T.Element == (Element) -> U
+        {
+            guard let (leaf,remainingLeaves) = leaves.destructured else { return result }
+            switch leaf {
+            case .continuation:
+                return replace(remainingLeaves, with: transforms, into: result + [.continuation])
+            case .instance(let absenceOrEvent):
+                switch absenceOrEvent {
+                case .absence:
+                    return replace(remainingLeaves,
+                       with: transforms,
+                       into: result + [.instance(.absence)]
+                    )
+                case .event(let event):
+                    guard let (transform,remainingTransforms) = transforms.destructured else {
+                        fatalError("Cannot replace leaves with: \(transforms)")
+                    }
+                    return replace(remainingLeaves,
+                       with: remainingTransforms,
+                       into: result + [.instance(.event(transform(event)))]
+                    )
+                }
+            }
+        }
+        return Rhythm<U>(durationTree, replace(leaves, with: transforms, into: []))
+    }
+
+    /// - Returns: `Rhythm` with the equivalent `durationTree` but with `event`-holding leaves
+    /// replaced by the values contained in the given `leaves.`
+    public func replaceEvents <U> (_ events: [U]) -> Rhythm<U> {
+        return mapEvents(events.map { event in { _ in event } })
     }
 }
 
@@ -145,37 +194,40 @@ func leafMap <T,U> (_ leaf: Rhythm<T>.Leaf, _ transform: (T) -> U) -> Rhythm<U>.
 
 /// - Returns: The `Duration` values of the leaves of the given `rhythms`, by merging
 /// `tied` leaves to their predecesors.
+//
+// FIXME: Make extension over `Sequence where Element == (Duration, Rhythm<T>.Leaf) when
+// Swift supported parameterized extensions.
 public func lengths <S,T> (of rhythms: S) -> [Duration] where S: Sequence, S.Element == Rhythm<T> {
-
-    // FIXME: Consider using `inout [Duration]` for `accum` re: performance.
-    func merge <S> (_ leaves: S, into accum: [Duration], tied: Duration?) -> [Duration]
-        where S: Sequence, S.Element == (Duration, Rhythm<T>.Leaf)
-    {
-        guard let (duratedLeaf, remaining) = leaves.destructured else { return accum + tied }
-        let (duration, leaf) = duratedLeaf
-        switch leaf {
-        case .continuation:
-            let tied = (tied ?? .zero) + duration
-            return merge(remaining, into: accum, tied: tied)
-        case .instance(let absenceOrEvent):
-            let newAccum: [Duration]
-            let newTied: Duration?
-            switch absenceOrEvent {
-            case .absence:
-                newAccum = accum + tied + duration
-                newTied = nil
-            case .event:
-                newAccum = accum + tied
-                newTied = duration
-            }
-            return merge(remaining, into: newAccum, tied: newTied)
-        }
-    }
     return merge(
         rhythms.flatMap { rhythm in zip(rhythm.durationTree.leaves,rhythm.leaves) },
         into: [],
         tied: nil
     )
+}
+
+// FIXME: Consider using `inout [Duration]` for `accum` re: performance.
+func merge <S,T> (_ leaves: S, into accum: [Duration], tied: Duration?) -> [Duration]
+    where S: Sequence, S.Element == (Duration, Rhythm<T>.Leaf)
+{
+    guard let (duratedLeaf, remaining) = leaves.destructured else { return accum + tied }
+    let (duration, leaf) = duratedLeaf
+    switch leaf {
+    case .continuation:
+        let tied = (tied ?? .zero) + duration
+        return merge(remaining, into: accum, tied: tied)
+    case .instance(let absenceOrEvent):
+        let newAccum: [Duration]
+        let newTied: Duration?
+        switch absenceOrEvent {
+        case .absence:
+            newAccum = accum + tied + duration
+            newTied = nil
+        case .event:
+            newAccum = accum + tied
+            newTied = duration
+        }
+        return merge(remaining, into: newAccum, tied: newTied)
+    }
 }
 
 /// - Returns: `Rhythm` with the given `DurationTree` and `Rhythm.Leaf.Kind` values.
@@ -197,3 +249,5 @@ public func rest <T> () -> Rhythm<T>.Leaf {
 public func event <T> (_ value: T) -> Rhythm<T>.Leaf {
     return .instance(.event(value))
 }
+
+extension Rhythm: Equatable where Element: Equatable { }

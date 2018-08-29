@@ -39,6 +39,21 @@ class RhythmTests: XCTestCase {
         ])
     }
 
+    func testLengthsSingleAllTies() {
+        let rhythm = Rhythm<Int>(4/>8, (0..<4).map { _ in tie() })
+        XCTAssertEqual(rhythm.lengths, [4/>8])
+    }
+
+    func testLengthsSingleTiesAndEvents() {
+        let rhythm = Rhythm<()>(4/>8, [tie(), event(()), tie(), event(())])
+        XCTAssertEqual(rhythm.lengths, [1/>8, 2/>8, 1/>8])
+    }
+
+    func testLengthsSingleTiesEventsAndRests() {
+        let rhythm = Rhythm(4/>8, [tie(), event(1), tie(), rest()])
+        XCTAssertEqual(rhythm.lengths, [1/>8, 2/>8, 1/>8])
+    }
+
     func testLengthsAllTies() {
         let rhythm = Rhythm<Int>(4/>8, (0..<4).map { _ in tie() })
         XCTAssertEqual(lengths(of: [rhythm]), [4/>8])
@@ -58,5 +73,19 @@ class RhythmTests: XCTestCase {
         let rhythm = Rhythm(4/>8, [(1, tie()), (2, rest()), (1, event("uh"))])
         let rhythms = (0..<3).map { _ in rhythm }
         XCTAssertEqual(lengths(of: rhythms), [1/>8, 2/>8, 2/>8, 2/>8, 2/>8, 2/>8, 1/>8])
+    }
+
+    func testMapEvents() {
+        let rhythm = Rhythm(4/>8, [tie(), event(1), tie(), rest(), event(2)])
+        let mapped = rhythm.mapEvents([ { $0 * 2 }, { $0 * 4 }])
+        let expected = Rhythm(4/>8, [tie(), event(2), tie(), rest(), event(8)])
+        XCTAssertEqual(mapped, expected)
+    }
+
+    func testReplaceEvents() {
+        let rhythm = Rhythm(4/>8, [tie(), event(1), tie(), rest(), event(2)])
+        let mapped = rhythm.replaceEvents(["one","two"])
+        let expected = Rhythm(4/>8, [tie(), event("one"), tie(), rest(), event("two")])
+        XCTAssertEqual(mapped, expected)
     }
 }
