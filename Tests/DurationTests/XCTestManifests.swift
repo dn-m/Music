@@ -93,13 +93,19 @@ extension ProportionTreeTests {
 
 extension RhythmTests {
     static let __allTests = [
+        ("testDuratedEvents", testDuratedEvents),
         ("testInitWithDurationAndContextsUsage", testInitWithDurationAndContextsUsage),
         ("testInitWithDurationAndContextTupleUsage", testInitWithDurationAndContextTupleUsage),
         ("testInitWithDurationAndValueTupleUsage", testInitWithDurationAndValueTupleUsage),
         ("testLengths", testLengths),
         ("testLengthsAllTies", testLengthsAllTies),
+        ("testLengthsSingleAllTies", testLengthsSingleAllTies),
+        ("testLengthsSingleTiesAndEvents", testLengthsSingleTiesAndEvents),
+        ("testLengthsSingleTiesEventsAndRests", testLengthsSingleTiesEventsAndRests),
         ("testLengthsTiesAndEvents", testLengthsTiesAndEvents),
         ("testLengthsTiesEventsAndRests", testLengthsTiesEventsAndRests),
+        ("testMapEvents", testMapEvents),
+        ("testReplaceEvents", testReplaceEvents),
     ]
 }
 
@@ -113,6 +119,7 @@ extension TempoInterpolationCollectionTests {
     static let __allTests = [
         ("testBuilderSingleInterpolation", testBuilderSingleInterpolation),
         ("testBuilderSingleStatic", testBuilderSingleStatic),
+        ("testFirstOffset", testFirstOffset),
         ("testFragment", testFragment),
         ("testMoreComplexFragment", testMoreComplexFragment),
         ("testSimpleFragment", testSimpleFragment),

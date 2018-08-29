@@ -13,6 +13,24 @@ extension MeterTempoTests {
     ]
 }
 
+extension ModelTests {
+    static let __allTests = [
+        ("testAddAttribute", testAddAttribute),
+        ("testAddAttributeInInterval", testAddAttributeInInterval),
+        ("testAddEntity", testAddEntity),
+        ("testAddEventWithAttributes", testAddEventWithAttributes),
+        ("testAddEventWithAttributesInInterval", testAddEventWithAttributesInInterval),
+        ("testAddMeter", testAddMeter),
+        ("testAddTempo", testAddTempo),
+        ("testCreateEvent", testCreateEvent),
+        ("testCreateEventInInterval", testCreateEventInInterval),
+        ("testCreateEventWithEntities", testCreateEventWithEntities),
+        ("testInferOffset", testInferOffset),
+        ("testManyRhythms", testManyRhythms),
+        ("testSingleNoteRhythm", testSingleNoteRhythm),
+    ]
+}
+
 extension PerformanceContextTests {
     static let __allTests = [
         ("testContextContainsPathFalseWrongInstrument", testContextContainsPathFalseWrongInstrument),
