@@ -44,19 +44,41 @@ extension Model {
     ///
     public class Builder {
 
-        /// Collection of entities for a single event (all containing same
-        /// `PerformanceContext.Path` and `interval`).
-        internal var attributes: [UUID: Any] = [:]
-        internal var events: [UUID: Set<UUID>] = [:]
-        internal var entitiesByType: [String: Set<UUID>] = [:]
-        internal var entitiesByInterval: [Range<Fraction>: Set<UUID>] = [:]
-        internal let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
-        internal let meterCollectionBuilder = MeterCollectionBuilder()
+        var attributes: [UUID: Any] = [:]
+        var events: [UUID: Set<UUID>] = [:]
+        var entitiesByType: [String: Set<UUID>] = [:]
+        var entitiesByInterval: [Range<Fraction>: Set<UUID>] = [:]
+        let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
+        let meterCollectionBuilder = MeterCollectionBuilder()
 
         // MARK: - Initializers
         
         /// Creates `Builder` prepared to construct a `Model`.
         public init() { }
+
+        // MARK: - Tempo & Meter
+
+        /// Add the given `tempo` at the given `offset`, and whether or not it shall be
+        /// prepared to interpolate to the next given tempo.
+        @discardableResult public func addTempo(
+            _ tempo: Tempo,
+            at offset: Fraction? = nil,
+            easing: Tempo.Interpolation.Easing? = nil
+        ) -> Builder
+        {
+            let offset = offset ?? meterCollectionBuilder.offset
+            print(offset)
+            tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
+            return self
+        }
+
+        /// Add the given `meter`.
+        @discardableResult public func addMeter(_ meter: Meter) -> Builder {
+            meterCollectionBuilder.add(meter)
+            return self
+        }
+
+        // MARK: - Events and Attributes
 
         public func addEvent(with attributes: [Any], in interval: Range<Fraction>)
             -> (event: UUID, attribute: [UUID])
@@ -76,7 +98,6 @@ extension Model {
             let identifier = UUID()
             addAttribute(attribute, withIdentifier: identifier)
             entitiesByInterval.safelyInsert(identifier, forKey: interval)
-            
             return identifier
         }
 
@@ -183,71 +204,8 @@ extension Model {
 //            return self
 //        }
 //
-//        // MARK: - Tempo & Meter
-//
-//        /// Add the given `tempo` at the given `offset`, and whether or not it shall be
-//        /// prepared to interpolate to the next given tempo.
-//        @discardableResult public func add(
-//            _ tempo: Tempo,
-//            at offset: Fraction,
-//            easing: Tempo.Interpolation.Easing? = nil
-//        ) -> Builder
-//        {
-//            tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
-//            return self
-//        }
-//
-//        /// Add the given `meter`.
-//        @discardableResult public func add(_ meter: Meter) -> Builder {
-//            //meterCollectionBuilder.add(meter)
-//            return self
-//        }
-//
-//        // MARK: - Private
-//
-//        @discardableResult private func createEntity(
-//            for value: NamedAttribute,
-//            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-//            in interval: ClosedRange<Fraction>? = nil
-//        ) -> UUID
-//        {
-//            return createEntity(
-//                for: value.attribute,
-//                label: value.name,
-//                with: performanceContext,
-//                in: interval
-//            )
-//        }
-//
-//        @discardableResult private func createEntity(
-//            for value: Any,
-//            label: String,
-//            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-//            in interval: ClosedRange<Fraction>? = nil
-//        ) -> UUID
-//        {
-//            let id = UUID()
-//            values[id] = value
-//            byLabel.safelyAppend(id, toArrayWith: label)
-//            performanceContexts[id] = performanceContext
-//            intervals[id] = interval
-//            return id
-//        }
-//
-//        @discardableResult private func createEntities(
-//            for namedAttributes: [NamedAttribute],
-//            with performanceContext: PerformanceContext.Path = PerformanceContext.Path()
-//        ) -> [UUID]
-//        {
-//            return namedAttributes.map { namedAttribute in
-//                createEntity(for: namedAttribute, with: performanceContext)
-//            }
-//        }
-//
-//        private func createEvent(for entities: [UUID]) {
-//            let eventID = UUID()
-//            events[eventID] = entities
-//        }
+
+
 
         public func build() -> Model {
             fatalError()

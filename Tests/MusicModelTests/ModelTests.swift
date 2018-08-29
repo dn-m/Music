@@ -86,6 +86,41 @@ class ModelTests: XCTestCase {
         XCTAssertEqual(builder.entitiesByInterval[interval]!, Set(ids + [event]))
     }
 
+    // MARK: - Meter and Tempo
+
+    func testAddMeter() {
+        let builder = Model.Builder()
+        builder.addMeter(Meter(3,4))
+    }
+
+    func testAddTempo() {
+        let builder = Model.Builder()
+        builder.addTempo(Tempo(60, subdivision: 4), at: Fraction(15,32), easing: .linear)
+    }
+
+    func testInferOffset() {
+        let startTempo = Tempo(60, subdivision: 4)
+        let endTempo = Tempo(120, subdivision: 4)
+        let builder = Model.Builder()
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addTempo(startTempo, easing: .linear)
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addTempo(endTempo)
+        let expectedInterp = Tempo.Interpolation(
+            start: startTempo,
+            end: endTempo,
+            length: Fraction(16,4), easing: .linear
+        )
+        let expected: OrderedDictionary = [Fraction(16,4): expectedInterp]
+        XCTAssertEqual(builder.tempoInterpolationCollectionBuilder.intermediate, expected)
+    }
+
     func testEroicaHit() {
         let pitches: [Pitch] = [39,46,51,55,67,70,75,79]
         let articulation: Articulation = .staccato

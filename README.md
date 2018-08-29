@@ -34,7 +34,7 @@ let pcs: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
 let retrograde = pcs.retrograde // => [10,2,1,6,5,9,7,8,4,3,11,0]
 
 let duration = 3/>4 // => Duration(3,4) "three quarter notes"
-let tempo = Tempo(120,8) // => "120 beats per minute at the eighth-note level"
+let tempo = Tempo(120, subdivision: 8) // => "120 beats per minute at the eighth-note level"
 let meter = Meter(15,16) // => "15 beats at the sixteenth-note level"
 let meters: Meter.Collection = [Meter(3,4), Meter(5,16), Meter(11,28)]
 
