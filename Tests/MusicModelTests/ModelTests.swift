@@ -41,7 +41,7 @@ class ModelTests: XCTestCase {
     }
 
     func testCreateEventWithEntities() {
-        let entities = (0..<3).map { _ in UUID() }
+        let entities = Set((0..<3).map { _ in UUID() })
         let builder = Model.Builder()
         let identifier = builder.createEvent(with: entities)
         XCTAssertEqual(builder.events, [identifier: entities])
@@ -68,9 +68,9 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(60), Articulation.staccato, Dynamic.f]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(with: attributes)
-        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
-        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
-        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssert(!builder.entitiesByType["Pitch"]!.intersection(ids).isEmpty)
+        XCTAssert(!builder.entitiesByType["Articulation"]!.intersection(ids).isEmpty)
+        XCTAssert(!builder.entitiesByType["Dynamic"]!.intersection(ids).isEmpty)
         XCTAssertEqual(builder.events, [event: ids])
     }
 
@@ -79,9 +79,9 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(with: attributes, in: interval)
-        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
-        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
-        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssert(!builder.entitiesByType["Pitch"]!.intersection(ids).isEmpty)
+        XCTAssert(!builder.entitiesByType["Articulation"]!.intersection(ids).isEmpty)
+        XCTAssert(!builder.entitiesByType["Dynamic"]!.intersection(ids).isEmpty)
         XCTAssertEqual(builder.events, [event: ids])
         XCTAssertEqual(builder.entitiesByInterval[interval]!, event + ids)
     }
