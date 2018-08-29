@@ -55,14 +55,19 @@ extension MeterCollectionTests {
     static let __allTests = [
         ("testFragmentOutOfRange", testFragmentOutOfRange),
         ("testFragmentRangeWithinSingleMeter", testFragmentRangeWithinSingleMeter),
-        ("testFuzzManyFragments", testFuzzManyFragments),
         ("testFragmentUpperBoundBeyondEnd", testFragmentUpperBoundBeyondEnd),
+        ("testFuzzManyFragments", testFuzzManyFragments),
         ("testTruncatingFragment", testTruncatingFragment),
     ]
 }
 
 extension MeterTests {
     static let __allTests = [
+        ("testAdditiveMeter", testAdditiveMeter),
+        ("testBeatOffsets", testBeatOffsets),
+        ("testBeatOffsetsAdditive", testBeatOffsetsAdditive),
+        ("testBeatOffsetsFractional", testBeatOffsetsFractional),
+        ("testFractionalMeter", testFractionalMeter),
         ("testIrrationalMeter", testIrrationalMeter),
         ("testNormalMeter", testNormalMeter),
     ]

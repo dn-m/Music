@@ -15,12 +15,7 @@ extension MeterTempoTests {
 
 extension ModelTests {
     static let __allTests = [
-        ("testAddManyRhythms", testAddManyRhythms),
-        ("testAddMeterStructure", testAddMeterStructure),
-        ("testAddPitchArrayAttribute", testAddPitchArrayAttribute),
-        ("testAddRhythm", testAddRhythm),
-        ("testFilter", testFilter),
-        ("testPitchesAndAtriculations", testPitchesAndAtriculations),
+        ("testEroicaHit", testEroicaHit),
     ]
 }
 

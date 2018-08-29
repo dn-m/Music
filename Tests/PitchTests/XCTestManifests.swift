@@ -86,6 +86,7 @@ extension PitchTests {
         ("testFloatPlusPitch", testFloatPlusPitch),
         ("testInit", testInit),
         ("testPitchMinusFloat", testPitchMinusFloat),
+        ("testPitchPlusFloat", testPitchPlusFloat),
     ]
 }
 
