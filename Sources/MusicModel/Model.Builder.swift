@@ -101,13 +101,13 @@ extension Model {
         public func addEvent(with attributes: [Any], in interval: Range<Fraction>)
             -> (event: UUID, attribute: [UUID])
         {
-            let attributeIdentifiers = attributes.map { [unowned self] in self.add($0, in: interval) }
+            let attributeIdentifiers = attributes.map { add($0, in: interval) }
             let eventIdentifier = createEvent(with: Set(attributeIdentifiers), in: interval)
             return (eventIdentifier, attributeIdentifiers)
         }
 
         public func addEvent(with attributes: [Any]) -> (event: UUID, attributes: [UUID]) {
-            let attributeIdentifiers = attributes.map { [unowned self] in self.add($0) }
+            let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: Set(attributeIdentifiers))
             return (eventIdentifier, attributeIdentifiers)
         }
