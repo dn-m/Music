@@ -68,10 +68,10 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(60), Articulation.staccato, Dynamic.f]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(with: attributes)
-        XCTAssert(!builder.entitiesByType["Pitch"]!.intersection(ids).isEmpty)
-        XCTAssert(!builder.entitiesByType["Articulation"]!.intersection(ids).isEmpty)
-        XCTAssert(!builder.entitiesByType["Dynamic"]!.intersection(ids).isEmpty)
-        XCTAssertEqual(builder.events, [event: ids])
+        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.events, [event: Set(ids)])
     }
 
     func testAddEventWithAttributesInInterval() {
@@ -79,11 +79,11 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(with: attributes, in: interval)
-        XCTAssert(!builder.entitiesByType["Pitch"]!.intersection(ids).isEmpty)
-        XCTAssert(!builder.entitiesByType["Articulation"]!.intersection(ids).isEmpty)
-        XCTAssert(!builder.entitiesByType["Dynamic"]!.intersection(ids).isEmpty)
-        XCTAssertEqual(builder.events, [event: ids])
-        XCTAssertEqual(builder.entitiesByInterval[interval]!, event + ids)
+        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.events, [event: Set(ids)])
+        XCTAssertEqual(builder.entitiesByInterval[interval]!, Set(ids + [event]))
     }
 
     func testEroicaHit() {

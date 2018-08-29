@@ -59,16 +59,16 @@ extension Model {
         public init() { }
 
         public func addEvent(with attributes: [Any], in interval: Range<Fraction>)
-            -> (event: UUID, attribute: Set<UUID>)
+            -> (event: UUID, attribute: [UUID])
         {
-            let attributeIdentifiers = Set(attributes.map { add($0, in: interval) })
-            let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
+            let attributeIdentifiers = attributes.map { add($0, in: interval) }
+            let eventIdentifier = createEvent(with: Set(attributeIdentifiers), in: interval)
             return (eventIdentifier, attributeIdentifiers)
         }
 
-        public func addEvent(with attributes: [Any]) -> (event: UUID, attributes: Set<UUID>) {
-            let attributeIdentifiers = Set(attributes.map { add($0) })
-            let eventIdentifier = createEvent(with: attributeIdentifiers)
+        public func addEvent(with attributes: [Any]) -> (event: UUID, attributes: [UUID]) {
+            let attributeIdentifiers = attributes.map { add($0) }
+            let eventIdentifier = createEvent(with: Set(attributeIdentifiers))
             return (eventIdentifier, attributeIdentifiers)
         }
 
