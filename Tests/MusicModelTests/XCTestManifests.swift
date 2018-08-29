@@ -13,12 +13,6 @@ extension MeterTempoTests {
     ]
 }
 
-extension ModelTests {
-    static let __allTests = [
-        ("testEroicaHit", testEroicaHit),
-    ]
-}
-
 extension PerformanceContextTests {
     static let __allTests = [
         ("testContextContainsPathFalseWrongInstrument", testContextContainsPathFalseWrongInstrument),

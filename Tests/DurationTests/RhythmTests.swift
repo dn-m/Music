@@ -77,7 +77,7 @@ class RhythmTests: XCTestCase {
 
     func testMapEvents() {
         let rhythm = Rhythm(4/>8, [tie(), event(1), tie(), rest(), event(2)])
-        let mapped = rhythm.mapEvents([ { $0 * 2 }, { $0 * 4 }])
+        let mapped = rhythm.mapEvents([{ $0 * 2 }, { $0 * 4 }])
         let expected = Rhythm(4/>8, [tie(), event(2), tie(), rest(), event(8)])
         XCTAssertEqual(mapped, expected)
     }
@@ -87,5 +87,14 @@ class RhythmTests: XCTestCase {
         let mapped = rhythm.replaceEvents(["one","two"])
         let expected = Rhythm(4/>8, [tie(), event("one"), tie(), rest(), event("two")])
         XCTAssertEqual(mapped, expected)
+    }
+
+    func testDuratedEvents() {
+        let rhythm = Rhythm(4/>8, [event(1), tie(), rest(), event(2)])
+        let duratedEvents = rhythm.duratedEvents
+        let durations = duratedEvents.map { $0.0 }
+        let events = duratedEvents.map { $0.1 }
+        XCTAssertEqual(durations, [2/>8, 1/>8])
+        XCTAssertEqual(events, [1,2])
     }
 }

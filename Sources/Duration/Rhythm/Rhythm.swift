@@ -59,14 +59,6 @@ import Math
 // FIXME: Use graffle png instead of ASCII art
 public struct Rhythm <Element> {
 
-    // MARK: - Instance Properties
-
-    /// - Returns: A sequence of tuples containing the `Duration` and `Leaf` information of each
-    /// leaf item.
-    public var duratedLeaves: AnySequence<(Duration,Leaf)> {
-        return AnySequence(zip(durationTree.leaves,leaves))
-    }
-
     /// Hierarchical representation of metrical durations.
     public let durationTree: DurationTree
 
@@ -116,6 +108,58 @@ extension Rhythm {
 extension Rhythm {
 
     // MARK: - Instance Properties
+
+    /// - Returns: An array of the `event` values contained herein.
+    public var events: [Element] {
+        var result: [Element] = []
+        for leaf in leaves {
+            switch leaf {
+            case .continuation:
+                continue
+            case .instance(let absenceOrEvent):
+                switch absenceOrEvent {
+                case .absence:
+                    continue
+                case .event(let event):
+                    result.append(event)
+                }
+            }
+        }
+        return result
+    }
+
+    /// - Returns: A sequence of tuples containing the `Duration` and `Leaf` information of each
+    /// leaf item.
+    public var duratedLeaves: AnySequence<(Duration,Leaf)> {
+        return AnySequence(zip(durationTree.leaves,leaves))
+    }
+
+    /// - Returns: A sequence of tuples containing the `Duration` and `Element` information of
+    /// event.
+    public var duratedEvents: AnySequence<(Duration,Element)> {
+        return AnySequence(zip(lengths,events))
+    }
+
+    /// - Returns: The durational offsets of the event-containing leaves.
+    public var eventOffsets: [Duration] {
+        var result: [Duration] = []
+        var offset: Duration = .zero
+        for (duration, leaf) in duratedLeaves {
+            switch leaf {
+            case .continuation:
+                continue
+            case .instance(let absenceOrEvent):
+                switch absenceOrEvent {
+                case .absence:
+                    continue
+                case .event:
+                    result.append(offset)
+                }
+            }
+            offset += duration
+        }
+        return result
+    }
 
     /// - Returns: The effective duration of each `event`.
     public var lengths: [Duration] {

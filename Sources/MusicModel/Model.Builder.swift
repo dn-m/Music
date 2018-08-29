@@ -59,14 +59,20 @@ extension Model {
 
         // MARK: - Rhythm
 
-        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) {
+        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> UUID {
+            let globalOffset = offset ?? meterCollectionBuilder.offset
             let rhythmIdentifier = UUID()
-            
-            let r = rhythm.map { attrs in
-                return attrs.map { [unowned self] in self.add($0, in: .zero ..< .one) }
+            let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
+            let identifiers: [UUID] = offsetsAndDuratedEvents.map { (localOffset, duratedEvent) in
+                let (duration, attributes) = duratedEvent
+                let localRange = Fraction(localOffset) ..< Fraction(localOffset + duration)
+                let range = localRange.shifted(by: globalOffset)
+                let (eventIdentifier, _) = addEvent(with: attributes, in: range)
+                return eventIdentifier
             }
-
-            // for each event, addEvent with attributes
+            eventsByRhythm[rhythmIdentifier] = identifiers
+            addAttribute(rhythm, withIdentifier: rhythmIdentifier)
+            return rhythmIdentifier
         }
 
         // MARK: - Tempo & Meter
@@ -95,13 +101,13 @@ extension Model {
         public func addEvent(with attributes: [Any], in interval: Range<Fraction>)
             -> (event: UUID, attribute: [UUID])
         {
-            let attributeIdentifiers = attributes.map { add($0, in: interval) }
+            let attributeIdentifiers = attributes.map { [unowned self] in self.add($0, in: interval) }
             let eventIdentifier = createEvent(with: Set(attributeIdentifiers), in: interval)
             return (eventIdentifier, attributeIdentifiers)
         }
 
         public func addEvent(with attributes: [Any]) -> (event: UUID, attributes: [UUID]) {
-            let attributeIdentifiers = attributes.map { add($0) }
+            let attributeIdentifiers = attributes.map { [unowned self] in self.add($0) }
             let eventIdentifier = createEvent(with: Set(attributeIdentifiers))
             return (eventIdentifier, attributeIdentifiers)
         }
