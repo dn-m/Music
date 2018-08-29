@@ -131,7 +131,6 @@ class ModelTests: XCTestCase {
     }
 
     func testManyRhythms() {
-
         let rhythms: [Rhythm<[Any]>] = (0..<100).map { _ in
             let amountEvents = Int.random(in: 1..<16)
             let events: [Rhythm<[Any]>.Leaf] = (0..<amountEvents).map { _ in
@@ -148,8 +147,10 @@ class ModelTests: XCTestCase {
         }
 
         let builder = Model.Builder()
+        var offset: Fraction = .zero
         for rhythm in rhythms {
-            builder.addRhythm(rhythm)
+            builder.addRhythm(rhythm, at: offset)
+            offset += Fraction(rhythm.durationTree.duration)
         }
     }
 }

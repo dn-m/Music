@@ -44,6 +44,10 @@ extension Model {
     ///
     public class Builder {
 
+        public typealias Identifier = Int
+
+        private var identifier: Int = 0
+
         var attributes: [UUID: Any] = [:]
         var events: [UUID: Set<UUID>] = [:]
         var eventsByRhythm: [UUID: [UUID]] = [:]
@@ -227,12 +231,6 @@ extension Model {
 
         public func build() -> Model {
             fatalError()
-//            storeRhythmicEvents()
-//            return Model(
-//                events: events,
-//                meters: makeMeters(),
-//                tempi: makeTempi()
-//            )
         }
 
         private func makeTempi() -> Tempo.Interpolation.Collection {
@@ -243,21 +241,9 @@ extension Model {
             return meterCollectionBuilder.build()
         }
 
-        /// TODO: Needs testing!
-        private func storeRhythmicEvents() {
-//            for (rhythmID, offset) in rhythmOffsets {
-//                let rhythm = values[rhythmID] as! Rhythm<UUID>
-//                let eventIntervals = rhythm.eventIntervals.map { interval in
-//                    return (Fraction(interval.lowerBound) + offset)...(Fraction(interval.upperBound) + offset)
-//                }
-//
-//                for (event,interval) in zip(rhythm.events, eventIntervals) {
-//                    intervals[event] = interval
-//                    for attribute in events[event]! {
-//                        intervals[attribute] = interval
-//                    }
-//                }
-//            }
+        private func makeIdentifier() -> Int {
+            defer { identifier += 1 }
+            return identifier
         }
     }
 
