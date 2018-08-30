@@ -20,8 +20,8 @@ class ModelTests: XCTestCase {
     func testAddEntity() {
         let identifier: Model.Builder.Identifier = 42
         let builder = Model.Builder()
-        builder.addEntity(identifier, ofType: "ID")
-        XCTAssertEqual(builder.entitiesByType, ["ID": [identifier]])
+        builder.addEntity(identifier, ofType: ObjectIdentifier(String.self))
+        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(String.self): [identifier]])
     }
 
     func testCreateEvent() {
@@ -68,9 +68,9 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(60), Articulation.staccato, Dynamic.f]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(with: attributes)
-        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
-        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
-        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Pitch.self)]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Articulation.self)]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Dynamic.self)]!, [ids[2]])
         XCTAssertEqual(builder.events, [event: ids])
     }
 
@@ -79,9 +79,9 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(with: attributes, in: interval)
-        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
-        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
-        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Pitch.self)]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Articulation.self)]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Dynamic.self)]!, [ids[2]])
         XCTAssertEqual(builder.events, [event: ids])
         XCTAssertEqual(builder.entitiesByInterval[interval]!, ids + [event])
     }

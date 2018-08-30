@@ -51,7 +51,7 @@ extension Model {
         var attributes: [Identifier: Any] = [:]
         var events: [Identifier: [Identifier]] = [:]
         var eventsByRhythm: [Identifier: [Identifier]] = [:]
-        var entitiesByType: [String: [Identifier]] = [:]
+        var entitiesByType: [ObjectIdentifier: [Identifier]] = [:]
         var entitiesByInterval: [Range<Fraction>: [Identifier]] = [:]
         let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
         let meterCollectionBuilder = MeterCollectionBuilder()
@@ -150,84 +150,17 @@ extension Model {
         public func createEvent() -> Identifier {
             let identifier = makeIdentifier()
             events[identifier] = []
-            addEntity(identifier, ofType: "EventContainer")
             return identifier
         }
 
         func addAttribute(_ attribute: Any, withIdentifier identifier: Identifier) {
             attributes[identifier] = attribute
-            addEntity(identifier, ofType: "\(type(of: attribute))")
+            addEntity(identifier, ofType: ObjectIdentifier(type(of: attribute)))
         }
 
-        func addEntity(_ identifier: Identifier, ofType type: String) {
+        func addEntity(_ identifier: Identifier, ofType type: ObjectIdentifier) {
             entitiesByType.safelyAppend(identifier, forKey: type)
         }
-        
-//        /// Add the given `rhythm` at the given `offset`, zipping the given `events`, with
-//        /// the given `performanceContext`.
-//        ///
-//        /// - TODO: Interrogate `Rhythm<Int> type`
-//        /// - TODO: Refactor (need to wrap up clusters of concern)
-//        ///
-//        @discardableResult public func add(
-//            _ rhythm: Rhythm<Int>,
-//            at offset: Fraction,
-//            with events: [[NamedAttribute]],
-//            and performanceContext: PerformanceContext.Path = PerformanceContext.Path()
-//        ) -> Builder
-//        {
-//            guard events.count == rhythm.leaves.count else {
-//                fatalError("Incompatible rhythm and events!")
-//            }
-//
-//            // Create UUIDs for each event in the given `rhythm`.
-//            let rhythm = rhythm.map { _ in UUID() }
-//
-//            // Store rhythm
-//            let rhythmID = createEntity(for: rhythm, label: "rhythm")
-//            rhythmOffsets[rhythmID] = offset
-//
-//            // Store each event
-//            var events = events
-//            for eventEntity in rhythm.events {
-//
-//                // Create event
-//                self.events[eventEntity] = createEntities(for: events.remove(at: 0))
-//            }
-//
-//            return self
-//        }
-//
-//        /// Add the named attribute values for a given `event`, performed with the
-//        /// given `performanceContext`, in the given `interval`.
-//        @discardableResult public func add(
-//            _ event: [NamedAttribute],
-//            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-//            in interval: ClosedRange<Fraction>? = nil
-//        ) -> Builder
-//        {
-//            let entities = event.map { namedAttribute in
-//                createEntity(for: namedAttribute, with: performanceContext, in: interval)
-//            }
-//            createEvent(for: entities)
-//            return self
-//        }
-//
-//        /// Add the given `value` with the given `label`, performed with the given
-//        /// `performanceContext`, in the given `interval`.
-//        @discardableResult public func add(
-//            _ value: Any,
-//            label: String,
-//            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-//            in interval: ClosedRange<Fraction>? = nil
-//        ) -> Builder
-//        {
-//            createEntity(for: value, label: label, with: performanceContext, in: interval)
-//            return self
-//        }
-//
-
-
 
         public func build() -> Model {
             fatalError()
