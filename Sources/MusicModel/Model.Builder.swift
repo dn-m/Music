@@ -49,10 +49,10 @@ extension Model {
         private var identifier: Int = 0
 
         var attributes: [Identifier: Any] = [:]
-        var events: [Identifier: Set<Identifier>] = [:]
+        var events: [Identifier: [Identifier]] = [:]
         var eventsByRhythm: [Identifier: [Identifier]] = [:]
-        var entitiesByType: [String: Set<Identifier>] = [:]
-        var entitiesByInterval: [Range<Fraction>: Set<Identifier>] = [:]
+        var entitiesByType: [String: [Identifier]] = [:]
+        var entitiesByInterval: [Range<Fraction>: [Identifier]] = [:]
         let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
         let meterCollectionBuilder = MeterCollectionBuilder()
 
@@ -106,20 +106,20 @@ extension Model {
             -> (event: Identifier, attribute: [Identifier])
         {
             let attributeIdentifiers = attributes.map { add($0, in: interval) }
-            let eventIdentifier = createEvent(with: Set(attributeIdentifiers), in: interval)
+            let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
             return (eventIdentifier, attributeIdentifiers)
         }
 
         public func addEvent(with attributes: [Any]) -> (event: Identifier, attributes: [Identifier]) {
             let attributeIdentifiers = attributes.map { add($0) }
-            let eventIdentifier = createEvent(with: Set(attributeIdentifiers))
+            let eventIdentifier = createEvent(with: attributeIdentifiers)
             return (eventIdentifier, attributeIdentifiers)
         }
 
         public func add(_ attribute: Any, in interval: Range<Fraction>) -> Identifier {
             let identifier = makeIdentifier()
             addAttribute(attribute, withIdentifier: identifier)
-            entitiesByInterval.safelyInsert(identifier, forKey: interval)
+            entitiesByInterval.safelyAppend(identifier, forKey: interval)
             return identifier
         }
 
@@ -129,21 +129,21 @@ extension Model {
             return identifier
         }
 
-        public func createEvent(with entities: Set<Identifier>, in interval: Range<Fraction>) -> Identifier {
+        public func createEvent(with entities: [Identifier], in interval: Range<Fraction>) -> Identifier {
             let identifier = createEvent(in: interval)
-            events.safelyFormUnion(entities, forKey: identifier)
+            events.safelyAppend(contentsOf: entities, forKey: identifier)
             return identifier
         }
 
-        public func createEvent(with entities: Set<Identifier>) -> Identifier {
+        public func createEvent(with entities: [Identifier]) -> Identifier {
             let identifier = createEvent()
-            events.safelyFormUnion(entities, forKey: identifier)
+            events.safelyAppend(contentsOf: entities, forKey: identifier)
             return identifier
         }
 
         public func createEvent(in interval: Range<Fraction>) -> Identifier {
             let identifier = createEvent()
-            entitiesByInterval.safelyInsert(identifier, forKey: interval)
+            entitiesByInterval.safelyAppend(identifier, forKey: interval)
             return identifier
         }
 
@@ -160,7 +160,7 @@ extension Model {
         }
 
         func addEntity(_ identifier: Identifier, ofType type: String) {
-            entitiesByType.safelyInsert(identifier, forKey: type)
+            entitiesByType.safelyAppend(identifier, forKey: type)
         }
         
 //        /// Add the given `rhythm` at the given `offset`, zipping the given `events`, with

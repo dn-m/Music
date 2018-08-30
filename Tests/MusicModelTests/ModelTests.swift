@@ -41,7 +41,7 @@ class ModelTests: XCTestCase {
     }
 
     func testCreateEventWithEntities() {
-        let entities: Set = [0,1,2]
+        let entities = [0,1,2]
         let builder = Model.Builder()
         let identifier = builder.createEvent(with: entities)
         XCTAssertEqual(builder.events, [identifier: entities])
@@ -71,7 +71,7 @@ class ModelTests: XCTestCase {
         XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
         XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
         XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
-        XCTAssertEqual(builder.events, [event: Set(ids)])
+        XCTAssertEqual(builder.events, [event: ids])
     }
 
     func testAddEventWithAttributesInInterval() {
@@ -82,8 +82,8 @@ class ModelTests: XCTestCase {
         XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
         XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
         XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
-        XCTAssertEqual(builder.events, [event: Set(ids)])
-        XCTAssertEqual(builder.entitiesByInterval[interval]!, Set(ids + [event]))
+        XCTAssertEqual(builder.events, [event: ids])
+        XCTAssertEqual(builder.entitiesByInterval[interval]!, ids + [event])
     }
 
     // MARK: - Meter and Tempo
@@ -131,7 +131,7 @@ class ModelTests: XCTestCase {
     }
 
     func testManyRhythms() {
-        let rhythms: [Rhythm<[Any]>] = (0..<1000).map { _ in
+        let rhythms: [Rhythm<[Any]>] = (0..<100).map { _ in
             let amountEvents = Int.random(in: 1..<16)
             let events: [Rhythm<[Any]>.Leaf] = (0..<amountEvents).map { _ in
                 let amountPitches = Int.random(in: 1..<16)
@@ -146,11 +146,13 @@ class ModelTests: XCTestCase {
             return Rhythm(duration,events)
         }
 
-        let builder = Model.Builder()
-        var offset: Fraction = .zero
-        for rhythm in rhythms {
-            builder.addRhythm(rhythm, at: offset)
-            offset += Fraction(rhythm.durationTree.duration)
+        measure {
+            let builder = Model.Builder()
+            var offset: Fraction = .zero
+            for rhythm in rhythms {
+                builder.addRhythm(rhythm, at: offset)
+                offset += Fraction(rhythm.durationTree.duration)
+            }
         }
     }
 }
