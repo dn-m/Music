@@ -131,13 +131,13 @@ extension Model {
 
         public func createEvent(with entities: [Identifier], in interval: Range<Fraction>) -> Identifier {
             let identifier = createEvent(in: interval)
-            events.safelyAppend(contentsOf: entities, forKey: identifier)
+            events[identifier] = entities
             return identifier
         }
 
         public func createEvent(with entities: [Identifier]) -> Identifier {
             let identifier = createEvent()
-            events.safelyAppend(contentsOf: entities, forKey: identifier)
+            events[identifier] = entities
             return identifier
         }
 

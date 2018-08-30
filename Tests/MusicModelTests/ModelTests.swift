@@ -28,7 +28,6 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         let identifier = builder.createEvent()
         XCTAssertEqual(builder.events, [identifier: []])
-        XCTAssertEqual(builder.entitiesByType, ["EventContainer": [identifier]])
     }
 
     func testCreateEventInInterval() {
@@ -36,7 +35,6 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         let identifier = builder.createEvent(in: interval)
         XCTAssertEqual(builder.events, [identifier: []])
-        XCTAssertEqual(builder.entitiesByType, ["EventContainer": [identifier]])
         XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
     }
 
@@ -45,14 +43,13 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         let identifier = builder.createEvent(with: entities)
         XCTAssertEqual(builder.events, [identifier: entities])
-        XCTAssertEqual(builder.entitiesByType, ["EventContainer": [identifier]])
     }
 
     func testAddAttribute() {
         let builder = Model.Builder()
         let identifier = builder.add(5)
         XCTAssertEqual(builder.events, [:])
-        XCTAssertEqual(builder.entitiesByType, ["Int": [identifier]])
+        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(Int.self): [identifier]])
     }
 
     func testAddAttributeInInterval() {
@@ -60,7 +57,7 @@ class ModelTests: XCTestCase {
         let pitch: Pitch = 60
         let builder = Model.Builder()
         let identifier = builder.add(pitch, in: interval)
-        XCTAssertEqual(builder.entitiesByType, ["Pitch": [identifier]])
+        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(Pitch.self): [identifier]])
         XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
     }
 
@@ -131,10 +128,10 @@ class ModelTests: XCTestCase {
     }
 
     func testManyRhythms() {
-        let rhythms: [Rhythm<[Any]>] = (0..<100).map { _ in
-            let amountEvents = Int.random(in: 1..<16)
+        let rhythms: [Rhythm<[Any]>] = (0..<1000).map { _ in
+            let amountEvents = 10
             let events: [Rhythm<[Any]>.Leaf] = (0..<amountEvents).map { _ in
-                let amountPitches = Int.random(in: 1..<16)
+                let amountPitches = 3
                 let pitches: [Pitch] = (0..<amountPitches).map { _ in
                     let nn = Double.random(in: 48..<74)
                     return Pitch(nn)
@@ -146,13 +143,11 @@ class ModelTests: XCTestCase {
             return Rhythm(duration,events)
         }
 
-        measure {
-            let builder = Model.Builder()
-            var offset: Fraction = .zero
-            for rhythm in rhythms {
-                builder.addRhythm(rhythm, at: offset)
-                offset += Fraction(rhythm.durationTree.duration)
-            }
+        let builder = Model.Builder()
+        var offset: Fraction = .zero
+        for rhythm in rhythms {
+            builder.addRhythm(rhythm, at: offset)
+            offset += Fraction(rhythm.durationTree.duration)
         }
     }
 }
