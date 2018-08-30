@@ -131,7 +131,7 @@ class ModelTests: XCTestCase {
     }
 
     func testManyRhythms() {
-        let rhythms: [Rhythm<[Any]>] = (0..<100).map { _ in
+        let rhythms: [Rhythm<[Any]>] = (0..<1000).map { _ in
             let amountEvents = Int.random(in: 1..<16)
             let events: [Rhythm<[Any]>.Leaf] = (0..<amountEvents).map { _ in
                 let amountPitches = Int.random(in: 1..<16)

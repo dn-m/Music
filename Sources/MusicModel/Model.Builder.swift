@@ -65,7 +65,7 @@ extension Model {
 
         public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> Identifier {
             let globalOffset = offset ?? meterCollectionBuilder.offset
-            let rhythmIdentifier = Identifier()
+            let rhythmIdentifier = makeIdentifier()
             let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
             let identifiers: [Identifier] = offsetsAndDuratedEvents.map { (localOffset, duratedEvent) in
                 let (duration, attributes) = duratedEvent
