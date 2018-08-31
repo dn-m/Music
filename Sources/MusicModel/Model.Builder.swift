@@ -63,6 +63,7 @@ extension Model {
 
         // MARK: - Rhythm
 
+        @discardableResult
         public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> Identifier {
             let globalOffset = offset ?? meterCollectionBuilder.offset
             let rhythmIdentifier = makeIdentifier()
@@ -83,7 +84,8 @@ extension Model {
 
         /// Add the given `tempo` at the given `offset`, and whether or not it shall be
         /// prepared to interpolate to the next given tempo.
-        @discardableResult public func addTempo(
+        @discardableResult
+        public func addTempo(
             _ tempo: Tempo,
             at offset: Fraction? = nil,
             easing: Tempo.Interpolation.Easing? = nil
@@ -95,7 +97,8 @@ extension Model {
         }
 
         /// Add the given `meter`.
-        @discardableResult public func addMeter(_ meter: Meter) -> Builder {
+        @discardableResult
+        public func addMeter(_ meter: Meter) -> Builder {
             meterCollectionBuilder.add(meter)
             return self
         }
