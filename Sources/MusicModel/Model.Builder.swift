@@ -13,12 +13,6 @@ import Math
 import Pitch
 import Duration
 
-extension Identifier {
-    func converted <T> () -> Identifier<T> {
-        return Identifier<T>(0)
-    }
-}
-
 public typealias Event = [Any]
 public typealias Attribute = Any
 public typealias RhythmID = Identifier<Rhythm<Event>>
