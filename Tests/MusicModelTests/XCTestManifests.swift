@@ -33,15 +33,15 @@ extension ModelTests {
 
 extension PerformanceContextTests {
     static let __allTests = [
-        ("testContextContainsPathFalseWrongInstrument", testContextContainsPathFalseWrongInstrument),
-        ("testContextContainsPathFalseWrongVoice", testContextContainsPathFalseWrongVoice),
-        ("testContextContainsPathFalseWrongVoiceAndInstrument", testContextContainsPathFalseWrongVoiceAndInstrument),
-        ("testContextContainsPathTrue", testContextContainsPathTrue),
-        ("testInstrumentInitArrayOfVoiceIdentifiers", testInstrumentInitArrayOfVoiceIdentifiers),
-        ("testInstrumentInitEmpty", testInstrumentInitEmpty),
-        ("testPerformerHasInstrumentWithIdentifierFalse", testPerformerHasInstrumentWithIdentifierFalse),
-        ("testPerformerHasInstrumentWithIdentifierTrue", testPerformerHasInstrumentWithIdentifierTrue),
-        ("testPerformerInitArrayOfInstruments", testPerformerInitArrayOfInstruments),
+//        ("testContextContainsPathFalseWrongInstrument", testContextContainsPathFalseWrongInstrument),
+//        ("testContextContainsPathFalseWrongVoice", testContextContainsPathFalseWrongVoice),
+//        ("testContextContainsPathFalseWrongVoiceAndInstrument", testContextContainsPathFalseWrongVoiceAndInstrument),
+//        ("testContextContainsPathTrue", testContextContainsPathTrue),
+//        ("testInstrumentInitArrayOfVoiceIdentifiers", testInstrumentInitArrayOfVoiceIdentifiers),
+//        ("testInstrumentInitEmpty", testInstrumentInitEmpty),
+//        ("testPerformerHasInstrumentWithIdentifierFalse", testPerformerHasInstrumentWithIdentifierFalse),
+//        ("testPerformerHasInstrumentWithIdentifierTrue", testPerformerHasInstrumentWithIdentifierTrue),
+//        ("testPerformerInitArrayOfInstruments", testPerformerInitArrayOfInstruments),
         ("testVoiceInit", testVoiceInit),
     ]
 }

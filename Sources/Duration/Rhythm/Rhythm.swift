@@ -162,8 +162,9 @@ extension Rhythm {
     }
 
     /// - Returns: The effective duration of each `event`.
+    @inlinable
     public var lengths: [Duration] {
-        return merge(duratedLeaves, into: [], tied: nil)
+        return merge(duratedLeaves)
     }
 }
 
@@ -238,40 +239,36 @@ func leafMap <T,U> (_ leaf: Rhythm<T>.Leaf, _ transform: (T) -> U) -> Rhythm<U>.
 
 /// - Returns: The `Duration` values of the leaves of the given `rhythms`, by merging
 /// `tied` leaves to their predecesors.
-//
-// FIXME: Make extension over `Sequence where Element == (Duration, Rhythm<T>.Leaf) when
-// Swift supported parameterized extensions.
+@inlinable
 public func lengths <S,T> (of rhythms: S) -> [Duration] where S: Sequence, S.Element == Rhythm<T> {
-    return merge(
-        rhythms.flatMap { rhythm in zip(rhythm.durationTree.leaves,rhythm.leaves) },
-        into: [],
-        tied: nil
-    )
+    return merge(rhythms.flatMap { rhythm in zip(rhythm.durationTree.leaves,rhythm.leaves) })
 }
 
-// FIXME: Consider using `inout [Duration]` for `accum` re: performance.
-func merge <S,T> (_ leaves: S, into accum: [Duration], tied: Duration?) -> [Duration]
+
+// FIXME: Use Generalize Existentials when supported by Swift.
+@usableFromInline
+func merge <S,T> (_ leaves: S) -> [Duration]
     where S: Sequence, S.Element == (Duration, Rhythm<T>.Leaf)
 {
-    guard let (duratedLeaf, remaining) = leaves.destructured else { return accum + tied }
-    let (duration, leaf) = duratedLeaf
-    switch leaf {
-    case .continuation:
-        let tied = (tied ?? .zero) + duration
-        return merge(remaining, into: accum, tied: tied)
-    case .instance(let absenceOrEvent):
-        let newAccum: [Duration]
-        let newTied: Duration?
-        switch absenceOrEvent {
-        case .absence:
-            newAccum = accum + tied + duration
-            newTied = nil
-        case .event:
-            newAccum = accum + tied
-            newTied = duration
+    var result: [Duration] = []
+    var tied: Duration?
+    for (duration, leaf) in leaves {
+        switch leaf {
+        case .continuation:
+            tied = (tied ?? .zero) + duration
+        case .instance(let absenceOrEvent):
+            switch absenceOrEvent {
+            case .absence:
+                if let tied = tied { result += [tied, duration] }
+                tied = nil
+            case .event:
+                if let tied = tied { result += [tied] }
+                tied = duration
+            }
         }
-        return merge(remaining, into: newAccum, tied: newTied)
     }
+    if let tied = tied { result += [tied] }
+    return result
 }
 
 /// - Returns: `Rhythm` with the given `DurationTree` and `Rhythm.Leaf.Kind` values.
