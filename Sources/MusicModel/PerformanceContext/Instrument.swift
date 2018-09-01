@@ -6,8 +6,15 @@
 //
 //
 
+import DataStructures
+
+public typealias InstrumentID = Identifier<Instrument>
+
 public struct Instrument {
-    let name: String
+    public let name: String
+    public init(name: String) {
+        self.name = name
+    }
 }
 
 extension Instrument: Equatable { }

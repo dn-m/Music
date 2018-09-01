@@ -18,7 +18,7 @@ import Dynamics
 class ModelTests: XCTestCase {
 
     func testAddEntity() {
-        let identifier: Model.Builder.Identifier = 42
+        let identifier: AttributeID = 42
         let builder = Model.Builder()
         builder.addEntity(identifier, ofType: ObjectIdentifier(String.self))
         XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(String.self): [identifier]])
@@ -35,11 +35,10 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         let identifier = builder.createEvent(in: interval)
         XCTAssertEqual(builder.events, [identifier: []])
-        XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
     }
 
     func testCreateEventWithEntities() {
-        let entities = [0,1,2]
+        let entities: [AttributeID] = [0,1,2]
         let builder = Model.Builder()
         let identifier = builder.createEvent(with: entities)
         XCTAssertEqual(builder.events, [identifier: entities])
@@ -80,7 +79,6 @@ class ModelTests: XCTestCase {
         XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Articulation.self)]!, [ids[1]])
         XCTAssertEqual(builder.entitiesByType[ObjectIdentifier(Dynamic.self)]!, [ids[2]])
         XCTAssertEqual(builder.events, [event: ids])
-        XCTAssertEqual(builder.entitiesByInterval[interval]!, ids + [event])
     }
 
     // MARK: - Meter and Tempo
@@ -124,7 +122,20 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         let rhythmID = builder.addRhythm(rhythm)
         XCTAssertNotNil(builder.eventsByRhythm[rhythmID])
-        XCTAssertNotNil(builder.attributes[rhythmID] as? Rhythm<[Any]>)
+    }
+
+    func testHelloWorld() {
+        let pitch: Pitch = 60
+        let articulation: Articulation = .tenuto
+        let dynamic: Dynamic = .fff
+        let note = Rhythm<Event>(1/>1, [event([pitch, dynamic, articulation])])
+        let meter = Meter(4,4)
+        let tempo = Tempo(120, subdivision: 4)
+        let builder = Model.Builder()
+        builder.addMeter(meter)
+        builder.addTempo(tempo)
+        _ = builder.addRhythm(note)
+        let _ = builder.build()
     }
 
     func testManyRhythms() {
@@ -146,7 +157,7 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         var offset: Fraction = .zero
         for rhythm in rhythms {
-            builder.addRhythm(rhythm, at: offset)
+            _ = builder.addRhythm(rhythm, at: offset)
             offset += Fraction(rhythm.durationTree.duration)
         }
     }
