@@ -24,7 +24,6 @@ public final class Model {
     public var entitiesByInterval: [Range<Fraction>: [AttributeID]] = [:]
     public var entitiesByType: [ObjectIdentifier: [AttributeID]] = [:]
 
-
     public init(
         performanceContext: PerformanceContext,
         tempi: Tempo.Interpolation.Collection,

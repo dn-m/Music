@@ -57,6 +57,8 @@ extension Model {
         var attributes: [AttributeID: Attribute] = [:]
         var events: [EventID: [AttributeID]] = [:]
         var eventsByRhythm: [RhythmID: [EventID]] = [:]
+
+        // FIXME: Use BinarySearchTree (then IntervalTree)
         var entitiesByInterval: [Range<Fraction>: [AttributeID]] = [:]
         var entitiesByType: [ObjectIdentifier: [AttributeID]] = [:]
 
