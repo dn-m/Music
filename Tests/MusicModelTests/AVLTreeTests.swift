@@ -44,16 +44,12 @@ class AVLTreeTests: XCTestCase {
 
     func testManyValuesIncreasing() {
         let values = (0..<100_000).map { ($0,$0) }
-        measure {
-            let _ = AVLTree(values)
-        }
+        let _ = AVLTree(values)
     }
 
     func testManyValuesDecreasing() {
         let values = (0..<100_000).reversed().map { ($0,$0) }
-        measure {
-            let _ = AVLTree(values)
-        }
+        let _ = AVLTree(values)
     }
 
 

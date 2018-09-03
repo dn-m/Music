@@ -7,6 +7,7 @@
 
 import Destructure
 
+/// Copy-on-write self-balancing binary search tree.
 public struct AVLTree <Key: Comparable, Value> {
 
     // MARK: - Instance Properties
@@ -18,6 +19,8 @@ extension AVLTree {
 
     // MARK: - Nested Types
 
+    /// Node for an `AVLTree` which contains a `key`, and `value`, along with the `left` and `right`
+    /// child nodes (if they exist), as well as the its `height`.
     final class Node {
         var key: Key
         var value: Value
@@ -41,7 +44,7 @@ extension AVLTree {
     }
 
     public init(key: Key, value: Value) {
-        self.root = Node(key: key, value: value/*, height: 0*/)
+        self.root = Node(key: key, value: value)
     }
 
     public init <S> (_ sequence: S) where S: Sequence, S.Element == (Key,Value) {
@@ -98,6 +101,10 @@ extension AVLTree {
         } else {
             return node
         }
+        return balance(node, with: key)
+    }
+
+    static func balance(_ node: Node, with key: Key) -> Node {
         node.updateHeight()
         let balance = balanceFactor(node.left, node.right)
         if balance > 1 && key < node.left!.key {
@@ -116,11 +123,11 @@ extension AVLTree {
 
     // TODO: removeValue(forKey key: Key) -> Node?
 
-    private static func balanceFactor(_ left: Node?, _ right: Node?) -> Int {
+    static func balanceFactor(_ left: Node?, _ right: Node?) -> Int {
         return (left?.height ?? -1) - (right?.height ?? -1)
     }
 
-    private static func rotateLeft(_ node: Node) -> Node {
+    static func rotateLeft(_ node: Node) -> Node {
         guard let newRoot = node.right else { return node }
         node.right = newRoot.left
         newRoot.left = node
@@ -129,7 +136,7 @@ extension AVLTree {
         return newRoot
     }
 
-    private static func rotateRight(_ node: Node) -> Node {
+    static func rotateRight(_ node: Node) -> Node {
         guard let newRoot = node.left else { return node }
         node.left = newRoot.right
         newRoot.right = node
@@ -165,4 +172,3 @@ extension AVLTree.Node: Equatable where Value: Equatable {
 }
 
 extension AVLTree: Equatable where Value: Equatable { }
-

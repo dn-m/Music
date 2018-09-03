@@ -5,9 +5,9 @@
         "package": "Math",
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
-          "branch": "refine-power-of-two",
-          "revision": "107d1d3ceb588be4174fbeff99e7f9c27a3ba3f9",
-          "version": null
+          "branch": null,
+          "revision": "075ebb5a934251ed7acbe4feace925ed7e322d0f",
+          "version": "0.6.0"
         }
       },
       {
@@ -23,9 +23,9 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "master",
+          "branch": null,
           "revision": "88fbb7dcb85a0b18aad4ee772b3f9c9dd7aacee2",
-          "version": null
+          "version": "0.14.1"
         }
       }
     ]
