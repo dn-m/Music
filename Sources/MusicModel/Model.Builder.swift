@@ -70,16 +70,20 @@ extension Model {
 
         // MARK: - Performance Context
 
+        /// Adds the given `performer` to the performance context.
         public func addPerformer(_ performer: Performer) -> Identifier<Performer> {
             return performanceContextBuilder.addPerformer(performer)
         }
 
+        /// Adds the given `instrument` to the performance context.
         public func addInstrument(_ instrument: Instrument) -> Identifier<Instrument> {
             return performanceContextBuilder.addInstrument(instrument)
         }
 
         // MARK: - Rhythm
 
+        /// Adds the given `rhythm` at the given `offset`, if it exists. If no `offset` is given,
+        /// the `rhythm` will be added at the current offset of the current meter.
         public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> RhythmID {
             let globalOffset = offset ?? meterCollectionBuilder.offset
             let rhythmIdentifier: Identifier<Rhythm<Event>> = makeRhythmIdentifier()
@@ -120,8 +124,11 @@ extension Model {
 
         // MARK: - Events and Attributes
 
+        /// Adds an event with the given `attributes` in the given `interval`.
+        ///
+        /// - Returns: The identifiers for the event and the attributes.
         public func addEvent(with attributes: [Attribute], in interval: Range<Fraction>)
-            -> (event: Identifier<Event>, attribute: [AttributeID])
+            -> (event: EventID, attributes: [AttributeID])
         {
             let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
@@ -130,53 +137,74 @@ extension Model {
             return (eventIdentifier, attributeIdentifiers)
         }
 
+        /// Adds an event with the given `attributes`.
+        ///
+        /// - Returns: The identifiers for the event and the attributes.
         public func addEvent(with attributes: [Any]) -> (event: EventID, attributes: [AttributeID]) {
             let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: attributeIdentifiers)
             return (eventIdentifier, attributeIdentifiers)
         }
 
+        /// Adds the given `attribute`.
+        ///
+        //// - Returns: The identifier for the attribute.
         public func add(_ attribute: Any) -> AttributeID {
             let identifier = makeAttributeIdentifier()
             addAttribute(attribute, withIdentifier: identifier)
             return identifier
         }
 
-        public func createEvent(with entities: [AttributeID], in interval: Range<Fraction>)
+        /// Creates an event with the given `attributes` in the given `interval`.
+        ///
+        /// - Returns: The identifier for the event.
+        public func createEvent(with attributes: [AttributeID], in interval: Range<Fraction>)
             -> EventID
         {
             let identifier = createEvent(in: interval)
-            events[identifier] = entities
-            //entities.forEach { _ = add($0, in: interval) }
+            events[identifier] = attributes
             return identifier
         }
 
-        public func createEvent(with entities: [AttributeID]) -> EventID {
+        /// Creates an event with the given `attributes`.
+        ///
+        /// - Returns: The identifier for the event.
+        public func createEvent(with attributes: [AttributeID]) -> EventID {
             let identifier = createEvent()
-            events[identifier] = entities
+            events[identifier] = attributes
             return identifier
         }
 
+        /// Creates and event in the given `interval`.
+        ///
+        //// - Returns: The identifier for the event.
         public func createEvent(in interval: Range<Fraction>) -> EventID {
             let identifier = createEvent()
             return identifier
         }
 
+        /// Creates an event.
+        ///
+        /// - Returns: The identifier for the event.
         public func createEvent() -> EventID {
             let identifier = makeEventIdentifier()
             events[identifier] = []
             return identifier
         }
 
-        func addAttribute(_ attribute: Any, withIdentifier identifier: Identifier<Any>) {
+        /// Adds the given `attribute` with the given `identifier`.
+        func addAttribute(_ attribute: Any, withIdentifier identifier: AttributeID) {
             attributes[identifier] = attribute
             addEntity(identifier, ofType: "\(type(of: attribute))")
         }
 
-        func addEntity(_ identifier: Identifier<Any>, ofType type: String) {
+        /// Adds an entity with the given `identifier` with the given string representaiton of
+        /// its `type`.
+        func addEntity(_ identifier: AttributeID, ofType type: String) {
             entitiesByType[type, default: []].append(identifier)
         }
 
+        /// - Returns: A completed `Model` for your enjoyment.
         public func build() -> Model {
             return Model(
                 performanceContext: makePerformanceContext(),
@@ -202,7 +230,7 @@ extension Model {
             return performanceContextBuilder.build()
         }
 
-        private func makeEventIdentifier() -> Identifier<Event> {
+        private func makeEventIdentifier() -> EventID {
             defer { eventIdentifier += 1 }
             return .init(eventIdentifier)
         }
@@ -212,7 +240,7 @@ extension Model {
             return .init(rhythmIdentifier)
         }
 
-        private func makeAttributeIdentifier() -> Identifier<Any> {
+        private func makeAttributeIdentifier() -> AttributeID {
             defer { attributeIdentifier += 1 }
             return .init(attributeIdentifier)
         }
@@ -231,6 +259,10 @@ enum AttributionError: Swift.Error {
 
 extension Rhythm where Element: RangeReplaceableCollection, Element.Element == Any {
 
+    /// Add the given `attribute` at the given `index` of leaves.
+    ///
+    /// If the leaf is a tie or rest, an event is injected with the given `attribute`. Otherwise,
+    /// the `attribute` is added to the extant list of attributes.
     mutating func add(_ attribute: Any, at index: Int) {
         switch leaves[index].context {
         case .continuation:
