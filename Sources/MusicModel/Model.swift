@@ -6,7 +6,6 @@
 //
 //
 
-import Foundation
 import Algebra
 import DataStructures
 import Math
@@ -18,11 +17,11 @@ public final class Model {
     public var performanceContext: PerformanceContext
     public let tempi: Tempo.Interpolation.Collection
     public let meters: Meter.Collection
-    public var attributes: [AttributeID: Attribute] = [:]
-    public var events: [EventID: [AttributeID]] = [:]
-    public var eventsByRhythm: [RhythmID: [EventID]] = [:]
+    public var attributes: [AttributeID: Attribute]
+    public var events: [EventID: [AttributeID]]
+    public var eventsByRhythm: [RhythmID: [EventID]]
     public var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
-    public var entitiesByType: [ObjectIdentifier: [AttributeID]] = [:]
+    public var entitiesByType: [String: [AttributeID]] = [:]
 
     public init(
         performanceContext: PerformanceContext,
@@ -32,7 +31,7 @@ public final class Model {
         events: [EventID: [AttributeID]],
         eventsByRhythm: [RhythmID: [EventID]],
         entitiesByInterval: IntervalSearchTree<Fraction,[AttributeID]>,
-        entitiesByType: [ObjectIdentifier: [AttributeID]]
+        entitiesByType: [String: [AttributeID]]
     )
     {
         self.performanceContext = performanceContext
@@ -44,7 +43,6 @@ public final class Model {
         self.entitiesByInterval = entitiesByInterval
         self.entitiesByType = entitiesByType
     }
-
 }
 
 extension Model: CustomStringConvertible {

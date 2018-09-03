@@ -35,7 +35,7 @@ extension AVLTree {
 extension AVLTree {
 
     // MARK: - Initializers
-    
+
     init(root: Node) {
         self.root = root
     }
@@ -86,6 +86,8 @@ extension AVLTree {
         }
     }
 
+    // FIXME: If Value is RangeRepleceableCollection (or Additive?), instead of returning `node`
+    // upon interval match, concatenate incoming `value` with extant value.
     @discardableResult
     private static func insert(_ value: Value, forKey key: Key, into node: Node? = nil) -> Node? {
         guard let node = node else { return Node(key: key, value: value) }
@@ -111,6 +113,8 @@ extension AVLTree {
         }
         return node
     }
+
+    // TODO: removeValue(forKey key: Key) -> Node?
 
     private static func balanceFactor(_ left: Node?, _ right: Node?) -> Int {
         return (left?.height ?? -1) - (right?.height ?? -1)

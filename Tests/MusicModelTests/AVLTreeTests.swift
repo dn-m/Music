@@ -42,18 +42,23 @@ class AVLTreeTests: XCTestCase {
         XCTAssertEqual(tree, expected)
     }
 
-    func testManyValuesPresorted() {
-        let values = (0..<10_000).map { ($0,$0) }
-        let _ = AVLTree(values)
+    func testManyValuesIncreasing() {
+        let values = (0..<100_000).map { ($0,$0) }
+        measure {
+            let _ = AVLTree(values)
+        }
     }
+
+    func testManyValuesDecreasing() {
+        let values = (0..<100_000).reversed().map { ($0,$0) }
+        measure {
+            let _ = AVLTree(values)
+        }
+    }
+
 
     func testManyValuesRandom() {
-        let values = (0..<10_000).map { ($0,$0) }.shuffled()
+        let values = (0..<1_000_000).map { ($0,$0) }.shuffled()
         let _ = AVLTree(values)
-    }
-
-    func testSortedArray() {
-        let values = (0..<10_000).shuffled()
-        let _ = SortedArray(values)
     }
 }

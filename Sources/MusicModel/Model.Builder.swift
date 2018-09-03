@@ -26,15 +26,6 @@ extension Array: Additive {
     }
 }
 
-
-// FIXME: Rename!
-public struct ISTNode <Metric: Comparable, Value> {
-    let interval: Range<Metric>
-    let value: Value
-}
-
-public typealias IntervalSearchTree<Metric: Comparable, Value> = AVLTree<Metric,ISTNode<Metric,Value>>
-
 extension Model {
 
     public class Builder {
@@ -43,14 +34,28 @@ extension Model {
         private var eventIdentifier: Int = 0
         private var rhythmIdentifier: Int = 0
 
+        /// All attributes stored by their unique identifier.
+        ///
+        /// The attributes here are the raw values of the musical model (`Pitch`, `Dynamic`, etc.)
         var attributes: [AttributeID: Attribute] = [:]
+
+        /// All of the identifiers of attributes stored by the `ObjectIdentifier` representing
+        /// their type.
+        ///
+        // FIXME: There must be a more efficient way to store entities in a way wherein the type
+        // can be reified. The `String` init is not efficient, and doesn't really carry with it
+        // its own type information.
+        var entitiesByType: [String: [AttributeID]] = [:]
+
+        /// All of the identifiers of the attributes contained in a single event.
         var events: [EventID: [AttributeID]] = [:]
+
+        /// All of the identifiers of the events contained in a single rhythm.
         var eventsByRhythm: [RhythmID: [EventID]] = [:]
 
-        // FIXME: Use BinarySearchTree (then IntervalTree)
-        //var entitiesByInterval: IntervalSearchTree<Fraction,[AttributeID]> = .empty
+        /// An `IntervalSearchTree` with all of the identifiers of the attributes occurring in a
+        /// a given `Fraction` interval.
         var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
-        var entitiesByType: [ObjectIdentifier: [AttributeID]] = [:]
 
         // MARK: - Builders
 
@@ -131,13 +136,6 @@ extension Model {
             return (eventIdentifier, attributeIdentifiers)
         }
 
-//        public func add(_ attribute: Any, in interval: Range<Fraction>) -> AttributeID {
-//            let identifier = makeAttributeIdentifier()
-//            addAttribute(attribute, withIdentifier: identifier)
-//            //entitiesByInterval.safelyAppend(identifier, forKey: interval)
-//            return identifier
-//        }
-
         public func add(_ attribute: Any) -> AttributeID {
             let identifier = makeAttributeIdentifier()
             addAttribute(attribute, withIdentifier: identifier)
@@ -172,11 +170,11 @@ extension Model {
 
         func addAttribute(_ attribute: Any, withIdentifier identifier: Identifier<Any>) {
             attributes[identifier] = attribute
-            addEntity(identifier, ofType: ObjectIdentifier(type(of: attribute)))
+            addEntity(identifier, ofType: "\(type(of: attribute))")
         }
 
-        func addEntity(_ identifier: Identifier<Any>, ofType type: ObjectIdentifier) {
-            entitiesByType.safelyAppend(identifier, forKey: type)
+        func addEntity(_ identifier: Identifier<Any>, ofType type: String) {
+            entitiesByType[type, default: []].append(identifier)
         }
 
         public func build() -> Model {
@@ -223,5 +221,32 @@ extension Model {
     /// `Builder` ready to construct `Model`.
     public static var builder: Builder {
         return Builder()
+    }
+}
+
+enum AttributionError: Swift.Error {
+    case leafIndexOutOfBounds(Int)
+    case nonEventLeafToAddAttribute(Any)
+}
+
+extension Rhythm where Element: RangeReplaceableCollection, Element.Element == Any {
+
+    mutating func add(_ attribute: Any, at index: Int) {
+        switch leaves[index].context {
+        case .continuation:
+            var attributes = Element()
+            attributes.append(attribute)
+            leaves[index].context = event(attributes)
+        case .instance(let absenceOrEvent):
+            switch absenceOrEvent {
+            case .absence:
+                var attributes = Element()
+                attributes.append(attribute)
+                leaves[index].context = event(attributes)
+            case .event(var attributes):
+                attributes.append(attribute)
+                leaves[index].context = event(attributes)
+            }
+        }
     }
 }

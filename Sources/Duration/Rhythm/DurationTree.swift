@@ -21,12 +21,14 @@ extension Tree where Branch == Duration, Leaf == Duration {
     /// with the given `subdivision`.
     ///
     /// - note: Ensure the given `proportionTree` has been normalized.
+    @inlinable
     public init(_ subdivision: Int, _ proportionTree: ProportionTree) {
         self = proportionTree.map { $0 /> subdivision }
     }
 
     /// Create a `DurationTree` with the given `duration` as the value of the
     /// root node, and the given `proportions` scaled appropriately.
+    @inlinable
     public init(_ duration: Duration, _ proportionTree: ProportionTree) {
 
         let beats = duration.beats
@@ -51,6 +53,7 @@ extension Tree where Branch == Duration, Leaf == Duration {
     // MARK: - Instance Properties
 
     /// `Duration` value of this `DurationTree` node.
+    @inlinable
     public var duration: Duration {
         switch self {
         case .leaf(let duration):
@@ -61,11 +64,13 @@ extension Tree where Branch == Duration, Leaf == Duration {
     }
 
     /// - Returns: `Tree` containing the inherited scale of each node contained herein.
+    @inlinable
     public var scaling: Tree<Fraction,Fraction> {
         return map { $0.beats }.scaling
     }
 
     /// - Returns: `DurationTree` with the durations scaled by context.
+    @inlinable
     public var scaled: Tree<Fraction,Fraction> {
         return zip(self, scaling) { duration, scaling in (Fraction(duration) * scaling).reduced }
     }
@@ -76,12 +81,14 @@ extension Tree where Branch == Duration, Leaf == Duration {
     /// - TODO: Change to concrete offsets.
     /// - TODO: Refactor to 
     /// `concreteOffsets(startingAt: Duration, in structure: Meter.Structure)`
+    @inlinable
     public var offsets: [Fraction] {
         return scaled.leaves.accumulatingSum
     }
 }
 
 /// - Returns: A `DurationTree` with the given `subdivision` applied to each node.
+@inlinable
 public func * (_ subdivision: Int, proportions: [Int]) -> DurationTree {
     return DurationTree(subdivision, ProportionTree(subdivision,proportions))
 }
@@ -91,14 +98,9 @@ public func * (_ subdivision: Int, proportions: [Int]) -> DurationTree {
 ///
 /// If an empty array is given, a single child is created with the same `Duration`
 /// value as the root.
-public func * (_ duration: Duration, _ proportions: [Int])
-    -> DurationTree
-{
-
-    if proportions.isEmpty {
-        return .branch(duration, [.leaf(duration)])
-    }
-
+@inlinable
+public func * (_ duration: Duration, _ proportions: [Int]) -> DurationTree {
+    if proportions.isEmpty { return .branch(duration, [.leaf(duration)]) }
     let beats = duration.beats
     let proportionTree = ProportionTree(beats, proportions)
     return DurationTree(duration, proportionTree)
