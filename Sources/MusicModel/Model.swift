@@ -21,7 +21,7 @@ public final class Model {
     public var attributes: [AttributeID: Attribute] = [:]
     public var events: [EventID: [AttributeID]] = [:]
     public var eventsByRhythm: [RhythmID: [EventID]] = [:]
-    public var entitiesByInterval: [Range<Fraction>: [AttributeID]] = [:]
+    public var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
     public var entitiesByType: [ObjectIdentifier: [AttributeID]] = [:]
 
     public init(
@@ -31,7 +31,7 @@ public final class Model {
         attributes: [AttributeID: Attribute],
         events: [EventID: [AttributeID]],
         eventsByRhythm: [RhythmID: [EventID]],
-        entitiesByInterval: [Range<Fraction>: [AttributeID]],
+        entitiesByInterval: IntervalSearchTree<Fraction,[AttributeID]>,
         entitiesByType: [ObjectIdentifier: [AttributeID]]
     )
     {

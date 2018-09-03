@@ -19,35 +19,24 @@ public typealias RhythmID = Identifier<Rhythm<Event>>
 public typealias AttributeID = Identifier<Attribute>
 public typealias EventID = Identifier<Event>
 
+// FIXME: Move to dn-m/Structure/Algebra/AlgebraAdapters
+extension Array: Additive {
+    public static var zero: Array {
+        return []
+    }
+}
+
+
+// FIXME: Rename!
+public struct ISTNode <Metric: Comparable, Value> {
+    let interval: Range<Metric>
+    let value: Value
+}
+
+public typealias IntervalSearchTree<Metric: Comparable, Value> = AVLTree<Metric,ISTNode<Metric,Value>>
+
 extension Model {
-    
-    /// ## Creating a `Model` with a `Model.Builder`.
-    ///
-    /// The `AbstractMusicalModel` is a static database, containing the musical information of 
-    /// a single _work_. In order to create an `AbstractMusicalModel`, we can use a `Builder`,
-    /// which decouples the construction process of the model from the completed structure.
-    ///
-    /// First, create a `Builder`:
-    ///
-    ///     let builder = Model.Builder()
-    ///
-    /// Then, we can put things in it:
-    ///
-    ///     // Create a middle-c, to be played by "Pat" on the "Violin", starting on the
-    ///     // second quarter-note of the piece, and will last for a single quarter-note.
-    ///     let pitch = Pitch(60) // middle c
-    ///     let instrument = Instrument("Violin")
-    ///     let performer = Performer("Pat", [instrument])
-    ///     let performanceContext = PerformanceContext(performer)
-    ///     let interval = 1/>4...2/>4
-    ///
-    ///     // Now, we can ask the `Builder` to add it:
-    ///     builder.add(pitch, label: "pitch", with: performanceContext, in: interval)
-    ///
-    /// Lastly, we can ask for the `AbstractMusicModel` in completed form:
-    ///
-    ///     let model = builder.build()
-    ///
+
     public class Builder {
 
         private var attributeIdentifier: Int = 0
@@ -59,7 +48,8 @@ extension Model {
         var eventsByRhythm: [RhythmID: [EventID]] = [:]
 
         // FIXME: Use BinarySearchTree (then IntervalTree)
-        var entitiesByInterval: [Range<Fraction>: [AttributeID]] = [:]
+        //var entitiesByInterval: IntervalSearchTree<Fraction,[AttributeID]> = .empty
+        var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
         var entitiesByType: [ObjectIdentifier: [AttributeID]] = [:]
 
         // MARK: - Builders
@@ -128,8 +118,10 @@ extension Model {
         public func addEvent(with attributes: [Attribute], in interval: Range<Fraction>)
             -> (event: Identifier<Event>, attribute: [AttributeID])
         {
-            let attributeIdentifiers = attributes.map { add($0, in: interval) }
+            let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
+            let istNode = ISTNode(interval: interval, value: attributeIdentifiers)
+            entitiesByInterval.insert(istNode, forKey: interval.lowerBound)
             return (eventIdentifier, attributeIdentifiers)
         }
 
@@ -139,12 +131,12 @@ extension Model {
             return (eventIdentifier, attributeIdentifiers)
         }
 
-        public func add(_ attribute: Any, in interval: Range<Fraction>) -> AttributeID {
-            let identifier = makeAttributeIdentifier()
-            addAttribute(attribute, withIdentifier: identifier)
-            entitiesByInterval.safelyAppend(identifier, forKey: interval)
-            return identifier
-        }
+//        public func add(_ attribute: Any, in interval: Range<Fraction>) -> AttributeID {
+//            let identifier = makeAttributeIdentifier()
+//            addAttribute(attribute, withIdentifier: identifier)
+//            //entitiesByInterval.safelyAppend(identifier, forKey: interval)
+//            return identifier
+//        }
 
         public func add(_ attribute: Any) -> AttributeID {
             let identifier = makeAttributeIdentifier()
@@ -157,7 +149,7 @@ extension Model {
         {
             let identifier = createEvent(in: interval)
             events[identifier] = entities
-            entities.forEach { _ = add($0, in: interval) }
+            //entities.forEach { _ = add($0, in: interval) }
             return identifier
         }
 
