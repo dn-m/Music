@@ -28,8 +28,6 @@ public typealias IntervalSearchTree <Metric: Comparable, Value> = AVLTree<Metric
 
 // FIXME: This is a very concrete initial implementation. Abstract out from here.
 extension AVLTree where Key == Fraction, Value == ISTNode<Fraction,[Any]> {
-    // FIXME: Split up the aspects of this implementation, so as to share all but the different
-    // parts with the normal implementation
     @discardableResult
     private static func insert(_ value: Value, forKey key: Key, into node: Node? = nil) -> Node? {
         guard let node = node else { return Node(key: key, value: value) }
