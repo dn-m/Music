@@ -14,7 +14,7 @@ class RhythmTreeTests: XCTestCase {
 
     func testInit() {
         let durationTree = 1/>8 * [1,2,3]
-        let contexts: [Rhythm<Int>.Leaf] = [
+        let contexts: [Rhythm<Int>.Context] = [
             .instance(.event(1)),
             .continuation,
             .instance(.absence)

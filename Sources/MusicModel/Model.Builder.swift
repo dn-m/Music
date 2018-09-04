@@ -13,207 +13,208 @@ import Math
 import Pitch
 import Duration
 
-extension Model {
-    
-    /// ## Creating a `Model` with a `Model.Builder`.
-    ///
-    /// The `AbstractMusicalModel` is a static database, containing the musical information of 
-    /// a single _work_. In order to create an `AbstractMusicalModel`, we can use a `Builder`,
-    /// which decouples the construction process of the model from the completed structure.
-    ///
-    /// First, create a `Builder`:
-    ///
-    ///     let builder = Model.Builder()
-    ///
-    /// Then, we can put things in it:
-    ///
-    ///     // Create a middle-c, to be played by "Pat" on the "Violin", starting on the
-    ///     // second quarter-note of the piece, and will last for a single quarter-note.
-    ///     let pitch = Pitch(60) // middle c
-    ///     let instrument = Instrument("Violin")
-    ///     let performer = Performer("Pat", [instrument])
-    ///     let performanceContext = PerformanceContext(performer)
-    ///     let interval = 1/>4...2/>4
-    ///
-    ///     // Now, we can ask the `Builder` to add it:
-    ///     builder.add(pitch, label: "pitch", with: performanceContext, in: interval)
-    ///
-    /// Lastly, we can ask for the `AbstractMusicModel` in completed form:
-    ///
-    ///     let model = builder.build()
-    ///
-    public class Builder {
-        
-        /// Concrete values associated with a given unique identifier.
-        internal var values: [UUID: Any] = [:]
-        
-        /// `PerformanceContext.Path` for each entity.
-        internal var performanceContexts: [UUID: PerformanceContext.Path] = [:]
-        
-        /// Interval of each entity.
-        ///
-        /// - TODO: Keep sorted by interval.lowerBound
-        /// - TODO: Create a richer offset type (incorporating metrical and non-metrical sections)
-        internal var intervals: [UUID: ClosedRange<Fraction>] = [:]
-        
-        /// Collection of entities for a single event (all containing same
-        /// `PerformanceContext.Path` and `interval`).
-        internal var events: [UUID: [UUID]] = [:]
-        
-        /// Entities stored by their label (e.g., "rhythm", "pitch", "articulation", etc.)
-        internal var byLabel: [String: [UUID]] = [:]
-        
-        // FIXME: Find better way of doing this.
-        internal var rhythmOffsets: [UUID: Fraction] = [:]
+public typealias Event = [Any]
+public typealias Attribute = Any
+public typealias RhythmID = Identifier<Rhythm<Event>>
+public typealias AttributeID = Identifier<Attribute>
+public typealias EventID = Identifier<Event>
 
-        #warning("Reintroduce meter and tempo collection builders")
-        internal let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
-        internal let meterCollectionBuilder = MeterCollectionBuilder()
+// FIXME: Move to dn-m/Structure/Algebra/AlgebraAdapters
+extension Array: Additive {
+    public static var zero: Array {
+        return []
+    }
+}
+
+extension Model {
+
+    public class Builder {
+
+        private var attributeIdentifier: Int = 0
+        private var eventIdentifier: Int = 0
+        private var rhythmIdentifier: Int = 0
+
+        /// All attributes stored by their unique identifier.
+        ///
+        /// The attributes here are the raw values of the musical model (`Pitch`, `Dynamic`, etc.)
+        var attributes: [AttributeID: Attribute] = [:]
+
+        /// All of the identifiers of attributes stored by the `ObjectIdentifier` representing
+        /// their type.
+        ///
+        // FIXME: There must be a more efficient way to store entities in a way wherein the type
+        // can be reified. The `String` init is not efficient, and doesn't really carry with it
+        // its own type information.
+        var entitiesByType: [String: [AttributeID]] = [:]
+
+        /// All of the identifiers of the attributes contained in a single event.
+        var events: [EventID: [AttributeID]] = [:]
+
+        /// All of the identifiers of the events contained in a single rhythm.
+        var eventsByRhythm: [RhythmID: [EventID]] = [:]
+
+        /// An `IntervalSearchTree` with all of the identifiers of the attributes occurring in a
+        /// a given `Fraction` interval.
+        var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
+
+        // MARK: - Builders
+
+        let performanceContextBuilder = PerformanceContext.Builder()
+        let tempoInterpolationCollectionBuilder = TempoInterpolationCollectionBuilder()
+        let meterCollectionBuilder = MeterCollectionBuilder()
 
         // MARK: - Initializers
         
         /// Creates `Builder` prepared to construct a `Model`.
         public init() { }
-        
-        /// Add the given `rhythm` at the given `offset`, zipping the given `events`, with
-        /// the given `performanceContext`.
-        ///
-        /// - TODO: Interrogate `Rhythm<Int> type`
-        /// - TODO: Refactor (need to wrap up clusters of concern)
-        ///
-        @discardableResult public func add(
-            _ rhythm: Rhythm<Int>,
-            at offset: Fraction,
-            with events: [[NamedAttribute]],
-            and performanceContext: PerformanceContext.Path = PerformanceContext.Path()
-        ) -> Builder
-        {
-            guard events.count == rhythm.leaves.count else {
-                fatalError("Incompatible rhythm and events!")
-            }
 
-            // Create UUIDs for each event in the given `rhythm`.
-            let rhythm = rhythm.map { _ in UUID() }
+        // MARK: - Performance Context
 
-            // Store rhythm
-            let rhythmID = createEntity(for: rhythm, label: "rhythm")
-            rhythmOffsets[rhythmID] = offset
-
-            // Store each event
-            var events = events
-            for eventEntity in rhythm.events {
-                
-                // Create event
-                self.events[eventEntity] = createEntities(for: events.remove(at: 0))
-            }
-
-            return self
+        /// Adds the given `performer` to the performance context.
+        public func addPerformer(_ performer: Performer) -> Identifier<Performer> {
+            return performanceContextBuilder.addPerformer(performer)
         }
 
-        /// Add the named attribute values for a given `event`, performed with the
-        /// given `performanceContext`, in the given `interval`.
-        @discardableResult public func add(
-            _ event: [NamedAttribute],
-            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-            in interval: ClosedRange<Fraction>? = nil
-        ) -> Builder
-        {
-            let entities = event.map { namedAttribute in
-                createEntity(for: namedAttribute, with: performanceContext, in: interval)
-            }
-            createEvent(for: entities)
-            return self
+        /// Adds the given `instrument` to the performance context.
+        public func addInstrument(_ instrument: Instrument) -> Identifier<Instrument> {
+            return performanceContextBuilder.addInstrument(instrument)
         }
 
-        /// Add the given `value` with the given `label`, performed with the given 
-        /// `performanceContext`, in the given `interval`.
-        @discardableResult public func add(
-            _ value: Any,
-            label: String,
-            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-            in interval: ClosedRange<Fraction>? = nil
-        ) -> Builder
-        {
-            createEntity(for: value, label: label, with: performanceContext, in: interval)
-            return self
+        // MARK: - Rhythm
+
+        /// Adds the given `rhythm` at the given `offset`, if it exists. If no `offset` is given,
+        /// the `rhythm` will be added at the current offset of the current meter.
+        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> RhythmID {
+            let globalOffset = offset ?? meterCollectionBuilder.offset
+            let rhythmIdentifier: Identifier<Rhythm<Event>> = makeRhythmIdentifier()
+            let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
+            let identifiers: [EventID] = offsetsAndDuratedEvents.map { (localOffset, duratedEvent) in
+                let (duration, attributes) = duratedEvent
+                let localRange = Fraction(localOffset) ..< Fraction(localOffset + duration)
+                let range = localRange.shifted(by: globalOffset)
+                let (eventIdentifier, _) = addEvent(with: attributes, in: range)
+                return eventIdentifier
+            }
+            eventsByRhythm[rhythmIdentifier] = identifiers
+            return rhythmIdentifier
         }
 
         // MARK: - Tempo & Meter
 
         /// Add the given `tempo` at the given `offset`, and whether or not it shall be
         /// prepared to interpolate to the next given tempo.
-        @discardableResult public func add(
+        @discardableResult
+        public func addTempo(
             _ tempo: Tempo,
-            at offset: Fraction,
+            at offset: Fraction? = nil,
             easing: Tempo.Interpolation.Easing? = nil
         ) -> Builder
         {
+            let offset = offset ?? meterCollectionBuilder.offset
             tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
             return self
         }
 
         /// Add the given `meter`.
-        @discardableResult public func add(_ meter: Meter) -> Builder {
-            //meterCollectionBuilder.add(meter)
+        @discardableResult
+        public func addMeter(_ meter: Meter) -> Builder {
+            meterCollectionBuilder.add(meter)
             return self
         }
 
-        // MARK: - Private
-        
-        @discardableResult private func createEntity(
-            for value: NamedAttribute,
-            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-            in interval: ClosedRange<Fraction>? = nil
-        ) -> UUID
+        // MARK: - Events and Attributes
+
+        /// Adds an event with the given `attributes` in the given `interval`.
+        ///
+        /// - Returns: The identifiers for the event and the attributes.
+        public func addEvent(with attributes: [Attribute], in interval: Range<Fraction>)
+            -> (event: EventID, attributes: [AttributeID])
         {
-            return createEntity(
-                for: value.attribute,
-                label: value.name,
-                with: performanceContext,
-                in: interval
-            )
+            let attributeIdentifiers = attributes.map { add($0) }
+            let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
+            let istNode = ISTNode(interval: interval, value: attributeIdentifiers)
+            entitiesByInterval.insert(istNode, forKey: interval.lowerBound)
+            return (eventIdentifier, attributeIdentifiers)
         }
 
-        @discardableResult private func createEntity(
-            for value: Any,
-            label: String,
-            with performanceContext: PerformanceContext.Path = PerformanceContext.Path(),
-            in interval: ClosedRange<Fraction>? = nil
-        ) -> UUID
+        /// Adds an event with the given `attributes`.
+        ///
+        /// - Returns: The identifiers for the event and the attributes.
+        public func addEvent(with attributes: [Any]) -> (event: EventID, attributes: [AttributeID]) {
+            let attributeIdentifiers = attributes.map { add($0) }
+            let eventIdentifier = createEvent(with: attributeIdentifiers)
+            return (eventIdentifier, attributeIdentifiers)
+        }
+
+        /// Adds the given `attribute`.
+        ///
+        //// - Returns: The identifier for the attribute.
+        public func add(_ attribute: Any) -> AttributeID {
+            let identifier = makeAttributeIdentifier()
+            addAttribute(attribute, withIdentifier: identifier)
+            return identifier
+        }
+
+        /// Creates an event with the given `attributes` in the given `interval`.
+        ///
+        /// - Returns: The identifier for the event.
+        public func createEvent(with attributes: [AttributeID], in interval: Range<Fraction>)
+            -> EventID
         {
-            let id = UUID()
-            values[id] = value
-            byLabel.safelyAppend(id, toArrayWith: label)
-            performanceContexts[id] = performanceContext
-            intervals[id] = interval
-            return id
+            let identifier = createEvent(in: interval)
+            events[identifier] = attributes
+            return identifier
         }
 
-        @discardableResult private func createEntities(
-            for namedAttributes: [NamedAttribute],
-            with performanceContext: PerformanceContext.Path = PerformanceContext.Path()
-        ) -> [UUID]
-        {
-            return namedAttributes.map { namedAttribute in
-                createEntity(for: namedAttribute, with: performanceContext)
-            }
+        /// Creates an event with the given `attributes`.
+        ///
+        /// - Returns: The identifier for the event.
+        public func createEvent(with attributes: [AttributeID]) -> EventID {
+            let identifier = createEvent()
+            events[identifier] = attributes
+            return identifier
         }
 
-        private func createEvent(for entities: [UUID]) {
-            let eventID = UUID()
-            events[eventID] = entities
+        /// Creates and event in the given `interval`.
+        ///
+        //// - Returns: The identifier for the event.
+        public func createEvent(in interval: Range<Fraction>) -> EventID {
+            let identifier = createEvent()
+            return identifier
         }
 
+        /// Creates an event.
+        ///
+        /// - Returns: The identifier for the event.
+        public func createEvent() -> EventID {
+            let identifier = makeEventIdentifier()
+            events[identifier] = []
+            return identifier
+        }
+
+        /// Adds the given `attribute` with the given `identifier`.
+        func addAttribute(_ attribute: Any, withIdentifier identifier: AttributeID) {
+            attributes[identifier] = attribute
+            addEntity(identifier, ofType: "\(type(of: attribute))")
+        }
+
+        /// Adds an entity with the given `identifier` with the given string representaiton of
+        /// its `type`.
+        func addEntity(_ identifier: AttributeID, ofType type: String) {
+            entitiesByType[type, default: []].append(identifier)
+        }
+
+        /// - Returns: A completed `Model` for your enjoyment.
         public func build() -> Model {
-            storeRhythmicEvents()
             return Model(
-                values: values,
-                performanceContexts: performanceContexts,
-                intervals: intervals,
-                events: events,
-                byLabel: byLabel,
+                performanceContext: makePerformanceContext(),
+                tempi: makeTempi(),
                 meters: makeMeters(),
-                tempi: makeTempi()
+                attributes: attributes,
+                events: events,
+                eventsByRhythm: eventsByRhythm,
+                entitiesByInterval: entitiesByInterval,
+                entitiesByType: entitiesByType
             )
         }
 
@@ -225,21 +226,23 @@ extension Model {
             return meterCollectionBuilder.build()
         }
 
-        /// TODO: Needs testing!
-        private func storeRhythmicEvents() {
-            for (rhythmID, offset) in rhythmOffsets {
-                let rhythm = values[rhythmID] as! Rhythm<UUID>
-                let eventIntervals = rhythm.eventIntervals.map { interval in
-                    return (Fraction(interval.lowerBound) + offset)...(Fraction(interval.upperBound) + offset)
-                }
-                
-                for (event,interval) in zip(rhythm.events, eventIntervals) {
-                    intervals[event] = interval
-                    for attribute in events[event]! {
-                        intervals[attribute] = interval
-                    }
-                }
-            }
+        private func makePerformanceContext() -> PerformanceContext {
+            return performanceContextBuilder.build()
+        }
+
+        private func makeEventIdentifier() -> EventID {
+            defer { eventIdentifier += 1 }
+            return .init(eventIdentifier)
+        }
+
+        private func makeRhythmIdentifier <T> () -> Identifier<Rhythm<T>> {
+            defer { rhythmIdentifier += 1 }
+            return .init(rhythmIdentifier)
+        }
+
+        private func makeAttributeIdentifier() -> AttributeID {
+            defer { attributeIdentifier += 1 }
+            return .init(attributeIdentifier)
         }
     }
 
@@ -249,56 +252,33 @@ extension Model {
     }
 }
 
-/// - TODO: Move to `dn-m/Rhythm`.
-extension Rhythm where Element: Equatable {
-    
-    var events: [Element] {
-        return leaves.compactMap { leaf in
-            guard case let .instance(.event(value)) = leaf else { return nil }
-            return value
-        }
-    }
-    
-    // TODO: Refactor!!
-    var eventIntervals: [ClosedRange<Duration>] {
-        
-        var result: [ClosedRange<Duration>] = []
-        
-        var start: Duration = 0/>4
-        var current: Duration = 0/>4
+enum AttributionError: Swift.Error {
+    case leafIndexOutOfBounds(Int)
+    case nonEventLeafToAddAttribute(Any)
+}
 
-        for (l, duratedLeaf) in zip(durationTree.leaves,leaves).enumerated() {
-            let (duration, leaf) = duratedLeaf
-            switch leaf {
-            case .continuation:
-                break
-            case .instance(let absenceOrEvent):
-                switch absenceOrEvent {
-                case .absence:
-                    if current > .zero {
-                        result.append(start ... current)
-                    }
-                    start = current + duration
-                case .event:
-                    
-                    if let previous = leaves[safe: l-1] {
-                        
-                        if previous != .instance(.absence) {
-                            result.append(start ... current)
-                        }
-                    }
-                    
-                    start = current
-                }
+extension Rhythm where Element: RangeReplaceableCollection, Element.Element == Any {
+
+    /// Add the given `attribute` at the given `index` of leaves.
+    ///
+    /// If the leaf is a tie or rest, an event is injected with the given `attribute`. Otherwise,
+    /// the `attribute` is added to the extant list of attributes.
+    mutating func add(_ attribute: Any, at index: Int) {
+        switch leaves[index].context {
+        case .continuation:
+            var attributes = Element()
+            attributes.append(attribute)
+            leaves[index].context = event(attributes)
+        case .instance(let absenceOrEvent):
+            switch absenceOrEvent {
+            case .absence:
+                var attributes = Element()
+                attributes.append(attribute)
+                leaves[index].context = event(attributes)
+            case .event(var attributes):
+                attributes.append(attribute)
+                leaves[index].context = event(attributes)
             }
-            
-            current += duration
         }
-        
-        if leaves.last! != .instance(.absence) {
-            result.append(start ... current)
-        }
-        
-        return result
     }
 }

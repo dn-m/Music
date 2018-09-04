@@ -6,17 +6,18 @@
 //
 //
 
+import DataStructures
+
 /// Model of a single `Voice` in a `PerformanceContext`.
 public struct Voice: Equatable, Hashable {
     
-    /// Type of `Identifier`
-    public typealias Identifier = Int
-    
     /// Identifier.
-    public let identifier: Identifier
+    let identifier: Int
     
     /// Create a `Voice` with a given `identifier`.
-    public init(_ identifier: Identifier) {
+    public init(_ identifier: Int) {
         self.identifier = identifier
     }
 }
+
+public typealias VoiceID = Identifier<Voice>

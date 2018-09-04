@@ -6,61 +6,61 @@
 //
 //
 
-import Foundation
 import Algebra
+import DataStructures
 import Math
 import Duration
 
 /// The database of musical information contained in a single musical _work_.
 public final class Model {
-    
-    /// Concrete values associated with a given unique identifier.
-    public let values: [UUID: Any]
-    
-    /// `PerformanceContext.Path` for each entity.
-    public let performanceContexts: [UUID: PerformanceContext.Path]
-    
-    /// Interval of each entity.
-    ///
-    /// - TODO: Keep sorted by interval.lowerBound
-    /// - TODO: Create a richer offset type (incorporating metrical and non-metrical sections)
-    ///
-    public let intervals: [UUID: ClosedRange<Fraction>]
-    
-    /// Collection of entities for a single event (all containing same
-    /// `PerformanceContext.Path` and `interval`).
-    public let events: [UUID: [UUID]]
-    
-    /// Entities stored by their label (e.g., "rhythm", "pitch", "articulation", etc.)
-    public let byLabel: [String: [UUID]]
-    
-    /// Rhythm events
-    internal var rhythms: [Rhythm<UUID>] {
-        return byLabel["rhythm"]!.map { values[$0] as! Rhythm<UUID> }
-    }
 
+    /// The performance context of a work.
+    public var performanceContext: PerformanceContext
+
+    /// The tempi contained in a work.
     public let tempi: Tempo.Interpolation.Collection
+
+    /// The meters contained in a work.
     public let meters: Meter.Collection
-    
+
+    /// Each attribute in a work, stored by a unique identifier.
+    public var attributes: [AttributeID: Attribute]
+
+    /// Each event (composition of identifiers of attributes) in a work, stored by a unique
+    /// identifier.
+    public var events: [EventID: [AttributeID]]
+
+    /// The list of identifiers of events contained in a given rhythm, as represented by a unique
+    /// identifier.
+    public var eventsByRhythm: [RhythmID: [EventID]]
+
+    /// The list of identifiers of attributes stored by their fractional interval.
+    public var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
+
+    // FIXME: This is currently inefficient and does provide the desired level of type-safety.
+    public var entitiesByType: [String: [AttributeID]] = [:]
+
     // MARK: - Initializers
-    
+
     public init(
-        values: [UUID: Any],
-        performanceContexts: [UUID: PerformanceContext.Path],
-        intervals: [UUID: ClosedRange<Fraction>],
-        events: [UUID: [UUID]],
-        byLabel: [String: [UUID]],
+        performanceContext: PerformanceContext,
+        tempi: Tempo.Interpolation.Collection,
         meters: Meter.Collection,
-        tempi: Tempo.Interpolation.Collection
+        attributes: [AttributeID: Attribute],
+        events: [EventID: [AttributeID]],
+        eventsByRhythm: [RhythmID: [EventID]],
+        entitiesByInterval: IntervalSearchTree<Fraction,[AttributeID]>,
+        entitiesByType: [String: [AttributeID]]
     )
     {
-        self.values = values
-        self.performanceContexts = performanceContexts
-        self.intervals = intervals
-        self.events = events
-        self.byLabel = byLabel
-        self.meters = meters
+        self.performanceContext = performanceContext
         self.tempi = tempi
+        self.meters = meters
+        self.attributes = attributes
+        self.events = events
+        self.eventsByRhythm = eventsByRhythm
+        self.entitiesByInterval = entitiesByInterval
+        self.entitiesByType = entitiesByType
     }
 }
 
@@ -70,14 +70,6 @@ extension Model: CustomStringConvertible {
     
     /// Printed description.
     public var description: String {
-        var result = "MODEL:\n"
-        for (label, entities) in byLabel {
-            result += "\(label): \(entities.map { values[$0] })\n"
-        }
-        for (id, event) in events {
-            result += "\(id): \(event.map { values[$0] })\n"
-        }
-        return result
+        return "Model"
     }
 }
-

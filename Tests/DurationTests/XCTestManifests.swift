@@ -20,6 +20,7 @@ extension DurationTreeTests {
         ("testInitWithRelativeDurations4Over5", testInitWithRelativeDurations4Over5),
         ("testInitWithRelativeDurations5Over4", testInitWithRelativeDurations5Over4),
         ("testLeafOffsets", testLeafOffsets),
+        ("testManyDurationTrees", testManyDurationTrees),
         ("testMultipleLeaves", testMultipleLeaves),
         ("testSingleLeaf", testSingleLeaf),
     ]
@@ -55,14 +56,19 @@ extension MeterCollectionTests {
     static let __allTests = [
         ("testFragmentOutOfRange", testFragmentOutOfRange),
         ("testFragmentRangeWithinSingleMeter", testFragmentRangeWithinSingleMeter),
-        ("testFuzzManyFragments", testFuzzManyFragments),
         ("testFragmentUpperBoundBeyondEnd", testFragmentUpperBoundBeyondEnd),
+        ("testFuzzManyFragments", testFuzzManyFragments),
         ("testTruncatingFragment", testTruncatingFragment),
     ]
 }
 
 extension MeterTests {
     static let __allTests = [
+        ("testAdditiveMeter", testAdditiveMeter),
+        ("testBeatOffsets", testBeatOffsets),
+        ("testBeatOffsetsAdditive", testBeatOffsetsAdditive),
+        ("testBeatOffsetsFractional", testBeatOffsetsFractional),
+        ("testFractionalMeter", testFractionalMeter),
         ("testIrrationalMeter", testIrrationalMeter),
         ("testNormalMeter", testNormalMeter),
     ]
@@ -88,13 +94,19 @@ extension ProportionTreeTests {
 
 extension RhythmTests {
     static let __allTests = [
+        ("testDuratedEvents", testDuratedEvents),
         ("testInitWithDurationAndContextsUsage", testInitWithDurationAndContextsUsage),
         ("testInitWithDurationAndContextTupleUsage", testInitWithDurationAndContextTupleUsage),
         ("testInitWithDurationAndValueTupleUsage", testInitWithDurationAndValueTupleUsage),
         ("testLengths", testLengths),
         ("testLengthsAllTies", testLengthsAllTies),
+        ("testLengthsSingleAllTies", testLengthsSingleAllTies),
+        ("testLengthsSingleTiesAndEvents", testLengthsSingleTiesAndEvents),
+        ("testLengthsSingleTiesEventsAndRests", testLengthsSingleTiesEventsAndRests),
         ("testLengthsTiesAndEvents", testLengthsTiesAndEvents),
         ("testLengthsTiesEventsAndRests", testLengthsTiesEventsAndRests),
+        ("testMapEvents", testMapEvents),
+        ("testReplaceEvents", testReplaceEvents),
     ]
 }
 
@@ -108,6 +120,7 @@ extension TempoInterpolationCollectionTests {
     static let __allTests = [
         ("testBuilderSingleInterpolation", testBuilderSingleInterpolation),
         ("testBuilderSingleStatic", testBuilderSingleStatic),
+        ("testFirstOffset", testFirstOffset),
         ("testFragment", testFragment),
         ("testMoreComplexFragment", testMoreComplexFragment),
         ("testSimpleFragment", testSimpleFragment),

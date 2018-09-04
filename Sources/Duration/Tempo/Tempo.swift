@@ -478,11 +478,7 @@ public final class TempoInterpolationCollectionBuilder {
 
     // MARK: - Instance Properties
 
-    private var last: (Fraction, Tempo, Tempo.Interpolation.Easing?)?
-
-    /// The stateful, accumulating `offset` which becomes the metrical offset of a
-    ///`Tempo.Interpolation.Fragment` value.
-    public var offset: Fraction
+    private var last: (offset: Fraction, tempo: Tempo, easing: Tempo.Interpolation.Easing?)?
 
     /// The intermediate storage of `Tempo.Interpolation.Fragment` values indexed by their
     /// `Fraction` offsets.
@@ -492,9 +488,8 @@ public final class TempoInterpolationCollectionBuilder {
 
     /// Create an empty `Tempo.Interpolation.Collection.Builder` ready to construct a nice
     /// little `Tempo.Interpolation.Collection` for you.
-    public init(offset: Fraction = .zero) {
+    public init() {
         self.intermediate = [:]
-        self.offset = offset
     }
 
     // MARK: - Instance Methods
@@ -506,9 +501,9 @@ public final class TempoInterpolationCollectionBuilder {
     @discardableResult public func add(_ interpolation: Tempo.Interpolation)
         -> TempoInterpolationCollectionBuilder
     {
-        self.intermediate.append(interpolation, key: offset)
+        let offset = last?.offset ?? .zero
+        intermediate.append(interpolation, key: offset)
         last = (offset, interpolation.end, nil)
-        offset += interpolation.length
         return self
     }
 
@@ -520,10 +515,10 @@ public final class TempoInterpolationCollectionBuilder {
         easing: Tempo.Interpolation.Easing? = nil
     ) -> TempoInterpolationCollectionBuilder
     {
-        if let (startOffset, startTempo, startInterpolating) = last {
+        if let (startOffset, startTempo, easing) = last {
             let interpolation = Tempo.Interpolation(
                 start: startTempo,
-                end: startInterpolating != nil ? tempo : startTempo,
+                end: easing != nil ? tempo : startTempo,
                 length: offset - startOffset,
                 easing: easing ?? .linear
             )

@@ -12,162 +12,152 @@ import Math
 import Pitch
 import Articulations
 import Duration
+import Dynamics
 @testable import MusicModel
 
 class ModelTests: XCTestCase {
-    
-    func testAddPitchArrayAttribute() {
-        let pitches: Set<Pitch> = [60,61,62]
-        let interval = Fraction(4,8)...Fraction(5,8)
-        let model = Model.Builder()
-            .add(pitches, label: "pitch", with: PerformanceContext.Path(), in: interval)
-            .build()
-        #warning("Add assertion to testAddPitchArrayAttribute()")
-    }
-    
-    func testPitchesAndAtriculations() {
-        let intervals = (0..<2).map { offset in Fraction(offset, 8)...Fraction(offset + 1, 8) }
-        let pitches: [Pitch] = [60,61,62]
-        let namedPitches = pitches.map { NamedAttribute($0, name: "pitch") }
-        let articulations: [Articulation] = [.staccato, .accent, .tenuto]
-        let namedArticulations = articulations.map { NamedAttribute($0, name: "articulation") }
-        let events = zip(namedPitches, namedArticulations).map { [$0.0,$0.1] }
-        let builder = Model.Builder()
-        zip(events, intervals).forEach { event, interval in builder.add(event, in: interval) }
-        let model = builder.build()
-        print(model)
-        #warning("Add assertion to testPitchesAndAtriculations()")
-    }
-    
-    func testAddRhythm() {
-        
-        let rhythm = Rhythm<Int>(
-            3/>16 * [1,2,3,1],
-            [
-                .instance(.event(0)),
-                .instance(.event(0)),
-                .instance(.event(0)),
-                .instance(.event(0))
-            ]
-        )
-        
-        let pitches: [Pitch] = [60,61,62,63]
-        let namedPitches = pitches.map { NamedAttribute($0, name: "pitch") }
-        let articulations: [Articulation] = [.staccato, .accent, .tenuto, .accent]
-        let namedArticulations = articulations.map { NamedAttribute($0, name: "articulation") }
-        let events = zip(namedPitches, namedArticulations).map { [$0.0,$0.1] }
-        
-        let model = Model.Builder()
-            .add(rhythm, at: 0, with: events)
-            .build()
-        print(model)
 
-        for rhythm in model.rhythms {
-            print("RHYTHM:")
-            for event in rhythm.events {
-                let attributeIDs = model.events[event]!
-                print(attributeIDs.map { model.values[$0] })
+    func testAddEntity() {
+        let identifier: AttributeID = 42
+        let builder = Model.Builder()
+        builder.addEntity(identifier, ofType: "\(type(of: 42))")
+        XCTAssertEqual(builder.entitiesByType, ["Int": [identifier]])
+    }
+
+    func testCreateEvent() {
+        let builder = Model.Builder()
+        let identifier = builder.createEvent()
+        XCTAssertEqual(builder.events, [identifier: []])
+    }
+
+    func testCreateEventInInterval() {
+        let interval = Fraction(3,16) ..< Fraction(31,32)
+        let builder = Model.Builder()
+        let identifier = builder.createEvent(in: interval)
+        XCTAssertEqual(builder.events, [identifier: []])
+    }
+
+    func testCreateEventWithEntities() {
+        let entities: [AttributeID] = [0,1,2]
+        let builder = Model.Builder()
+        let identifier = builder.createEvent(with: entities)
+        XCTAssertEqual(builder.events, [identifier: entities])
+    }
+
+    func testAddAttribute() {
+        let builder = Model.Builder()
+        let identifier = builder.add(5)
+        XCTAssertEqual(builder.events, [:])
+        XCTAssertEqual(builder.entitiesByType, ["\(type(of: 5))": [identifier]])
+    }
+
+    func testAddAttributeInInterval() {
+        let interval = Fraction(3,16) ..< Fraction(31,32)
+        let pitch: Pitch = 60
+        let builder = Model.Builder()
+        let identifier = builder.addEvent(with: [pitch], in: interval)
+//        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(Pitch.self): [identifier]])
+//        XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
+    }
+
+    func testAddEventWithAttributes() {
+        let attributes: [Any] = [Pitch(60), Articulation.staccato, Dynamic.f]
+        let builder = Model.Builder()
+        let (event,ids) = builder.addEvent(with: attributes)
+        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.events, [event: ids])
+    }
+
+    func testAddEventWithAttributesInInterval() {
+        let interval = Fraction(3,16) ..< Fraction(31,32)
+        let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
+        let builder = Model.Builder()
+        let (event,ids) = builder.addEvent(with: attributes, in: interval)
+        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.events, [event: ids])
+    }
+
+    // MARK: - Meter and Tempo
+
+    func testAddMeter() {
+        let builder = Model.Builder()
+        builder.addMeter(Meter(3,4))
+    }
+
+    func testAddTempo() {
+        let builder = Model.Builder()
+        builder.addTempo(Tempo(60, subdivision: 4), at: Fraction(15,32), easing: .linear)
+    }
+
+    func testInferOffset() {
+        let startTempo = Tempo(60, subdivision: 4)
+        let endTempo = Tempo(120, subdivision: 4)
+        let builder = Model.Builder()
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addTempo(startTempo, easing: .linear)
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addMeter(Meter(4,4))
+            .addTempo(endTempo)
+        let expectedInterp = Tempo.Interpolation(
+            start: startTempo,
+            end: endTempo,
+            length: Fraction(16,4), easing: .linear
+        )
+        let expected: OrderedDictionary = [Fraction(16,4): expectedInterp]
+        XCTAssertEqual(builder.tempoInterpolationCollectionBuilder.intermediate, expected)
+    }
+
+    func testSingleNoteRhythm() {
+        let pitch: Pitch = 60
+        let rhythm = Rhythm<[Any]>(1/>4, [event([pitch])])
+        let builder = Model.Builder()
+        let rhythmID = builder.addRhythm(rhythm)
+        XCTAssertNotNil(builder.eventsByRhythm[rhythmID])
+    }
+
+    func testHelloWorld() {
+        let pitch: Pitch = 60
+        let articulation: Articulation = .tenuto
+        let dynamic: Dynamic = .fff
+        let note = Rhythm<Event>(1/>1, [event([pitch, dynamic, articulation])])
+        let meter = Meter(4,4)
+        let tempo = Tempo(120, subdivision: 4)
+        let builder = Model.Builder()
+        builder.addMeter(meter)
+        builder.addTempo(tempo)
+        _ = builder.addRhythm(note)
+        let _ = builder.build()
+    }
+
+    func testManyRhythms() {
+        let rhythms: [Rhythm<[Any]>] = (0..<10_000).map { _ in
+            let amountEvents = 10
+            let events: [Rhythm<[Any]>.Context] = (0..<amountEvents).map { _ in
+                let amountPitches = 3
+                let pitches: [Pitch] = (0..<amountPitches).map { _ in
+                    let nn = Double.random(in: 48..<74)
+                    return Pitch(nn)
+                }
+                return event(pitches)
             }
+            let beats = Int.random(in: 1..<16)
+            let duration = beats /> 4
+            return Rhythm(duration,events)
         }
-
-        #warning("Add assertion to testAddRhythm()")
-    }
-    
-    func testAddManyRhythms() {
-
-        let rhythm = Rhythm<Int>(
-            1/>4 * [1,2,3,1],
-            [
-                .instance(.event(0)),
-                .instance(.event(0)),
-                .instance(.event(0)),
-                .instance(.event(0))
-            ]
-        )
-
-        let pitches: [Pitch] = [60,61,62,63]
-        let namedPitches = pitches.map { NamedAttribute($0, name: "pitch") }
-        let articulations: [Articulation] = [.staccato, .accent, .tenuto, .accent]
-        let namedArticulations = articulations.map { NamedAttribute($0, name: "articulation") }
-        let events = zip(namedPitches, namedArticulations).map { [$0.0,$0.1] }
-        
         let builder = Model.Builder()
-        (0..<100).forEach { offsetBeats in
-            builder.add(rhythm, at: Fraction(offsetBeats,4), with: events)
+        var offset: Fraction = .zero
+        for rhythm in rhythms {
+            _ = builder.addRhythm(rhythm, at: offset)
+            offset += Fraction(rhythm.durationTree.duration)
         }
-    
-        let model = builder.build()
-        print(model)
-
-        #warning("Add assertion to testAddManyRhythms()")
-    }
-    
-    func testFilter() {
-        
-        let rhythm = Rhythm<Int>(
-            1/>4 * [1,1,1,1],
-            [
-                .instance(.event(0)),
-                .instance(.event(0)),
-                .instance(.event(0)),
-                .instance(.event(0))
-            ]
-        )
-        
-        let context1 = PerformanceContext.Path("P", "I", 0)
-        let context2 = PerformanceContext.Path("P", "II", 3)
-        let pitches: [Pitch] = [60,61,62,63]
-        let namedPitches = pitches.map { NamedAttribute($0, name: "pitch") }
-        let articulations: [Articulation] = [.staccato, .accent, .tenuto, .accent]
-        let namedArticulations = articulations.map { NamedAttribute($0, name: "articulation") }
-        let events = zip(namedPitches, namedArticulations).map { [$0.0,$0.1] }
-        
-        let builder = Model.Builder()
-        
-        // Add a bunch of rhythms
-        (0..<1000).forEach { offsetBeats in
-            builder.add(rhythm, at: Fraction(offsetBeats,4), with: events, and: context1)
-            builder.add(rhythm, at: Fraction(offsetBeats,4), with: events, and: context2)
-        }
-        
-        // Construct the model
-        let model = builder.build()
-
-        let interval = Model.Filter(interval: Fraction(4,4)...Fraction(5/>4))
-        let scope = Model.Filter(scope: PerformanceContext.Scope("P","I"))
-        let label = Model.Filter(label: "articulation")
-        let filter = [interval,scope,label].nonEmptyProduct!
-
-        // Get the ids of all of the attributes within the given filter
-        let filteredIDs = filter.apply(model)
-        
-        filteredIDs.forEach { id in
-            let value = model.values[id]!
-            let interval = model.intervals[id]!
-            let context = model.performanceContexts[id]!
-            print("\(value); interval: \(interval); contexts: \(context)")
-        }
-
-        #warning("Add assertion to testFilter()")
-    }
-
-    
-    func testAddMeterStructure() {
-
-        let builder = Model.Builder()
-        
-        for meter in [Meter(4,4), Meter(3,8), Meter(5,16), Meter(29,64), Meter(3,2)] {
-            builder.add(meter)
-        }
-
-        builder.add(Tempo(90), at: .zero)
-        builder.add(Tempo(60), at: Fraction(4,4), easing: .linear)
-        builder.add(Tempo(120), at: Fraction(24,4))
-
-        let model = builder.build()
-        print(model)
-        // TODO: Assert something!
-
-        #warning("Add assertion to testAddMeterStructure()")
     }
 }

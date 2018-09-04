@@ -56,6 +56,13 @@ class TempoInterpolationCollectionTests: XCTestCase {
         XCTAssertEqual(fragment, expected)
     }
 
+    func testFirstOffset() {
+        let builder = TempoInterpolationCollectionBuilder()
+        builder.add(Tempo(60), at: Fraction(31,64), easing: .linear)
+        builder.add(Tempo(120), at: Fraction(4,2), easing: .linear)
+        XCTAssertEqual(builder.intermediate.keys.first!, Fraction(31,64))
+    }
+
     func testMoreComplexFragment() {
         let builder = TempoInterpolationCollectionBuilder()
         builder.add(Tempo(60), at: .zero, easing: .linear)
