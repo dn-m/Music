@@ -1,5 +1,17 @@
 import XCTest
 
+extension AVLTreeTests {
+    static let __allTests = [
+        ("testInitSequence", testInitSequence),
+        ("testManyValuesDecreasing", testManyValuesDecreasing),
+        ("testManyValuesIncreasing", testManyValuesIncreasing),
+        ("testManyValuesRandom", testManyValuesRandom),
+        ("testSingleNodeHeight", testSingleNodeHeight),
+        ("testThreeNodes", testThreeNodes),
+        ("testTwoNodes", testTwoNodes),
+    ]
+}
+
 extension MeterTempoTests {
     static let __allTests = [
         ("testMeterBeatOffsets", testMeterBeatOffsets),
@@ -25,6 +37,7 @@ extension ModelTests {
         ("testCreateEvent", testCreateEvent),
         ("testCreateEventInInterval", testCreateEventInInterval),
         ("testCreateEventWithEntities", testCreateEventWithEntities),
+        ("testHelloWorld", testHelloWorld),
         ("testInferOffset", testInferOffset),
         ("testManyRhythms", testManyRhythms),
         ("testSingleNoteRhythm", testSingleNoteRhythm),
@@ -33,6 +46,7 @@ extension ModelTests {
 
 extension PerformanceContextTests {
     static let __allTests = [
+        ("testAddVoice", testAddVoice),
         ("testInitEmpty", testInitEmpty),
     ]
 }
@@ -40,6 +54,7 @@ extension PerformanceContextTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
+        testCase(AVLTreeTests.__allTests),
         testCase(MeterTempoTests.__allTests),
         testCase(ModelTests.__allTests),
         testCase(PerformanceContextTests.__allTests),

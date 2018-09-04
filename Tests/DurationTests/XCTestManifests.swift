@@ -20,6 +20,7 @@ extension DurationTreeTests {
         ("testInitWithRelativeDurations4Over5", testInitWithRelativeDurations4Over5),
         ("testInitWithRelativeDurations5Over4", testInitWithRelativeDurations5Over4),
         ("testLeafOffsets", testLeafOffsets),
+        ("testManyDurationTrees", testManyDurationTrees),
         ("testMultipleLeaves", testMultipleLeaves),
         ("testSingleLeaf", testSingleLeaf),
     ]

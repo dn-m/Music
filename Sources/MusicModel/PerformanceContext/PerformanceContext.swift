@@ -13,6 +13,8 @@ import DataStructures
 /// one or more performers.
 public struct PerformanceContext {
 
+    // MARK: - Instance Properties
+
     /// Storage of `Performer` by unique identifier.
     let performers: Bimap<PerformerID,Performer>
 
@@ -21,6 +23,20 @@ public struct PerformanceContext {
 
     /// Storage of unique voices for each `PerformerInstrumentPair`.
     let voices: [PerformerInstrumentPair: Set<VoiceID>]
+
+    // MARK: - Initializers
+
+    /// Creates a `PerformanceContext` with the given `performers`, `instruments`, and `voices`.
+    public init(
+        performers: Bimap<PerformerID,Performer> = .init(),
+        instruments: Bimap<InstrumentID,Instrument> = .init(),
+        voices: [PerformerInstrumentPair: Set<VoiceID>] = [:]
+    )
+    {
+        self.performers = Bimap()
+        self.instruments = Bimap()
+        self.voices = [:]
+    }
 }
 
 // Combination of a `Performer` and `Instrument`, stored by their integer identifiers.

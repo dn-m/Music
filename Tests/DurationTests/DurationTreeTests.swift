@@ -137,4 +137,12 @@ class DurationTreeTests: XCTestCase {
         let tree = 1/>8 * [1,1,1]
         XCTAssertEqual(tree.offsets, [Fraction(0,1), Fraction(1,24), Fraction(1,12)])
     }
+
+    func testManyDurationTrees() {
+        measure {
+            (0..<10_000).forEach { _ in
+                let _ = DurationTree(16, ProportionTree(1,[1,2,3]))
+            }
+        }
+    }
 }

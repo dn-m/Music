@@ -63,7 +63,7 @@ public struct Rhythm <Element> {
     public let durationTree: DurationTree
 
     /// Leaf items containing metrical context.
-    public let leaves: [Leaf]
+    public var leaves: [Leaf]
 }
 
 extension Rhythm {
@@ -86,7 +86,7 @@ extension Rhythm {
     /// A pair of a `Duration` and `Context` representing a single leaf of a `Rhythm` structure.
     public struct Leaf {
         public let duration: Duration
-        public let context: Context
+        public var context: Context
     }
 }
 
@@ -170,6 +170,17 @@ extension Rhythm {
     @inlinable
     public var lengths: [Duration] {
         return merge(leaves)
+    }
+
+    /// - Returns: The indices within `leaves` which contain events (not ties or rests).
+    public var eventIndices: [Int] {
+        var result: [Int] = []
+        for (index,leaf) in leaves.enumerated() {
+            if case .instance(let absenceOrEvent) = leaf.context, case .event = absenceOrEvent {
+                result.append(index)
+            }
+        }
+        return result
     }
 }
 
@@ -301,3 +312,4 @@ public func event <T> (_ value: T) -> Rhythm<T>.Context {
 
 extension Rhythm.Leaf: Equatable where Element: Equatable { }
 extension Rhythm: Equatable where Element: Equatable { }
+
