@@ -71,20 +71,43 @@ extension Model {
         // MARK: - Performance Context
 
         /// Adds the given `performer` to the performance context.
-        public func addPerformer(_ performer: Performer) -> Identifier<Performer> {
+        public func addPerformer(_ performer: Performer) -> PerformerID {
             return performanceContextBuilder.addPerformer(performer)
         }
 
         /// Adds the given `instrument` to the performance context.
-        public func addInstrument(_ instrument: Instrument) -> Identifier<Instrument> {
+        public func addInstrument(_ instrument: Instrument) -> InstrumentID {
             return performanceContextBuilder.addInstrument(instrument)
+        }
+
+        public func addVoice(
+            _ voice: Int? = nil,
+            forPerformer performer: Performer,
+            forInstrument instrument: Instrument
+        ) -> VoiceID
+        {
+            return performanceContextBuilder.addVoice(
+                forPerformer: performer,
+                withInstrument: instrument,
+                number: voice
+            )
         }
 
         // MARK: - Rhythm
 
         /// Adds the given `rhythm` at the given `offset`, if it exists. If no `offset` is given,
         /// the `rhythm` will be added at the current offset of the current meter.
-        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> RhythmID {
+        public func addRhythm(
+            _ rhythm: Rhythm<[Any]>,
+            at offset: Fraction? = nil,
+            performedOn instrument: Instrument,
+            by performer: Performer,
+            voice: Int? = nil
+        ) -> RhythmID
+        {
+            let performerID = addPerformer(performer)
+            let instrumentID = addInstrument(instrument)
+            let voiceID = addVoice(voice, forPerformer: performer, forInstrument: instrument)
             let globalOffset = offset ?? meterCollectionBuilder.offset
             let rhythmIdentifier: Identifier<Rhythm<Event>> = makeRhythmIdentifier()
             let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)

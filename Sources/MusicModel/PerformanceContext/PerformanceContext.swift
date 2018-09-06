@@ -41,8 +41,8 @@ public struct PerformanceContext {
 
 // Combination of a `Performer` and `Instrument`, stored by their integer identifiers.
 public struct PerformerInstrumentPair: Equatable, Hashable {
-    public let performer: Identifier<Performer>
-    public let instrument: Identifier<Instrument>
+    public let performer: PerformerID
+    public let instrument: InstrumentID
 }
 
 extension PerformanceContext {
@@ -80,13 +80,14 @@ extension PerformanceContext.Builder {
         forPerformer performer: Performer,
         withInstrument instrument: Instrument,
         number: Int? = nil
-    )
+    ) -> VoiceID
     {
         let performerID = addPerformer(performer)
         let instrumentID = addInstrument(instrument)
         let pair = PerformerInstrumentPair(performer: performerID, instrument: instrumentID)
-        let voice = VoiceID(number ?? voices[pair]?.count ?? 0)
-        voices.safelyInsert(voice, forKey: pair)
+        let identifier = VoiceID(number ?? voices[pair]?.count ?? 0)
+        voices.safelyInsert(identifier, forKey: pair)
+        return identifier
     }
 
     public func addPerformer(_ performer: Performer) -> Identifier<Performer> {
