@@ -57,6 +57,9 @@ extension Model {
         /// a given `Fraction` interval.
         var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
 
+        /// All of the identifiers of the attributes performed by a given `Voice`.
+        var attributesByVoice: [VoiceID: [AttributeID]] = [:]
+
         // MARK: - Builders
 
         let performanceContextBuilder = PerformanceContext.Builder()
@@ -71,20 +74,41 @@ extension Model {
         // MARK: - Performance Context
 
         /// Adds the given `performer` to the performance context.
-        public func addPerformer(_ performer: Performer) -> Identifier<Performer> {
+        public func addPerformer(_ performer: Performer) -> PerformerID {
             return performanceContextBuilder.addPerformer(performer)
         }
 
         /// Adds the given `instrument` to the performance context.
-        public func addInstrument(_ instrument: Instrument) -> Identifier<Instrument> {
+        public func addInstrument(_ instrument: Instrument) -> InstrumentID {
             return performanceContextBuilder.addInstrument(instrument)
+        }
+
+        public func addVoice(
+            _ voice: Int? = nil,
+            forPerformer performer: Performer,
+            forInstrument instrument: Instrument
+        ) -> VoiceID
+        {
+            return performanceContextBuilder.addVoice(
+                forPerformer: performer,
+                withInstrument: instrument,
+                number: voice
+            )
         }
 
         // MARK: - Rhythm
 
         /// Adds the given `rhythm` at the given `offset`, if it exists. If no `offset` is given,
         /// the `rhythm` will be added at the current offset of the current meter.
-        public func addRhythm(_ rhythm: Rhythm<[Any]>, at offset: Fraction? = nil) -> RhythmID {
+        public func addRhythm(
+            _ rhythm: Rhythm<[Any]>,
+            at offset: Fraction? = nil,
+            performedOn instrument: Instrument,
+            by performer: Performer,
+            voice: Int? = nil
+        ) -> RhythmID
+        {
+            let voiceID = addVoice(voice, forPerformer: performer, forInstrument: instrument)
             let globalOffset = offset ?? meterCollectionBuilder.offset
             let rhythmIdentifier: Identifier<Rhythm<Event>> = makeRhythmIdentifier()
             let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
@@ -92,7 +116,7 @@ extension Model {
                 let (duration, attributes) = duratedEvent
                 let localRange = Fraction(localOffset) ..< Fraction(localOffset + duration)
                 let range = localRange.shifted(by: globalOffset)
-                let (eventIdentifier, _) = addEvent(with: attributes, in: range)
+                let (eventIdentifier, _) = addEvent(attributes, in: range, performedBy: voiceID)
                 return eventIdentifier
             }
             eventsByRhythm[rhythmIdentifier] = identifiers
@@ -127,13 +151,17 @@ extension Model {
         /// Adds an event with the given `attributes` in the given `interval`.
         ///
         /// - Returns: The identifiers for the event and the attributes.
-        public func addEvent(with attributes: [Attribute], in interval: Range<Fraction>)
-            -> (event: EventID, attributes: [AttributeID])
+        public func addEvent(
+            _ attributes: [Attribute],
+            in interval: Range<Fraction>,
+            performedBy voiceID: VoiceID = 0
+        ) -> (event: EventID, attributes: [AttributeID])
         {
             let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
             let istNode = ISTNode(interval: interval, value: attributeIdentifiers)
             entitiesByInterval.insert(istNode, forKey: interval.lowerBound)
+            attributesByVoice[voiceID, default: []].append(contentsOf: attributeIdentifiers)
             return (eventIdentifier, attributeIdentifiers)
         }
 

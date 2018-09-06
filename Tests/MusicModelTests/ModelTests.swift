@@ -55,7 +55,7 @@ class ModelTests: XCTestCase {
         let interval = Fraction(3,16) ..< Fraction(31,32)
         let pitch: Pitch = 60
         let builder = Model.Builder()
-        let identifier = builder.addEvent(with: [pitch], in: interval)
+        let identifier = builder.addEvent([pitch], in: interval)
 //        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(Pitch.self): [identifier]])
 //        XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
     }
@@ -70,11 +70,13 @@ class ModelTests: XCTestCase {
         XCTAssertEqual(builder.events, [event: ids])
     }
 
+    // MARK: - Meter and Tempo
+
     func testAddEventWithAttributesInInterval() {
         let interval = Fraction(3,16) ..< Fraction(31,32)
         let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
         let builder = Model.Builder()
-        let (event,ids) = builder.addEvent(with: attributes, in: interval)
+        let (event,ids) = builder.addEvent(attributes, in: interval)
         XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
         XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
         XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
@@ -92,7 +94,7 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         builder.addTempo(Tempo(60, subdivision: 4), at: Fraction(15,32), easing: .linear)
     }
-
+  
     func testInferOffset() {
         let startTempo = Tempo(60, subdivision: 4)
         let endTempo = Tempo(120, subdivision: 4)
@@ -117,14 +119,18 @@ class ModelTests: XCTestCase {
     }
 
     func testSingleNoteRhythm() {
+        let performer = Performer(name: "Eleven")
+        let instrument = Instrument(name: "Upside Down")
         let pitch: Pitch = 60
         let rhythm = Rhythm<[Any]>(1/>4, [event([pitch])])
         let builder = Model.Builder()
-        let rhythmID = builder.addRhythm(rhythm)
+        let rhythmID = builder.addRhythm(rhythm, performedOn: instrument, by: performer)
         XCTAssertNotNil(builder.eventsByRhythm[rhythmID])
     }
 
     func testHelloWorld() {
+        let performer = Performer(name: "Jordan")
+        let instrument = Instrument(name: "Violin")
         let pitch: Pitch = 60
         let articulation: Articulation = .tenuto
         let dynamic: Dynamic = .fff
@@ -134,18 +140,18 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         builder.addMeter(meter)
         builder.addTempo(tempo)
-        _ = builder.addRhythm(note)
-        let _ = builder.build()
+        _ = builder.addRhythm(note, performedOn: instrument, by: performer)
     }
 
     func testManyRhythms() {
+        let performer = Performer(name: "Alexis")
+        let instrument = Instrument(name: "Contrabass")
         let rhythms: [Rhythm<[Any]>] = (0..<10_000).map { _ in
             let amountEvents = 10
             let events: [Rhythm<[Any]>.Context] = (0..<amountEvents).map { _ in
                 let amountPitches = 3
                 let pitches: [Pitch] = (0..<amountPitches).map { _ in
-                    let nn = Double.random(in: 48..<74)
-                    return Pitch(nn)
+                    return Pitch(Double.random(in: 48..<74))
                 }
                 return event(pitches)
             }
@@ -156,7 +162,7 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         var offset: Fraction = .zero
         for rhythm in rhythms {
-            _ = builder.addRhythm(rhythm, at: offset)
+            _ = builder.addRhythm(rhythm, at: offset, performedOn: instrument, by: performer, voice: 0)
             offset += Fraction(rhythm.durationTree.duration)
         }
     }

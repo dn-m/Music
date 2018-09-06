@@ -22,7 +22,7 @@ public struct PerformanceContext {
     let instruments: Bimap<InstrumentID,Instrument>
 
     /// Storage of unique voices for each `PerformerInstrumentPair`.
-    let voices: [PerformerInstrumentPair: Set<VoiceID>]
+    let voices: Bimap<VoiceID,Voice>
 
     // MARK: - Initializers
 
@@ -30,20 +30,27 @@ public struct PerformanceContext {
     public init(
         performers: Bimap<PerformerID,Performer> = .init(),
         instruments: Bimap<InstrumentID,Instrument> = .init(),
-        voices: [PerformerInstrumentPair: Set<VoiceID>] = [:]
+        voices: Bimap<VoiceID,Voice> = .init()
     )
     {
-        self.performers = Bimap()
-        self.instruments = Bimap()
-        self.voices = [:]
+        self.performers = performers
+        self.instruments = instruments
+        self.voices = voices
     }
 }
 
 // Combination of a `Performer` and `Instrument`, stored by their integer identifiers.
-public struct PerformerInstrumentPair: Equatable, Hashable {
-    public let performer: Identifier<Performer>
-    public let instrument: Identifier<Instrument>
+struct PerformerInstrumentPair {
+    let performer: PerformerID
+    let instrument: InstrumentID
+    init(_ performer: PerformerID, _ instrument: InstrumentID) {
+        self.performer = performer
+        self.instrument = instrument
+    }
 }
+
+extension PerformerInstrumentPair: Equatable { }
+extension PerformerInstrumentPair: Hashable { }
 
 extension PerformanceContext {
 
@@ -53,10 +60,13 @@ extension PerformanceContext {
 
         private var performerIdentifier = 0
         private var instrumentIdentifier = 0
+        private var voiceIdentifier = 0
 
         var performers: Bimap<PerformerID,Performer> = [:]
         var instruments: Bimap<InstrumentID,Instrument> = [:]
-        var voices: [PerformerInstrumentPair: Set<VoiceID>] = [:]
+        var voices: Bimap<VoiceID,Voice> = [:]
+
+        var voicesByPerformerInstrumentPair: [PerformerInstrumentPair: Set<VoiceID>] = [:]
 
         // MARK: - Initializers
 
@@ -65,6 +75,7 @@ extension PerformanceContext {
             self.performers = [:]
             self.instruments = [:]
             self.voices = [:]
+            self.voicesByPerformerInstrumentPair = [:]
         }
     }
 }
@@ -80,16 +91,38 @@ extension PerformanceContext.Builder {
         forPerformer performer: Performer,
         withInstrument instrument: Instrument,
         number: Int? = nil
-    )
+    ) -> VoiceID
     {
         let performerID = addPerformer(performer)
         let instrumentID = addInstrument(instrument)
-        let pair = PerformerInstrumentPair(performer: performerID, instrument: instrumentID)
-        let voice = VoiceID(number ?? voices[pair]?.count ?? 0)
-        voices.safelyInsert(voice, forKey: pair)
+        let pair = PerformerInstrumentPair(performerID, instrumentID)
+
+        // If a number is known ahead of time, return the voice identifier if the voice is extant,
+        // otherwise, add a new voice.
+        if let number = number {
+            let voice = Voice(performer: performerID, instrument: instrumentID, number)
+            if let voiceID = voices[value: voice] { return voiceID }
+            return addNewVoice(voice, with: pair)
+        }
+
+        // If the number is not known ahead of time, make a new voice for ther performer-instrument
+        // pair.
+        let voice = Voice(performer: performerID, instrument: instrumentID, makeNewVoiceID(pair))
+        return addNewVoice(voice, with: pair)
     }
 
-    public func addPerformer(_ performer: Performer) -> Identifier<Performer> {
+    func addNewVoice(_ voice: Voice, with pair: PerformerInstrumentPair) -> VoiceID {
+        let identifier = makeVoiceIdentifier()
+        voicesByPerformerInstrumentPair[pair, default: []].insert(identifier)
+        voices[key: identifier] = voice
+        return identifier
+    }
+
+    func makeNewVoiceID(_ pair: PerformerInstrumentPair) -> Int {
+        return voicesByPerformerInstrumentPair[pair]?.count ?? 0
+    }
+
+    public func addPerformer(_ performer: Performer) -> PerformerID {
         guard let identifier = performers[value: performer] else {
             let identifier = makePerformerIdentifier()
             performers[key: identifier] = performer
@@ -98,7 +131,7 @@ extension PerformanceContext.Builder {
         return identifier
     }
 
-    public func addInstrument(_ instrument: Instrument) -> Identifier<Instrument> {
+    public func addInstrument(_ instrument: Instrument) -> InstrumentID {
         guard let identifier = instruments[value: instrument] else {
             let identifier = makeInstrumentIdentifier()
             instruments[key: identifier]  = instrument
@@ -109,6 +142,11 @@ extension PerformanceContext.Builder {
 
     public func build() -> PerformanceContext {
         return PerformanceContext(performers: performers, instruments: instruments, voices: voices)
+    }
+
+    private func makeVoiceIdentifier() -> VoiceID {
+        defer { voiceIdentifier += 1 }
+        return Identifier(voiceIdentifier)
     }
 
     private func makePerformerIdentifier() -> Identifier<Performer> {
