@@ -166,4 +166,20 @@ class ModelTests: XCTestCase {
             offset += Fraction(rhythm.durationTree.duration)
         }
     }
+
+    func testSlur() {
+        let performer = Performer(name: "Leo")
+        let instrument = Instrument(name: "Guitar")
+        let pitch: Pitch = 60
+        let articulation: Articulation = .tenuto
+        let dynamic: Dynamic = .fff
+        let slurStart: Slur = .start
+        let slurStop: Slur = .stop
+        let rhythm = Rhythm<Event>(1/>1, [
+            event([pitch, dynamic, articulation, slurStart]),
+            event([pitch, dynamic, articulation, slurStop])
+        ])
+        let builder = Model.Builder()
+        let _ = builder.addRhythm(rhythm, performedOn: instrument, by: performer)
+    }
 }
