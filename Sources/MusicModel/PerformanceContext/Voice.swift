@@ -16,7 +16,7 @@ public struct Voice {
 
     /// Instrument identifier.
     let instrument: InstrumentID
-
+    
     /// Identifier.
     let identifier: Int
     
@@ -38,4 +38,3 @@ extension Voice: Equatable { }
 extension Voice: Hashable { }
 
 public typealias VoiceID = Identifier<Voice>
-

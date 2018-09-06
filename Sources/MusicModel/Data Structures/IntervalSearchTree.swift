@@ -42,4 +42,3 @@ extension AVLTree where Key == Fraction, Value == ISTNode<Fraction,[Any]> {
         return balance(node, with: key)
     }
 }
-
