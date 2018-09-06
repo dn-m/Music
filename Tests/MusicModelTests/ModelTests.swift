@@ -55,28 +55,7 @@ class ModelTests: XCTestCase {
         let interval = Fraction(3,16) ..< Fraction(31,32)
         let pitch: Pitch = 60
         let builder = Model.Builder()
-
         let identifier = builder.addEvent([pitch], in: interval)
-//        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(Pitch.self): [identifier]])
-//        XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
-    }
-
-    func testAddEventWithAttributes() {
-        let attributes: [Any] = [Pitch(60), Articulation.staccato, Dynamic.f]
-        let builder = Model.Builder()
-        let (event,ids) = builder.addEvent(with: attributes)
-        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
-        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
-        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
-        XCTAssertEqual(builder.events, [event: ids])
-    }
-
-    func testAddEventWithAttributesInInterval() {
-        let interval = Fraction(3,16) ..< Fraction(31,32)
-        let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
-        let builder = Model.Builder()
-        let (event,ids) = builder.addEvent(attributes, in: interval)
-        let identifier = builder.addEvent(with: [pitch], in: interval)
 //        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(Pitch.self): [identifier]])
 //        XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
     }
@@ -97,7 +76,7 @@ class ModelTests: XCTestCase {
         let interval = Fraction(3,16) ..< Fraction(31,32)
         let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
         let builder = Model.Builder()
-        let (event,ids) = builder.addEvent(with: attributes, in: interval)
+        let (event,ids) = builder.addEvent(attributes, in: interval)
         XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
         XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
         XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
@@ -167,11 +146,6 @@ class ModelTests: XCTestCase {
     func testManyRhythms() {
         let performer = Performer(name: "Alexis")
         let instrument = Instrument(name: "Contrabass")
-        _ = builder.addRhythm(note)
-        let _ = builder.build()
-    }
-
-    func testManyRhythms() {
         let rhythms: [Rhythm<[Any]>] = (0..<10_000).map { _ in
             let amountEvents = 10
             let events: [Rhythm<[Any]>.Context] = (0..<amountEvents).map { _ in
