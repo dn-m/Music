@@ -182,4 +182,21 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         let _ = builder.addRhythm(rhythm, performedOn: instrument, by: performer)
     }
+
+    func testDynamicInterpolation() {
+        let performer = Performer(name: "Leo")
+        let instrument = Instrument(name: "Guitar")
+        let pitch: Pitch = 60
+        let dynamicStart: Dynamic = .fff
+        let dymamicEnd: Dynamic = .ppp
+        let interpStart = Dynamic.Interpolation(from: dynamicStart, to: dynamicEnd)
+        let interpStop: Dynamic.Interpolation = .stop
+        let rhythm = Rhythm<Event>(1/>1, [
+            event([pitch, dynamic, interpStart]),
+            event([pitch, dynamic, interpStop])
+        ])
+        let builder = Model.Builder()
+        let _ = builder.addRhythm(rhythm, performedOn: instrument, by: performer)
+    }
 }
+

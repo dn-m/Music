@@ -9,7 +9,7 @@
 extension Dynamic {
 
     /// Interpolation between two `Dynamic` markings.
-    public struct Interpolation: Equatable {
+    public enum Interpolation: Equatable {
 
         /// The direction of a `Dynamic.Interpolation`.
         public enum Direction {
@@ -26,16 +26,16 @@ extension Dynamic {
             case none
         }
 
-        // MARK: - Instance Properties
+        case start(Direction)
+        case stop
 
-        /// The direction of a `Dynamic.Interpolation`.
-        public let direction: Direction
+        // MARK: - Instance Properties
 
         // MARK: - Initializers
 
         /// Create a `Dynamic.Interpolation` with the given `direction`.
         public init(direction: Direction) {
-            self.direction = direction
+            self = .start(direction)
         }
 
         /// Create a `Dynamic.Interpolation` between the given `Dynamic` values.
