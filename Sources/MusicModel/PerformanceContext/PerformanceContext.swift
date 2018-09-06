@@ -39,6 +39,7 @@ public struct PerformanceContext {
     }
 }
 
+// Combination of a `Performer` and `Instrument`, stored by their integer identifiers.
 struct PerformerInstrumentPair {
     let performer: PerformerID
     let instrument: InstrumentID
@@ -50,12 +51,6 @@ struct PerformerInstrumentPair {
 
 extension PerformerInstrumentPair: Equatable { }
 extension PerformerInstrumentPair: Hashable { }
-
-// Combination of a `Performer` and `Instrument`, stored by their integer identifiers.
-public struct PerformerInstrumentPair: Equatable, Hashable {
-    public let performer: Identifier<Performer>
-    public let instrument: Identifier<Instrument>
-}
 
 extension PerformanceContext {
 
