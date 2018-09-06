@@ -64,6 +64,7 @@ extension PerformanceContext {
         var performers: Bimap<PerformerID,Performer> = [:]
         var instruments: Bimap<InstrumentID,Instrument> = [:]
         var voices: Bimap<VoiceID,Voice> = [:]
+
         var voicesByPerformerInstrumentPair: [PerformerInstrumentPair: Set<VoiceID>] = [:]
 
         // MARK: - Initializers

@@ -57,8 +57,8 @@ extension Model {
         /// a given `Fraction` interval.
         var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
 
-        /// All of the identifiers of the attributes performed by a given `PerformerInstrumentPair`.
-        var entitiesByPerformerInstrumentPair: [PerformerInstrumentPair: [VoiceID]] = [:]
+        /// All of the identifiers of the attributes performed by a given `Voice`.
+        var attributesByVoice: [VoiceID: [AttributeID]] = [:]
 
         // MARK: - Builders
 
@@ -108,8 +108,6 @@ extension Model {
             voice: Int? = nil
         ) -> RhythmID
         {
-            let performerID = addPerformer(performer)
-            let instrumentID = addInstrument(instrument)
             let voiceID = addVoice(voice, forPerformer: performer, forInstrument: instrument)
             let globalOffset = offset ?? meterCollectionBuilder.offset
             let rhythmIdentifier: Identifier<Rhythm<Event>> = makeRhythmIdentifier()
@@ -118,7 +116,7 @@ extension Model {
                 let (duration, attributes) = duratedEvent
                 let localRange = Fraction(localOffset) ..< Fraction(localOffset + duration)
                 let range = localRange.shifted(by: globalOffset)
-                let (eventIdentifier, _) = addEvent(with: attributes, in: range)
+                let (eventIdentifier, _) = addEvent(attributes, in: range, performedBy: voiceID)
                 return eventIdentifier
             }
             eventsByRhythm[rhythmIdentifier] = identifiers
@@ -153,13 +151,17 @@ extension Model {
         /// Adds an event with the given `attributes` in the given `interval`.
         ///
         /// - Returns: The identifiers for the event and the attributes.
-        public func addEvent(with attributes: [Attribute], in interval: Range<Fraction>)
-            -> (event: EventID, attributes: [AttributeID])
+        public func addEvent(
+            _ attributes: [Attribute],
+            in interval: Range<Fraction>,
+            performedBy voiceID: VoiceID = 0
+        ) -> (event: EventID, attributes: [AttributeID])
         {
             let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
             let istNode = ISTNode(interval: interval, value: attributeIdentifiers)
             entitiesByInterval.insert(istNode, forKey: interval.lowerBound)
+            attributesByVoice[voiceID, default: []].append(contentsOf: attributeIdentifiers)
             return (eventIdentifier, attributeIdentifiers)
         }
 
