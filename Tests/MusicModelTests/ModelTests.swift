@@ -150,8 +150,7 @@ class ModelTests: XCTestCase {
             let events: [Rhythm<[Any]>.Context] = (0..<amountEvents).map { _ in
                 let amountPitches = 3
                 let pitches: [Pitch] = (0..<amountPitches).map { _ in
-                    let nn = Double.random(in: 48..<74)
-                    return Pitch(nn)
+                    return Pitch(Double.random(in: 48..<74))
                 }
                 return event(pitches)
             }

@@ -57,6 +57,9 @@ extension Model {
         /// a given `Fraction` interval.
         var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
 
+        /// All of the identifiers of the attributes performed by a given `PerformerInstrumentPair`.
+        var entitiesByPerformerInstrumentPair: [PerformerInstrumentPair: [VoiceID]] = [:]
+
         // MARK: - Builders
 
         let performanceContextBuilder = PerformanceContext.Builder()
