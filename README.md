@@ -99,43 +99,142 @@ let normalForm = set.normalForm
 
 > `[4,6,8,0]`
 
-Further, we can arrange the set into its "prime" form. A prime form is the more "left-packed" ordering of the pitch classes of the normal form of the original collection and the normal form of the inversion of the original collection. Finally, this ordering is transposed such that the first value is the pitch class of `0`.
+Further, we can arrange the set into its "prime" form. A prime form is the more "left-packed" ordering of the pitch classes of the normal form of the original collection and the normal form of the inversion of the original collection. Finally, pitch classes are transposed such that the first value is the pitch class of `0`.
 
 ```Swift
-let primeForm = self.primeForm
+let primeForm = set.primeForm
 ```
 
 > `[0,2,4,8]`
 
 ### Duration
 
+Import the `Duration` module to create and manipulate structures of musical time.
 
+```Swift
+import Duration
+```
+
+A `Duration` is a `Rational` type whose denominator must be a power-of-two.
+
+```Swift
+let crotchet = Duration(1,4)
+```
+
+> One quarter note
+
+The infix operator `/>` can be used to construct a `Duration`.
+
+```Swift
+let dur = 3/>32
+```
+
+> Three thirty-second notes
+
+If you attempt to create a `Duration` with a non-power-of-two denominator, your program will crash.
+
+```Swift
+let notDur = 1/>31
+```
+
+> Cannot create a 'Duration' with a non-power-of-two subdivision '31'
+
+#### Meter
+
+Some musics contextualize utterances within a beat structure, called a `Meter`.
+
+```Swift
+let common = Meter(4,4)
+let waltz = Meter(3,4)
+```
+
+Most often, meters have a power-of-two denominator, but this is not a requirement of the type in the way that it is for `Duration`.
+
+```Swift
+let ferneyhough = Meter(13,56)
+```
+
+More complex meters can also be constructed. For example, the numerator can be represented by a fraction.
+
+```Swift
+let fractional = Meter(Fraction(3,5),16)
+```
+
+Ordinary and fractional meters can be concatenated into a single additive meter.
+
+```Swift
+let blueRondo = Meter(2,8) + Meter(2,8) + Meter(2,8) + Meter(3,8)
+let czernowinSQm5 = Meter(Meter(1,4),Meter(3,16))
+let czernowinSQm7 = Meter(Meter(1,4),Meter(Fraction(2,3),4))
+```
+
+A `Meter` can be split up into a subsegment if necessary.
+
+```Swift
+let fragment = common.fragment(in: Fraction(3,32) ..< Fraction(53,64))
+```
+
+> `Meter.Fragment(Meter(4,4), in: Fraction(3,32) ..< Fraction(53,64))`
+
+#### Meter.Collection
+
+We can wrap these meters up into a `Meter.Collection`. `Meter.Collection` conforms to `ExpressibleByArrayLiteral`, so we can construct one without too much effort.
+
+```Swift
+let weirdMeters: Meter.Collection = [common, waltz, ferneyhough, fractional, blueRondo]
+```
+
+The `Meter.Collection` type provides affordances for splitting up a collection of meters into subsegments.
+
+```Swift
+let meters: Meter.Collection = (0..<4).map { _ in Meter(4,4) } // Four common-time meters
+let fragment = meters.fragment(in: Fraction(3,4) ..< Fraction(11,4)
+```
+
+> ```
+> Meter.Collection.Fragment(
+>     head: Meter.Fragment(Meter(4,4), in: Fraction(3,4) ..< Fraction(4,4)),
+>     body: [Meter(4,4)],
+>     tail: Meter.Fragment(Meter(4,4), in: Fraction(0,4) ..< Fraction(3,4))
+> )
+> ```
+
+#### Tempo
+
+A `Tempo` is the definition of a pulse occurring at a given frequency at a given subdivision level .
+
+```Swift
+let stayinAlive = Tempo(100, subdivision: 4)
+```
+
+> 100 quarter-note beats per minute . Useful for CPR.
 
 ### Dynamics
 
-### Articulations
-
-### MusicModel
+The `Dynamic` type provides an interface to describe musical loudness in a highly subjective way.
 
 ```Swift
-import Pitch
-import Duration
-import Dynamics
-
-let c: Pitch = 60 // => "middle c"
-let d = c + 2 // => 62 // => Pitch(62)
-let pcs: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
-let retrograde = pcs.retrograde // => [10,2,1,6,5,9,7,8,4,3,11,0]
-
-let duration = 3/>4 // => Duration(3,4) "three quarter notes"
-let tempo = Tempo(120, subdivision: 8) // => "120 beats per minute at the eighth-note level"
-let meter = Meter(15,16) // => "15 beats at the sixteenth-note level"
-let meters: Meter.Collection = [Meter(3,4), Meter(5,16), Meter(11,28)]
-
 let loud: Dynamic = .ff
 let louder: Dynamic = .ffff
 let lessLoud: Dynamic = .p
 ```
+
+### Articulations
+
+The `Articulation` type provides an interface to describe the way in which a given musical entity is performed.
+
+```Swift
+let short: Articulation = .staccato
+let sweet: Articulation = .tenuto
+let hard: Articulation = .marcato
+let hereIAm: Articulation = .accent
+```
+
+### MusicModel
+
+The `MusicModel` brings all of elements together from the modules contained in this package.
+
+---
 
 ### Requirements
 
@@ -143,9 +242,6 @@ let lessLoud: Dynamic = .p
 - [Swift Package Manager](https://swift.org/package-manager/)
 
 ### Installation
-
-
-
 
 In order to use the `Music` API, add it to the `dependencies` section of your `Package.swift` file:
 
