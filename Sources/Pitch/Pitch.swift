@@ -50,7 +50,7 @@ extension Pitch {
 
     /// The `Frequency` representation of this `Pitch`, with the given tuning `referenceFrequency`
     /// at the given `referenceNoteNumber`.
-    public func frequency(with referenceFrequency: Frequency, referenceNoteNumber: NoteNumber)
+    public func frequency(referenceFrequency: Frequency = 440, referenceNoteNumber: NoteNumber = 69)
         -> Frequency
     {
         return value.frequency(with: referenceFrequency, at: referenceNoteNumber)

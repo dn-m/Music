@@ -23,6 +23,100 @@ Check out the [documentation](https://dn-m.github.io/Packages/Music) automatical
 
 ## Usage
 
+### Pitch
+
+Import the `Pitch` module to create and manipulate pitch-related structures.
+
+```Swift
+import Pitch
+```
+
+To start, we can create a pitch with a note number of `60` (i.e., "middle c"). `Pitch` conforms to `ExpressibleByFloatLiteral`, so you can construct a `Pitch` value without too much extra noise.
+
+```Swift
+let c: Pitch = 60
+```
+
+> Under the hood, the float literal value here (`60`) represents a `NoteNumber` instance. The `NoteNumber` structure is a floating-point analog to the MIDI integral note number concept, wherein each unit corresponds to a semitone.
+
+Now, let's make a new pitch which is three semitones higher than our "middle c". `Pitch` conforms to `SignedNumeric`, so transposing pitches is quite elegant.
+
+```Swift
+let higher = c + 3
+```
+
+> `Pitch(63)`
+
+And, if we want to dirty things up and make this all a little more microtonal, we needn't constrain ourselves to using integral `NoteNumber` values.
+
+```Swift
+let lessHigh = higher - 0.25
+```
+
+> `Pitch(62.75)`
+
+If we want to do some post-tonal theoretical analysis on some given pitches, it is very helpful to convert them to `Pitch.Class` values. A pitch class is a mod-12 representation of a pitch.
+
+```Swift
+let pc = lessHigh.class
+```
+
+> `Pitch.Class(2.75)`
+
+If we have a collection of `Pitch.Class` values, we can group them up into a `Pitch.Class.Collection`.
+
+```Swift
+let webern24: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
+```
+
+> This is the 12-tone row from Anton Webern's op. 24, *Concerto for Nine Instruments*.
+
+There are some helpful operations that we can perform in order expose interesting similarities between different pitch collections.
+
+```Swift
+let retrograde = webern24.retrograde
+```
+
+> `[0,11,3,4,8,7,9,5,6,1,2,10]`
+
+```Swift
+let inversion = webern24.inversion 
+```
+
+> `[0,1,9,8,4,5,3,7,6,11,10,2]`
+
+Now, consider this set of pitch classes.
+
+```Swift
+let set: Pitch.Class.Collection = [8,0,4,6]
+```
+
+We can arrange it into its "normal" form, which orders the pitch classes in their most "left-packed" arrangement (i.e., the intervals between the pitch classes are the smallest at the beginning of the collection).
+
+```Swift
+let normalForm = set.normalForm
+```
+
+> `[4,6,8,0]`
+
+Further, we can arrange the set into its "prime" form. A prime form is the more "left-packed" ordering of the pitch classes of the normal form of the original collection and the normal form of the inversion of the original collection. Finally, this ordering is transposed such that the first value is the pitch class of `0`.
+
+```Swift
+let primeForm = self.primeForm
+```
+
+> `[0,2,4,8]`
+
+### Duration
+
+
+
+### Dynamics
+
+### Articulations
+
+### MusicModel
+
 ```Swift
 import Pitch
 import Duration
