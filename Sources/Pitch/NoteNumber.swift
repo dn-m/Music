@@ -50,7 +50,7 @@ extension NoteNumber {
 
     /// Creates a `NoteNumber` from the given `frequency`, using the given reference `Frequency` for
     /// the given reference `NoteNumber`.
-    public init(frequency: Frequency, with freqRef: Frequency = 440, at nnRef: NoteNumber) {
+    public init(frequency: Frequency, with freqRef: Frequency = 440, at nnRef: NoteNumber = 69) {
         self.value = nnRef.value + (12 * (log(frequency.value / freqRef.value) / log(2)))
     }
 

@@ -43,7 +43,7 @@ public struct Duration {
 
         assert(
             denominator.isPowerOfTwo,
-            "Cannot create Duration with non-power-of-two subdivision: " + "\(denominator)"
+            "Cannot create a 'Duration' with a non-power-of-two subdivision " + "'\(denominator)'"
         )
 
         self.beats = numerator

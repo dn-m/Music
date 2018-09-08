@@ -200,7 +200,7 @@ extension Collection where Element == Pitch.Class.Collection {
     /// - Returns: The `Pitch.Class.Collection` which has the least difference between its first
     /// elements.
     var mostLeftPacked: Element {
-        return self.min { $0.intervals.lexicographicallyPrecedes($1.intervals) }!
+        return self.min { $0.lazy.intervals.lexicographicallyPrecedes($1.lazy.intervals) }!
     }
 }
 
