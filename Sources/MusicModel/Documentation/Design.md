@@ -34,7 +34,7 @@ The primary use cases for this musical model are the queries stated above. The u
 
 Any query of musical information will exist within some interval of musical time (even if this interval is equivalent to that of the entire work). As such, it is of critical importance to provide the music information in a given interval as performantly as possible. Identifiers for each attribute (piece of musical information) are stored by their fractional interval in an `IntervalSearchTree<Fraction,Set<AttributeID>>`.
 
-The `IntervalSearchTree` structure provides the O(log *n + m*) performance as desired. 
+The `IntervalSearchTree` structure is implemented as an augmented `AVLTree`, which provides better lookup performance than a red-black tree and worse insertion and removal performance.
 
 ### Query By Voice
 
