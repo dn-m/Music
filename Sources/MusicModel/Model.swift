@@ -11,6 +11,7 @@ import DataStructures
 import Math
 import Duration
 
+// TODO: Move to `dn-m/Structure/DataStructures`
 public struct Metatype {
     let base: Any.Type
     public init(_ base: Any.Type) {
