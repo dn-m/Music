@@ -12,6 +12,16 @@ extension AVLTreeTests {
     ]
 }
 
+extension IntervalSearchTreeTests {
+    static let __allTests = [
+        ("testInsertMaxUpdated", testInsertMaxUpdated),
+        ("testIntervalContainsMultiple", testIntervalContainsMultiple),
+        ("testIntervalContainsSingle", testIntervalContainsSingle),
+        ("testIntervalNotContainedGreaterThan", testIntervalNotContainedGreaterThan),
+        ("testIntervalNotContainedLessThan", testIntervalNotContainedLessThan),
+    ]
+}
+
 extension MeterTempoTests {
     static let __allTests = [
         ("testMeterBeatOffsets", testMeterBeatOffsets),
@@ -41,6 +51,7 @@ extension ModelTests {
         ("testInferOffset", testInferOffset),
         ("testManyRhythms", testManyRhythms),
         ("testSingleNoteRhythm", testSingleNoteRhythm),
+        ("testSlur", testSlur),
     ]
 }
 
@@ -55,6 +66,7 @@ extension PerformanceContextTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(AVLTreeTests.__allTests),
+        testCase(IntervalSearchTreeTests.__allTests),
         testCase(MeterTempoTests.__allTests),
         testCase(ModelTests.__allTests),
         testCase(PerformanceContextTests.__allTests),
