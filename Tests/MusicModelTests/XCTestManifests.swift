@@ -1,17 +1,5 @@
 import XCTest
 
-extension AVLTreeTests {
-    static let __allTests = [
-        ("testInitSequence", testInitSequence),
-        ("testManyValuesDecreasing", testManyValuesDecreasing),
-        ("testManyValuesIncreasing", testManyValuesIncreasing),
-        ("testManyValuesRandom", testManyValuesRandom),
-        ("testSingleNodeHeight", testSingleNodeHeight),
-        ("testThreeNodes", testThreeNodes),
-        ("testTwoNodes", testTwoNodes),
-    ]
-}
-
 extension IntervalSearchTreeTests {
     static let __allTests = [
         ("testInsertMaxUpdated", testInsertMaxUpdated),
@@ -67,7 +55,6 @@ extension PerformanceContextTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
-        testCase(AVLTreeTests.__allTests),
         testCase(IntervalSearchTreeTests.__allTests),
         testCase(MeterTempoTests.__allTests),
         testCase(ModelTests.__allTests),
