@@ -58,6 +58,17 @@ class IntervalSearchTreeTests: XCTestCase {
     }
 
     func testIntervalContainsMultiple() {
-        // TODO
+        let searchInterval = Fraction(3,8) ..< Fraction(7,8)
+        let expectedIntervals: [Range<Fraction>] = [
+            Fraction(3,8) ..< Fraction(8,8),
+            Fraction(2,8) ..< Fraction(9,8),
+            Fraction(5,8) ..< Fraction(7,8),
+            Fraction(6,8) ..< Fraction(13,8)
+        ]
+        let expected: [ISTPayload<Fraction,[AttributeID]>] = expectedIntervals.map { interval in
+            ISTPayload(interval: interval, value: [])
+        }
+        let result = intervalTree.intervals(overlapping: searchInterval)
+        XCTAssertEqual(result, expected)
     }
 }
