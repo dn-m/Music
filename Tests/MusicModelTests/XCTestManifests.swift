@@ -19,6 +19,7 @@ extension IntervalSearchTreeTests {
         ("testIntervalContainsSingle", testIntervalContainsSingle),
         ("testIntervalNotContainedGreaterThan", testIntervalNotContainedGreaterThan),
         ("testIntervalNotContainedLessThan", testIntervalNotContainedLessThan),
+        ("testManyIntervalsOverlapping", testManyIntervalsOverlapping),
     ]
 }
 
