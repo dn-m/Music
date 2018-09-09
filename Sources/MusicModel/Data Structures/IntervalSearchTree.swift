@@ -45,16 +45,17 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
 
     public func intervals(overlapping target: Range<Fraction>) -> [ISTPayload<Fraction,[AttributeID]>] {
         var result: [ISTPayload<Fraction,[AttributeID]>] = []
-        return IntervalSearchTree.intervals(from: root, overlapping: target, into: &result)
+        IntervalSearchTree.intervals(from: root, overlapping: target, into: &result)
+        return result
     }
 
     private static func intervals(
         from node: Node? = nil,
         overlapping target: Range<Fraction>,
         into result: inout [ISTPayload<Fraction,[AttributeID]>]
-    ) -> [ISTPayload<Fraction,[AttributeID]>]
+    )
     {
-        guard let node = node else { return result }
+        guard let node = node else { return }
         let interval = node.value.interval
         // Attempt to add the payload of the current node if their is an overlap
         if IntervalRelation.overlapping.contains(interval.relation(with: target)) {
@@ -63,11 +64,10 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
         // Attempt to add nodes to the left if the maximum subtree upper bound is greater than the
         // lower bound of the target interval
         if let left = node.left, left.value.max > target.lowerBound {
-            result = intervals(from: left, overlapping: target, into: &result)
+            intervals(from: left, overlapping: target, into: &result)
         }
         // Lastly, attempt to add the overlapping intervals to the right
-        result = intervals(from: node.right, overlapping: target, into: &result)
-        return result
+        intervals(from: node.right, overlapping: target, into: &result)
     }
 
     mutating func insert(_ payload: Value) {
