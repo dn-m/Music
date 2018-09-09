@@ -83,16 +83,20 @@ public final class Model {
         self.entitiesByType = entitiesByType
     }
 
+    /// - Returns: The identifiers for attributes in the given `interval`.
     public func attributes(in interval: Range<Fraction>) -> [AttributeID] {
-        fatalError()
+        return entitiesByInterval.intervals(overlapping: interval).flatMap { $0.payload }
     }
 
-    public func attributes(by voice: Voice) -> [AttributeID] {
-        fatalError()
+    /// - Returns: The identifiers for attributes performed by the given voice.
+    public func attributes(by voice: VoiceID) -> [AttributeID] {
+        return attributesByVoice[voice] ?? []
     }
 
+    /// - Returns: The identifiers for attributes with the given `type`.
     public func attributes(type: Any.Type) -> [AttributeID] {
-        fatalError()
+        let metatype = Metatype(type)
+        return entitiesByType[metatype] ?? []
     }
 }
 
