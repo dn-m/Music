@@ -38,12 +38,18 @@ public typealias IntervalSearchTree <Metric: Comparable, Value> = AVLTree<Metric
 extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[AttributeID]> {
 
     /// Creates an `IntervalSearchTree` with the given `sequence` of `ISTPayload` values.
-    public init <S> (_ sequence: S) where S: Sequence, S.Element == ISTPayload<Fraction,[AttributeID]> {
+    public init <S> (_ sequence: S)
+        where S: Sequence, S.Element == ISTPayload<Fraction,[AttributeID]>
+    {
         self.init()
         sequence.forEach { insert($0, forKey: $0.interval.lowerBound) }
     }
 
-    public func intervals(overlapping target: Range<Fraction>) -> [ISTPayload<Fraction,[AttributeID]>] {
+    /// - Returns: An array of payloads containing the fractional interval and associated values
+    /// overlapping with the given `target` interval.
+    public func intervals(overlapping target: Range<Fraction>)
+        -> [ISTPayload<Fraction,[AttributeID]>]
+    {
         var result: [ISTPayload<Fraction,[AttributeID]>] = []
         IntervalSearchTree.intervals(from: root, overlapping: target, into: &result)
         return result
@@ -70,8 +76,12 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
         intervals(from: node.right, overlapping: target, into: &result)
     }
 
+    /// Inserts the given `payload`, storing the payload by the lower bound of its interval.
     mutating func insert(_ payload: Value) {
-        self.root = IntervalSearchTree.insert(payload, forKey: payload.interval.lowerBound, into: root)
+        self.root = IntervalSearchTree.insert(payload,
+            forKey: payload.interval.lowerBound,
+            into: root
+        )
     }
 
     @discardableResult
