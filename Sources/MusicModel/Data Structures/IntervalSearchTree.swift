@@ -36,9 +36,17 @@ public struct ISTPayload <Metric: Comparable, Value> {
 
 extension ISTPayload: Equatable where Value: Equatable { }
 
+/// An `IntervalSearchTree` is an augmentatin of an `AVLTree`, wherein the the value of `Node` is
+/// an `ISTPayload`. An `ISTPayload` contains the `interval` containing the value, the `max` upper
+/// bound of subtrees, and the `payload` value itself.
 public typealias IntervalSearchTree <Metric: Comparable, Value> = AVLTree<Metric,ISTPayload<Metric,Value>>
 
 // FIXME: This is a very concrete initial implementation. Abstract out from here.
+// When Swift allows parameterized extensions (https://gist.github.com/austinzheng/7cd427dd1a87efb1d94481015e5b3828#parameterized-extensions), and extensions of generic
+// typealiases, this will be more elegant:
+//
+// `extension IntervalSearchTree <T> where Value == ISTPyload<Fraction,T>, T: RangeReplaceableCollection`
+//
 extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[AttributeID]> {
 
     /// Creates an `IntervalSearchTree` with the given `sequence` of `ISTPayload` values.
