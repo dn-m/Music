@@ -71,4 +71,17 @@ class IntervalSearchTreeTests: XCTestCase {
         let result = intervalTree.intervals(overlapping: searchInterval)
         XCTAssertEqual(result, expected)
     }
+
+    func testManyIntervalsOverlapping() {
+        let intervals: [Range<Fraction>] = (0..<1_000_000).map { _ in
+            let lowerBound = Fraction(Int.random(in: 1..<10_000),8)
+            let length = Fraction(Int.random(in: 1..<10),8)
+            let upperBound = lowerBound + length
+            return lowerBound ..< upperBound
+        }
+        let payloads: [ISTPayload<Fraction,[AttributeID]>] = intervals.map { .init(interval: $0, value: []) }
+        let ist = IntervalSearchTree<Fraction,[AttributeID]>(payloads)
+        let searchInterval = Fraction(40,8) ..< Fraction(300,8)
+        let _ = ist.intervals(overlapping: searchInterval)
+    }
 }

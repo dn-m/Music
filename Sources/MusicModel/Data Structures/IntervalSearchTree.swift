@@ -86,6 +86,7 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
             node.value.payload.append(contentsOf: value.payload)
             return node
         }
+        // Update the max subtree upper bound to the max of the current and the inserted
         node.value.max = max(node.value.max, value.max)
         return balance(node, with: key)
     }
