@@ -20,8 +20,8 @@ class ModelTests: XCTestCase {
     func testAddEntity() {
         let identifier: AttributeID = 42
         let builder = Model.Builder()
-        builder.addEntity(identifier, ofType: "\(type(of: 42))")
-        XCTAssertEqual(builder.entitiesByType, ["Int": [identifier]])
+        builder.addEntity(identifier, ofType: Metatype(type(of: 42)))
+        XCTAssertEqual(builder.entitiesByType, [Metatype(type(of: 42)): [identifier]])
     }
 
     func testCreateEvent() {
@@ -48,15 +48,15 @@ class ModelTests: XCTestCase {
         let builder = Model.Builder()
         let identifier = builder.add(5)
         XCTAssertEqual(builder.events, [:])
-        XCTAssertEqual(builder.entitiesByType, ["\(type(of: 5))": [identifier]])
+        XCTAssertEqual(builder.entitiesByType, [Metatype(type(of: 5)): [identifier]])
     }
 
     func testAddAttributeInInterval() {
         let interval = Fraction(3,16) ..< Fraction(31,32)
         let pitch: Pitch = 60
         let builder = Model.Builder()
-        let identifier = builder.addEvent([pitch], in: interval)
-//        XCTAssertEqual(builder.entitiesByType, [ObjectIdentifier(Pitch.self): [identifier]])
+        let (_, identifiers) = builder.addEvent([pitch], in: interval)
+        XCTAssertEqual(builder.entitiesByType, [Metatype(Pitch.self): identifiers])
 //        XCTAssertEqual(builder.entitiesByInterval[interval]!, [identifier])
     }
 
@@ -64,9 +64,9 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(60), Articulation.staccato, Dynamic.f]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(with: attributes)
-        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
-        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
-        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.entitiesByType[Metatype(Pitch.self)]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType[Metatype(Articulation.self)]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType[Metatype(Dynamic.self)]!, [ids[2]])
         XCTAssertEqual(builder.events, [event: ids])
     }
 
@@ -77,9 +77,9 @@ class ModelTests: XCTestCase {
         let attributes: [Any] = [Pitch(72), Articulation.tenuto, Dynamic.ppp]
         let builder = Model.Builder()
         let (event,ids) = builder.addEvent(attributes, in: interval)
-        XCTAssertEqual(builder.entitiesByType["Pitch"]!, [ids[0]])
-        XCTAssertEqual(builder.entitiesByType["Articulation"]!, [ids[1]])
-        XCTAssertEqual(builder.entitiesByType["Dynamic"]!, [ids[2]])
+        XCTAssertEqual(builder.entitiesByType[Metatype(Pitch.self)]!, [ids[0]])
+        XCTAssertEqual(builder.entitiesByType[Metatype(Articulation.self)]!, [ids[1]])
+        XCTAssertEqual(builder.entitiesByType[Metatype(Dynamic.self)]!, [ids[2]])
         XCTAssertEqual(builder.events, [event: ids])
     }
 
@@ -146,14 +146,17 @@ class ModelTests: XCTestCase {
     func testManyRhythms() {
         let performer = Performer(name: "Alexis")
         let instrument = Instrument(name: "Contrabass")
-        let rhythms: [Rhythm<[Any]>] = (0..<10_000).map { _ in
+        let rhythms: [Rhythm<[Any]>] = (0..<10).map { _ in
             let amountEvents = 10
             let events: [Rhythm<[Any]>.Context] = (0..<amountEvents).map { _ in
                 let amountPitches = 3
                 let pitches: [Pitch] = (0..<amountPitches).map { _ in
                     return Pitch(Double.random(in: 48..<74))
                 }
-                return event(pitches)
+                let articulation = Articulation.staccato
+                let dynamic = Dynamic.fff
+                let attributes: [Any] = pitches + [articulation] + [dynamic]
+                return event(attributes)
             }
             let beats = Int.random(in: 1..<16)
             let duration = beats /> 4
@@ -165,6 +168,8 @@ class ModelTests: XCTestCase {
             _ = builder.addRhythm(rhythm, at: offset, performedOn: instrument, by: performer, voice: 0)
             offset += Fraction(rhythm.durationTree.duration)
         }
+        let model = builder.build()
+        print(builder.entitiesByType)
     }
 
     func testSlur() {

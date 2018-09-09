@@ -19,13 +19,6 @@ public typealias RhythmID = Identifier<Rhythm<Event>>
 public typealias AttributeID = Identifier<Attribute>
 public typealias EventID = Identifier<Event>
 
-// FIXME: Move to dn-m/Structure/Algebra/AlgebraAdapters
-extension Array: Additive {
-    public static var zero: Array {
-        return []
-    }
-}
-
 extension Model {
 
     public class Builder {
@@ -45,7 +38,7 @@ extension Model {
         // FIXME: There must be a more efficient way to store entities in a way wherein the type
         // can be reified. The `String` init is not efficient, and doesn't really carry with it
         // its own type information.
-        var entitiesByType: [String: [AttributeID]] = [:]
+        var entitiesByType: [Metatype: [AttributeID]] = [:]
 
         /// All of the identifiers of the attributes contained in a single event.
         var events: [EventID: [AttributeID]] = [:]
@@ -159,7 +152,7 @@ extension Model {
         {
             let attributeIdentifiers = attributes.map { add($0) }
             let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
-            let istNode = ISTNode(interval: interval, value: attributeIdentifiers)
+            let istNode = ISTPayload(interval: interval, value: attributeIdentifiers)
             entitiesByInterval.insert(istNode, forKey: interval.lowerBound)
             attributesByVoice[voiceID, default: []].append(contentsOf: attributeIdentifiers)
             return (eventIdentifier, attributeIdentifiers)
@@ -223,12 +216,12 @@ extension Model {
         /// Adds the given `attribute` with the given `identifier`.
         func addAttribute(_ attribute: Any, withIdentifier identifier: AttributeID) {
             attributes[identifier] = attribute
-            addEntity(identifier, ofType: "\(type(of: attribute))")
+            addEntity(identifier, ofType: Metatype(type(of: attribute)))
         }
 
         /// Adds an entity with the given `identifier` with the given string representaiton of
         /// its `type`.
-        func addEntity(_ identifier: AttributeID, ofType type: String) {
+        func addEntity(_ identifier: AttributeID, ofType type: Metatype) {
             entitiesByType[type, default: []].append(identifier)
         }
 
@@ -242,6 +235,7 @@ extension Model {
                 events: events,
                 eventsByRhythm: eventsByRhythm,
                 entitiesByInterval: entitiesByInterval,
+                attributesByVoice: attributesByVoice,
                 entitiesByType: entitiesByType
             )
         }
