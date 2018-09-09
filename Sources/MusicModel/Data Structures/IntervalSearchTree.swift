@@ -14,15 +14,19 @@ import Math
 public struct ISTPayload <Metric: Comparable, Value> {
 
     /// The interval in which the `payload` occurs.
+    @usableFromInline
     let interval: Range<Metric>
 
     /// The maximum upper bound of subtrees.
+    @usableFromInline
     var max: Metric
 
     /// The payload contained herein.
+    @usableFromInline
     var payload: Value
 
     /// Creates an `ISTPayload` with the given `interval`, `value`, and `max` values.
+    @inlinable
     public init(interval: Range<Metric>, value: Value, max: Metric? = nil) {
         self.interval = interval
         self.payload = value
@@ -47,13 +51,15 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
 
     /// - Returns: An array of payloads containing the fractional interval and associated values
     /// containing the given `target` offset.
+    @inlinable
     public func intervals(containing target: Fraction) -> [ISTPayload<Fraction,[AttributeID]>] {
         var result: [ISTPayload<Fraction,[AttributeID]>] = []
         IntervalSearchTree.intervals(from: root, containing: target, into: &result)
         return result
     }
 
-    private static func intervals(
+    @usableFromInline
+    static func intervals(
         from node: Node? = nil,
         containing target: Fraction,
         into result: inout [ISTPayload<Fraction,[AttributeID]>]
@@ -70,6 +76,7 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
 
     /// - Returns: An array of payloads containing the fractional interval and associated values
     /// overlapping with the given `target` interval.
+    @inlinable
     public func intervals(overlapping target: Range<Fraction>)
         -> [ISTPayload<Fraction,[AttributeID]>]
     {
@@ -78,7 +85,8 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
         return result
     }
 
-    private static func intervals(
+    @usableFromInline
+    static func intervals(
         from node: Node? = nil,
         overlapping target: Range<Fraction>,
         into result: inout [ISTPayload<Fraction,[AttributeID]>]
@@ -100,7 +108,8 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
     }
 
     /// Inserts the given `payload`, storing the payload by the lower bound of its interval.
-    mutating func insert(_ payload: Value) {
+    @inlinable
+    public mutating func insert(_ payload: Value) {
         self.root = IntervalSearchTree.insert(payload,
             forKey: payload.interval.lowerBound,
             into: root
@@ -108,7 +117,8 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
     }
 
     @discardableResult
-    private static func insert(_ value: Value, forKey key: Key, into node: Node? = nil) -> Node? {
+    @usableFromInline
+    static func insert(_ value: Value, forKey key: Key, into node: Node? = nil) -> Node? {
         guard let node = node else { return Node(key: key, value: value) }
         if node.key > key {
             node.left = insert(value, forKey: key, into: node.left)

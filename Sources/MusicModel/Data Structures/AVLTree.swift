@@ -12,6 +12,7 @@ public struct AVLTree <Key: Comparable, Value> {
 
     // MARK: - Instance Properties
 
+    @usableFromInline
     var root: Node?
 }
 
@@ -21,6 +22,7 @@ extension AVLTree {
 
     /// Node for an `AVLTree` which contains a `key`, and `value`, along with the `left` and `right`
     /// child nodes (if they exist), as well as the its `height`.
+    @usableFromInline
     final class Node {
         var key: Key
         var value: Value
