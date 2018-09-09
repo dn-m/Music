@@ -41,14 +41,17 @@ extension AVLTree {
 
     // MARK: - Initializers
 
+    /// Creates an `AVLTree` with the given `root` node.
     init(root: Node) {
         self.root = root
     }
 
+    /// Creates an `AVLTree` with the given `key` and `value` for the `root` node.
     public init(key: Key, value: Value) {
         self.root = Node(key: key, value: value)
     }
 
+    /// Creates an `AVLTree` with the given `sequence` of key-value pairs.
     public init <S> (_ sequence: S) where S: Sequence, S.Element == (Key,Value) {
         guard let (first,rest) = sequence.destructured else { self.init(); return }
         self.init(root: Node(key: first.0, value: first.1))
@@ -60,6 +63,7 @@ extension AVLTree {
 
     // MARK: - Computed Properties
 
+    /// - Returns: An array of key-value pairs in sorted order.
     public var inOrder: [(Key,Value)] {
         func traverse(_ node: Node, into result: inout [(Key,Value)]) -> [(Key,Value)] {
             let left = node.left.map { traverse($0, into: &result ) } ?? []
@@ -76,18 +80,19 @@ extension AVLTree {
 
     // MARK: - Instance Methods
 
-    private mutating func ensureUnique() {
-        if !isKnownUniquelyReferenced(&root) {
-            self = AVLTree(root: root)
-        }
-    }
-
+    /// Inserts the given `value` for the given `key`.
     public mutating func insert(_ value: Value, forKey key: Key) {
         ensureUnique()
         if let node = root {
             root = AVLTree.insert(value, forKey: key, into: node)
         } else {
             root = Node(key: key, value: value)
+        }
+    }
+
+    private mutating func ensureUnique() {
+        if !isKnownUniquelyReferenced(&root) {
+            self = AVLTree(root: root)
         }
     }
 
