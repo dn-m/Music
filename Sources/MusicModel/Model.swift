@@ -95,8 +95,7 @@ public final class Model {
 
     /// - Returns: The identifiers for attributes with the given `type`.
     public func attributes(type: Any.Type) -> [AttributeID] {
-        let metatype = Metatype(type)
-        return entitiesByType[metatype] ?? []
+        return entitiesByType[Metatype(type)] ?? []
     }
 }
 
