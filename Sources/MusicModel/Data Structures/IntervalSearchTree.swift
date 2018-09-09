@@ -46,6 +46,29 @@ extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[Attribute
     }
 
     /// - Returns: An array of payloads containing the fractional interval and associated values
+    /// containing the given `target` offset.
+    public func intervals(containing target: Fraction) -> [ISTPayload<Fraction,[AttributeID]>] {
+        var result: [ISTPayload<Fraction,[AttributeID]>] = []
+        IntervalSearchTree.intervals(from: root, containing: target, into: &result)
+        return result
+    }
+
+    private static func intervals(
+        from node: Node? = nil,
+        containing target: Fraction,
+        into result: inout [ISTPayload<Fraction,[AttributeID]>]
+    )
+    {
+        guard let node = node else { return }
+        let interval = node.value.interval
+        if interval.contains(target) { result.append(node.value) }
+        if let left = node.left, left.value.max > target {
+            intervals(from: node.left, containing: target, into: &result)
+        }
+        intervals(from: node.right, containing: target, into: &result)
+    }
+
+    /// - Returns: An array of payloads containing the fractional interval and associated values
     /// overlapping with the given `target` interval.
     public func intervals(overlapping target: Range<Fraction>)
         -> [ISTPayload<Fraction,[AttributeID]>]
