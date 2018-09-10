@@ -139,10 +139,8 @@ class DurationTreeTests: XCTestCase {
     }
 
     func testManyDurationTrees() {
-        measure {
-            (0..<10_000).forEach { _ in
-                let _ = DurationTree(16, ProportionTree(1,[1,2,3]))
-            }
+        (0..<10_000).forEach { _ in
+            let _ = DurationTree(16, ProportionTree(1,[1,2,3]))
         }
     }
 }
