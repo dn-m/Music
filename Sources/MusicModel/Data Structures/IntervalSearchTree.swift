@@ -50,6 +50,7 @@ public typealias IntervalSearchTree <Metric: Comparable, Value> = AVLTree<Metric
 extension AVLTree where Key == Fraction, Value == ISTPayload<Fraction,[AttributeID]> {
 
     /// Creates an `IntervalSearchTree` with the given `sequence` of `ISTPayload` values.
+    @inlinable
     public init <S> (_ sequence: S)
         where S: Sequence, S.Element == ISTPayload<Fraction,[AttributeID]>
     {

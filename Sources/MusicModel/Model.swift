@@ -11,23 +11,23 @@ import DataStructures
 import Math
 import Duration
 
-// TODO: Move to `dn-m/Structure/DataStructures`
-public struct Metatype {
-    let base: Any.Type
-    public init(_ base: Any.Type) {
-        self.base = base
-    }
-}
-extension Metatype: Equatable {
-    public static func == (lhs: Metatype, rhs: Metatype) -> Bool {
-        return lhs.base == rhs.base
-    }
-}
-extension Metatype: Hashable {
-    public var hashValue: Int {
-        return ObjectIdentifier(base).hashValue
-    }
-}
+//// TODO: Move to `dn-m/Structure/DataStructures`
+//public struct Metatype {
+//    let base: Any.Type
+//    public init(_ base: Any.Type) {
+//        self.base = base
+//    }
+//}
+//extension Metatype: Equatable {
+//    public static func == (lhs: Metatype, rhs: Metatype) -> Bool {
+//        return lhs.base == rhs.base
+//    }
+//}
+//extension Metatype: Hashable {
+//    public var hashValue: Int {
+//        return ObjectIdentifier(base).hashValue
+//    }
+//}
 
 /// The database of musical information contained in a single musical _work_.
 public final class Model {
