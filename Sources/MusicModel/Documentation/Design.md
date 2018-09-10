@@ -2,6 +2,32 @@
 
 This document serves as an enumeration of design goals for the `Model` object in the `MusicModel` module.
 
+## Basic Types
+
+### Performer
+
+The model of an agent (actor) able to actuate musical events. A `Performer` may perform through one or more `Instrument` values.
+
+### Instrument
+
+The model of an object or system with which musical events can be actuated. An `Instrument` may be performed through by one or more `Performer` values.
+
+### Voice
+
+A single thread of actuation from a `Performer` through an `Instrument`. In the case that a `Performer`-`Instrument` pair is polyphonic and different "voices" of this polyphony occur in non-identical intervals of musical time, these "voices" must be represented as different `Voice` structures
+
+### Rhythm
+
+A `Rhythm` is a hierarchical structuring of time, coupled with a sequence of metrical contexts which indicate whether a rhythmical leaf item is a "rest", "tie", or "event". A `Rhythm` contains only the musical information of a single `Voice`.
+
+### Event
+
+An `Event` is a collection of `Attribute` values which are performed by a single `Voice` in a given interval of musical time.
+
+### Attribute
+
+An `Attribute` is any bit of information which describes a musical `Event` (`Pitch`, `Dynamic`, `Articulation`, `Slur`, etc.).
+
 ## API
 
 The `Model` object functions as a domain-specific in-memory database for abstract musical elements. There are three primary queries which the `Model` is designed to support.
@@ -16,9 +42,7 @@ Returns all of the identifiers of the attributes occurring in the given `interva
 
 > Complexity: O(*1*)
 
-
 Returns all of the identifiers of the attributes performed by the given `voice`.
-
 
 ### `attributes () <T> -> Set<AttributeID>`
 
