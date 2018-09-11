@@ -56,14 +56,14 @@ The primary use cases for this musical model are the queries stated above. The u
 
 ### Query By Interval
 
-Any query of musical information will exist within some interval of musical time (even if this interval is equivalent to that of the entire work). As such, it is of critical importance to provide the music information in a given interval as performantly as possible. Identifiers for each attribute (piece of musical information) are stored by their fractional interval in an `IntervalSearchTree<Fraction,Set<AttributeID>>`.
+Any query of musical information will exist within some interval of musical time (even if this interval is equivalent to that of the entire work). As such, it is of critical importance to provide the music information in a given interval as performantly as possible. Identifiers for each event (piece of musical information performed by a single voice at a single offset) are stored by their fractional interval.
 
-The `IntervalSearchTree` structure is implemented as an augmented `AVLTree`, which provides better lookup performance than a red-black tree and worse insertion and removal performance.
+> The `IntervalSearchTree` structure is implemented as an augmented `AVLTree`, which provides better lookup performance than a red-black tree yet worse insertion and removal performance. These trade-offs seem reasonable given the performance requirements stated above.
 
 ### Query By Voice
 
-Identifiers for each attribute are stored in a `Dictionary<Voice,Set<AttributeID>>`.
+Identifiers for each event are stored in a `Dictionary<VoiceID,IntervalSearchTree<Fraction,Set<EventID>>>`.
 
 ### Query By Type
 
-Identifiers for each attribute are stored in a `Dictionary<Metatype,Set<AttributeID>>`.
+Identifiers for each attribute can be queried by their dynamic type with the use of the [`Metatype`](https://github.com/dn-m/Structure/blob/master/Sources/DataStructures/Metatype.swift) wrapper struct.

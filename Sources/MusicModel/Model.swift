@@ -107,10 +107,6 @@ extension Model {
             self.performanceContext = performanceContext
             self.types = types
         }
-
-        func apply(to model: Model) -> [(Interval,AttributeID)] {
-            fatalError()
-        }
     }
 }
 
