@@ -11,29 +11,26 @@ import DataStructures
 import Math
 import Duration
 
-//// TODO: Move to `dn-m/Structure/DataStructures`
-//public struct Metatype {
-//    let base: Any.Type
-//    public init(_ base: Any.Type) {
-//        self.base = base
-//    }
-//}
-//extension Metatype: Equatable {
-//    public static func == (lhs: Metatype, rhs: Metatype) -> Bool {
-//        return lhs.base == rhs.base
-//    }
-//}
-//extension Metatype: Hashable {
-//    public var hashValue: Int {
-//        return ObjectIdentifier(base).hashValue
-//    }
-//}
+public typealias Event = [Any]
+public typealias Attribute = Any
+public typealias RhythmID = Identifier<Rhythm<Event>>
+public typealias AttributeID = Identifier<Attribute>
+public typealias EventID = Identifier<Event>
 
 /// The database of musical information contained in a single musical _work_.
 public final class Model {
 
-    /// The performance context of a work.
-    var performanceContext: PerformanceContext
+    // To expand to accomodate metered / non-metered sections, as well as a concurrent meters.
+    public typealias Interval = Range<Fraction>
+
+    // MARK: - Instance Properties
+
+    // MARK: PerformanceContext
+
+    /// The context of performers, instruments, and voices in a work.
+    let performanceContext: PerformanceContext
+
+    // MARK: Temporal Structure
 
     /// The tempi contained in a work.
     let tempi: Tempo.Interpolation.Collection
@@ -41,23 +38,32 @@ public final class Model {
     /// The meters contained in a work.
     let meters: Meter.Collection
 
+    // MARK: Attributes
+
     /// Each attribute in a work, stored by a unique identifier.
-    var attributes: [AttributeID: Attribute]
+    let attributesByID: [AttributeID: Attribute]
 
-    /// Each event (composition of identifiers of attributes) in a work, stored by a unique
-    /// identifier.
-    var events: [EventID: [AttributeID]]
+    // MARK: Events
 
-    /// The list of identifiers of events contained in a given rhythm, as represented by a unique
-    /// identifier.
-    var eventsByRhythm: [RhythmID: [EventID]]
+    /// Each event in a work, stored by its interval and the identifier of the voice which performs
+    /// it.
+    let events: [VoiceID: IntervalSearchTree<Fraction,Set<EventID>>]
 
-    /// The list of identifiers of attributes stored by their fractional interval.
-    var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
+    /// Each attribute in an event, stored by its unique identifier.
+    let attributesByEvent: [EventID: Set<AttributeID>]
 
-    var entitiesByType: [Metatype: [AttributeID]] = [:]
+    // MARK: Rhythms
 
-    var attributesByVoice: [VoiceID: [AttributeID]] = [:]
+    /// Each rhythm in a work, stored by its interval and the identifier of the voice which performs
+    /// it.
+    let rhythms: [VoiceID: IntervalSearchTree<Fraction,Set<RhythmID>>]
+
+    /// The identifier of each event stored by the identifier of the rhythm which contains it.
+    let eventsByRhythm: [RhythmID: Set<EventID>]
+
+    // MARK: Spanners
+
+    // TODO: Spanner (from EventID to EventID + SpannerType)
 
     // MARK: - Initializers
 
@@ -65,38 +71,42 @@ public final class Model {
         performanceContext: PerformanceContext,
         tempi: Tempo.Interpolation.Collection,
         meters: Meter.Collection,
-        attributes: [AttributeID: Attribute],
-        events: [EventID: [AttributeID]],
-        eventsByRhythm: [RhythmID: [EventID]],
-        entitiesByInterval: IntervalSearchTree<Fraction,[AttributeID]>,
-        attributesByVoice: [VoiceID: [AttributeID]],
-        entitiesByType: [Metatype: [AttributeID]]
+        attributesByID: [AttributeID: Attribute],
+        events: [VoiceID: IntervalSearchTree<Fraction,Set<EventID>>],
+        attributesByEvent: [EventID: Set<AttributeID>],
+        rhythms: [VoiceID: IntervalSearchTree<Fraction,Set<RhythmID>>],
+        eventsByRhythm: [RhythmID: Set<EventID>]
     )
     {
         self.performanceContext = performanceContext
         self.tempi = tempi
         self.meters = meters
-        self.attributes = attributes
+        self.attributesByID = attributesByID
         self.events = events
+        self.attributesByEvent = attributesByEvent
+        self.rhythms = rhythms
         self.eventsByRhythm = eventsByRhythm
-        self.entitiesByInterval = entitiesByInterval
-        self.attributesByVoice = attributesByVoice
-        self.entitiesByType = entitiesByType
     }
+}
 
-    /// - Returns: The identifiers for attributes in the given `interval`.
-    public func attributes(in interval: Range<Fraction>) -> [AttributeID] {
-        return entitiesByInterval.intervals(overlapping: interval).flatMap { $0.payload }
-    }
+extension Model {
 
-    /// - Returns: The identifiers for attributes performed by the given voice.
-    public func attributes(by voice: VoiceID) -> [AttributeID] {
-        return attributesByVoice[voice] ?? []
-    }
+    public struct Filter {
 
-    /// - Returns: The identifiers for attributes with the given `type`.
-    public func attributes(type: Any.Type) -> [AttributeID] {
-        return entitiesByType[Metatype(type)] ?? []
+        let interval: Interval?
+        let performanceContext: PerformanceContext.Filter
+        let types: [Any.Type]
+
+        init(
+            interval: Interval?,
+            performanceContext: PerformanceContext.Filter,
+            types: [Any.Type]
+        )
+        {
+            self.interval = interval
+            self.performanceContext = performanceContext
+            self.types = types
+        }
     }
 }
 

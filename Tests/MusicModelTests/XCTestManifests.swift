@@ -27,16 +27,8 @@ extension MeterTempoTests {
 
 extension ModelTests {
     static let __allTests = [
-        ("testAddAttribute", testAddAttribute),
-        ("testAddAttributeInInterval", testAddAttributeInInterval),
-        ("testAddEntity", testAddEntity),
-        ("testAddEventWithAttributes", testAddEventWithAttributes),
-        ("testAddEventWithAttributesInInterval", testAddEventWithAttributesInInterval),
         ("testAddMeter", testAddMeter),
         ("testAddTempo", testAddTempo),
-        ("testCreateEvent", testCreateEvent),
-        ("testCreateEventInInterval", testCreateEventInInterval),
-        ("testCreateEventWithEntities", testCreateEventWithEntities),
         ("testHelloWorld", testHelloWorld),
         ("testInferOffset", testInferOffset),
         ("testManyRhythms", testManyRhythms),

@@ -21,11 +21,6 @@ class PerformanceContextTests: XCTestCase {
         let performer = Performer(name: "Jill")
         let instrument = Instrument(name: "Bass Saxophone")
         let builder = PerformanceContext.Builder()
-        builder.addVoice(forPerformer: performer, withInstrument: instrument)
-        //let pair = PerformerInstrumentPair(performer: performer, instrument: instrument)
-        //XCTAssertEqual(builder.voices, [pair: [0]])
-        dump(builder.voices)
+        _ = builder.addVoice(performer: performer, instrument: instrument)
     }
-
-    
 }

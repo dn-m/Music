@@ -232,7 +232,47 @@ let hereIAm: Articulation = .accent
 
 ### MusicModel
 
-The `MusicModel` brings all of elements together from the modules contained in this package.
+The `Model` brings all of elements together from the modules contained in this package.
+
+Use the `Model.Builder` to incrementally build up a `Model`.
+
+```Swift
+let builder = Model.Builder()
+```
+
+Constructing models of performers and instruments in your performing context.
+
+```Swift
+let performer = Performer(name: "Pat")
+let instrument = Instrument(name: "Euphonium")
+```
+
+Ask `builder` to create a model of a `Voice` within its `PerformanceContext`. Retrieve the identifier for this new voice so that you can identitify musical attributes by it.
+
+```Swift
+let voiceID = builder.createVoice(performer: performer, instrument: instrument)
+```
+
+Build up a single whole note, composed of a "middle c", tenuto articulation, at the triple forte dynamic level.
+
+```Swift
+let pitch: Pitch = 60
+let articulation: Articulation = .tenuto
+let dynamic: Dynamic = .fff
+let note = Rhythm<Event>(1/>1, [event([pitch, dynamic, articulation])])
+```
+
+Now we can ask the builder to add it to the model at the downbeat of our piece.
+
+```Swift
+let rhythmID = builder.createRhythm(note, voiceID: voiceID, offset: .zero)
+```
+
+Lastly, we can ask the builder to complete the build process, and return a shiny new `Model`.
+
+```Swift
+let model = builder.build()
+```
 
 ---
 
