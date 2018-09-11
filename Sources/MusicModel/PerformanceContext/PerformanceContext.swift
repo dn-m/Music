@@ -49,6 +49,25 @@ struct PerformerInstrumentPair {
     }
 }
 
+extension PerformanceContext {
+
+    struct Filter {
+        let performer: Performer?
+        let instrument: Instrument?
+        let voice: Int?
+        init(performer: Performer? = nil, instrument: Instrument? = nil) {
+            self.performer = performer
+            self.instrument = instrument
+            self.voice = nil
+        }
+        init(performer: Performer, instrument: Instrument, voice: Int) {
+            self.performer = performer
+            self.instrument = instrument
+            self.voice = voice
+        }
+    }
+}
+
 extension PerformerInstrumentPair: Equatable { }
 extension PerformerInstrumentPair: Hashable { }
 
@@ -88,8 +107,8 @@ extension PerformanceContext.Builder {
     /// voices already exists. Otherwise, a new voice will be generated for the performer-instrument
     /// pair.
     public func addVoice(
-        forPerformer performer: Performer,
-        withInstrument instrument: Instrument,
+        performer performer: Performer,
+        instrument instrument: Instrument,
         number: Int? = nil
     ) -> VoiceID
     {

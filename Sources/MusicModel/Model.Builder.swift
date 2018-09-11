@@ -13,45 +13,42 @@ import Math
 import Pitch
 import Duration
 
-public typealias Event = [Any]
-public typealias Attribute = Any
-public typealias RhythmID = Identifier<Rhythm<Event>>
-public typealias AttributeID = Identifier<Attribute>
-public typealias EventID = Identifier<Event>
-
 extension Model {
 
     public class Builder {
+
+        // MARK: - Private State
 
         private var attributeIdentifier: Int = 0
         private var eventIdentifier: Int = 0
         private var rhythmIdentifier: Int = 0
 
-        /// All attributes stored by their unique identifier.
-        ///
-        /// The attributes here are the raw values of the musical model (`Pitch`, `Dynamic`, etc.)
-        var attributes: [AttributeID: Attribute] = [:]
+        // MARK: - Instance Properties
 
-        /// All of the identifiers of attributes stored by the `ObjectIdentifier` representing
-        /// their type.
-        ///
-        // FIXME: There must be a more efficient way to store entities in a way wherein the type
-        // can be reified. The `String` init is not efficient, and doesn't really carry with it
-        // its own type information.
-        var entitiesByType: [Metatype: [AttributeID]] = [:]
+        // MARK: Attributes
 
-        /// All of the identifiers of the attributes contained in a single event.
-        var events: [EventID: [AttributeID]] = [:]
+        /// Each attribute in a work, stored by a unique identifier.
+        var attributesByID: [AttributeID: Attribute] = [:]
 
-        /// All of the identifiers of the events contained in a single rhythm.
-        var eventsByRhythm: [RhythmID: [EventID]] = [:]
+        // MARK: Events
 
-        /// An `IntervalSearchTree` with all of the identifiers of the attributes occurring in a
-        /// a given `Fraction` interval.
-        var entitiesByInterval = IntervalSearchTree<Fraction,[AttributeID]>()
+        /// Each event in a work, stored by its interval and the identifier of the voice which performs
+        /// it.
+        var events: [VoiceID: IntervalSearchTree<Fraction,Set<EventID>>] = [:]
 
-        /// All of the identifiers of the attributes performed by a given `Voice`.
-        var attributesByVoice: [VoiceID: [AttributeID]] = [:]
+        /// Each attribute in an event, stored by its unique identifier.
+        var attributesByEvent: [EventID: Set<AttributeID>] = [:]
+
+        // MARK: Rhythms
+
+        /// Each rhythm in a work, stored by its interval and the identifier of the voice which performs
+        /// it.
+        var rhythms: [VoiceID: IntervalSearchTree<Fraction,Set<RhythmID>>] = [:]
+
+        /// The identifier of each event stored by the identifier of the rhythm which contains it.
+        var eventsByRhythm: [RhythmID: Set<EventID>] = [:]
+
+        // TODO: Spanner (from EventID to EventID + SpannerType)
 
         // MARK: - Builders
 
@@ -64,192 +61,80 @@ extension Model {
         /// Creates `Builder` prepared to construct a `Model`.
         public init() { }
 
-        // MARK: - Performance Context
-
-        /// Adds the given `performer` to the performance context.
-        public func addPerformer(_ performer: Performer) -> PerformerID {
-            return performanceContextBuilder.addPerformer(performer)
-        }
-
-        /// Adds the given `instrument` to the performance context.
-        public func addInstrument(_ instrument: Instrument) -> InstrumentID {
-            return performanceContextBuilder.addInstrument(instrument)
-        }
-
-        public func addVoice(
-            _ voice: Int? = nil,
-            forPerformer performer: Performer,
-            forInstrument instrument: Instrument
-        ) -> VoiceID
-        {
-            return performanceContextBuilder.addVoice(
-                forPerformer: performer,
-                withInstrument: instrument,
-                number: voice
-            )
-        }
-
         // MARK: - Rhythm
 
-        /// Adds the given `rhythm` at the given `offset`, if it exists. If no `offset` is given,
-        /// the `rhythm` will be added at the current offset of the current meter.
-        public func addRhythm(
-            _ rhythm: Rhythm<[Any]>,
-            at offset: Fraction? = nil,
-            performedOn instrument: Instrument,
-            by performer: Performer,
-            voice: Int? = nil
-        ) -> RhythmID
+        /// Creates an entry for the given `rhythm`, performed by the given `voiceID`, at the give
+        /// `offset`.
+        public func createRhythm(_ rhythm: Rhythm<[Any]>, voiceID: VoiceID, offset: Fraction)
+            -> RhythmID
         {
-            let voiceID = addVoice(voice, forPerformer: performer, forInstrument: instrument)
-            let globalOffset = offset ?? meterCollectionBuilder.offset
-            let rhythmIdentifier: Identifier<Rhythm<Event>> = makeRhythmIdentifier()
+            let rhythmID = makeRhythmIdentifier()
             let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
-            let identifiers: [EventID] = offsetsAndDuratedEvents.map { (localOffset, duratedEvent) in
-                let (duration, attributes) = duratedEvent
-                let localRange = Fraction(localOffset) ..< Fraction(localOffset + duration)
-                let range = localRange.shifted(by: globalOffset)
-                let (eventIdentifier, _) = addEvent(attributes, in: range, performedBy: voiceID)
-                return eventIdentifier
-            }
-            eventsByRhythm[rhythmIdentifier] = identifiers
-            return rhythmIdentifier
-        }
-
-        // MARK: - Tempo & Meter
-
-        /// Add the given `tempo` at the given `offset`, and whether or not it shall be
-        /// prepared to interpolate to the next given tempo.
-        @discardableResult
-        public func addTempo(
-            _ tempo: Tempo,
-            at offset: Fraction? = nil,
-            easing: Tempo.Interpolation.Easing? = nil
-        ) -> Builder
-        {
-            let offset = offset ?? meterCollectionBuilder.offset
-            tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
-            return self
-        }
-
-        /// Add the given `meter`.
-        @discardableResult
-        public func addMeter(_ meter: Meter) -> Builder {
-            meterCollectionBuilder.add(meter)
-            return self
-        }
-
-        // MARK: - Events and Attributes
-
-        /// Adds an event with the given `attributes` in the given `interval`.
-        ///
-        /// - Returns: The identifiers for the event and the attributes.
-        public func addEvent(
-            _ attributes: [Attribute],
-            in interval: Range<Fraction>,
-            performedBy voiceID: VoiceID = 0
-        ) -> (event: EventID, attributes: [AttributeID])
-        {
-            let attributeIdentifiers = attributes.map { add($0) }
-            let eventIdentifier = createEvent(with: attributeIdentifiers, in: interval)
-            let istNode = ISTPayload(interval: interval, value: attributeIdentifiers)
-            entitiesByInterval.insert(istNode, forKey: interval.lowerBound)
-            attributesByVoice[voiceID, default: []].append(contentsOf: attributeIdentifiers)
-            return (eventIdentifier, attributeIdentifiers)
-        }
-
-        /// Adds an event with the given `attributes`.
-        ///
-        /// - Returns: The identifiers for the event and the attributes.
-        public func addEvent(with attributes: [Any]) -> (event: EventID, attributes: [AttributeID]) {
-            let attributeIdentifiers = attributes.map { add($0) }
-            let eventIdentifier = createEvent(with: attributeIdentifiers)
-            return (eventIdentifier, attributeIdentifiers)
-        }
-
-        /// Adds the given `attribute`.
-        ///
-        //// - Returns: The identifier for the attribute.
-        public func add(_ attribute: Any) -> AttributeID {
-            let identifier = makeAttributeIdentifier()
-            addAttribute(attribute, withIdentifier: identifier)
-            return identifier
-        }
-
-        /// Creates an event with the given `attributes` in the given `interval`.
-        ///
-        /// - Returns: The identifier for the event.
-        public func createEvent(with attributes: [AttributeID], in interval: Range<Fraction>)
-            -> EventID
-        {
-            let identifier = createEvent(in: interval)
-            events[identifier] = attributes
-            return identifier
-        }
-
-        /// Creates an event with the given `attributes`.
-        ///
-        /// - Returns: The identifier for the event.
-        public func createEvent(with attributes: [AttributeID]) -> EventID {
-            let identifier = createEvent()
-            events[identifier] = attributes
-            return identifier
-        }
-
-        /// Creates and event in the given `interval`.
-        ///
-        //// - Returns: The identifier for the event.
-        public func createEvent(in interval: Range<Fraction>) -> EventID {
-            let identifier = createEvent()
-            return identifier
-        }
-
-        /// Creates an event.
-        ///
-        /// - Returns: The identifier for the event.
-        public func createEvent() -> EventID {
-            let identifier = makeEventIdentifier()
-            events[identifier] = []
-            return identifier
-        }
-
-        /// Adds the given `attribute` with the given `identifier`.
-        func addAttribute(_ attribute: Any, withIdentifier identifier: AttributeID) {
-            attributes[identifier] = attribute
-            addEntity(identifier, ofType: Metatype(type(of: attribute)))
-        }
-
-        /// Adds an entity with the given `identifier` with the given string representaiton of
-        /// its `type`.
-        func addEntity(_ identifier: AttributeID, ofType type: Metatype) {
-            entitiesByType[type, default: []].append(identifier)
-        }
-
-        /// - Returns: A completed `Model` for your enjoyment.
-        public func build() -> Model {
-            return Model(
-                performanceContext: makePerformanceContext(),
-                tempi: makeTempi(),
-                meters: makeMeters(),
-                attributes: attributes,
-                events: events,
-                eventsByRhythm: eventsByRhythm,
-                entitiesByInterval: entitiesByInterval,
-                attributesByVoice: attributesByVoice,
-                entitiesByType: entitiesByType
+            let eventIDs: Set<EventID> = Set(
+                offsetsAndDuratedEvents.lazy.map { [unowned self] (localOffset, duratedEvent) in
+                    let (duration, attributes) = duratedEvent
+                    let localInterval = Fraction(localOffset) ..< Fraction(localOffset + duration)
+                    let interval = localInterval.shifted(by: offset)
+                    return self.createEvent(
+                        attributes: attributes,
+                        voiceID: voiceID,
+                        interval: interval
+                    )
+                }
             )
+            storeEventIDs(eventIDs, by: rhythmID)
+            let interval = offset ..< offset + Fraction(rhythm.durationTree.duration)
+            storeRhythm(id: rhythmID, voiceID: voiceID, interval: interval)
+            return rhythmID
         }
 
-        private func makeTempi() -> Tempo.Interpolation.Collection {
-            return tempoInterpolationCollectionBuilder.build()
+        private func storeRhythm(id rhythm: RhythmID, voiceID: VoiceID, interval: Model.Interval) {
+            rhythms[voiceID, default: .empty].insert(.init(interval: interval, value: [rhythm]))
         }
 
-        private func makeMeters() -> Meter.Collection {
-            return meterCollectionBuilder.build()
+        private func storeEventIDs(_ ids: Set<EventID>, by rhythmID: RhythmID) {
+            eventsByRhythm[rhythmID] = ids
+        }
+
+        /// Creates an event with the given `attributes`, performed by the given `voiceID`, in the
+        /// given `interval`.
+        ///
+        /// - Returns: An `EventID` for the new event.
+        public func createEvent(
+            attributes: [Any],
+            voiceID: VoiceID,
+            interval: Model.Interval
+        ) -> EventID
+        {
+            let eventID = makeEventIdentifier()
+            let attributeIDs = attributes.map { _ in self.makeAttributeIdentifier() }
+            storeAttributes(attributes, withIDs: attributeIDs)
+            storeAttributeIDs(Set(attributeIDs), by: eventID)
+            storeEvent(id: eventID, voiceID: voiceID, interval: interval)
+            return eventID
+        }
+
+        private func storeEvent(id event: EventID, voiceID: VoiceID, interval: Model.Interval) {
+            events[voiceID, default: .empty].insert(.init(interval: interval, value: [event]))
+        }
+
+        private func storeAttributeIDs(_ ids: Set<AttributeID>, by eventID: EventID) {
+            attributesByEvent[eventID] = ids
+        }
+
+        private func storeAttributes(_ attributes: [Any], withIDs ids: [AttributeID]) {
+            zip(ids,attributes).forEach { id, attribute in
+                attributesByID[id] = attribute
+            }
         }
 
         private func makePerformanceContext() -> PerformanceContext {
             return performanceContextBuilder.build()
+        }
+
+        private func makeAttributeIdentifier() -> AttributeID {
+            defer { attributeIdentifier += 1 }
+            return .init(attributeIdentifier)
         }
 
         private func makeEventIdentifier() -> EventID {
@@ -257,20 +142,94 @@ extension Model {
             return .init(eventIdentifier)
         }
 
-        private func makeRhythmIdentifier <T> () -> Identifier<Rhythm<T>> {
+        private func makeRhythmIdentifier() -> RhythmID {
             defer { rhythmIdentifier += 1 }
             return .init(rhythmIdentifier)
-        }
-
-        private func makeAttributeIdentifier() -> AttributeID {
-            defer { attributeIdentifier += 1 }
-            return .init(attributeIdentifier)
         }
     }
 
     /// `Builder` ready to construct `Model`.
     public static var builder: Builder {
         return Builder()
+    }
+}
+
+extension Model.Builder {
+
+    // MARK: - Performance Context
+
+    /// Adds the given `performer` to the performance context.
+    public func createPerformer(_ performer: Performer) -> PerformerID {
+        return performanceContextBuilder.addPerformer(performer)
+    }
+
+    /// Adds the given `instrument` to the performance context.
+    public func createInstrument(_ instrument: Instrument) -> InstrumentID {
+        return performanceContextBuilder.addInstrument(instrument)
+    }
+
+    /// Adds the given voice identifier for the given `performer` and `instrument`.
+    public func createVoice(_ voice: Int? = nil, performer: Performer, instrument: Instrument)
+        -> VoiceID
+    {
+        return performanceContextBuilder.addVoice(
+            performer: performer,
+            instrument: instrument,
+            number: voice
+        )
+    }
+}
+
+extension Model.Builder {
+
+    // MARK: - Tempo & Meter
+
+    /// Add the given `tempo` at the given `offset`, and whether or not it shall be
+    /// prepared to interpolate to the next given tempo.
+    @discardableResult
+    public func addTempo(
+        _ tempo: Tempo,
+        at offset: Fraction? = nil,
+        easing: Tempo.Interpolation.Easing? = nil
+    ) -> Model.Builder
+    {
+        let offset = offset ?? meterCollectionBuilder.offset
+        tempoInterpolationCollectionBuilder.add(tempo, at: offset, easing: easing)
+        return self
+    }
+
+    /// Add the given `meter`.
+    @discardableResult
+    public func addMeter(_ meter: Meter) -> Model.Builder {
+        meterCollectionBuilder.add(meter)
+        return self
+    }
+}
+
+extension Model.Builder {
+
+    // MARK: - Build
+
+    /// - Returns: A completed `Model` for your enjoyment.
+    public func build() -> Model {
+        return Model(
+            performanceContext: makePerformanceContext(),
+            tempi: makeTempi(),
+            meters: makeMeters(),
+            attributesByID: attributesByID,
+            events: events,
+            attributesByEvent: attributesByEvent,
+            rhythms: rhythms,
+            eventsByRhythm: eventsByRhythm
+        )
+    }
+
+    private func makeTempi() -> Tempo.Interpolation.Collection {
+        return tempoInterpolationCollectionBuilder.build()
+    }
+
+    private func makeMeters() -> Meter.Collection {
+        return meterCollectionBuilder.build()
     }
 }
 
