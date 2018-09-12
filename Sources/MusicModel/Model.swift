@@ -67,6 +67,8 @@ public final class Model {
 
     // MARK: - Initializers
 
+    /// Creates a `Model` with the given `performanceContext`, `tempi`, `meter`, `attributesByID`,
+    /// `events`, `attributesByEvent`, `rhythms`, and `eventsByRhythm`.
     public init(
         performanceContext: PerformanceContext,
         tempi: Tempo.Interpolation.Collection,
