@@ -123,9 +123,7 @@ extension Model {
         }
 
         private func storeAttributes(_ attributes: [Any], withIDs ids: [AttributeID]) {
-            zip(ids,attributes).forEach { id, attribute in
-                attributesByID[id] = attribute
-            }
+            zip(ids,attributes).forEach { id, attribute in attributesByID[id] = attribute }
         }
 
         private func makePerformanceContext() -> PerformanceContext {
