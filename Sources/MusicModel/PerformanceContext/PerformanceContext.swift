@@ -137,17 +137,19 @@ extension PerformanceContext.Builder {
     }
 
     public func build() -> PerformanceContext {
-        let performerInstrumentVoices = voicesByPerformerInstrumentPair
-            .flatMap { performerInstrument,voices -> [PerformerInstrumentVoice] in
-                voices.map { voice in
-                    PerformerInstrumentVoice(performerInstrument: performerInstrument, voice: voice)
-                }
-            }
         return PerformanceContext(
             performerByID: performers,
             instrumentByID: instruments,
             voiceByID: voices,
-            performerInstrumentVoices: performerInstrumentVoices
+            performerInstrumentVoices: voicesByPerformerInstrumentPair
+                .flatMap { performerInstrument,voices -> [PerformerInstrumentVoice] in
+                    voices.map { voice in
+                        PerformerInstrumentVoice(
+                            performerInstrument: performerInstrument,
+                            voice: voice
+                        )
+                    }
+                }
         )
     }
 
