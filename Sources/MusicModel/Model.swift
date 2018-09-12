@@ -93,6 +93,8 @@ public final class Model {
 
 extension Model {
 
+    /// A `Model.Filter` splits a `Model` along three axes: interval of musical time, performing
+    /// forces, and type of musical information.
     public struct Filter {
 
         let interval: Interval?
