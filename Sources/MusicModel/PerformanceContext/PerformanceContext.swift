@@ -106,11 +106,8 @@ extension PerformanceContext.Builder {
     /// Adds a new voice for the given `performer` and `instrument`, with a given `number`, if the
     /// voices already exists. Otherwise, a new voice will be generated for the performer-instrument
     /// pair.
-    public func addVoice(
-        performer performer: Performer,
-        instrument instrument: Instrument,
-        number: Int? = nil
-    ) -> VoiceID
+    public func addVoice(performer: Performer, instrument: Instrument, number: Int? = nil) ->
+        VoiceID
     {
         let performerID = addPerformer(performer)
         let instrumentID = addInstrument(instrument)
