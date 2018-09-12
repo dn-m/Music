@@ -47,7 +47,7 @@ public final class Model {
 
     /// Each event in a work, stored by its interval and the identifier of the voice which performs
     /// it.
-    let events: [VoiceID: IntervalSearchTree<Fraction,Set<EventID>>]
+    let events: [Voice.ID: IntervalSearchTree<Fraction,Set<EventID>>]
 
     /// Each attribute in an event, stored by its unique identifier.
     let attributesByEvent: [EventID: Set<AttributeID>]
@@ -56,7 +56,7 @@ public final class Model {
 
     /// Each rhythm in a work, stored by its interval and the identifier of the voice which performs
     /// it.
-    let rhythms: [VoiceID: IntervalSearchTree<Fraction,Set<RhythmID>>]
+    let rhythms: [Voice.ID: IntervalSearchTree<Fraction,Set<RhythmID>>]
 
     /// The identifier of each event stored by the identifier of the rhythm which contains it.
     let eventsByRhythm: [RhythmID: Set<EventID>]
@@ -74,9 +74,9 @@ public final class Model {
         tempi: Tempo.Interpolation.Collection,
         meters: Meter.Collection,
         attributesByID: [AttributeID: Attribute],
-        events: [VoiceID: IntervalSearchTree<Fraction,Set<EventID>>],
+        events: [Voice.ID: IntervalSearchTree<Fraction,Set<EventID>>],
         attributesByEvent: [EventID: Set<AttributeID>],
-        rhythms: [VoiceID: IntervalSearchTree<Fraction,Set<RhythmID>>],
+        rhythms: [Voice.ID: IntervalSearchTree<Fraction,Set<RhythmID>>],
         eventsByRhythm: [RhythmID: Set<EventID>]
     )
     {
@@ -88,6 +88,15 @@ public final class Model {
         self.attributesByEvent = attributesByEvent
         self.rhythms = rhythms
         self.eventsByRhythm = eventsByRhythm
+    }
+}
+
+extension Model {
+
+    // TODO: Create Model.Fragment
+
+    public func attributes(filteredBy filter: Filter) -> Set<AttributeID> {
+        return []
     }
 }
 

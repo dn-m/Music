@@ -15,7 +15,6 @@ public struct Performer {
     }
 }
 
-public typealias PerformerID = Identifier<Performer>
-
+extension Performer: Identifiable { }
 extension Performer: Equatable { }
 extension Performer: Hashable { }
