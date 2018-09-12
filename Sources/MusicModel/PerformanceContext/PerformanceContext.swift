@@ -52,15 +52,15 @@ struct PerformerInstrumentPair {
 extension PerformanceContext {
 
     struct Filter {
-        let performer: Performer?
-        let instrument: Instrument?
+        let performer: PerformerID?
+        let instrument: InstrumentID?
         let voice: Int?
-        init(performer: Performer? = nil, instrument: Instrument? = nil) {
+        init(performer: PerformerID? = nil, instrument: InstrumentID? = nil) {
             self.performer = performer
             self.instrument = instrument
             self.voice = nil
         }
-        init(performer: Performer, instrument: Instrument, voice: Int) {
+        init(performer: PerformerID, instrument: InstrumentID, voice: Int) {
             self.performer = performer
             self.instrument = instrument
             self.voice = voice
