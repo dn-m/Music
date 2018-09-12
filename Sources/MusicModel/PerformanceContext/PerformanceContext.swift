@@ -40,12 +40,17 @@ public struct PerformanceContext {
 
 extension PerformanceContext {
 
-    struct Filter {
-        let performers: [Performer.ID]
-        let instruments: [Instrument.ID]
-        let voices: [Voice]
+    public struct Filter {
+        let performers: Set<Performer.ID>
+        let instruments: Set<Instrument.ID>
+        let voices: Set<Voice.ID>
+    }
 
-        // TODO
+    public func filtered(by filter: Filter) -> PerformanceContext {
+        let performers = filter.performers.isEmpty ? Set(performerByID.keys) : filter.performers
+        let instruments = filter.instruments.isEmpty ? Set(instrumentByID.keys) : filter.instruments
+        let voices = filter.voices.isEmpty ? Set(voiceByID.keys) : filter.voices
+        fatalError()
     }
 }
 
@@ -132,12 +137,12 @@ extension PerformanceContext.Builder {
     }
 
     public func build() -> PerformanceContext {
-        var performerInstrumentVoices: [PerformerInstrumentVoice] = []
-        for (pi,vs) in voicesByPerformerInstrumentPair {
-            for v in vs {
-                performerInstrumentVoices.append(PerformerInstrumentVoice(performerInstrument: pi, voice: v))
+        let performerInstrumentVoices = voicesByPerformerInstrumentPair
+            .flatMap { performerInstrument,voices -> [PerformerInstrumentVoice] in
+                voices.map { voice in
+                    PerformerInstrumentVoice(performerInstrument: performerInstrument, voice: voice)
+                }
             }
-        }
         return PerformanceContext(
             performerByID: performers,
             instrumentByID: instruments,
