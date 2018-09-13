@@ -11,8 +11,17 @@ import DataStructures
 /// Model of a single music-making object, through which a `Performer` can actuate musical actions.
 ///
 /// - TODO: Add `Instrument.Kind` metadata
+/// - TODO: Add long name
+/// - TODO: Add short name
+/// - TODO: Add abbreviation (with default abbreviating method)
 public struct Instrument {
+
+    // MARK: - Instance Properties
+
     public let name: String
+
+    // MARK: - Initializers
+
     public init(name: String) {
         self.name = name
     }
