@@ -119,7 +119,7 @@ class PerformanceContextTests: XCTestCase {
     func testFilterPerformersAndVoices() {
         let violinsOnlyFilter = PerformanceContext.Filter(
             performers: [chris],
-            voices: [Voice(name: "Jay - Violoncello - 0")]
+            voices: [jayVoice0]
         )
         let violinsOnly = jackQuartet.filtered(by: violinsOnlyFilter)
         let expected = PerformanceContext(
