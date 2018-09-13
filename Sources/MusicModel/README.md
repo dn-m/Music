@@ -45,3 +45,43 @@ There are often cases in which multiple performers play on the same physical ins
 ![Intertwined Ensemble](Documentation/IntertwinedEnsembleExample.png "Intertwined Ensemble")
 
 In this case, imagine four percussionists, playing on two different physical instruments. Each `Performer`-`Instrument` pair emits a single, unique voice.
+
+### PerformanceContext.Filter
+
+A `PerformanceContext.Filter` is used to focus in on a subset of a `PerformanceContext`. It can be specified by indicating specific `Performer`, `Instrument`, or `Voice` values which are to be retained.
+
+A `PerformanceContext.Filter` can be initialized with sets of `Performer`, `Instrument`, and/or `Voice` values.
+
+```Swift
+let filter = PerformanceContext.Filter(
+    performers: [performerD], 
+    instruments: [], 
+    voices: [voiceB]
+)
+```
+
+> If an empty set is given for a given parameter, the filter will not use that parameter for constraining the `PerformanceContext`.
+
+#### Filtering by `Performer`
+
+When filtering a `PerformanceContext` with a set of `Performer` values, all of the voices emitted by all of the `Performer`-`Instrument` pairs including the given `Performer` values are retained.
+
+![Filter By Performer](Documentation/FilterByPerformer.png "Filter By Performer")
+
+#### Filtering by `Instrument`
+
+When filtering a `PerformanceContext` with a set of `Instrument` values, all of the voices emitted by all of the `Performer`-`Instrument` pairs including the given `Instrument` values are retained.
+
+![Filter By Instrument](Documentation/FilterByInstrument.png "Filter By Instrument")
+
+#### Filtering by `Voice`
+
+When filtering a `PerformanceContext` with a set of `Voice` values, all of the `Performer`-`Instrument` pairs emitting the given `Voice` values are retained.
+
+![Filter By Voice](Documentation/FilterByVoice.png "Filter By Voice")
+
+#### Filtering by combination
+
+Of course, you can filter a `PerformanceContext` with a combination of `Performer`, `Instrument`, and `Voice` values. In this case, all of the applicable `Performer-Instrument` pairs and emitted voices are retained.
+
+![Filter By Performer and Voice](Documentation/FilterByPerformerAndVoice.png "Filter By Performer And Voice")
