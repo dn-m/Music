@@ -38,33 +38,93 @@ public struct PerformanceContext {
     }
 }
 
+extension PerformanceContext {
+
+    public func identifier(for performer: Performer) -> Performer.ID? {
+        return performerByID[value: performer]
+    }
+
+    public func performer(for identifier: Performer.ID) -> Performer? {
+        return performerByID[key: identifier]
+    }
+
+    public func identifier(for instrument: Instrument) -> Instrument.ID? {
+        return instrumentByID[value: instrument]
+    }
+
+    public func instrument(for identifier: Instrument.ID) -> Instrument? {
+        return instrumentByID[key: identifier]
+    }
+
+    public func identifier(for voice: Voice) -> Voice.ID? {
+        return voiceByID[value: voice]
+    }
+
+    public func voice(for identifier: Voice.ID) -> Voice? {
+        return voiceByID[key: identifier]
+    }
+}
+
 extension PerformanceContext: Equatable { }
 
 extension PerformanceContext {
 
     public struct Filter {
-        let performers: Set<Performer.ID>
-        let instruments: Set<Instrument.ID>
-        let voices: Set<Voice.ID>
+        let performers: Set<Performer>
+        let instruments: Set<Instrument>
+        let voices: Set<Voice>
+
+        init(
+            performers: Set<Performer> = [],
+            instruments: Set<Instrument> = [],
+            voices: Set<Voice> = []
+        )
+        {
+            self.performers = performers
+            self.instruments = instruments
+            self.voices = voices
+        }
     }
 
     public func filtered(by filter: Filter) -> PerformanceContext {
-        let performers = filter.performers.isEmpty ? Set(performerByID.keys) : filter.performers
-        let instruments = filter.instruments.isEmpty ? Set(instrumentByID.keys) : filter.instruments
-        let voices = filter.voices.isEmpty ? Set(voiceByID.keys) : filter.voices
-        let p = self.performerByID.filter { performers.contains($0.key) }
-        let i = self.instrumentByID.filter { instruments.contains($0.key) }
-        let v = self.voiceByID.filter { voices.contains($0.key) }
-        let pivs = performerInstrumentVoices.filter {
-            p.keys.contains($0.performerInstrument.performer) ||
-            i.keys.contains($0.performerInstrument.instrument) ||
-            v.keys.contains($0.voice)
+
+        // Early exit if there are no constraints
+        if filter.performers.isEmpty && filter.instruments.isEmpty && filter.voices.isEmpty {
+            return self
+        }
+
+        var filtered: Set<PerformerInstrumentVoice> = []
+        for piv in performerInstrumentVoices {
+            let pid = piv.performerInstrument.performer
+            let iid = piv.performerInstrument.instrument
+            let vid = piv.voice
+            if !filter.performers.isEmpty && filter.performers.contains(performer(for: pid)!) {
+                filtered.insert(piv)
+            }
+            if !filter.instruments.isEmpty && filter.instruments.contains(instrument(for: iid)!) {
+                filtered.insert(piv)
+            }
+            if !filter.voices.isEmpty && filter.voices.contains(voice(for: vid)!) {
+                filtered.insert(piv)
+            }
+        }
+
+        var p = Bimap<Performer.ID,Performer>()
+        var i = Bimap<Instrument.ID,Instrument>()
+        var v = Bimap<Voice.ID,Voice>()
+        for piv in filtered {
+            let pid = piv.performerInstrument.performer
+            p[pid] = performer(for: pid)!
+            let iid = piv.performerInstrument.instrument
+            i[iid] = instrument(for: iid)!
+            let vid = piv.voice
+            v[vid] = voice(for: vid)!
         }
         return PerformanceContext(
             performerByID: p,
             instrumentByID: i,
             voiceByID: v,
-            performerInstrumentVoices: pivs
+            performerInstrumentVoices: filtered
         )
     }
 }
