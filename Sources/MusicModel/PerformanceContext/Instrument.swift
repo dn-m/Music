@@ -8,6 +8,9 @@
 
 import DataStructures
 
+/// Model of a single music-making object, through which a `Performer` can actuate musical actions.
+///
+/// - TODO: Add `Instrument.Kind` metadata
 public struct Instrument {
     public let name: String
     public init(name: String) {
