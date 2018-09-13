@@ -7,8 +7,14 @@
 
 // Combination of a `Performer` and `Instrument`, stored by their integer identifiers.
 public struct PerformerInstrument {
+
+    // MARK: - Instance Properties
+
     let performer: Performer.ID
     let instrument: Instrument.ID
+
+    // MARK: - Initializers
+
     public init(_ performer: Performer.ID, _ instrument: Instrument.ID) {
         self.performer = performer
         self.instrument = instrument

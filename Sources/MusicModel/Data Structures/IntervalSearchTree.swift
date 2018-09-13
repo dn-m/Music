@@ -12,6 +12,8 @@ import Math
 /// An `IntervalSearchTree` is an augmentatin of an `AVLTree`, wherein the the value of `Node` is
 /// an `IntervalSearchTree.Node`. An `IntervalSearchTree.Node` contains the `interval`
 /// indexing the payload, the `max` upper bound of subtrees, and the `payload` value itself.
+///
+/// - TODO: Push down to dn-m/Structure/DataStructures when fully vetted.
 public struct IntervalSearchTree <Metric: Comparable, Value> {
 
     /// Underlying `AVLTree` augmented for interval searching purposes.
