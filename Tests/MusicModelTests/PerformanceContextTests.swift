@@ -22,52 +22,17 @@ class PerformanceContextTests: XCTestCase {
         _ = builder.addVoice(performer: performer, instrument: instrument)
     }
 
-    // Performers
-    let john = Performer(name: "John")
-    let austin = Performer(name: "Austin")
-    let chris = Performer(name: "Chris")
-    let jay = Performer(name: "Jay")
-
-    // Instruments
-    let violinI = Instrument(name: "Violin I")
-    let violinII = Instrument(name: "Violin II")
-    let viola = Instrument(name: "Viola")
-    let violoncello = Instrument(name: "Violoncello")
-
-    var jackQuartet: PerformanceContext {
-        let builder = PerformanceContext.Builder()
-        // Add performers
-        builder.addPerformer(john)
-        builder.addPerformer(austin)
-        builder.addPerformer(chris)
-        builder.addPerformer(jay)
-        // Add instruments
-        builder.addInstrument(violinI)
-        builder.addInstrument(violinII)
-        builder.addInstrument(viola)
-        builder.addInstrument(violoncello)
-        // Add voices
-        // Make Chris play three lines at once
-        builder.addVoice(Voice(name: "Chris - ViolinI - 0"), performer: chris, instrument: violinI)
-        builder.addVoice(Voice(name: "Chris - ViolinI - 1"), performer: chris, instrument: violinI)
-        builder.addVoice(Voice(name: "Chris - ViolinI - 2"), performer: chris, instrument: violinI)
-        builder.addVoice(Voice(name: "Austin - ViolinII - 0"), performer: austin, instrument: violinII)
-        builder.addVoice(Voice(name: "John - Viola - 0"), performer: john, instrument: viola)
-        builder.addVoice(Voice(name: "Jay - Violoncello - 0"), performer: jay, instrument: violoncello)
-        return builder.build()
-    }
-
     func testBuilder() {
         let expected = PerformanceContext(
             performerByID: [0: john, 1: austin, 2: chris, 3: jay],
             instrumentByID: [0: violinI, 1: violinII, 2: viola, 3: violoncello],
             voiceByID: [
-                0: Voice(name: "Chris - ViolinI - 0"),
-                1: Voice(name: "Chris - ViolinI - 1"),
-                2: Voice(name: "Chris - ViolinI - 2"),
-                3: Voice(name: "Austin - ViolinII - 0"),
-                4: Voice(name: "John - Viola - 0"),
-                5: Voice(name: "Jay - Violoncello - 0")
+                0: chrisVoice0,
+                1: chrisVoice1,
+                2: chrisVoice2,
+                3: austinVoice0,
+                4: johnVoice0,
+                5: jayVoice0
             ],
             performerInstrumentVoices: [
                 .init(performerInstrument: PerformerInstrument(2,0), voice: 0),
@@ -88,10 +53,10 @@ class PerformanceContextTests: XCTestCase {
             performerByID: [1: austin, 2: chris],
             instrumentByID: [0: violinI, 1: violinII],
             voiceByID: [
-                0: Voice(name: "Chris - ViolinI - 0"),
-                1: Voice(name: "Chris - ViolinI - 1"),
-                2: Voice(name: "Chris - ViolinI - 2"),
-                3: Voice(name: "Austin - ViolinII - 0"),
+                0: chrisVoice0,
+                1: chrisVoice1,
+                2: chrisVoice2,
+                3: austinVoice0,
             ],
             performerInstrumentVoices: [
                 .init(performerInstrument: PerformerInstrument(2,0), voice: 0),
@@ -110,10 +75,10 @@ class PerformanceContextTests: XCTestCase {
             performerByID: [1: austin, 2: chris],
             instrumentByID: [0: violinI, 1: violinII],
             voiceByID: [
-                0: Voice(name: "Chris - ViolinI - 0"),
-                1: Voice(name: "Chris - ViolinI - 1"),
-                2: Voice(name: "Chris - ViolinI - 2"),
-                3: Voice(name: "Austin - ViolinII - 0"),
+                0: chrisVoice0,
+                1: chrisVoice1,
+                2: chrisVoice2,
+                3: austinVoice0,
             ],
             performerInstrumentVoices: [
                 .init(performerInstrument: PerformerInstrument(2,0), voice: 0),
@@ -128,9 +93,9 @@ class PerformanceContextTests: XCTestCase {
     func testFilterVoices() {
         let violinsOnlyFilter = PerformanceContext.Filter(
             voices: [
-                Voice(name: "Chris - ViolinI - 0"),
-                Voice(name: "Chris - ViolinI - 2"),
-                Voice(name: "Jay - Violoncello - 0")
+                chrisVoice0,
+                chrisVoice2,
+                jayVoice0
             ]
         )
         let violinsOnly = jackQuartet.filtered(by: violinsOnlyFilter)
@@ -138,9 +103,9 @@ class PerformanceContextTests: XCTestCase {
             performerByID: [2: chris, 3: jay],
             instrumentByID: [0: violinI, 3: violoncello],
             voiceByID: [
-                0: Voice(name: "Chris - ViolinI - 0"),
-                2: Voice(name: "Chris - ViolinI - 2"),
-                5: Voice(name: "Jay - Violoncello - 0")
+                0: chrisVoice0,
+                2: chrisVoice2,
+                5: jayVoice0
             ],
             performerInstrumentVoices: [
                 .init(performerInstrument: PerformerInstrument(2,0), voice: 0),
@@ -161,10 +126,10 @@ class PerformanceContextTests: XCTestCase {
             performerByID: [2: chris, 3: jay],
             instrumentByID: [0: violinI, 3: violoncello],
             voiceByID: [
-                0: Voice(name: "Chris - ViolinI - 0"),
-                1: Voice(name: "Chris - ViolinI - 1"),
-                2: Voice(name: "Chris - ViolinI - 2"),
-                5: Voice(name: "Jay - Violoncello - 0")
+                0: chrisVoice0,
+                1: chrisVoice1,
+                2: chrisVoice2,
+                5: jayVoice0
             ],
             performerInstrumentVoices: [
                 .init(performerInstrument: PerformerInstrument(2,0), voice: 0),

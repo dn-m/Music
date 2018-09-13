@@ -79,6 +79,23 @@ class ModelTests: XCTestCase {
         _ = builder.createRhythm(note, voiceID: voiceID, offset: .zero)
     }
 
+    func testSlur() {
+        let performer = Performer(name: "Leo")
+        let instrument = Instrument(name: "Guitar")
+        let pitch: Pitch = 60
+        let articulation: Articulation = .tenuto
+        let dynamic: Dynamic = .fff
+        let slurStart: Slur = .start
+        let slurStop: Slur = .stop
+        let rhythm = Rhythm<Event>(1/>1, [
+            event(Event([pitch, dynamic, articulation, slurStart])),
+            event(Event([pitch, dynamic, articulation, slurStop]))
+            ])
+        let builder = Model.Builder()
+        let voiceID = builder.createVoice(performer: performer, instrument: instrument)
+        let _ = builder.createRhythm(rhythm, voiceID: voiceID, offset: .zero)
+    }
+
     func testManyRhythms() {
         let performer = Performer(name: "Alexis")
         let instrument = Instrument(name: "Contrabass")
@@ -108,20 +125,7 @@ class ModelTests: XCTestCase {
         let _ = builder.build()
     }
 
-    func testSlur() {
-        let performer = Performer(name: "Leo")
-        let instrument = Instrument(name: "Guitar")
-        let pitch: Pitch = 60
-        let articulation: Articulation = .tenuto
-        let dynamic: Dynamic = .fff
-        let slurStart: Slur = .start
-        let slurStop: Slur = .stop
-        let rhythm = Rhythm<Event>(1/>1, [
-            event(Event([pitch, dynamic, articulation, slurStart])),
-            event(Event([pitch, dynamic, articulation, slurStop]))
-        ])
-        let builder = Model.Builder()
-        let voiceID = builder.createVoice(performer: performer, instrument: instrument)
-        let _ = builder.createRhythm(rhythm, voiceID: voiceID, offset: .zero)
+    func testFilterPerformanceContext() {
+
     }
 }

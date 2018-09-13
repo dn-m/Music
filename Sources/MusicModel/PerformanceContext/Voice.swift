@@ -16,6 +16,12 @@ public struct Voice {
 
     /// The name of this voice.
     let name: String
+
+    // MARK: - Initializers
+
+    public init(name: String) {
+        self.name = name
+    }
 }
 
 extension Voice: Identifiable { }
