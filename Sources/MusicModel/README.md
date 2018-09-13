@@ -2,7 +2,17 @@
 
 The `MusicModel` module defines a database for storing musical information.
 
+## Model
+
 The `Model` object is an aggregate of information describing the performing forces (`Performer`, `Instrument`, and `Voice`), and the musical information which is actuated by them.
+
+### Model.Fragment
+
+A `Model.Fragment` is the product of slicing up a `Model` with a `Model.Filter`. A `Model.Fragment` is a representation of a `Model` in a particular interval of musical time, performed by a constrained set of performing forces, within a set of desired types of musical information (e.g., `Pitch`, `Dynamics`, etc.).
+
+### Model.Filter
+
+A `Model.Filter` is a composition of three axes of constraint used to create a `Model.Fragment`: an interval of musical time, a set of performing forces, and a set of the types of musical information to retain.
 
 ## PerformanceContext
 
