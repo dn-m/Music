@@ -66,11 +66,23 @@ let filter = PerformanceContext.Filter(
 
 When filtering a `PerformanceContext` with a set of `Performer` values, all of the voices emitted by all of the `Performer`-`Instrument` pairs including the given `Performer` values are retained.
 
+The filter for the following example would be:
+
+```Swift
+let filter = PerformanceContext.Filter(performers: [performerB])
+```
+
 ![Filter By Performer](Documentation/FilterByPerformer.png "Filter By Performer")
 
 #### Filtering by `Instrument`
 
 When filtering a `PerformanceContext` with a set of `Instrument` values, all of the voices emitted by all of the `Performer`-`Instrument` pairs including the given `Instrument` values are retained.
+
+The filter for the following example would be:
+
+```Swift
+let filter = PerformanceContext.Filter(instruments: [instrument1])
+```
 
 ![Filter By Instrument](Documentation/FilterByInstrument.png "Filter By Instrument")
 
@@ -78,10 +90,30 @@ When filtering a `PerformanceContext` with a set of `Instrument` values, all of 
 
 When filtering a `PerformanceContext` with a set of `Voice` values, all of the `Performer`-`Instrument` pairs emitting the given `Voice` values are retained.
 
+The filter for the following example would be:
+
+```Swift
+let filter = PerformanceContext.Filter(voices: [voiceB])
+```
+
 ![Filter By Voice](Documentation/FilterByVoice.png "Filter By Voice")
 
 #### Filtering by combination
 
 Of course, you can filter a `PerformanceContext` with a combination of `Performer`, `Instrument`, and `Voice` values. In this case, all of the applicable `Performer-Instrument` pairs and emitted voices are retained.
 
+The filter for the following example would be:
+
+```Swift
+let filter = PerformanceContext.Filter(performers: [performerD], voices: [voiceB])
+```
+
 ![Filter By Performer and Voice](Documentation/FilterByPerformerAndVoice.png "Filter By Performer And Voice")
+
+The filter for the following example would be:
+
+```Swift
+let filter = PerformanceContext.Filter(instruments: [instrument2], voices: [voiceB])
+```
+
+![Filter By Instrument and Voice](Documentation/FilterByInstrumentAndVoice.png "Filter By Instrument And Voice")
