@@ -35,8 +35,6 @@ class PerformanceContextTests: XCTestCase {
     let violoncello = Instrument(name: "Violoncello")
 
     var jackQuartet: PerformanceContext {
-
-
         let builder = PerformanceContext.Builder()
         // Add performers
         builder.addPerformer(john)
