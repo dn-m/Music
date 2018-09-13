@@ -24,17 +24,21 @@ class PerformanceContextTests: XCTestCase {
         _ = builder.addVoice(performer: performer, instrument: instrument)
     }
 
-    func testBuilder() {
-        // Performers
-        let john = Performer(name: "John")
-        let austin = Performer(name: "Austin")
-        let chris = Performer(name: "Chris")
-        let jay = Performer(name: "Jay")
-        // Instruments
-        let violinI = Instrument(name: "Violin I")
-        let violinII = Instrument(name: "Violin II")
-        let viola = Instrument(name: "Viola")
-        let violoncello = Instrument(name: "Violoncello")
+    // Performers
+    let john = Performer(name: "John")
+    let austin = Performer(name: "Austin")
+    let chris = Performer(name: "Chris")
+    let jay = Performer(name: "Jay")
+
+    // Instruments
+    let violinI = Instrument(name: "Violin I")
+    let violinII = Instrument(name: "Violin II")
+    let viola = Instrument(name: "Viola")
+    let violoncello = Instrument(name: "Violoncello")
+
+    var jackQuartet: PerformanceContext {
+
+
         let builder = PerformanceContext.Builder()
         // Add performers
         builder.addPerformer(john)
@@ -54,7 +58,10 @@ class PerformanceContextTests: XCTestCase {
         builder.addVoice(Voice(name: "Austin - ViolinII - 0"), performer: austin, instrument: violinII)
         builder.addVoice(Voice(name: "John - Viola - 0"), performer: john, instrument: viola)
         builder.addVoice(Voice(name: "Jay - Violoncello - 0"), performer: jay, instrument: violoncello)
-        let result = builder.build()
+        return builder.build()
+    }
+
+    func testBuilder() {
         let expected = PerformanceContext(
             performerByID: [0: john, 1: austin, 2: chris, 3: jay],
             instrumentByID: [0: violinI, 1: violinII, 2: viola, 3: violoncello],
@@ -75,6 +82,6 @@ class PerformanceContextTests: XCTestCase {
                 .init(performerInstrument: PerformerInstrument(3,3), voice: 5),
             ]
         )
-        XCTAssertEqual(result,expected)
+        XCTAssertEqual(jackQuartet,expected)
     }
 }
