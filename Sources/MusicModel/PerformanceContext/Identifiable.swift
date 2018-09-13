@@ -8,7 +8,8 @@
 import DataStructures
 
 /// Protocol which creates a type-safe identifier for the conforming type.
+///
+/// - TODO: Push down to dn-m/Structure/DataStructures
 public protocol Identifiable {
     typealias ID = Identifier<Self>
 }
-
