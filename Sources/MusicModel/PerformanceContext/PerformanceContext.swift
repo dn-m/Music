@@ -93,21 +93,15 @@ extension PerformanceContext {
             return self
         }
 
-        // Traverse `performerInstrumentVoices`, and rebuild set with matches
-        var filtered: Set<PerformerInstrumentVoice> = []
-        for piv in performerInstrumentVoices {
+        let filtered = performerInstrumentVoices.filter { piv in
             let pid = piv.performerInstrument.performer
             let iid = piv.performerInstrument.instrument
             let vid = piv.voice
-            if !filter.performers.isEmpty && filter.performers.contains(performer(for: pid)!) {
-                filtered.insert(piv)
-            }
-            if !filter.instruments.isEmpty && filter.instruments.contains(instrument(for: iid)!) {
-                filtered.insert(piv)
-            }
-            if !filter.voices.isEmpty && filter.voices.contains(voice(for: vid)!) {
-                filtered.insert(piv)
-            }
+            return (
+                !filter.performers.isEmpty && filter.performers.contains(performer(for: pid)!) ||
+                !filter.instruments.isEmpty && filter.instruments.contains(instrument(for: iid)!) ||
+                !filter.voices.isEmpty && filter.voices.contains(voice(for: vid)!)
+            )
         }
 
         // Reconstitute mappings from elements and identifiers
