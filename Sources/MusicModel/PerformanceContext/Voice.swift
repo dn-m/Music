@@ -10,6 +10,11 @@ import DataStructures
 
 /// Model of a single `Voice` in a `PerformanceContext`, actuated by a single performer through a
 /// single instrument.
+///
+/// - TODO: Add long name
+/// - TODO: Add short name
+/// - TODO: Add abbreviation (with default abbreviating method)
+/// - TODO: Add more metadata
 public struct Voice {
 
     /// The name of this voice.
