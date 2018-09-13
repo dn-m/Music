@@ -87,12 +87,10 @@ extension PerformanceContext {
     }
 
     public func filtered(by filter: Filter) -> PerformanceContext {
-
-        // Early exit if there are no constraints
+        // Exit early if there are no constraints
         if filter.performers.isEmpty && filter.instruments.isEmpty && filter.voices.isEmpty {
             return self
         }
-
         let filtered = performerInstrumentVoices.filter { piv in
             let pid = piv.performerInstrument.performer
             let iid = piv.performerInstrument.instrument
@@ -103,20 +101,9 @@ extension PerformanceContext {
                 !filter.voices.isEmpty && filter.voices.contains(voice(for: vid)!)
             )
         }
-
-        // Reconstitute mappings from elements and identifiers
-        var p = Bimap<Performer.ID,Performer>()
-        var i = Bimap<Instrument.ID,Instrument>()
-        var v = Bimap<Voice.ID,Voice>()
-        for piv in filtered {
-            let pid = piv.performerInstrument.performer
-            p[pid] = performer(for: pid)!
-            let iid = piv.performerInstrument.instrument
-            i[iid] = instrument(for: iid)!
-            let vid = piv.voice
-            v[vid] = voice(for: vid)!
-        }
-
+        let p = performerByID.filter { id,_ in filtered.contains { $0.contains(performer: id) } }
+        let i = instrumentByID.filter { id,_ in filtered.contains { $0.contains(instrument: id) } }
+        let v = voiceByID.filter { id,_ in filtered.contains { $0.voice == id } }
         return PerformanceContext(
             performerByID: p,
             instrumentByID: i,
