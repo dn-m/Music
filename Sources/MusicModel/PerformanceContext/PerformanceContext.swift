@@ -70,6 +70,7 @@ extension PerformanceContext: Equatable { }
 extension PerformanceContext {
 
     public struct Filter {
+
         let performers: Set<Performer>
         let instruments: Set<Instrument>
         let voices: Set<Voice>
@@ -101,13 +102,14 @@ extension PerformanceContext {
                 !filter.voices.isEmpty && filter.voices.contains(voice(for: vid)!)
             )
         }
-        let p = performerByID.filter { id,_ in filtered.contains { $0.contains(performer: id) } }
-        let i = instrumentByID.filter { id,_ in filtered.contains { $0.contains(instrument: id) } }
-        let v = voiceByID.filter { id,_ in filtered.contains { $0.voice == id } }
         return PerformanceContext(
-            performerByID: p,
-            instrumentByID: i,
-            voiceByID: v,
+            performerByID: performerByID.filter { id,_ in
+                filtered.contains { $0.contains(performer: id) }
+            },
+            instrumentByID: instrumentByID.filter { id,_ in
+                filtered.contains { $0.contains(instrument: id) }
+            },
+            voiceByID: voiceByID.filter { id,_ in filtered.contains { $0.voice == id } },
             performerInstrumentVoices: filtered
         )
     }
