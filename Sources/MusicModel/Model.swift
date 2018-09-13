@@ -11,11 +11,26 @@ import DataStructures
 import Math
 import Duration
 
-public typealias Event = [Any]
+//public typealias Event = [Any]
 public typealias Attribute = Any
-public typealias RhythmID = Identifier<Rhythm<Event>>
+public typealias RhythmID = Identifier<Rhythm<[Any]>>
 public typealias AttributeID = Identifier<Attribute>
 public typealias EventID = Identifier<Event>
+
+public struct Event {
+    var isEmpty: Bool {
+        return attributes.isEmpty
+    }
+    var attributes: [Any]
+    init(_ attributes: [Any]) {
+        self.attributes = attributes
+    }
+    func filter(_ isIncluded: (Any) -> Bool) -> Event {
+        return Event(attributes.filter(isIncluded))
+    }
+}
+
+extension Event: Identifiable { }
 
 /// The database of musical information contained in a single musical _work_.
 public final class Model {
@@ -41,7 +56,7 @@ public final class Model {
     // MARK: Attributes
 
     /// Each attribute in a work, stored by a unique identifier.
-    let attributesByID: [AttributeID: Attribute]
+    let attributeByID: [AttributeID: Attribute]
 
     // MARK: Events
 
@@ -67,13 +82,13 @@ public final class Model {
 
     // MARK: - Initializers
 
-    /// Creates a `Model` with the given `performanceContext`, `tempi`, `meter`, `attributesByID`,
+    /// Creates a `Model` with the given `performanceContext`, `tempi`, `meter`, `attributeByID`,
     /// `events`, `attributesByEvent`, `rhythms`, and `eventsByRhythm`.
     public init(
         performanceContext: PerformanceContext,
         tempi: Tempo.Interpolation.Collection,
         meters: Meter.Collection,
-        attributesByID: [AttributeID: Attribute],
+        attributeByID: [AttributeID: Attribute],
         events: [Voice.ID: IntervalSearchTree<Fraction,Set<EventID>>],
         attributesByEvent: [EventID: Set<AttributeID>],
         rhythms: [Voice.ID: IntervalSearchTree<Fraction,Set<RhythmID>>],
@@ -83,7 +98,7 @@ public final class Model {
         self.performanceContext = performanceContext
         self.tempi = tempi
         self.meters = meters
-        self.attributesByID = attributesByID
+        self.attributeByID = attributeByID
         self.events = events
         self.attributesByEvent = attributesByEvent
         self.rhythms = rhythms
@@ -91,12 +106,56 @@ public final class Model {
     }
 }
 
-extension Model {
+extension Model: Fragmentable {
 
-    // TODO: Create Model.Fragment
+    public func fragment(filter: Filter) -> Fragment {
+        let interval = filter.interval ?? .zero ..< max(tempi.length, meters.length)
+        let performanceContext = self.performanceContext.filtered(by: filter.performanceContext)
+        let events = Dictionary(
+            self.events.lazy
+                .filter { voiceID,_ in performanceContext.voiceByID.keys.contains(voiceID) }
+                .map { voiceID, intervalSearchTree in (voiceID, intervalSearchTree[interval]) }
+        )
+        let attributesByEvent = self.attributesByEvent.filter { eventID,_ in
+            return events.contains { _,intervalSearchTree in
+                intervalSearchTree.base.inOrder
+                    .map { $0.1.payload }
+                    .contains { $0.contains(eventID) }
+            }
+        }
+        let rhythms = Dictionary(
+            self.rhythms.lazy
+                .filter { voiceID,_ in performanceContext.voiceByID.keys.contains(voiceID) }
+                .map { voiceID, intervalSearchTree in (voiceID, intervalSearchTree[interval]) }
+        )
+        let eventsByRhythm = self.eventsByRhythm.filter { rhythmID,_ in
+            return rhythms.contains { _,intervalSearchTree in
+                intervalSearchTree.base.inOrder
+                    .map { $0.1.payload }
+                    .contains { $0.contains(rhythmID) }
+            }
+        }
+        return Fragment(
+            performanceContext: performanceContext,
+            tempoFragments: tempi.fragment(in: interval),
+            meterFragments: meters.fragment(in: interval),
+            attributesByID: attributeByID,
+            events: events,
+            attributesByEvent: attributesByEvent,
+            rhythms: rhythms,
+            eventsByRhythm: eventsByRhythm
+        )
+    }
 
-    public func attributes(filteredBy filter: Filter) -> Set<AttributeID> {
-        return []
+    public struct Fragment {
+        let performanceContext: PerformanceContext
+        let tempoFragments: Tempo.Interpolation.Collection.Fragment
+        let meterFragments: Meter.Collection.Fragment
+        let attributesByID: [AttributeID: Attribute]
+        let events: [Voice.ID: IntervalSearchTree<Fraction,Set<EventID>>]
+        let attributesByEvent: [EventID: Set<AttributeID>]
+        let rhythms: [Voice.ID: IntervalSearchTree<Fraction,Set<RhythmID>>]
+        let eventsByRhythm: [RhythmID: Set<EventID>]
     }
 }
 

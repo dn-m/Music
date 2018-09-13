@@ -28,7 +28,7 @@ extension Model {
         // MARK: Attributes
 
         /// Each attribute in a work, stored by a unique identifier.
-        var attributesByID: [AttributeID: Attribute] = [:]
+        var attributeByID: [AttributeID: Attribute] = [:]
 
         // MARK: Events
 
@@ -65,18 +65,18 @@ extension Model {
 
         /// Creates an entry for the given `rhythm`, performed by the given `voiceID`, at the give
         /// `offset`.
-        public func createRhythm(_ rhythm: Rhythm<[Any]>, voiceID: Voice.ID, offset: Fraction)
+        public func createRhythm(_ rhythm: Rhythm<Event>, voiceID: Voice.ID, offset: Fraction)
             -> RhythmID
         {
             let rhythmID = makeRhythmIdentifier()
             let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
             let eventIDs: Set<EventID> = Set(
                 offsetsAndDuratedEvents.lazy.map { [unowned self] (localOffset, duratedEvent) in
-                    let (duration, attributes) = duratedEvent
+                    let (duration, event) = duratedEvent
                     let localInterval = Fraction(localOffset) ..< Fraction(localOffset + duration)
                     let interval = localInterval.shifted(by: offset)
                     return self.createEvent(
-                        attributes: attributes,
+                        attributes: event.attributes,
                         voiceID: voiceID,
                         interval: interval
                     )
@@ -123,7 +123,7 @@ extension Model {
         }
 
         private func storeAttributes(_ attributes: [Any], withIDs ids: [AttributeID]) {
-            zip(ids,attributes).forEach { id, attribute in attributesByID[id] = attribute }
+            zip(ids,attributes).forEach { id, attribute in attributeByID[id] = attribute }
         }
 
         private func makePerformanceContext() -> PerformanceContext {
@@ -208,7 +208,7 @@ extension Model.Builder {
             performanceContext: makePerformanceContext(),
             tempi: makeTempi(),
             meters: makeMeters(),
-            attributesByID: attributesByID,
+            attributeByID: attributeByID,
             events: events,
             attributesByEvent: attributesByEvent,
             rhythms: rhythms,
