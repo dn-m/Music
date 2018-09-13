@@ -5,8 +5,13 @@
 //  Created by James Bean on 9/12/18.
 //
 
+/// A triplet of identifiers for a `Performer`, `Instrument`, `Voice` composite.
 public struct PerformerInstrumentVoice {
+
+    /// The pair of identifiers for a `Performer`-`Instrument` aggregate.
     let performerInstrument: PerformerInstrument
+
+    // The identifier for the `voice`.
     let voice: Voice.ID
 }
 
