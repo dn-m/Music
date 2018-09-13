@@ -126,6 +126,47 @@ class ModelTests: XCTestCase {
     }
 
     func testFilterPerformanceContext() {
-
+        let model = Model(
+            performanceContext: jackQuartet,
+            tempi: .empty,
+            meters: .empty,
+            attributeByID: [:],
+            events: [:],
+            attributesByEvent: [:],
+            rhythms: [:],
+            eventsByRhythm: [:]
+        )
+        let performanceContextFilter = PerformanceContext.Filter(
+            performers: [jay],
+            instruments: [viola],
+            voices: [chrisVoice1]
+        )
+        let filter = Model.Filter(
+            interval: nil,
+            performanceContext: performanceContextFilter,
+            types: []
+        )
+        let result = model.fragment(filter: filter)
+        let expectedPerformanceContext = PerformanceContext(
+            performerByID: [0: john, 2: chris, 3: jay],
+            instrumentByID: [0: violinI, 2: viola, 3: violoncello],
+            voiceByID: [1: chrisVoice1, 4: johnVoice0, 5: jayVoice0],
+            performerInstrumentVoices: [
+                .init(performerInstrument: PerformerInstrument(2,0), voice: 1),
+                .init(performerInstrument: PerformerInstrument(0,2), voice: 4),
+                .init(performerInstrument: PerformerInstrument(3,3), voice: 5),
+            ]
+        )
+        let expected = Model.Fragment(
+            performanceContext: expectedPerformanceContext,
+            tempoFragments: .empty,
+            meterFragments: .empty,
+            attributesByID: [:],
+            events: [:],
+            attributesByEvent: [:],
+            rhythms: [:],
+            eventsByRhythm: [:]
+        )
+        XCTAssertEqual(result.performanceContext, expected.performanceContext)
     }
 }

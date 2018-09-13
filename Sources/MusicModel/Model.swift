@@ -167,7 +167,7 @@ extension Model {
 
         let interval: Interval?
         let performanceContext: PerformanceContext.Filter
-        let types: [Any.Type]
+        let types: [Metatype]
 
         init(
             interval: Interval?,
@@ -177,7 +177,7 @@ extension Model {
         {
             self.interval = interval
             self.performanceContext = performanceContext
-            self.types = types
+            self.types = types.map(Metatype.init)
         }
     }
 }

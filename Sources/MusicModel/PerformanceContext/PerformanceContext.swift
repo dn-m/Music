@@ -66,6 +66,7 @@ extension PerformanceContext {
 }
 
 extension PerformanceContext: Equatable { }
+extension PerformanceContext: Hashable { }
 
 extension PerformanceContext {
 
