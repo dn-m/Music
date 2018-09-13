@@ -93,6 +93,7 @@ extension PerformanceContext {
             return self
         }
 
+        // Traverse `performerInstrumentVoices`, and rebuild set with matches
         var filtered: Set<PerformerInstrumentVoice> = []
         for piv in performerInstrumentVoices {
             let pid = piv.performerInstrument.performer
@@ -109,6 +110,7 @@ extension PerformanceContext {
             }
         }
 
+        // Reconstitute mappings from elements and identifiers
         var p = Bimap<Performer.ID,Performer>()
         var i = Bimap<Instrument.ID,Instrument>()
         var v = Bimap<Voice.ID,Voice>()
@@ -120,6 +122,7 @@ extension PerformanceContext {
             let vid = piv.voice
             v[vid] = voice(for: vid)!
         }
+
         return PerformanceContext(
             performerByID: p,
             instrumentByID: i,
