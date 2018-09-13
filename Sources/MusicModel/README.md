@@ -2,7 +2,7 @@
 
 The `MusicModel` module defines a database for storing musical information.
 
-The `Model` object is an aggregate of information describing the performing forces (`Performer`, `Instrument`, and `Voice`), and the musical information which are actuated by them.
+The `Model` object is an aggregate of information describing the performing forces (`Performer`, `Instrument`, and `Voice`), and the musical information which is actuated by them.
 
 ## PerformanceContext
 
