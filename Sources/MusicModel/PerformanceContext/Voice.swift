@@ -30,4 +30,3 @@ public struct Voice {
 extension Voice: Identifiable { }
 extension Voice: Equatable { }
 extension Voice: Hashable { }
-
