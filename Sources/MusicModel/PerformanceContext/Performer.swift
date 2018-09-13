@@ -8,6 +8,7 @@
 
 import DataStructures
 
+/// Model of a single music-making agent.
 public struct Performer {
     public let name: String
     public init(name: String) {
