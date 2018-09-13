@@ -60,7 +60,7 @@ let filter = PerformanceContext.Filter(
 )
 ```
 
-> If an empty set is given for a given parameter, the filter will not use that parameter for constraining the `PerformanceContext`.
+The default value for each parameter is an empty `Set`. If an empty set is given for a parameter, the filter will not use that parameter for constraining the `PerformanceContext`. Thus, if no parameters are given (`.init()`), no constraints are enforced by the filter, and the original `PerformanceContext` is returned in its entirety.
 
 #### Filtering by `Performer`
 
