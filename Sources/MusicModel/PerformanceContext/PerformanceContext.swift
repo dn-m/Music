@@ -82,12 +82,19 @@ extension PerformanceContext: Hashable { }
 
 extension PerformanceContext {
 
+    /// A filter for constraining a view onto a `PerformanceContext`.
     public struct Filter {
 
         let performers: Set<Performer>
         let instruments: Set<Instrument>
         let voices: Set<Voice>
 
+        // MARK: - Initializers
+
+        /// Creates a `PerformanceContext` showing the given sets of `performers`, `instruments`,
+        /// and `voices`.
+        ///
+        /// If a given set is empty, all applicable values for the given type are included.
         init(
             performers: Set<Performer> = [],
             instruments: Set<Instrument> = [],
@@ -100,6 +107,7 @@ extension PerformanceContext {
         }
     }
 
+    /// - Returns: A `PerformanceContext` filtered by the given `PerformanceContext.Filter`.
     public func filtered(by filter: Filter) -> PerformanceContext {
         // Exit early if there are no constraints
         if filter.performers.isEmpty && filter.instruments.isEmpty && filter.voices.isEmpty {
@@ -132,6 +140,7 @@ extension PerformanceContext {
 
     // MARK: - Builder
 
+    /// A class which encapsulates the stateful construction of a `PerformanceContext`.
     public final class Builder {
 
         private var performerIdentifier = 0
@@ -146,7 +155,7 @@ extension PerformanceContext {
 
         // MARK: - Initializers
 
-        /// Creates an empty `PerformanceContext`.
+        /// Creates an empty `PerformanceContext.Builder`.
         public init() {
             self.performers = [:]
             self.instruments = [:]
@@ -160,6 +169,9 @@ extension PerformanceContext.Builder {
 
     // MARK: - Instance Methods
 
+    /// Adds the given `Performer` to the `PerformanceContext`.
+    ///
+    /// - Returns: The identifier for the given `performer`.
     @discardableResult
     public func addPerformer(_ performer: Performer) -> Performer.ID {
         guard let identifier = performers[value: performer] else {
@@ -170,6 +182,9 @@ extension PerformanceContext.Builder {
         return identifier
     }
 
+    /// Adds the given `instrument` to the `PerformanceContext`.
+    ///
+    /// - Returns: The identifier for the given `instrument`.
     @discardableResult
     public func addInstrument(_ instrument: Instrument) -> Instrument.ID {
         guard let identifier = instruments[value: instrument] else {
@@ -215,6 +230,7 @@ extension PerformanceContext.Builder {
         return voicesByPerformerInstrumentPair[pair]?.count ?? 0
     }
 
+    /// - Returns: A completed `PerformanceContext`.
     public func build() -> PerformanceContext {
         return PerformanceContext(
             performerByID: performers,
