@@ -11,12 +11,12 @@ import DataStructures
 import Math
 import Duration
 
-//public typealias Event = [Any]
 public typealias Attribute = Any
 public typealias RhythmID = Identifier<Rhythm<[Any]>>
 public typealias AttributeID = Identifier<Attribute>
 public typealias EventID = Identifier<Event>
 
+/// A single musical event, as performed by a single `Voice` in a single interval of musical time.
 public struct Event {
     var isEmpty: Bool {
         return attributes.isEmpty
