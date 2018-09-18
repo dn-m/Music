@@ -165,7 +165,8 @@ extension Pitch.Class {
 
         /// - Returns: A `Pitch.Class.Collection` in which the elements are sorted by the given
         /// `areInIncreasingOrder`.
-        public func sorted(by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool) rethrows -> Collection
+        public func sorted(by areInIncreasingOrder: (Pitch.Class, Pitch.Class) throws -> Bool)
+            rethrows -> Collection
         {
             return Collection(try base.sorted(by: areInIncreasingOrder))
         }
