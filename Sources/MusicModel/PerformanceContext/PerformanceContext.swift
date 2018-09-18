@@ -40,26 +40,38 @@ public struct PerformanceContext {
 
 extension PerformanceContext {
 
+    /// The identifier for the given `performer`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
     public func identifier(for performer: Performer) -> Performer.ID? {
         return performerByID[value: performer]
     }
 
+    /// The performer for the given `identifier`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
     public func performer(for identifier: Performer.ID) -> Performer? {
         return performerByID[key: identifier]
     }
 
+    /// The identifier for the given `instrument`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
     public func identifier(for instrument: Instrument) -> Instrument.ID? {
         return instrumentByID[value: instrument]
     }
 
+    /// The instrument for the given `identifier`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
     public func instrument(for identifier: Instrument.ID) -> Instrument? {
         return instrumentByID[key: identifier]
     }
 
+    /// The identifier for the given `voice`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
     public func identifier(for voice: Voice) -> Voice.ID? {
         return voiceByID[value: voice]
     }
 
+    /// The voice for the given `identifier`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
     public func voice(for identifier: Voice.ID) -> Voice? {
         return voiceByID[key: identifier]
     }
