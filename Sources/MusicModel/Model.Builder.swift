@@ -28,13 +28,13 @@ extension Model {
         // MARK: Attributes
 
         /// Each attribute in a work, stored by a unique identifier.
-        var attributesByID: [AttributeID: Attribute] = [:]
+        var attributeByID: [AttributeID: Attribute] = [:]
 
         // MARK: Events
 
         /// Each event in a work, stored by its interval and the identifier of the voice which performs
         /// it.
-        var events: [VoiceID: IntervalSearchTree<Fraction,Set<EventID>>] = [:]
+        var events: [Voice.ID: IntervalSearchTree<Fraction,Set<EventID>>] = [:]
 
         /// Each attribute in an event, stored by its unique identifier.
         var attributesByEvent: [EventID: Set<AttributeID>] = [:]
@@ -43,7 +43,7 @@ extension Model {
 
         /// Each rhythm in a work, stored by its interval and the identifier of the voice which performs
         /// it.
-        var rhythms: [VoiceID: IntervalSearchTree<Fraction,Set<RhythmID>>] = [:]
+        var rhythms: [Voice.ID: IntervalSearchTree<Fraction,Set<RhythmID>>] = [:]
 
         /// The identifier of each event stored by the identifier of the rhythm which contains it.
         var eventsByRhythm: [RhythmID: Set<EventID>] = [:]
@@ -65,18 +65,18 @@ extension Model {
 
         /// Creates an entry for the given `rhythm`, performed by the given `voiceID`, at the give
         /// `offset`.
-        public func createRhythm(_ rhythm: Rhythm<[Any]>, voiceID: VoiceID, offset: Fraction)
+        public func createRhythm(_ rhythm: Rhythm<Event>, voiceID: Voice.ID, offset: Fraction)
             -> RhythmID
         {
             let rhythmID = makeRhythmIdentifier()
             let offsetsAndDuratedEvents = zip(rhythm.eventOffsets, rhythm.duratedEvents)
             let eventIDs: Set<EventID> = Set(
                 offsetsAndDuratedEvents.lazy.map { [unowned self] (localOffset, duratedEvent) in
-                    let (duration, attributes) = duratedEvent
+                    let (duration, event) = duratedEvent
                     let localInterval = Fraction(localOffset) ..< Fraction(localOffset + duration)
                     let interval = localInterval.shifted(by: offset)
                     return self.createEvent(
-                        attributes: attributes,
+                        attributes: event.attributes,
                         voiceID: voiceID,
                         interval: interval
                     )
@@ -88,7 +88,7 @@ extension Model {
             return rhythmID
         }
 
-        private func storeRhythm(id rhythm: RhythmID, voiceID: VoiceID, interval: Model.Interval) {
+        private func storeRhythm(id rhythm: RhythmID, voiceID: Voice.ID, interval: Model.Interval) {
             rhythms[voiceID, default: .empty].insert(.init(interval: interval, value: [rhythm]))
         }
 
@@ -102,7 +102,7 @@ extension Model {
         /// - Returns: An `EventID` for the new event.
         public func createEvent(
             attributes: [Any],
-            voiceID: VoiceID,
+            voiceID: Voice.ID,
             interval: Model.Interval
         ) -> EventID
         {
@@ -114,7 +114,7 @@ extension Model {
             return eventID
         }
 
-        private func storeEvent(id event: EventID, voiceID: VoiceID, interval: Model.Interval) {
+        private func storeEvent(id event: EventID, voiceID: Voice.ID, interval: Model.Interval) {
             events[voiceID, default: .empty].insert(.init(interval: interval, value: [event]))
         }
 
@@ -123,9 +123,7 @@ extension Model {
         }
 
         private func storeAttributes(_ attributes: [Any], withIDs ids: [AttributeID]) {
-            zip(ids,attributes).forEach { id, attribute in
-                attributesByID[id] = attribute
-            }
+            zip(ids,attributes).forEach { id, attribute in attributeByID[id] = attribute }
         }
 
         private func makePerformanceContext() -> PerformanceContext {
@@ -147,11 +145,6 @@ extension Model {
             return .init(rhythmIdentifier)
         }
     }
-
-    /// `Builder` ready to construct `Model`.
-    public static var builder: Builder {
-        return Builder()
-    }
 }
 
 extension Model.Builder {
@@ -159,23 +152,22 @@ extension Model.Builder {
     // MARK: - Performance Context
 
     /// Adds the given `performer` to the performance context.
-    public func createPerformer(_ performer: Performer) -> PerformerID {
+    public func createPerformer(_ performer: Performer) -> Performer.ID {
         return performanceContextBuilder.addPerformer(performer)
     }
 
     /// Adds the given `instrument` to the performance context.
-    public func createInstrument(_ instrument: Instrument) -> InstrumentID {
+    public func createInstrument(_ instrument: Instrument) -> Instrument.ID {
         return performanceContextBuilder.addInstrument(instrument)
     }
 
     /// Adds the given voice identifier for the given `performer` and `instrument`.
-    public func createVoice(_ voice: Int? = nil, performer: Performer, instrument: Instrument)
-        -> VoiceID
+    public func createVoice(_ voice: Voice? = nil, performer: Performer, instrument: Instrument)
+        -> Voice.ID
     {
-        return performanceContextBuilder.addVoice(
+        return performanceContextBuilder.addVoice(voice,
             performer: performer,
-            instrument: instrument,
-            number: voice
+            instrument: instrument
         )
     }
 }
@@ -216,7 +208,7 @@ extension Model.Builder {
             performanceContext: makePerformanceContext(),
             tempi: makeTempi(),
             meters: makeMeters(),
-            attributesByID: attributesByID,
+            attributeByID: attributeByID,
             events: events,
             attributesByEvent: attributesByEvent,
             rhythms: rhythms,

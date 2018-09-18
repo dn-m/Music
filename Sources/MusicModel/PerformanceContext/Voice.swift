@@ -8,33 +8,25 @@
 
 import DataStructures
 
-/// Model of a single `Voice` in a `PerformanceContext`.
+/// Model of a single `Voice` in a `PerformanceContext`, actuated by a single performer through a
+/// single instrument.
+///
+/// - TODO: Add long name
+/// - TODO: Add short name
+/// - TODO: Add abbreviation (with default abbreviating method)
+/// - TODO: Add more metadata
 public struct Voice {
 
-    /// Performer identifier.
-    let performer: PerformerID
+    /// The name of this voice.
+    let name: String
 
-    /// Instrument identifier.
-    let instrument: InstrumentID
-    
-    /// Identifier.
-    let identifier: Int
-    
-    /// Create a `Voice` with a given `identifier`.
-    public init(performer: PerformerID, instrument: InstrumentID, _ identifier: Int) {
-        self.performer = performer
-        self.instrument = instrument
-        self.identifier = identifier
+    // MARK: - Initializers
+
+    public init(name: String) {
+        self.name = name
     }
 }
 
-extension Voice {
-    public func matches(performer: PerformerID, instrument: InstrumentID) -> Bool {
-        return performer == self.performer && instrument == self.instrument
-    }
-}
-
+extension Voice: Identifiable { }
 extension Voice: Equatable { }
 extension Voice: Hashable { }
-
-public typealias VoiceID = Identifier<Voice>

@@ -12,6 +12,8 @@ import Math
 /// An `IntervalSearchTree` is an augmentatin of an `AVLTree`, wherein the the value of `Node` is
 /// an `IntervalSearchTree.Node`. An `IntervalSearchTree.Node` contains the `interval`
 /// indexing the payload, the `max` upper bound of subtrees, and the `payload` value itself.
+///
+/// - TODO: Push down to dn-m/Structure/DataStructures when fully vetted.
 public struct IntervalSearchTree <Metric: Comparable, Value> {
 
     /// Underlying `AVLTree` augmented for interval searching purposes.
@@ -19,17 +21,15 @@ public struct IntervalSearchTree <Metric: Comparable, Value> {
 
     public struct Node {
 
+        /// The payload contained herein.
+        public var payload: Value
+
         /// The interval in which the `payload` occurs.
-        @usableFromInline
-        let interval: Range<Metric>
+        public let interval: Range<Metric>
 
         /// The maximum upper bound of subtrees.
         @usableFromInline
         var max: Metric
-
-        /// The payload contained herein.
-        @usableFromInline
-        var payload: Value
 
         /// Creates an `ISTPayload` with the given `interval`, `value`, and `max` values.
         @inlinable
@@ -71,12 +71,18 @@ extension IntervalSearchTree {
 
 extension IntervalSearchTree {
 
+    /// - Returns: An `IntervalSearchTree` composed of the nodes overlapping the given `interval`.
+    public subscript(interval: Range<Metric>) -> IntervalSearchTree {
+        return IntervalSearchTree(overlapping(interval))
+    }
+}
+
+extension IntervalSearchTree {
+
     // MARK: - Instance Methods
 
     /// - Returns: An array of payloads containing the fractional interval and associated values
     /// containing the given `target` offset.
-
-    // FIXME: make free func
     @inlinable
     public func containing(_ target: Metric) -> [Node] {
         var result: [Node] = []
@@ -84,8 +90,7 @@ extension IntervalSearchTree {
         return result
     }
 
-    // FIXME: Return an `IntervalSearchTree` which retains its structure, instead of just an array
-    // of nodes.
+    // FIXME: Make free func
     @usableFromInline
     static func intervals(
         from node: Base.Node? = nil,

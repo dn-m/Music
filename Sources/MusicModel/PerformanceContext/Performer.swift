@@ -8,14 +8,26 @@
 
 import DataStructures
 
+/// Model of a single music-making agent.
+///
+/// - TODO: Add long name
+/// - TODO: Add short name
+/// - TODO: Add abbreviation (with default abbreviating method)
+/// - TODO: Add more metadata
 public struct Performer {
+
+    // MARK: - Instance Properties
+
     public let name: String
+
+    // MARK: - Initializers
+
+    /// Creates a `Performer` with the given `name`.
     public init(name: String) {
         self.name = name
     }
 }
 
-public typealias PerformerID = Identifier<Performer>
-
+extension Performer: Identifiable { }
 extension Performer: Equatable { }
 extension Performer: Hashable { }

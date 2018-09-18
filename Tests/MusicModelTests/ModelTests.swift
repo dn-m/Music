@@ -56,7 +56,7 @@ class ModelTests: XCTestCase {
         let performer = Performer(name: "Eleven")
         let instrument = Instrument(name: "Upside Down")
         let pitch: Pitch = 60
-        let rhythm = Rhythm<[Any]>(1/>4, [event([pitch])])
+        let rhythm = Rhythm<Event>(1/>4, [event(Event([pitch]))])
         let builder = Model.Builder()
         let voiceID = builder.createVoice(performer: performer, instrument: instrument)
         let rhythmID = builder.createRhythm(rhythm, voiceID: voiceID, offset: .zero)
@@ -69,7 +69,7 @@ class ModelTests: XCTestCase {
         let pitch: Pitch = 60
         let articulation: Articulation = .tenuto
         let dynamic: Dynamic = .fff
-        let note = Rhythm<Event>(1/>1, [event([pitch, dynamic, articulation])])
+        let note = Rhythm<Event>(1/>1, [event(Event([pitch, dynamic, articulation]))])
         let meter = Meter(4,4)
         let tempo = Tempo(120, subdivision: 4)
         let builder = Model.Builder()
@@ -79,19 +79,36 @@ class ModelTests: XCTestCase {
         _ = builder.createRhythm(note, voiceID: voiceID, offset: .zero)
     }
 
+    func testSlur() {
+        let performer = Performer(name: "Leo")
+        let instrument = Instrument(name: "Guitar")
+        let pitch: Pitch = 60
+        let articulation: Articulation = .tenuto
+        let dynamic: Dynamic = .fff
+        let slurStart: Slur = .start
+        let slurStop: Slur = .stop
+        let rhythm = Rhythm<Event>(1/>1, [
+            event(Event([pitch, dynamic, articulation, slurStart])),
+            event(Event([pitch, dynamic, articulation, slurStop]))
+            ])
+        let builder = Model.Builder()
+        let voiceID = builder.createVoice(performer: performer, instrument: instrument)
+        let _ = builder.createRhythm(rhythm, voiceID: voiceID, offset: .zero)
+    }
+
     func testManyRhythms() {
         let performer = Performer(name: "Alexis")
         let instrument = Instrument(name: "Contrabass")
-        let rhythms: [Rhythm<[Any]>] = (0..<1_000).map { _ in
+        let rhythms: [Rhythm<Event>] = (0..<1_000).map { _ in
             let amountEvents = 10
-            let events: [Rhythm<[Any]>.Context] = (0..<amountEvents).map { _ in
+            let events: [Rhythm<Event>.Context] = (0..<amountEvents).map { _ in
                 let amountPitches = 3
                 let pitches: [Pitch] = (0..<amountPitches).map { _ in
                     return Pitch(Double.random(in: 48..<74))
                 }
                 let articulation = Articulation.staccato
                 let dynamic = Dynamic.fff
-                let attributes: [Any] = pitches + [articulation] + [dynamic]
+                let attributes = Event(pitches + [articulation] + [dynamic])
                 return event(attributes)
             }
             let beats = Int.random(in: 1..<16)
@@ -108,20 +125,48 @@ class ModelTests: XCTestCase {
         let _ = builder.build()
     }
 
-    func testSlur() {
-        let performer = Performer(name: "Leo")
-        let instrument = Instrument(name: "Guitar")
-        let pitch: Pitch = 60
-        let articulation: Articulation = .tenuto
-        let dynamic: Dynamic = .fff
-        let slurStart: Slur = .start
-        let slurStop: Slur = .stop
-        let rhythm = Rhythm<Event>(1/>1, [
-            event([pitch, dynamic, articulation, slurStart]),
-            event([pitch, dynamic, articulation, slurStop])
-        ])
-        let builder = Model.Builder()
-        let voiceID = builder.createVoice(performer: performer, instrument: instrument)
-        let _ = builder.createRhythm(rhythm, voiceID: voiceID, offset: .zero)
+    func testFilterPerformanceContext() {
+        let model = Model(
+            performanceContext: jackQuartet,
+            tempi: .empty,
+            meters: .empty,
+            attributeByID: [:],
+            events: [:],
+            attributesByEvent: [:],
+            rhythms: [:],
+            eventsByRhythm: [:]
+        )
+        let performanceContextFilter = PerformanceContext.Filter(
+            performers: [jay],
+            instruments: [viola],
+            voices: [chrisVoice1]
+        )
+        let filter = Model.Filter(
+            interval: nil,
+            performanceContext: performanceContextFilter,
+            types: []
+        )
+        let result = model.fragment(filter: filter)
+        let expectedPerformanceContext = PerformanceContext(
+            performerByID: [0: john, 2: chris, 3: jay],
+            instrumentByID: [0: violinI, 2: viola, 3: violoncello],
+            voiceByID: [1: chrisVoice1, 4: johnVoice0, 5: jayVoice0],
+            performerInstrumentVoices: [
+                .init(performerInstrument: PerformerInstrument(2,0), voice: 1),
+                .init(performerInstrument: PerformerInstrument(0,2), voice: 4),
+                .init(performerInstrument: PerformerInstrument(3,3), voice: 5),
+            ]
+        )
+        let expected = Model.Fragment(
+            performanceContext: expectedPerformanceContext,
+            tempoFragments: .empty,
+            meterFragments: .empty,
+            attributesByID: [:],
+            events: [:],
+            attributesByEvent: [:],
+            rhythms: [:],
+            eventsByRhythm: [:]
+        )
+        XCTAssertEqual(result.performanceContext, expected.performanceContext)
     }
 }

@@ -15,81 +15,147 @@ public struct PerformanceContext {
 
     // MARK: - Instance Properties
 
-    /// Storage of `Performer` by unique identifier.
-    let performers: Bimap<PerformerID,Performer>
+    let performerByID: Bimap<Performer.ID,Performer>
+    let instrumentByID: Bimap<Instrument.ID,Instrument>
+    let voiceByID: Bimap<Voice.ID,Voice>
 
-    /// Storage of `Instrument` by unique identifier.
-    let instruments: Bimap<InstrumentID,Instrument>
-
-    /// Storage of unique voices for each `PerformerInstrumentPair`.
-    let voices: Bimap<VoiceID,Voice>
+    let performerInstrumentVoices: Set<PerformerInstrumentVoice>
 
     // MARK: - Initializers
 
     /// Creates a `PerformanceContext` with the given `performers`, `instruments`, and `voices`.
-    public init(
-        performers: Bimap<PerformerID,Performer> = .init(),
-        instruments: Bimap<InstrumentID,Instrument> = .init(),
-        voices: Bimap<VoiceID,Voice> = .init()
+    init(
+        performerByID: Bimap<Performer.ID,Performer>,
+        instrumentByID: Bimap<Instrument.ID,Instrument>,
+        voiceByID: Bimap<Voice.ID,Voice>,
+        performerInstrumentVoices: Set<PerformerInstrumentVoice>
     )
     {
-        self.performers = performers
-        self.instruments = instruments
-        self.voices = voices
-    }
-}
-
-// Combination of a `Performer` and `Instrument`, stored by their integer identifiers.
-struct PerformerInstrumentPair {
-    let performer: PerformerID
-    let instrument: InstrumentID
-    init(_ performer: PerformerID, _ instrument: InstrumentID) {
-        self.performer = performer
-        self.instrument = instrument
+        self.performerByID = performerByID
+        self.instrumentByID = instrumentByID
+        self.voiceByID = voiceByID
+        self.performerInstrumentVoices = performerInstrumentVoices
     }
 }
 
 extension PerformanceContext {
 
-    struct Filter {
-        let performer: Performer?
-        let instrument: Instrument?
-        let voice: Int?
-        init(performer: Performer? = nil, instrument: Instrument? = nil) {
-            self.performer = performer
-            self.instrument = instrument
-            self.voice = nil
-        }
-        init(performer: Performer, instrument: Instrument, voice: Int) {
-            self.performer = performer
-            self.instrument = instrument
-            self.voice = voice
-        }
+    /// The identifier for the given `performer`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
+    public func identifier(for performer: Performer) -> Performer.ID? {
+        return performerByID[value: performer]
+    }
+
+    /// The performer for the given `identifier`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
+    public func performer(for identifier: Performer.ID) -> Performer? {
+        return performerByID[key: identifier]
+    }
+
+    /// The identifier for the given `instrument`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
+    public func identifier(for instrument: Instrument) -> Instrument.ID? {
+        return instrumentByID[value: instrument]
+    }
+
+    /// The instrument for the given `identifier`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
+    public func instrument(for identifier: Instrument.ID) -> Instrument? {
+        return instrumentByID[key: identifier]
+    }
+
+    /// The identifier for the given `voice`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
+    public func identifier(for voice: Voice) -> Voice.ID? {
+        return voiceByID[value: voice]
+    }
+
+    /// The voice for the given `identifier`, if it exists in the `PerformanceContext`.
+    /// Otherwise, `nil`.
+    public func voice(for identifier: Voice.ID) -> Voice? {
+        return voiceByID[key: identifier]
     }
 }
 
-extension PerformerInstrumentPair: Equatable { }
-extension PerformerInstrumentPair: Hashable { }
+extension PerformanceContext: Equatable { }
+extension PerformanceContext: Hashable { }
+
+extension PerformanceContext {
+
+    /// A filter for constraining a view onto a `PerformanceContext`.
+    public struct Filter {
+
+        let performers: Set<Performer>
+        let instruments: Set<Instrument>
+        let voices: Set<Voice>
+
+        // MARK: - Initializers
+
+        /// Creates a `PerformanceContext` showing the given sets of `performers`, `instruments`,
+        /// and `voices`.
+        ///
+        /// If a given set is empty, all applicable values for the given type are included.
+        init(
+            performers: Set<Performer> = [],
+            instruments: Set<Instrument> = [],
+            voices: Set<Voice> = []
+        )
+        {
+            self.performers = performers
+            self.instruments = instruments
+            self.voices = voices
+        }
+    }
+
+    /// - Returns: A `PerformanceContext` filtered by the given `PerformanceContext.Filter`.
+    public func filtered(by filter: Filter) -> PerformanceContext {
+        // Exit early if there are no constraints
+        if filter.performers.isEmpty && filter.instruments.isEmpty && filter.voices.isEmpty {
+            return self
+        }
+        let filtered = performerInstrumentVoices.filter { piv in
+            let pid = piv.performerInstrument.performer
+            let iid = piv.performerInstrument.instrument
+            let vid = piv.voice
+            return (
+                !filter.performers.isEmpty && filter.performers.contains(performer(for: pid)!) ||
+                !filter.instruments.isEmpty && filter.instruments.contains(instrument(for: iid)!) ||
+                !filter.voices.isEmpty && filter.voices.contains(voice(for: vid)!)
+            )
+        }
+        return PerformanceContext(
+            performerByID: performerByID.filter { id,_ in
+                filtered.contains { $0.contains(performer: id) }
+            },
+            instrumentByID: instrumentByID.filter { id,_ in
+                filtered.contains { $0.contains(instrument: id) }
+            },
+            voiceByID: voiceByID.filter { id,_ in filtered.contains { $0.voice == id } },
+            performerInstrumentVoices: filtered
+        )
+    }
+}
 
 extension PerformanceContext {
 
     // MARK: - Builder
 
+    /// A class which encapsulates the stateful construction of a `PerformanceContext`.
     public final class Builder {
 
         private var performerIdentifier = 0
         private var instrumentIdentifier = 0
         private var voiceIdentifier = 0
 
-        var performers: Bimap<PerformerID,Performer> = [:]
-        var instruments: Bimap<InstrumentID,Instrument> = [:]
-        var voices: Bimap<VoiceID,Voice> = [:]
+        var performers: Bimap<Performer.ID,Performer> = [:]
+        var instruments: Bimap<Instrument.ID,Instrument> = [:]
+        var voices: Bimap<Voice.ID,Voice> = [:]
 
-        var voicesByPerformerInstrumentPair: [PerformerInstrumentPair: Set<VoiceID>] = [:]
+        var voicesByPerformerInstrumentPair: [PerformerInstrument: Set<Voice.ID>] = [:]
 
         // MARK: - Initializers
 
-        /// Creates an empty `PerformanceContext`.
+        /// Creates an empty `PerformanceContext.Builder`.
         public init() {
             self.performers = [:]
             self.instruments = [:]
@@ -103,45 +169,11 @@ extension PerformanceContext.Builder {
 
     // MARK: - Instance Methods
 
-    /// Adds a new voice for the given `performer` and `instrument`, with a given `number`, if the
-    /// voices already exists. Otherwise, a new voice will be generated for the performer-instrument
-    /// pair.
-    public func addVoice(
-        performer performer: Performer,
-        instrument instrument: Instrument,
-        number: Int? = nil
-    ) -> VoiceID
-    {
-        let performerID = addPerformer(performer)
-        let instrumentID = addInstrument(instrument)
-        let pair = PerformerInstrumentPair(performerID, instrumentID)
-
-        // If a number is known ahead of time, return the voice identifier if the voice is extant,
-        // otherwise, add a new voice.
-        if let number = number {
-            let voice = Voice(performer: performerID, instrument: instrumentID, number)
-            if let voiceID = voices[value: voice] { return voiceID }
-            return addNewVoice(voice, with: pair)
-        }
-
-        // If the number is not known ahead of time, make a new voice for ther performer-instrument
-        // pair.
-        let voice = Voice(performer: performerID, instrument: instrumentID, makeNewVoiceID(pair))
-        return addNewVoice(voice, with: pair)
-    }
-
-    func addNewVoice(_ voice: Voice, with pair: PerformerInstrumentPair) -> VoiceID {
-        let identifier = makeVoiceIdentifier()
-        voicesByPerformerInstrumentPair[pair, default: []].insert(identifier)
-        voices[key: identifier] = voice
-        return identifier
-    }
-
-    func makeNewVoiceID(_ pair: PerformerInstrumentPair) -> Int {
-        return voicesByPerformerInstrumentPair[pair]?.count ?? 0
-    }
-
-    public func addPerformer(_ performer: Performer) -> PerformerID {
+    /// Adds the given `Performer` to the `PerformanceContext`.
+    ///
+    /// - Returns: The identifier for the given `performer`.
+    @discardableResult
+    public func addPerformer(_ performer: Performer) -> Performer.ID {
         guard let identifier = performers[value: performer] else {
             let identifier = makePerformerIdentifier()
             performers[key: identifier] = performer
@@ -150,7 +182,11 @@ extension PerformanceContext.Builder {
         return identifier
     }
 
-    public func addInstrument(_ instrument: Instrument) -> InstrumentID {
+    /// Adds the given `instrument` to the `PerformanceContext`.
+    ///
+    /// - Returns: The identifier for the given `instrument`.
+    @discardableResult
+    public func addInstrument(_ instrument: Instrument) -> Instrument.ID {
         guard let identifier = instruments[value: instrument] else {
             let identifier = makeInstrumentIdentifier()
             instruments[key: identifier]  = instrument
@@ -159,11 +195,62 @@ extension PerformanceContext.Builder {
         return identifier
     }
 
-    public func build() -> PerformanceContext {
-        return PerformanceContext(performers: performers, instruments: instruments, voices: voices)
+    /// Adds a new voice for the given `performer` and `instrument`, with a given `number`, if the
+    /// voices already exists. Otherwise, a new voice will be generated for the performer-instrument
+    /// pair.
+    @discardableResult
+    public func addVoice(_ voice: Voice? = nil, performer: Performer, instrument: Instrument) ->
+        Voice.ID
+    {
+        let performerID = addPerformer(performer)
+        let instrumentID = addInstrument(instrument)
+        let performerInstrument = PerformerInstrument(performerID, instrumentID)
+        // If a voice is known ahead of time, return the voice identifier if the voice is extant,
+        // otherwise, add a new voice and return an identifier.
+        if let voice = voice {
+            if let voiceID = voices[value: voice] { return voiceID }
+            return addNewVoice(voice, with: performerInstrument)
+        }
+        // If the number is not known ahead of time, make a new voice for ther performer-instrument
+        // pair.
+        let voice = Voice(
+            name: "\(performer.name) - \(instrument.name) - \(makeNewVoiceID(performerInstrument))"
+        )
+        return addNewVoice(voice, with: performerInstrument)
     }
 
-    private func makeVoiceIdentifier() -> VoiceID {
+    func addNewVoice(_ voice: Voice, with pair: PerformerInstrument) -> Voice.ID {
+        let identifier = makeVoiceIdentifier()
+        voicesByPerformerInstrumentPair[pair, default: []].insert(identifier)
+        voices[key: identifier] = voice
+        return identifier
+    }
+
+    func makeNewVoiceID(_ pair: PerformerInstrument) -> Int {
+        return voicesByPerformerInstrumentPair[pair]?.count ?? 0
+    }
+
+    /// - Returns: A completed `PerformanceContext`.
+    public func build() -> PerformanceContext {
+        return PerformanceContext(
+            performerByID: performers,
+            instrumentByID: instruments,
+            voiceByID: voices,
+            performerInstrumentVoices: Set(
+                voicesByPerformerInstrumentPair.lazy
+                    .flatMap { performerInstrument,voices -> [PerformerInstrumentVoice] in
+                        voices.map { voice in
+                            PerformerInstrumentVoice(
+                                performerInstrument: performerInstrument,
+                                voice: voice
+                            )
+                        }
+                    }
+            )
+        )
+    }
+
+    private func makeVoiceIdentifier() -> Voice.ID {
         defer { voiceIdentifier += 1 }
         return Identifier(voiceIdentifier)
     }
