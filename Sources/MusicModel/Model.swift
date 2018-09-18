@@ -108,6 +108,25 @@ public final class Model {
 
 extension Model: Fragmentable {
 
+    // MARK: - Fragmentable
+
+    /// A `Fragment` of a `Model` with the constraints of a given `Filter`.
+    ///
+    ///
+    public struct Fragment {
+        let performanceContext: PerformanceContext
+        let tempoFragments: Tempo.Interpolation.Collection.Fragment
+        let meterFragments: Meter.Collection.Fragment
+        let attributesByID: [AttributeID: Attribute]
+        let events: [Voice.ID: IntervalSearchTree<Fraction,Set<EventID>>]
+        let attributesByEvent: [EventID: Set<AttributeID>]
+        let rhythms: [Voice.ID: IntervalSearchTree<Fraction,Set<RhythmID>>]
+        let eventsByRhythm: [RhythmID: Set<EventID>]
+    }
+
+    /// - Returns: A fragment of this `Model` with the constraints of the given `filter`.
+    //
+    // FIXME: This is a naive implementation, and can surely made more elegant and more efficient!
     public func fragment(filter: Filter) -> Fragment {
         let interval = filter.interval ?? .zero ..< max(tempi.length, meters.length)
         let performanceContext = self.performanceContext.filtered(by: filter.performanceContext)
@@ -146,17 +165,6 @@ extension Model: Fragmentable {
             eventsByRhythm: eventsByRhythm
         )
     }
-
-    public struct Fragment {
-        let performanceContext: PerformanceContext
-        let tempoFragments: Tempo.Interpolation.Collection.Fragment
-        let meterFragments: Meter.Collection.Fragment
-        let attributesByID: [AttributeID: Attribute]
-        let events: [Voice.ID: IntervalSearchTree<Fraction,Set<EventID>>]
-        let attributesByEvent: [EventID: Set<AttributeID>]
-        let rhythms: [Voice.ID: IntervalSearchTree<Fraction,Set<RhythmID>>]
-        let eventsByRhythm: [RhythmID: Set<EventID>]
-    }
 }
 
 extension Model {
@@ -169,6 +177,10 @@ extension Model {
         let performanceContext: PerformanceContext.Filter
         let types: [Metatype]
 
+        // MARK: - Initializers
+
+        /// Creates a `Model.Filter` with the given `interval`, `performanceContext`, and `types`
+        /// which are to be retained in a resultant `Model.Fragment`.
         init(
             interval: Interval?,
             performanceContext: PerformanceContext.Filter,
