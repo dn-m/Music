@@ -112,6 +112,8 @@ extension Dynamic: MusicItem { }
 extension Articulation: MusicItem { }
 ```
 
+> Most computational models of music from the last two decades employ an object-oriented approach (see: Abjad, GUIDO, Music21, etc.)
+
 A model could then be represented as such:
 
 ```Swift
