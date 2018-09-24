@@ -215,6 +215,10 @@ func musicalItem <M: MusicalItem> () -> M {
 }
 ```
 
+```Swift
+let renderer: Renderer = musicalItem()
+```
+
 > More mystery
 
 What is compelling here, though, is the ability to add a `FireCanon` type, and a renderer which can explicitly opt-in to representing the new type.
@@ -235,6 +239,10 @@ extension Renderer: CannonFiring {
 func musicalItemAndCannonFiring <M: MusicalItem & FireCannon> () -> M {
     return M.collection(...)
 }
+```
+
+```Swift
+let renderer: Renderer = musicalItem()
 ```
 
 In the end, each renderer knows explicitly what it needs to represent, in a way that is enforced by the compiler, yet each renderer can be extended incrementally in order to support new cases.
