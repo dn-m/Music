@@ -182,7 +182,7 @@ There are two goals for this abstract model of musical information: that it is t
 
 An interesting avenue for research into solving this problem (the [expression problem](https://en.wikipedia.org/wiki/Expression_problem)) is the use of the "final tagless style". The final tagless style in Swift, uses static, `Self`-returning, methods required by composable protocols instead of enums or class hierarchies.
 
-This is a compelling approach because protocol requirements are enforced by the compiler (satisfying our type-safety goal) and cases can be extended arbitrarily (satistying our exstensibility goal).
+This is a compelling approach because protocol requirements are enforced by the compiler (satisfying our type-safety goal) and cases can be extended arbitrarily (satistying our extensibility goal).
 
 Let's try to build up our `MusicalItem` value this way:
 
@@ -251,7 +251,7 @@ In the end, each renderer knows explicitly what it needs to represent, in a way 
 
 Such a model like final tagless style (if this were to work), could be applied to different dimensions of this model (e.g., there could be an entire constellation of different articulation types for different instruments, in different styles, for different time periods, etc.).
 
-It should also be noted that there is entire organizational layer between this abstract representation and the actual graphical rendering (see: [dn-m/NotationModel](https://github.com/dn-m/NotationModel)). 
+It should also be noted that there is an entire organizational layer between this abstract representation and the actual graphical rendering (see: [dn-m/NotationModel](https://github.com/dn-m/NotationModel)). 
 
 > This could make this more awkward, or more powerful, I'm not sure yet.
 
