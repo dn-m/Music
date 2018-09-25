@@ -251,7 +251,7 @@ In the end, each renderer knows explicitly what it needs to represent, in a way 
 
 Such a model like final tagless style (if this were to work), could be applied to different dimensions of this model (e.g., there could be an entire constellation of different articulation types for different instruments, in different styles, for different time periods, etc.).
 
-It should also be noted that there is entire organizational layer between this abstract representation and the actual graphical rendering (see: [dn-m/NotationModel](https://github.com/dn-m/NotationModel)). 
+It should also be noted that there is an entire organizational layer between this abstract representation and the actual graphical rendering (see: [dn-m/NotationModel](https://github.com/dn-m/NotationModel)). 
 
 > This could make this more awkward, or more powerful, I'm not sure yet.
 
