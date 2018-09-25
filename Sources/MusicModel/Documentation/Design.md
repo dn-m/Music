@@ -182,7 +182,7 @@ There are two goals for this abstract model of musical information: that it is t
 
 An interesting avenue for research into solving this problem (the [expression problem](https://en.wikipedia.org/wiki/Expression_problem)) is the use of the "final tagless style". The final tagless style in Swift, uses static, `Self`-returning, methods required by composable protocols instead of enums or class hierarchies.
 
-This is a compelling approach because protocol requirements are enforced by the compiler (satisfying our type-safety goal) and cases can be extended arbitrarily (satistying our exstensibility goal).
+This is a compelling approach because protocol requirements are enforced by the compiler (satisfying our type-safety goal) and cases can be extended arbitrarily (satistying our extensibility goal).
 
 Let's try to build up our `MusicalItem` value this way:
 
