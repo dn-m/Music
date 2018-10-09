@@ -24,4 +24,38 @@ class ScaleTests: XCTestCase {
         let _ = Scale(66, .melodicMinorAscending)
         let _ = Scale(66, .melodicMinorDescending)
     }
+
+    func testScaleDegreeNil() {
+        let cMajor = Scale(60, .major)
+        let pitches: [Pitch] = [61,63,66,68,70]
+        for pitch in pitches {
+            XCTAssertNil(cMajor.scaleDegree(pitch: pitch))
+        }
+    }
+
+    func testScaleDegreeNotNil() {
+        let cMajor = Scale(60, .major)
+        let pitches: [Pitch] = [60,62,64,65,67,69,71]
+        for pitch in pitches {
+            XCTAssertNotNil(cMajor.scaleDegree(pitch: pitch))
+        }
+    }
+
+    func testScaleDegree() {
+        let cMinor = Scale(60, .minor)
+        XCTAssertEqual(cMinor.scaleDegree(pitch: 63), 3)
+    }
+
+    func testPitchFromScaleDegreeNotNil() {
+        let cMinor = Scale(60, .minor)
+        let scaleDegrees = [1,2,3,4,5,6,7]
+        for scaleDegree in scaleDegrees {
+            XCTAssertNotNil(cMinor.pitch(scaleDegree: scaleDegree))
+        }
+    }
+
+    func testPitchFromScaleDegree() {
+        let eMajor = Scale(64, .major)
+        XCTAssertEqual(eMajor.pitch(scaleDegree: 4), 68)
+    }
 }

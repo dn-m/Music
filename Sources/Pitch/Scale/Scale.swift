@@ -8,6 +8,7 @@
 import Algebra
 import DataStructures
 
+// TODO: Make (optional) looping sequence
 public struct Scale {
 
     // MARK: - Instance Properties
@@ -35,9 +36,11 @@ extension Scale {
 extension Scale {
 
     func pitch(scaleDegree: Int) -> Pitch? {
-        return pitches[safe: scaleDegree]
+        let index = scaleDegree - 1
+        return pitches[safe: index]
     }
 
+    // FIXME: Currently only works for pitches in first octave. Extend to modulo-12
     func scaleDegree(pitch: Pitch) -> Int? {
         return pitches.index(of: pitch)
     }
