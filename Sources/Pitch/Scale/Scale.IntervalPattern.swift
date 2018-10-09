@@ -13,6 +13,13 @@ extension Scale {
 }
 
 extension Scale.IntervalPattern {
+
+    public init(_ intervals: [Pitch]) {
+        self.init(intervals: intervals)
+    }
+}
+
+extension Scale.IntervalPattern {
     static var major: Scale.IntervalPattern { return [2,2,1,2,2,2,1] }
     static var minor: Scale.IntervalPattern { return [2,1,2,2,1,2,2] }
     static var melodicMinorAscending: Scale.IntervalPattern { return [2,1,2,2,2,2,1] }
@@ -30,3 +37,6 @@ extension Scale.IntervalPattern: ExpressibleByArrayLiteral {
         self.init(intervals: intervals)
     }
 }
+
+extension Scale.IntervalPattern: Equatable { }
+extension Scale.IntervalPattern: Hashable { }

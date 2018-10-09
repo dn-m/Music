@@ -11,7 +11,9 @@ import XCTest
 class ScaleTests: XCTestCase {
 
     func testInitAPI() {
-        let _ = Scale(60, [2,1,2,1,2,1,2,1])
+        let initWithFirstAndIntervals = Scale(60, [2,1,2,1,2,1,2,1])
+        let initWithPitches: Scale = [60,62,63,65,66,68,69,71,72]
+        XCTAssertEqual(initWithFirstAndIntervals, initWithPitches)
     }
 
     func testMajor() {
