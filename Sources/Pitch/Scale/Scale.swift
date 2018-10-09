@@ -5,6 +5,7 @@
 //  Created by James Bean on 10/9/18.
 //
 
+import Algebra
 import DataStructures
 
 public struct Scale {
@@ -19,14 +20,7 @@ extension Scale {
     // MARK: - Initializers
 
     init(_ first: Pitch, _ intervals: IntervalPattern) {
-        // TODO: Make `Pitch` a monoid to allow `accumulatingRight`
-        var p = [first]
-        var accum: Pitch = 0
-        for i in intervals.intervals {
-            accum += i
-            p.append(first + accum)
-        }
-        self.pitches = p
+        self.pitches = [first] + intervals.intervals.accumulatingSum.map { $0 + first }
     }
 
     init <S> (_ sequence: S) where S: Sequence, S.Element == Pitch {
