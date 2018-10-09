@@ -19,10 +19,12 @@ extension Scale {
 
     // MARK: - Initializers
 
+    /// Creates a `Scale` with the given `first` pitch and the given `intervals`.
     init(_ first: Pitch, _ intervals: IntervalPattern) {
         self.pitches = [first] + intervals.accumulatingSum.map { $0 + first }
     }
 
+    /// Creates a `Scale` with the pitches in the given `sequence`.
     init <S> (_ sequence: S) where S: Sequence, S.Element == Pitch {
         let sorted = sequence.sorted()
         precondition(!sorted.isEmpty, "Cannot create a 'Scale' with an empty sequence of pitches")

@@ -12,19 +12,19 @@ public struct Chord {
 
     // MARK: - Instance Properties
 
-    let first: Pitch
-    let intervals: IntervalPattern
+    let pitches: [Pitch]
 }
 
 extension Chord {
 
     // MARK: - Initializers
 
+    /// Creates a `Chord` with the given `first` pitch and the given `intervals`.
     init(_ first: Pitch, _ intervals: IntervalPattern) {
-        self.first = first
-        self.intervals = intervals
+        self.pitches = [first] + intervals.accumulatingSum.map { $0 + first }
     }
 
+    /// Creates a `Chord` with the pitches in the given `sequence`.
     init <S> (_ sequence: S) where S: Sequence, S.Element == Pitch {
         let sorted = sequence.sorted()
         precondition(!sorted.isEmpty, "Cannot create a 'Chord' with an empty sequence of pitches")
