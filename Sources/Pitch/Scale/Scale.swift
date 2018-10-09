@@ -20,7 +20,7 @@ extension Scale {
     // MARK: - Initializers
 
     init(_ first: Pitch, _ intervals: IntervalPattern) {
-        self.pitches = [first] + intervals.intervals.accumulatingSum.map { $0 + first }
+        self.pitches = [first] + intervals.accumulatingSum.map { $0 + first }
     }
 
     init <S> (_ sequence: S) where S: Sequence, S.Element == Pitch {
