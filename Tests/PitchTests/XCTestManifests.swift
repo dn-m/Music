@@ -1,5 +1,11 @@
 import XCTest
 
+extension ChordTests {
+    static let __allTests = [
+        ("testInitAPI", testInitAPI),
+    ]
+}
+
 extension FrequencyTests {
     static let __allTests = [
         ("testInitIntLiteral", testInitIntLiteral),
@@ -90,9 +96,16 @@ extension PitchTests {
     ]
 }
 
+extension ScaleTests {
+    static let __allTests = [
+        ("testInitAPI", testInitAPI),
+    ]
+}
+
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
+        testCase(ChordTests.__allTests),
         testCase(FrequencyTests.__allTests),
         testCase(NoteNumberTests.__allTests),
         testCase(PitchClassDyadTests.__allTests),
@@ -104,6 +117,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(PitchSegmentTests.__allTests),
         testCase(PitchSetTests.__allTests),
         testCase(PitchTests.__allTests),
+        testCase(ScaleTests.__allTests),
     ]
 }
 #endif

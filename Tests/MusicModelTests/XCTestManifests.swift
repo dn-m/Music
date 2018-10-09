@@ -29,6 +29,7 @@ extension ModelTests {
     static let __allTests = [
         ("testAddMeter", testAddMeter),
         ("testAddTempo", testAddTempo),
+        ("testFilterPerformanceContext", testFilterPerformanceContext),
         ("testHelloWorld", testHelloWorld),
         ("testInferOffset", testInferOffset),
         ("testManyRhythms", testManyRhythms),
@@ -40,6 +41,11 @@ extension ModelTests {
 extension PerformanceContextTests {
     static let __allTests = [
         ("testAddVoice", testAddVoice),
+        ("testBuilder", testBuilder),
+        ("testFilterInstruments", testFilterInstruments),
+        ("testFilterPerformers", testFilterPerformers),
+        ("testFilterPerformersAndVoices", testFilterPerformersAndVoices),
+        ("testFilterVoices", testFilterVoices),
         ("testInitEmpty", testInitEmpty),
     ]
 }
