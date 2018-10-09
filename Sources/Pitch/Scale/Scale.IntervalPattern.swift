@@ -12,6 +12,16 @@ extension Scale {
     }
 }
 
+extension Scale.IntervalPattern {
+    static var major: Scale.IntervalPattern { return [2,2,1,2,2,2,1] }
+    static var minor: Scale.IntervalPattern { return [2,1,2,2,1,2,2] }
+    static var melodicMinorAscending: Scale.IntervalPattern { return [2,1,2,2,2,2,1] }
+    static var melodicMinorDescending: Scale.IntervalPattern { return .minor }
+    static var harmonicMinor: Scale.IntervalPattern { return [2,1,2,2,1,3,1] }
+    static var octatonic21: Scale.IntervalPattern { return [2,1,2,1,2,1,2,1] }
+    static var octatonic12: Scale.IntervalPattern { return [1,2,1,2,1,2,1,2] }
+}
+
 extension Scale.IntervalPattern: ExpressibleByArrayLiteral {
 
     // MARK: - ExpressibleByArrayLiteral

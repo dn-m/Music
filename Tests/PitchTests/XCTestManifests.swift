@@ -2,7 +2,10 @@ import XCTest
 
 extension ChordTests {
     static let __allTests = [
+        ("testCMajor", testCMajor),
+        ("testFSharpMinor", testFSharpMinor),
         ("testInitAPI", testInitAPI),
+        ("testIntervalPattern", testIntervalPattern),
     ]
 }
 
@@ -99,6 +102,8 @@ extension PitchTests {
 extension ScaleTests {
     static let __allTests = [
         ("testInitAPI", testInitAPI),
+        ("testMajor", testMajor),
+        ("testMelodicMinor", testMelodicMinor),
     ]
 }
 
