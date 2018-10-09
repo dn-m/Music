@@ -5,7 +5,7 @@
 //  Created by James Bean on 10/9/18.
 //
 
-import Algebra
+import DataStructures
 
 public struct Scale {
 
@@ -33,6 +33,17 @@ extension Scale {
         let sorted = sequence.sorted()
         precondition(!sorted.isEmpty, "Cannot create a 'Scale' with an empty sequence of pitches")
         self.init(sorted.first!, IntervalPattern(sorted.pairs.map { $1 - $0 }))
+    }
+}
+
+extension Scale {
+
+    func pitch(scaleDegree: Int) -> Pitch? {
+        return pitches[safe: scaleDegree]
+    }
+
+    func scaleDegree(pitch: Pitch) -> Int? {
+        return pitches.index(of: pitch)
     }
 }
 
