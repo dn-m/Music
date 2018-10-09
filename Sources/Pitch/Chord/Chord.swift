@@ -17,28 +17,10 @@ public struct Chord {
 
 extension Chord {
 
-    // MARK: - Nested Types
-
-    public struct IntervalPattern {
-        let intervals: [Pitch]
-    }
-}
-
-extension Chord {
-
     // MARK: - Initializers
 
     init(_ first: Pitch, _ intervals: IntervalPattern) {
         self.first = first
         self.intervals = intervals
-    }
-}
-
-extension Chord.IntervalPattern: ExpressibleByArrayLiteral {
-
-    // MARK: - ExpressibleByArrayLiteral
-
-    public init(arrayLiteral intervals: Pitch...) {
-        self.init(intervals: intervals)
     }
 }
