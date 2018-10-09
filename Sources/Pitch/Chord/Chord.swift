@@ -20,8 +20,8 @@ extension Chord {
     // MARK: - Initializers
 
     /// Creates a `Chord` with the given `first` pitch and the given `intervals`.
-    init(_ first: Pitch, _ intervals: IntervalPattern) {
-        self.pitches = [first] + intervals.accumulatingSum.map { $0 + first }
+    init(_ lowest: Pitch, _ intervals: IntervalPattern) {
+        self.pitches = [lowest] + intervals.accumulatingSum.map { $0 + lowest }
     }
 
     /// Creates a `Chord` with the pitches in the given `sequence`.
