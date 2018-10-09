@@ -6,6 +6,7 @@
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 
+import Algebra
 import Math
 
 /// The quality of a sound governed by the rate of vibrations producing it.
@@ -59,3 +60,12 @@ extension Pitch {
 
 extension Pitch: Equatable { }
 extension Pitch: Hashable { }
+
+extension Pitch: Additive {
+
+    // MARK: - Additive
+
+    public static var zero: Pitch {
+        return 0
+    }
+}
