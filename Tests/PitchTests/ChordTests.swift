@@ -13,4 +13,8 @@ class ChordTests: XCTestCase {
     func testInitAPI() {
         let _ = Chord(60, [4,3])
     }
+
+    func testIntervalPattern() {
+        let _: Chord.IntervalPattern = [4,3]
+    }
 }

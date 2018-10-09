@@ -10,15 +10,31 @@ public struct Scale {
     // MARK: - Instance Properties
 
     let first: Pitch
-    let intervals: [Pitch]
+    let intervals: IntervalPattern
+}
+
+extension Scale {
+
+    public struct IntervalPattern {
+        let intervals: [Pitch]
+    }
 }
 
 extension Scale {
 
     // MARK: - Initializers
 
-    init(_ first: Pitch, _ intervals: [Pitch]) {
+    init(_ first: Pitch, _ intervals: IntervalPattern) {
         self.first = first
         self.intervals = intervals
+    }
+}
+
+extension Scale.IntervalPattern: ExpressibleByArrayLiteral {
+
+    // MARK: - ExpressibleByArrayLiteral
+
+    public init(arrayLiteral intervals: Pitch...) {
+        self.init(intervals: intervals)
     }
 }
