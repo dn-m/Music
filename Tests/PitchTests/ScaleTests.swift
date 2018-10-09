@@ -54,8 +54,25 @@ class ScaleTests: XCTestCase {
         }
     }
 
-    func testPitchFromScaleDegree() {
+    func testPitchFromScaleDegree0() {
         let eMajor = Scale(64, .major)
-        XCTAssertEqual(eMajor.pitch(scaleDegree: 4), 68)
+        XCTAssertEqual(eMajor.pitch(scaleDegree: 1), 64)
+    }
+
+    func testPitchFromScaleDegree3() {
+        let eMajor = Scale(64, .major)
+        XCTAssertEqual(eMajor.pitch(scaleDegree: 3), 68)
+    }
+
+    func testPitchFromScaleDegree9() {
+        let eMajor = Scale(64, .major)
+        XCTAssertEqual(eMajor.pitch(scaleDegree: 9), 78)
+    }
+
+    func testScaleSequenceLooping() {
+        let root: Pitch = 0
+        let intervals = Scale.IntervalPattern(intervals: [2,2,1,2,2,2,1], isLooping: true)
+        let scale = Scale(root,intervals)
+        let _ = Array(scale.prefix(100))
     }
 }
