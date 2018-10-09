@@ -14,6 +14,11 @@ extension Chord {
     }
 }
 
+extension Chord.IntervalPattern {
+    static var major: Chord.IntervalPattern { return [4,3] }
+    static var minor: Chord.IntervalPattern { return [3,4] }
+}
+
 extension Chord.IntervalPattern: ExpressibleByArrayLiteral {
 
     // MARK: - ExpressibleByArrayLiteral
@@ -22,4 +27,3 @@ extension Chord.IntervalPattern: ExpressibleByArrayLiteral {
         self.init(intervals: intervals)
     }
 }
-

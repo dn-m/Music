@@ -17,4 +17,12 @@ class ChordTests: XCTestCase {
     func testIntervalPattern() {
         let _: Chord.IntervalPattern = [4,3]
     }
+
+    func testCMajor() {
+        let _ = Chord(60, .major)
+    }
+
+    func testFSharpMinor() {
+        let _ = Chord(66, .minor)
+    }
 }
