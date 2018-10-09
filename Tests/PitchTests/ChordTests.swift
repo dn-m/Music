@@ -11,7 +11,9 @@ import XCTest
 class ChordTests: XCTestCase {
 
     func testInitAPI() {
-        let _ = Chord(60, [4,3])
+        let initWithFirstAndIntervals = Chord(60, [4,3])
+        let initWithPitches: Chord = [60,64,67]
+        XCTAssertEqual(initWithFirstAndIntervals, initWithPitches)
     }
 
     func testIntervalPattern() {
