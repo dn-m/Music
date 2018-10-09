@@ -5,6 +5,8 @@
 //  Created by James Bean on 10/9/18.
 //
 
+import DataStructures
+
 extension Chord {
 
     // MARK: - Nested Types
@@ -32,6 +34,12 @@ extension Chord.IntervalPattern: ExpressibleByArrayLiteral {
 
     public init(arrayLiteral intervals: Pitch...) {
         self.init(intervals: intervals)
+    }
+}
+
+extension Chord.IntervalPattern: CollectionWrapping {
+    public var base: [Pitch] {
+        return intervals
     }
 }
 
