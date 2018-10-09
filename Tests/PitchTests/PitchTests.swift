@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Algebra
 @testable import Pitch
 
 class PitchTests: XCTestCase {
@@ -38,5 +39,12 @@ class PitchTests: XCTestCase {
         let pitch = Pitch(10.0)
         let sum = 60.0 - pitch
         XCTAssertEqual(sum, 50.0)
+    }
+
+    func testPitchAdditiveMonoid() {
+        let intervals: [Pitch] = [2,1,2,2,1,2]
+        let distances = intervals.accumulatingSum
+        let expected: [Pitch] = [0,2,3,5,7,8]
+        XCTAssertEqual(expected, distances)
     }
 }
