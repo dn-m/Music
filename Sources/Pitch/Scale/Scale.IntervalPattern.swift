@@ -5,6 +5,8 @@
 //  Created by James Bean on 10/9/18.
 //
 
+import DataStructures
+
 extension Scale {
 
     public struct IntervalPattern {
@@ -35,6 +37,12 @@ extension Scale.IntervalPattern: ExpressibleByArrayLiteral {
 
     public init(arrayLiteral intervals: Pitch...) {
         self.init(intervals: intervals)
+    }
+}
+
+extension Scale.IntervalPattern: CollectionWrapping {
+    public var base: [Pitch] {
+        return intervals
     }
 }
 
