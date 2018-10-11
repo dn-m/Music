@@ -45,7 +45,7 @@ extension IntervalQuality {
         case major
 
         /// Minor interval quality.
-        case minorn
+        case minor
     }
 
     /// An augmented or diminished interval quality
