@@ -18,7 +18,7 @@ public struct Scale {
 
 extension Scale {
     var isOctaveRepeating: Bool {
-        return intervals.span == 12
+        return intervals.span == 12 && intervals.isLooping
     }
 }
 
