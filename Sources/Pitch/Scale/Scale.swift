@@ -35,8 +35,10 @@ extension Scale {
     /// Creates a `Scale` with the pitches in the given `sequence`.
     init <S> (_ sequence: S) where S: Sequence, S.Element == Pitch {
         let sorted = sequence.sorted()
-        precondition(!sorted.isEmpty, "Cannot create a 'Scale' with an empty sequence of pitches")
-        self.init(sorted.first!, IntervalPattern(sorted.pairs.map { $1 - $0 }))
+        guard let first = sorted.first else {
+            fatalError("Cannot create a 'Scale' with an empty sequence of pitches")
+        }
+        self.init(first, IntervalPattern(sorted.pairs.map { $1 - $0 }))
     }
 }
 
