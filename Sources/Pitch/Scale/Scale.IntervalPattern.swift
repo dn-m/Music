@@ -27,6 +27,17 @@ extension Scale.IntervalPattern {
     var span: Pitch {
         return intervals.sum
     }
+
+    var scaleDegrees: [String] {
+        switch self {
+        case .major:
+            return ["I","ii","iii","IV","V","vi","vii"]
+        case .minor:
+            return ["i","ii","III","iv","V","IV","vii"]
+        default:
+            return (0..<intervals.count).map { "\($0 + 1)" }
+        }
+    }
 }
 
 extension Scale.IntervalPattern {
