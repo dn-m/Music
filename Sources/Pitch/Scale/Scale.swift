@@ -8,7 +8,6 @@
 import Algebra
 import DataStructures
 
-// TODO: Make (optional) looping sequence
 public struct Scale {
 
     // MARK: - Instance Properties
