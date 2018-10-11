@@ -15,9 +15,32 @@ extension FrequencyTests {
     ]
 }
 
+extension IntervalQualityTests {
+    static let __allTests = [
+        ("testInverseDimAug", testInverseDimAug),
+        ("testInverseMinorMajor", testInverseMinorMajor),
+        ("testInversePerfect", testInversePerfect),
+    ]
+}
+
 extension NoteNumberTests {
     static let __allTests = [
         ("testNoteNumberInit", testNoteNumberInit),
+    ]
+}
+
+extension OrderedIntervalDescriptorTests {
+    static let __allTests = [
+        ("testAbsoluteNamedIntervalOrdinalInversion", testAbsoluteNamedIntervalOrdinalInversion),
+        ("testAPI", testAPI),
+        ("testAPIShouldNotCompile", testAPIShouldNotCompile),
+        ("testDoubleAugmentedThirdDoubleDiminishedSixth", testDoubleAugmentedThirdDoubleDiminishedSixth),
+        ("testInversionMajorSecondMinorSeventh", testInversionMajorSecondMinorSeventh),
+        ("testInversionMajorThirdMinorSixth", testInversionMajorThirdMinorSixth),
+        ("testInversionPerfectFifthPerfectFourth", testInversionPerfectFifthPerfectFourth),
+        ("testPerfectOrdinalFourthFifthInverse", testPerfectOrdinalFourthFifthInverse),
+        ("testPerfectOrdinalUnisonInverse", testPerfectOrdinalUnisonInverse),
+        ("testSecondOrdinalInverseSeventh", testSecondOrdinalInverseSeventh),
     ]
 }
 
@@ -94,6 +117,7 @@ extension PitchTests {
         ("testFloatMinusPitch", testFloatMinusPitch),
         ("testFloatPlusPitch", testFloatPlusPitch),
         ("testInit", testInit),
+        ("testPitchAdditiveMonoid", testPitchAdditiveMonoid),
         ("testPitchMinusFloat", testPitchMinusFloat),
         ("testPitchPlusFloat", testPitchPlusFloat),
     ]
@@ -104,6 +128,14 @@ extension ScaleTests {
         ("testInitAPI", testInitAPI),
         ("testMajor", testMajor),
         ("testMelodicMinor", testMelodicMinor),
+        ("testPitchFromScaleDegree0", testPitchFromScaleDegree0),
+        ("testPitchFromScaleDegree3", testPitchFromScaleDegree3),
+        ("testPitchFromScaleDegree9", testPitchFromScaleDegree9),
+        ("testPitchFromScaleDegreeNotNil", testPitchFromScaleDegreeNotNil),
+        ("testScaleDegree", testScaleDegree),
+        ("testScaleDegreeNil", testScaleDegreeNil),
+        ("testScaleDegreeNotNil", testScaleDegreeNotNil),
+        ("testScaleSequenceLooping", testScaleSequenceLooping),
     ]
 }
 
@@ -112,7 +144,9 @@ public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(ChordTests.__allTests),
         testCase(FrequencyTests.__allTests),
+        testCase(IntervalQualityTests.__allTests),
         testCase(NoteNumberTests.__allTests),
+        testCase(OrderedIntervalDescriptorTests.__allTests),
         testCase(PitchClassDyadTests.__allTests),
         testCase(PitchClassIntervalTests.__allTests),
         testCase(PitchClassSetTests.__allTests),
