@@ -146,7 +146,6 @@ extension UnorderedIntervalDescriptor {
     ///
     ///     let perfectUnison = UnorderedIntervalDescriptor(.perfect, .unison)
     ///     let perfectFourth = UnorderedIntervalDescriptor(.perfect, .fourth)
-    ///     let perfectFifth = UnorderedIntervalDescriptor(.perfect, .fifth)
     ///
     public init(_ quality: IntervalQuality.Perfect, _ ordinal: Ordinal.Perfect) {
         self.quality = .perfect(.perfect)
@@ -187,17 +186,17 @@ extension UnorderedIntervalDescriptor {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedSpelledInterval` with a imperfect ordinal. These
-    /// intervals can be up to quintuple augmented or diminished.
+    /// Creates an augmented or diminished `UnorderedIntervalDescriptor` with an imperfect ordinal.
+    /// These intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .second)
-    ///     let tripleDiminishedFourth = OrderedSpelledInterval(.triple, .diminished, .third)
+    ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = OrderedSpelledInterval(.triple, .diminished, .fourth)
     ///
     public init(
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
-        )
+    )
     {
         self.quality = .extended(.init(degree, quality))
         self.ordinal = .imperfect(ordinal)
@@ -213,7 +212,7 @@ extension UnorderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
-        )
+    )
     {
         self.quality = .extended(.init(degree, quality))
         self.ordinal = .perfect(ordinal)
