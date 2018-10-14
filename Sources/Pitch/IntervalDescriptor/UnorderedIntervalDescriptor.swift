@@ -223,7 +223,7 @@ extension UnorderedIntervalDescriptor {
     ///     let minorSecond = UnorderedIntervalDescriptor(.minor, .second)
     ///     let augmentedSixth = UnorderedIntervalDescriptor(.augmented, .sixth)
     ///
-    internal init(_ quality: IntervalQuality, _ ordinal: Ordinal) {
+    public init(_ quality: IntervalQuality, _ ordinal: Ordinal) {
         self.quality = quality
         self.ordinal = ordinal
     }
@@ -231,31 +231,3 @@ extension UnorderedIntervalDescriptor {
 
 extension UnorderedIntervalDescriptor.Ordinal: Equatable, Hashable { }
 extension UnorderedIntervalDescriptor: Equatable, Hashable { }
-
-extension UnorderedIntervalDescriptor.Ordinal {
-
-    public var platonicThreshold: Double {
-        switch self {
-        case .perfect:
-            return 1
-        case .imperfect:
-            return 1.5
-        }
-    }
-
-    static func platonicInterval(steps: Int) -> Double {
-        assert((0..<4).contains(steps))
-        switch steps {
-        case 0: // unison
-            return 0
-        case 1: // second
-            return 1.5
-        case 2: // third
-            return 3.5
-        case 3: // fourth
-            return 5
-        default: // impossible
-            fatalError("Impossible")
-        }
-    }
-}
