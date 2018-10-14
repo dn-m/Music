@@ -8,7 +8,7 @@
 import Math
 
 /// Interface for `IntervalOrdinal`-like values.
-protocol IntervalOrdinal {
+public protocol IntervalOrdinal {
 
     // MARK: - Type Properties
 
@@ -35,7 +35,7 @@ extension IntervalOrdinal {
     /// - Returns: The distance of the given `interval` to the `platonicInterval` from the given
     /// `steps`.
     static func platonicDistance(from interval: Double, to steps: Int) -> Double {
-        let ideal = Self.platonicInterval(steps: steps)
+        let ideal = platonicInterval(steps: steps)
         let difference = interval - ideal
         let normalized = mod(difference + 6, 12) - 6
         return steps == 0 ? abs(normalized) : normalized

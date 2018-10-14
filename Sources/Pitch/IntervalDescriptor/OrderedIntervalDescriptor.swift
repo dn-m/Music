@@ -27,6 +27,23 @@ public struct OrderedIntervalDescriptor: IntervalDescriptor {
 
 extension OrderedIntervalDescriptor {
 
+    // MARK: - Initializers
+
+    /// Creates an `OrderedIntervalDescriptor` with the given `direction`, `ordinal`, and `quality`.
+    public init(
+        _ direction: Direction = .ascending,
+        _ ordinal: Ordinal,
+        _ quality: IntervalQuality
+    )
+    {
+        self.direction = direction
+        self.ordinal = ordinal
+        self.quality = quality
+    }
+}
+
+extension OrderedIntervalDescriptor {
+
     // MARK: - Nested Types
 
     /// Direction of a `OrderedIntervalDescriptor`.
@@ -144,7 +161,9 @@ extension OrderedIntervalDescriptor.Ordinal {
 }
 
 extension OrderedIntervalDescriptor.Ordinal {
-    var platonicThreshold: Double {
+
+    #warning("Break out to own protocol")
+    public var platonicThreshold: Double {
         switch self {
         case .perfect:
             return 1
@@ -153,25 +172,18 @@ extension OrderedIntervalDescriptor.Ordinal {
         }
     }
 
-    static func platonicInterval(steps: Int) -> Double {
+    #warning("Break out to own protocol")
+    public static func platonicInterval(steps: Int) -> Double {
         assert((0..<7).contains(steps))
         switch steps {
-        case 0:
-            return 0
-        case 1:
-            return 1.5
-        case 2:
-            return 3.5
-        case 3:
-            return 5
-        case 4:
-            return 7
-        case 5:
-            return 8.5
-        case 6:
-            return 10.5
-        default:
-            fatalError("Impossible")
+        case 0: return 0
+        case 1: return 1.5
+        case 2: return 3.5
+        case 3: return 5
+        case 4: return 7
+        case 5: return 8.5
+        case 6: return 10.5
+        default: fatalError("Impossible")
         }
     }
 }
@@ -199,7 +211,7 @@ extension OrderedIntervalDescriptor {
     }
 
     /// Creates an `OrderedIntervalDescriptor` with a given `quality` and `ordinal`.
-    internal init(_ quality: IntervalQuality, _ ordinal: Ordinal) {
+    public init(_ quality: IntervalQuality, _ ordinal: Ordinal) {
         self.direction = .ascending
         self.quality = quality
         self.ordinal = ordinal
