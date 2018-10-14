@@ -28,16 +28,3 @@ public protocol IntervalOrdinal {
     init?(steps: Int)
 }
 
-extension IntervalOrdinal {
-
-    // MARK: - Type Methods
-
-    /// - Returns: The distance of the given `interval` to the `platonicInterval` from the given
-    /// `steps`.
-    static func platonicDistance(from interval: Double, to steps: Int) -> Double {
-        let ideal = platonicInterval(steps: steps)
-        let difference = interval - ideal
-        let normalized = mod(difference + 6, 12) - 6
-        return steps == 0 ? abs(normalized) : normalized
-    }
-}
