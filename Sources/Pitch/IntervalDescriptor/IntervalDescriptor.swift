@@ -18,3 +18,4 @@ public protocol IntervalDescriptor {
     /// Creates a `IntervalDescriptor` with the given `quality` and the given `ordinal`.
     init(_ quality: IntervalQuality, _ ordinal: Ordinal)
 }
+

@@ -231,33 +231,3 @@ extension UnorderedIntervalDescriptor {
 
 extension UnorderedIntervalDescriptor.Ordinal: Equatable, Hashable { }
 extension UnorderedIntervalDescriptor: Equatable, Hashable { }
-
-extension UnorderedIntervalDescriptor.Ordinal {
-
-    #warning("Break out into own protocol, perhaps in NotationModel")
-    public var platonicThreshold: Double {
-        switch self {
-        case .perfect:
-            return 1
-        case .imperfect:
-            return 1.5
-        }
-    }
-
-    #warning("Break out into own protocol, perhaps in NotationModel")
-    public static func platonicInterval(steps: Int) -> Double {
-        assert((0..<4).contains(steps))
-        switch steps {
-        case 0: // unison
-            return 0
-        case 1: // second
-            return 1.5
-        case 2: // third
-            return 3.5
-        case 3: // fourth
-            return 5
-        default: // impossible
-            fatalError("Impossible")
-        }
-    }
-}

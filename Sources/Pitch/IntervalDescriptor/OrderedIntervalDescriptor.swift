@@ -160,35 +160,6 @@ extension OrderedIntervalDescriptor.Ordinal {
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal {
-
-    #warning("Break out to own protocol")
-    public var platonicThreshold: Double {
-        switch self {
-        case .perfect:
-            return 1
-        case .imperfect:
-            return 1.5
-        }
-    }
-
-    #warning("Break out to own protocol")
-    public static func platonicInterval(steps: Int) -> Double {
-        assert((0..<7).contains(steps))
-        switch steps {
-        case 0: return 0
-        case 1: return 1.5
-        case 2: return 3.5
-        case 3: return 5
-        case 4: return 7
-        case 5: return 8.5
-        case 6: return 10.5
-        default: fatalError("Impossible")
-        }
-    }
-}
-
-
 extension OrderedIntervalDescriptor {
 
     // MARK: - Type Properties
@@ -261,7 +232,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ quality: IntervalQuality.Imperfect,
         _ ordinal: Ordinal.Imperfect
-        )
+    )
     {
         self.direction = direction
         self.quality = .imperfect(quality)
@@ -278,7 +249,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
-        )
+    )
     {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
@@ -296,7 +267,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
-        )
+    )
     {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))
@@ -313,7 +284,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
-        )
+    )
     {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
@@ -359,7 +330,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
-        )
+    )
     {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
@@ -387,7 +358,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
-        )
+    )
     {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
