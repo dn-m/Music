@@ -23,6 +23,13 @@ public struct OrderedIntervalDescriptor: IntervalDescriptor {
     /// IntervalQuality value of a `OrderedIntervalDescriptor`.
     /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
     public let quality: IntervalQuality
+
+    /// Creates an `OrderedIntervalDescriptor` with the given `direction`, `ordinal`, and `quality`.
+    public init(direction: Direction, ordinal: Ordinal, quality: IntervalQuality) {
+        self.direction = direction
+        self.ordinal = ordinal
+        self.quality = quality
+    }
 }
 
 extension OrderedIntervalDescriptor {
