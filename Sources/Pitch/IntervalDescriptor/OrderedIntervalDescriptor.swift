@@ -164,7 +164,7 @@ extension OrderedIntervalDescriptor {
 
     // MARK: - Type Properties
 
-    /// Unison named ordered interval.
+    /// - Returns: Unison ordered interval descriptor.
     public static var unison: OrderedIntervalDescriptor {
         return .init(.perfect, .unison)
     }

@@ -36,5 +36,13 @@ extension CompoundIntervalDescriptor {
     }
 }
 
+extension CompoundIntervalDescriptor {
+
+    /// - Returns: Unison compound interval descriptor.
+    public static var unison: CompoundIntervalDescriptor {
+        return .init(.unison)
+    }
+}
+
 extension CompoundIntervalDescriptor: Equatable { }
 extension CompoundIntervalDescriptor: Hashable { }
