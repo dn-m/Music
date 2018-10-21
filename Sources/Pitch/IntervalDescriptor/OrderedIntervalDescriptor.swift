@@ -77,6 +77,16 @@ extension OrderedIntervalDescriptor {
                 return .imperfect(ordinal.inverse)
             }
         }
+
+        /// The amount of diatonic steps represented by this `OrderedIntervalDescriptor.Ordinal`.
+        public var steps: Int {
+            switch self {
+            case .perfect(let perfect):
+                return perfect.rawValue
+            case .imperfect(let imperfect):
+                return imperfect.rawValue
+            }
+        }
     }
 }
 
@@ -85,36 +95,36 @@ extension OrderedIntervalDescriptor.Ordinal {
     // MARK: - Nested Types
 
     /// Perfect `Ordinal` cases.
-    public enum Perfect: InvertibleEnum {
+    public enum Perfect: Int, InvertibleEnum {
 
         // MARK: - Cases
 
         /// Fourth perfect ordered interval ordinal.
-        case fourth
+        case fourth = 3
 
         /// Unison perfect ordered interval ordinal.
-        case unison
+        case unison = 0
 
         /// Fifth perfect ordered interval ordinal.
-        case fifth
+        case fifth = 4
     }
 
     /// Imperfect `Ordinal` cases
-    public enum Imperfect: InvertibleEnum {
+    public enum Imperfect: Int, InvertibleEnum {
 
         // MARK: - Cases
 
         /// Second imperfect ordered interval ordinal.
-        case second
+        case second = 1
 
         /// Third imperfect ordered interval ordinal.
-        case third
+        case third = 2
 
         /// Sixth imperfect ordered interval ordinal.
-        case sixth
+        case sixth = 5
 
         /// Seventh imperfect ordered interval ordinal.
-        case seventh
+        case seventh = 6
     }
 }
 
