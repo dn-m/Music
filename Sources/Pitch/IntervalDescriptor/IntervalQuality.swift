@@ -28,24 +28,24 @@ extension IntervalQuality {
     // MARK: - Nested Types
 
     /// A perfect interval quality.
-    public enum Perfect {
+    public enum Perfect: Int {
 
         // MARK: - Cases
 
         /// Perfect interval quality.
-        case perfect
+        case perfect = 0
     }
 
     /// An imperfect interval quality.
-    public enum Imperfect: InvertibleEnum {
+    public enum Imperfect: Int, InvertibleEnum {
 
         // MARK: - Cases
 
         /// Major interval quality.
-        case major
+        case major = 1
 
         /// Minor interval quality.
-        case minor
+        case minor = -1
     }
 
     /// An augmented or diminished interval quality
@@ -53,17 +53,23 @@ extension IntervalQuality {
 
         // MARK: Instance Properties
 
+        /// - Returns: The amount of adjustment in semitones from the ideal interval represented by
+        /// this `IntervalQuality.Extended`.
+        public var adjustment: Int {
+            return degree.rawValue * quality.rawValue
+        }
+
         /// - Returns: Inversion of `self`.
         public var inverse: Extended {
             return Extended(degree, quality.inverse)
         }
 
         /// Whether this `Extended` quality is augmented or diminished
-        let quality: AugmentedOrDiminished
+        public let quality: AugmentedOrDiminished
 
         /// The degree to which this quality is augmented or diminished (e.g., double augmented,
         /// etc.)
-        let degree: Degree
+        public let degree: Degree
 
         // MARK: Initializers
 
@@ -80,15 +86,15 @@ extension IntervalQuality.Extended {
     // MARK: - Nested Types
 
     /// Either augmented or diminished
-    public enum AugmentedOrDiminished: InvertibleEnum {
+    public enum AugmentedOrDiminished: Int, InvertibleEnum {
 
         // MARK: - Cases
 
         /// Augmented extended interval quality.
-        case augmented
+        case augmented = 1
 
         /// Diminished extended interval quality.
-        case diminished
+        case diminished = -1
     }
 
     /// The degree to which an `Extended` quality is augmented or diminished.
@@ -124,6 +130,19 @@ extension IntervalQuality {
             return .imperfect(quality.inverse)
         case .extended(let quality):
             return .extended(quality.inverse)
+        }
+    }
+
+    /// - Returns: The amount of adjustment in semitones from the ideal interval represented by this
+    /// `IntervalQuality`.
+    public var adjustment: Int {
+        switch self {
+        case .perfect(let perfect):
+            return perfect.rawValue
+        case .imperfect(let imperfect):
+            return imperfect.rawValue
+        case .extended(let extended):
+            return extended.adjustment
         }
     }
 }
