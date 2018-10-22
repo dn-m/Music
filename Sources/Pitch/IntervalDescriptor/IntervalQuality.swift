@@ -28,30 +28,36 @@ extension IntervalQuality {
     // MARK: - Nested Types
 
     /// A perfect interval quality.
-    public enum Perfect {
+    public enum Perfect: Double {
 
         // MARK: - Cases
 
         /// Perfect interval quality.
-        case perfect
+        case perfect = 0
     }
 
     /// An imperfect interval quality.
-    public enum Imperfect: InvertibleEnum {
+    public enum Imperfect: Double, InvertibleEnum {
 
         // MARK: - Cases
 
         /// Major interval quality.
-        case major
+        case major = 0.5
 
         /// Minor interval quality.
-        case minor
+        case minor = -0.5
     }
 
     /// An augmented or diminished interval quality
     public struct Extended: Invertible {
 
         // MARK: Instance Properties
+
+        /// - Returns: The amount of adjustment in semitones from the ideal interval represented by
+        /// this `IntervalQuality.Extended`.
+        public var adjustment: Double {
+            return Double(degree.rawValue) * quality.rawValue
+        }
 
         /// - Returns: Inversion of `self`.
         public var inverse: Extended {
@@ -80,15 +86,15 @@ extension IntervalQuality.Extended {
     // MARK: - Nested Types
 
     /// Either augmented or diminished
-    public enum AugmentedOrDiminished: InvertibleEnum {
+    public enum AugmentedOrDiminished: Double, InvertibleEnum {
 
         // MARK: - Cases
 
         /// Augmented extended interval quality.
-        case augmented
+        case augmented = 1
 
         /// Diminished extended interval quality.
-        case diminished
+        case diminished = -1
     }
 
     /// The degree to which an `Extended` quality is augmented or diminished.
@@ -124,6 +130,19 @@ extension IntervalQuality {
             return .imperfect(quality.inverse)
         case .extended(let quality):
             return .extended(quality.inverse)
+        }
+    }
+
+    /// - Returns: The amount of adjustment in semitones from the ideal interval represented by this
+    /// `IntervalQuality`.
+    public var adjustment: Double {
+        switch self {
+        case .perfect(let perfect):
+            return perfect.rawValue
+        case .imperfect(let imperfect):
+            return imperfect.rawValue
+        case .extended(let extended):
+            return extended.adjustment
         }
     }
 }
