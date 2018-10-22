@@ -13,6 +13,11 @@ public protocol IntervalDescriptor {
     /// The `IntervalOrdinal`-conforming type for this `IntervalDescriptor`.
     associatedtype Ordinal: IntervalOrdinal
 
+    // MARK: - Type Properties
+
+    /// Unison interval descriptor.
+    static var unison: Self { get }
+
     // MARK: - Initializers
 
     /// Creates a `IntervalDescriptor` with the given `quality` and the given `ordinal`.
