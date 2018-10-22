@@ -32,6 +32,16 @@ extension Chord {
     }
 }
 
+extension Chord: RandomAccessCollectionWrapping {
+
+    // MARK: - RandomAccessCollectionWrapping
+
+    /// - Returns: The `RandomAccessCollection` of `Pitch` values contained herein.
+    public var base: [Pitch] {
+        return pitches
+    }
+}
+
 extension Chord: ExpressibleByArrayLiteral {
 
     // MARK: - ExpressibleByArrayLiteral
