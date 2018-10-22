@@ -10,6 +10,11 @@ import Math
 /// Interface for `IntervalOrdinal`-like values.
 public protocol IntervalOrdinal {
 
+    // MARK: - Computed Properties
+
+    /// The amount of diatonic steps represented by this `IntervalOrdinal`.
+    var steps: Int { get }
+
     // MARK: - Initializers
 
     /// Creates a `IntervalOrdinal` with the given amount of `steps`.

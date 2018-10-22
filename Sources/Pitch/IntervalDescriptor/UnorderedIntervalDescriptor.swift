@@ -47,6 +47,16 @@ extension UnorderedIntervalDescriptor {
 
         /// Perfect unordered interval ordinals (e.g., second, third).
         case imperfect(Imperfect)
+
+        /// The amount of diatonic steps represented by this `UnorderedIntervalDescriptor.Ordinal`.
+        public var steps: Int {
+            switch self {
+            case .perfect(let perfect):
+                return perfect.rawValue
+            case .imperfect(let imperfect):
+                return imperfect.rawValue
+            }
+        }
     }
 }
 
@@ -102,27 +112,27 @@ extension UnorderedIntervalDescriptor.Ordinal {
     // MARK: - Nested Types
 
     /// Perfect ordinals.
-    public enum Perfect {
+    public enum Perfect: Int {
 
         // MARK: - Cases
 
         /// Unison perfect unordered interval ordinal.
-        case unison
+        case unison = 0
 
         /// Fourth perfect unordered interval ordinal.
-        case fourth
+        case fourth = 3
     }
 
     /// Imperfect ordinals.
-    public enum Imperfect {
+    public enum Imperfect: Int {
 
         // MARK: - Cases
 
         /// Second imperfect unordered interval ordinal.
-        case second
+        case second = 1
 
         /// Third imperfect unordered interval ordinal.
-        case third
+        case third = 2
     }
 }
 
