@@ -141,9 +141,7 @@ extension UnorderedIntervalDescriptor {
     // MARK: - Type Properties
 
     /// Unison interval.
-    public static var unison: UnorderedIntervalDescriptor {
-        return .init(.perfect, .unison)
-    }
+    public static let unison = UnorderedIntervalDescriptor(.perfect, .unison)
 }
 
 extension UnorderedIntervalDescriptor {
