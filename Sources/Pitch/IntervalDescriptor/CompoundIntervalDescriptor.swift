@@ -38,6 +38,8 @@ extension CompoundIntervalDescriptor {
 
 extension CompoundIntervalDescriptor {
 
+    // MARK: - Type Properties
+
     /// Unison.
     public static let unison = CompoundIntervalDescriptor(.unison)
 
