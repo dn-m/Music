@@ -28,7 +28,7 @@ extension IntervalQuality {
     // MARK: - Nested Types
 
     /// A perfect interval quality.
-    public enum Perfect: Int {
+    public enum Perfect: Double {
 
         // MARK: - Cases
 
@@ -37,15 +37,15 @@ extension IntervalQuality {
     }
 
     /// An imperfect interval quality.
-    public enum Imperfect: Int, InvertibleEnum {
+    public enum Imperfect: Double, InvertibleEnum {
 
         // MARK: - Cases
 
         /// Major interval quality.
-        case major = 1
+        case major = 0.5
 
         /// Minor interval quality.
-        case minor = -1
+        case minor = -0.5
     }
 
     /// An augmented or diminished interval quality
@@ -55,8 +55,8 @@ extension IntervalQuality {
 
         /// - Returns: The amount of adjustment in semitones from the ideal interval represented by
         /// this `IntervalQuality.Extended`.
-        public var adjustment: Int {
-            return degree.rawValue * quality.rawValue
+        public var adjustment: Double {
+            return Double(degree.rawValue) * quality.rawValue
         }
 
         /// - Returns: Inversion of `self`.
@@ -86,7 +86,7 @@ extension IntervalQuality.Extended {
     // MARK: - Nested Types
 
     /// Either augmented or diminished
-    public enum AugmentedOrDiminished: Int, InvertibleEnum {
+    public enum AugmentedOrDiminished: Double, InvertibleEnum {
 
         // MARK: - Cases
 
@@ -135,7 +135,7 @@ extension IntervalQuality {
 
     /// - Returns: The amount of adjustment in semitones from the ideal interval represented by this
     /// `IntervalQuality`.
-    public var adjustment: Int {
+    public var adjustment: Double {
         switch self {
         case .perfect(let perfect):
             return perfect.rawValue
