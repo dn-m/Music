@@ -12,8 +12,8 @@ import DataStructures
 ///
 /// **Example Usage**
 ///
-///     let minor: ChordDescriptor = [.M3, .m3]
-///     let major: ChordDescriptor = [.m3, .M3]
+///     let major: ChordDescriptor = [.M3, .m3]
+///     let minor: ChordDescriptor = [.m3, .M3]
 ///     let diminished: ChordDescriptor = [.m3, .m3]
 ///     let augmented: ChordDescriptor = [.M3, .M3]
 ///
