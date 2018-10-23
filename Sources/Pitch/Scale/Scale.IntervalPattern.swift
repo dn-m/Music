@@ -33,7 +33,7 @@ extension Scale.IntervalPattern {
         case .major:
             return ["I","ii","iii","IV","V","vi","vii"]
         case .minor:
-            return ["i","ii","III","iv","V","IV","vii"]
+            return ["i","ii","III","iv","V","VI","vii"]
         default:
             return (0..<intervals.count).map { "\($0 + 1)" }
         }
