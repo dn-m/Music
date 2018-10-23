@@ -53,6 +53,8 @@ extension Pitch.Class: Hashable { }
 
 extension Pitch.Class {
 
+    // MARK: - Nested Types
+
     /// A non-empty collection of `Pitch.Class` elements.
     ///
     /// **Example Usage**
