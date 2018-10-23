@@ -420,6 +420,8 @@ extension OrderedIntervalDescriptor: Equatable, Hashable { }
 
 extension OrderedIntervalDescriptor: Invertible {
 
+    // MARK: - Invertible
+
     /// - Returns: Inversion of `self`.
     public var inverse: OrderedIntervalDescriptor {
         return .init(direction.inverse, quality.inverse, ordinal.inverse)
