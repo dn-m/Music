@@ -140,7 +140,7 @@ extension UnorderedIntervalDescriptor {
 
     // MARK: - Type Properties
 
-    /// Unison interval.
+    /// Unison.
     public static let unison = UnorderedIntervalDescriptor(.perfect, .unison)
 
     /// Minor second.
