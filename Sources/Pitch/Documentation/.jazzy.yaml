@@ -16,6 +16,7 @@ custom_categories:
       - "OrderedInterval"
       - "UnorderedInterval"
   - name: "Interval Description"
+    children:
       - "IntervalQuality"
       - "IntervalOrdinal"
       - "IntervalDescriptor"
