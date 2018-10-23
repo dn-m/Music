@@ -93,10 +93,11 @@ extension Scale.IntervalPattern {
     public static let wholeTone: Scale.IntervalPattern = [2,2,2,2,2,2]
 }
 
-extension Scale.IntervalPattern: Sequence {
+extension Scale.IntervalPattern {
 
-    // MARK: - Sequence
+    // MARK: - Subscripts
 
+    /// - Returns: A `Pitch` at the given `index`, if it exists. Otherwise, `false`.
     public subscript(index: Int) -> Pitch? {
         if intervals.indices.contains(index) || isLooping {
             return intervals[index % intervals.count]
@@ -104,7 +105,13 @@ extension Scale.IntervalPattern: Sequence {
             return nil
         }
     }
+}
 
+extension Scale.IntervalPattern: Sequence {
+
+    // MARK: - Sequence
+
+    /// - Returns: An iterator for traversing the intervals in this `Scale.IntervalPattern`.
     public func makeIterator() -> AnyIterator<Pitch> {
         var index = 0
         return AnyIterator {
