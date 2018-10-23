@@ -11,33 +11,53 @@ extension Chord {
 
     // MARK: - Nested Types
 
+    /// The pattern of intervals which defines the quality of a `Chord`.
     public struct IntervalPattern {
+
+        // MARK: - Instance Properties
+
         let intervals: [Pitch]
     }
 }
 
 extension Chord.IntervalPattern {
 
+    // MARK: - Initializers
+
+    /// Creates a `Chord` with the given pitch intervals.
     public init(_ intervals: [Pitch]) {
         self.init(intervals: intervals)
     }
 }
 
 extension Chord.IntervalPattern {
-    static var major: Chord.IntervalPattern { return [4,3] }
-    static var minor: Chord.IntervalPattern { return [3,4] }
+
+    // MARK: - Type Properties
+
+    /// Major chord interval pattern.
+    static let major: Chord.IntervalPattern = [4,3]
+
+    /// Minor chord interval pattern.
+    static let minor: Chord.IntervalPattern = [3,4]
+
+    // TODO: Add more helpers
 }
 
 extension Chord.IntervalPattern: ExpressibleByArrayLiteral {
 
     // MARK: - ExpressibleByArrayLiteral
 
+    /// Creates a `Chord.IntervalPattern` with the given array literal of `Pitch` values.
     public init(arrayLiteral intervals: Pitch...) {
         self.init(intervals: intervals)
     }
 }
 
 extension Chord.IntervalPattern: CollectionWrapping {
+
+    // MARK: - CollectionWrapping
+
+    /// - Returns: The `Collection` base of a `Chord.IntervalPattern`.
     public var base: [Pitch] {
         return intervals
     }
