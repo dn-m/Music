@@ -61,6 +61,9 @@ extension Dyad: Hashable { }
 
 extension Dyad: CustomStringConvertible {
 
+    // MARK: - CustomStringConvertible
+
+    /// Printed description of a `Dyad`.
     public var description: String {
         return "(\(lower), \(higher))"
     }
