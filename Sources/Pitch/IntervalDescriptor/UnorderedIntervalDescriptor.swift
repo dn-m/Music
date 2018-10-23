@@ -163,6 +163,8 @@ extension UnorderedIntervalDescriptor {
 
     /// Augmented fourth.
     public static let A4 = UnorderedIntervalDescriptor(.augmented, .fourth)
+
+    // TODO: Add diminished / augmented imperfect intervals
 }
 
 extension UnorderedIntervalDescriptor {

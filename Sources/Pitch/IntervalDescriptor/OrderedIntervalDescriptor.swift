@@ -215,6 +215,8 @@ extension OrderedIntervalDescriptor {
 
     /// Major seventh.
     public static let M7 = OrderedIntervalDescriptor(.major, .seventh)
+
+    // TODO: Add diminished / augmented imperfect intervals
 }
 
 extension OrderedIntervalDescriptor {
