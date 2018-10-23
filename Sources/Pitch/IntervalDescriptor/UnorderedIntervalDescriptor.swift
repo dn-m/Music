@@ -142,6 +142,27 @@ extension UnorderedIntervalDescriptor {
 
     /// Unison interval.
     public static let unison = UnorderedIntervalDescriptor(.perfect, .unison)
+
+    /// Minor second.
+    public static let m2 = UnorderedIntervalDescriptor(.minor, .second)
+
+    /// Major second.
+    public static let M2 = UnorderedIntervalDescriptor(.major, .second)
+
+    /// Minor third.
+    public static let m3 = UnorderedIntervalDescriptor(.minor, .third)
+
+    /// Major third.
+    public static let M3 = UnorderedIntervalDescriptor(.major, .third)
+
+    /// Diminished fourth.
+    public static let d4 = UnorderedIntervalDescriptor(.diminished, .fourth)
+
+    /// Perfect fourth.
+    public static let P4 = UnorderedIntervalDescriptor(.perfect, .fourth)
+
+    /// Augmented fourth.
+    public static let A4 = UnorderedIntervalDescriptor(.augmented, .fourth)
 }
 
 extension UnorderedIntervalDescriptor {
