@@ -5,6 +5,8 @@ custom_categories:
       - "NoteNumber"
       - "Frequency"
       - "Pitch"
+      - "Scale"
+      - "Chord"
   - name: "Collections"
     children:
       - "Dyad"
@@ -13,6 +15,14 @@ custom_categories:
     children:
       - "OrderedInterval"
       - "UnorderedInterval"
+  - name: "Interval Description"
+      - "IntervalQuality"
+      - "IntervalOrdinal"
+      - "IntervalDescriptor"
+      - "UnorderedIntervalDescriptor"
+      - "OrderedIntervalDescriptor"
+      - "CompoundIntervalDescriptor"
+      - "ChordDescriptor"
   - name: "Tuning Systems"
     children:
       - "TuningSystem"
