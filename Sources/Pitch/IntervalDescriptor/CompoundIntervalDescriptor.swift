@@ -38,10 +38,8 @@ extension CompoundIntervalDescriptor {
 
 extension CompoundIntervalDescriptor {
 
-    /// - Returns: Unison compound interval descriptor.
-    public static var unison: CompoundIntervalDescriptor {
-        return .init(.unison)
-    }
+    /// Unison.
+    public static let unison = CompoundIntervalDescriptor(.unison)
 }
 
 extension CompoundIntervalDescriptor: Equatable { }
