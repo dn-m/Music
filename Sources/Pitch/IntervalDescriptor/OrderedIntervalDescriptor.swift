@@ -176,6 +176,45 @@ extension OrderedIntervalDescriptor {
 
     /// - Returns: Unison ordered interval descriptor.
     public static let unison = OrderedIntervalDescriptor(.perfect, .unison)
+
+    /// Minor second.
+    public static let m2 = OrderedIntervalDescriptor(.minor, .second)
+
+    /// Major second.
+    public static let M2 = OrderedIntervalDescriptor(.major, .second)
+
+    /// Minor third.
+    public static let m3 = OrderedIntervalDescriptor(.minor, .third)
+
+    /// Major third.
+    public static let M3 = OrderedIntervalDescriptor(.major, .third)
+
+    /// Diminished fourth.
+    public static let d4 = OrderedIntervalDescriptor(.diminished, .fourth)
+
+    /// Perfect fourth.
+    public static let P4 = OrderedIntervalDescriptor(.perfect, .fourth)
+
+    /// Augmented fourth.
+    public static let A4 = OrderedIntervalDescriptor(.augmented, .fourth)
+
+    /// Diminished fifth
+    public static let d5 = OrderedIntervalDescriptor(.diminished, .fifth)
+
+    /// Augmented fifth.
+    public static let A5 = OrderedIntervalDescriptor(.augmented, .fifth)
+
+    /// Minor sixth.
+    public static let m6 = OrderedIntervalDescriptor(.minor, .sixth)
+
+    /// Major sixth.
+    public static let M6 = OrderedIntervalDescriptor(.major, .sixth)
+
+    /// Minor seventh.
+    public static let m7 = OrderedIntervalDescriptor(.minor, .seventh)
+
+    /// Major seventh.
+    public static let M7 = OrderedIntervalDescriptor(.major, .seventh)
 }
 
 extension OrderedIntervalDescriptor {
