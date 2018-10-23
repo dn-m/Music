@@ -175,9 +175,7 @@ extension OrderedIntervalDescriptor {
     // MARK: - Type Properties
 
     /// - Returns: Unison ordered interval descriptor.
-    public static var unison: OrderedIntervalDescriptor {
-        return .init(.perfect, .unison)
-    }
+    public static let unison = OrderedIntervalDescriptor(.perfect, .unison)
 }
 
 extension OrderedIntervalDescriptor {
