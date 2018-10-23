@@ -40,6 +40,50 @@ extension CompoundIntervalDescriptor {
 
     /// Unison.
     public static let unison = CompoundIntervalDescriptor(.unison)
+
+    /// Minor second.
+    public static let m2 = CompoundIntervalDescriptor(.m2)
+
+    /// Major second.
+    public static let M2 = CompoundIntervalDescriptor(.M2)
+
+    /// Minor third.
+    public static let m3 = CompoundIntervalDescriptor(.m3)
+
+    /// Major third.
+    public static let M3 = CompoundIntervalDescriptor(.M3)
+
+    /// Diminished fourth.
+    public static let d4 = CompoundIntervalDescriptor(.d4)
+
+    /// Perfect fourth.
+    public static let P4 = CompoundIntervalDescriptor(.P4)
+
+    /// Augmented fourth.
+    public static let A4 = CompoundIntervalDescriptor(.A4)
+
+    /// Diminished fifth
+    public static let d5 = CompoundIntervalDescriptor(.d5)
+
+    /// Augmented fifth.
+    public static let A5 = CompoundIntervalDescriptor(.A5)
+
+    /// Minor sixth.
+    public static let m6 = CompoundIntervalDescriptor(.m6)
+
+    /// Major sixth.
+    public static let M6 = CompoundIntervalDescriptor(.M6)
+
+    /// Minor seventh.
+    public static let m7 = CompoundIntervalDescriptor(.m7)
+
+    /// Major seventh.
+    public static let M7 = CompoundIntervalDescriptor(.M7)
+
+    /// Octave.
+    public static let octave = CompoundIntervalDescriptor(.unison, displacedBy: 1)
+
+    // TODO: Add intervals spanning more than one octave
 }
 
 extension CompoundIntervalDescriptor: Equatable { }
