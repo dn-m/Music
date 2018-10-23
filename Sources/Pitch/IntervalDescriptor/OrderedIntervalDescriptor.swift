@@ -415,9 +415,6 @@ extension OrderedIntervalDescriptor {
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal: Equatable, Hashable { }
-extension OrderedIntervalDescriptor: Equatable, Hashable { }
-
 extension OrderedIntervalDescriptor: Invertible {
 
     // MARK: - Invertible
@@ -427,3 +424,16 @@ extension OrderedIntervalDescriptor: Invertible {
         return .init(direction.inverse, quality.inverse, ordinal.inverse)
     }
 }
+
+extension OrderedIntervalDescriptor: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of UnorderedIntervalDescriptor.
+    public var description: String {
+        return "\(quality)\(ordinal.steps + 1)\(direction == .descending ? "↓" : "")"
+    }
+}
+
+extension OrderedIntervalDescriptor.Ordinal: Equatable, Hashable { }
+extension OrderedIntervalDescriptor: Equatable, Hashable { }
