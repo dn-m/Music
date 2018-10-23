@@ -11,6 +11,8 @@ import DataStructures
 
 extension Pitch {
 
+    // MARK: - Nested Types
+
     /// A `Pitch` viewed within a modulo-12 space.
     public struct Class: NoteNumberRepresentable {
 
@@ -50,6 +52,8 @@ extension Pitch.Class: Equatable { }
 extension Pitch.Class: Hashable { }
 
 extension Pitch.Class {
+
+    // MARK: - Nested Types
 
     /// A non-empty collection of `Pitch.Class` elements.
     ///

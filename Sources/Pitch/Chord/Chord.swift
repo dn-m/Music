@@ -8,6 +8,13 @@
 import Destructure
 import DataStructures
 
+/// Collection of pitches.
+///
+/// **Example usage**
+///
+///     let cMajor: Chord = [60,64,67]
+///     let gMinor: Chord = [67,70,74]
+///
 public struct Chord {
 
     // MARK: - Instance Properties
