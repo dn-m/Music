@@ -28,9 +28,4 @@ class IntervalQualityTests: XCTestCase {
         let perfect = IntervalQuality.perfect(.perfect)
         XCTAssertEqual(perfect.inverse, perfect)
     }
-
-    func testExtendedDescription() {
-        let extended = IntervalQuality.Extended(.triple, .augmented)
-        print(extended)
-    }
 }

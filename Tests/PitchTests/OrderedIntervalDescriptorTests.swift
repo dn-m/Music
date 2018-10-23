@@ -66,6 +66,8 @@ class OrderedIntervalDescriptorTests: XCTestCase {
         let dd6 = OrderedIntervalDescriptor(.descending, .double, .diminished, .sixth)
         XCTAssertEqual(AA3.inverse, dd6)
         XCTAssertEqual(dd6.inverse, AA3)
+        print(AA3)
+        print(dd6)
     }
 
     func testPerfectOrdinalUnisonInverse() {

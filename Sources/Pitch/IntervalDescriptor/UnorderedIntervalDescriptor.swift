@@ -260,5 +260,15 @@ extension UnorderedIntervalDescriptor {
     }
 }
 
+extension UnorderedIntervalDescriptor: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of UnorderedIntervalDescriptor.
+    public var description: String {
+        return quality.description + "\(ordinal.steps)"
+    }
+}
+
 extension UnorderedIntervalDescriptor.Ordinal: Equatable, Hashable { }
 extension UnorderedIntervalDescriptor: Equatable, Hashable { }

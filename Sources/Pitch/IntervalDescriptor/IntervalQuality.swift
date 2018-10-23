@@ -147,13 +147,60 @@ extension IntervalQuality {
     }
 }
 
+extension IntervalQuality.Perfect: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of IntervalQuality.Perfect.
+    public var description: String {
+        return "P"
+    }
+}
+
+extension IntervalQuality.Imperfect: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of IntervalQuality.Imperfect.
+    public var description: String {
+        return "P"
+    }
+}
+
+extension IntervalQuality.Extended.AugmentedOrDiminished: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of IntervalQuality.Extended.AugmentedOrDiminished.
+    public var description: String {
+        return self == .augmented ? "A" : "d"
+    }
+}
+
 extension IntervalQuality.Extended: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
-    /// Printable description of IntervalQuality.Extended
+    /// Printable description of IntervalQuality.Extended.
     public var description: String {
-        return (self.degree == .single ? "" : "\(self.degree)") + " " + "\(quality)"
+        return String(repeating: quality.description, count: degree.rawValue)
+    }
+}
+
+extension IntervalQuality: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of IntervalQuality.
+    public var description: String {
+        switch self {
+        case .perfect(let perfect):
+            return perfect.description
+        case .imperfect(let imperfect):
+            return imperfect.description
+        case .extended(let extended):
+            return extended.description
+        }
     }
 }
 

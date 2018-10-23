@@ -88,5 +88,19 @@ extension CompoundIntervalDescriptor {
     // TODO: Add intervals spanning more than one octave
 }
 
+extension CompoundIntervalDescriptor: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of CompoundIntervalDescriptor.
+    public var description: String {
+        return(
+            interval.quality.description +
+            "\(interval.ordinal.steps + octaveDisplacement * 7 + 1)" +
+            (interval.direction == .descending ? "↓" : "")
+        )
+    }
+}
+
 extension CompoundIntervalDescriptor: Equatable { }
 extension CompoundIntervalDescriptor: Hashable { }
