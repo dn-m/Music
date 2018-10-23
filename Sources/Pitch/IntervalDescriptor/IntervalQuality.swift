@@ -147,7 +147,18 @@ extension IntervalQuality {
     }
 }
 
+extension IntervalQuality.Extended: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of IntervalQuality.Extended
+    public var description: String {
+        return (self.degree == .single ? "" : "\(self.degree)") + " " + "\(quality)"
+    }
+}
+
 extension IntervalQuality.Extended: Equatable { }
 extension IntervalQuality.Extended: Hashable { }
 extension IntervalQuality: Equatable { }
 extension IntervalQuality: Hashable { }
+
