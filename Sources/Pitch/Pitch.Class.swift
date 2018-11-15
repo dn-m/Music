@@ -29,7 +29,7 @@ extension Pitch {
         ///     let light = dark.inversion // => 8
         ///
         public var inversion: Pitch.Class {
-            return Pitch.Class(NoteNumber(12) - value)
+            return Pitch.Class(12 - value)
         }
 
         /// Value of `Pitch.Class`.
@@ -50,6 +50,16 @@ extension Pitch {
 
 extension Pitch.Class: Equatable { }
 extension Pitch.Class: Hashable { }
+
+extension Pitch.Class: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Pitch.Class`.
+    public var description: String {
+        return value.description
+    }
+}
 
 extension Pitch.Class {
 

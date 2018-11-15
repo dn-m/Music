@@ -37,7 +37,17 @@ public struct Pitch: NoteNumberRepresentable {
 
 extension Pitch {
 
-    // MARK: Computed Properties
+    // MARK: - Initializers
+
+    /// Creates a `Pitch` with the given `Pitch.Class`.
+    public init(_ pitchClass: Pitch.Class) {
+        self.init(pitchClass.value)
+    }
+}
+
+extension Pitch {
+
+    // MARK: - Computed Properties
 
     /// - Returns: The `mod 12` representation of this `Pitch`.
     public var `class`: Pitch.Class {
@@ -67,5 +77,15 @@ extension Pitch: Additive {
 
     public static var zero: Pitch {
         return 0
+    }
+}
+
+extension Pitch: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Pitch`.
+    public var description: String {
+        return value.description
     }
 }
