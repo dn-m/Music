@@ -79,3 +79,13 @@ extension Pitch: Additive {
         return 0
     }
 }
+
+extension Pitch: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Pitch`.
+    public var description: String {
+        return value.description
+    }
+}

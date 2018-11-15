@@ -51,6 +51,16 @@ extension Pitch {
 extension Pitch.Class: Equatable { }
 extension Pitch.Class: Hashable { }
 
+extension Pitch.Class: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `Pitch.Class`.
+    public var description: String {
+        return value.description
+    }
+}
+
 extension Pitch.Class {
 
     // MARK: - Nested Types

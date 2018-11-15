@@ -63,3 +63,13 @@ extension NoteNumber {
 
 extension NoteNumber: Equatable { }
 extension NoteNumber: Hashable { }
+
+extension NoteNumber: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `NoteNumber`.
+    public var description: String {
+        return value.description
+    }
+}
