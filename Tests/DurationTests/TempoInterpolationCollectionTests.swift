@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import DataStructures
 import Math
 @testable import Duration
 
@@ -48,10 +49,11 @@ class TempoInterpolationCollectionTests: XCTestCase {
         let interpolations: Tempo.Interpolation.Collection = builder.build()
         let fragment = interpolations.fragment(in: .zero ..< Fraction(32,4))
         let single = Tempo.Interpolation(start: Tempo(60), end: Tempo(120), length: Fraction(32,4))
+
         let expected = Tempo.Interpolation.Collection.Fragment(
-            head: nil,
+            head: Optional<Tempo.Interpolation.Fragment>.none,
             body: Tempo.Interpolation.Collection([single]),
-            tail: nil
+            tail: Optional<Tempo.Interpolation.Fragment>.none
         )
         XCTAssertEqual(fragment, expected)
     }
