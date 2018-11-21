@@ -95,7 +95,7 @@ extension Meter.Kind: Rational {
         case .fractional(let fraction, let subdivision):
             return (Fraction(1,subdivision) * fraction).numerator
         case .additive(let meters):
-            return meters.sum.numerator
+            return meters.map(Fraction.init).sum.numerator
         }
     }
 
@@ -107,7 +107,7 @@ extension Meter.Kind: Rational {
         case .fractional(let fraction, let subdivision):
             return (Fraction(1,subdivision) * fraction).denominator
         case .additive(let meters):
-            return meters.sum.denominator
+            return meters.map(Fraction.init).sum.denominator
         }
     }
 }
