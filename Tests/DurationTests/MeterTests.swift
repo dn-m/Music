@@ -61,4 +61,10 @@ class MeterTests: XCTestCase {
         ].map(Fraction.init)
         XCTAssertEqual(result, expected)
     }
+
+    func testMetersSum() {
+        let meters = [(1,4),(2,4),(3,4),(5,4)].map(Meter.init)
+        let _ = meters.sum.numerator
+        let _ = meters.sum.denominator
+    }
 }
