@@ -69,8 +69,8 @@ class MeterTests: XCTestCase {
     }
 
     func testManyMetersSum() {
-        let meters = (0..<1_000).map { _ in Meter(Int.random(in: 1 ..< 8), 4) }
+        let meters = (0..<10_000).map { _ in Meter(Int.random(in: 1 ..< 8), 4) }
         let sum: Meter = meters.sum
-        let numerator = sum.numerator
+        let _ = sum.numerator
     }
 }
