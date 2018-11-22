@@ -85,7 +85,7 @@ extension Meter: Additive {
 
     /// - Returns: An additive meter composed of the two given meters.
     public static func + (_ lhs: Meter, _ rhs: Meter) -> Meter {
-        return .init(kinds: [lhs.kind, rhs.kind])
+        return Meter(kind: lhs.kind + rhs.kind)
     }
 }
 

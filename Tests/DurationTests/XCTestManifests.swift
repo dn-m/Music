@@ -70,6 +70,7 @@ extension MeterTests {
         ("testBeatOffsetsFractional", testBeatOffsetsFractional),
         ("testFractionalMeter", testFractionalMeter),
         ("testIrrationalMeter", testIrrationalMeter),
+        ("testManyMetersSum", testManyMetersSum),
         ("testMetersSum", testMetersSum),
         ("testNormalMeter", testNormalMeter),
     ]

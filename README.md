@@ -163,7 +163,7 @@ let fractional = Meter(Fraction(3,5),16)
 Ordinary and fractional meters can be concatenated into a single additive meter.
 
 ```Swift
-let blueRondo = Meter(2,8) + Meter(2,8) + Meter(2,8) + Meter(3,8)
+let blueRondo = Meter(Meter(2,8), Meter(2,8),Meter(2,8),Meter(3,8))
 let czernowinSQm5 = Meter(Meter(1,4),Meter(3,16))
 let czernowinSQm7 = Meter(Meter(1,4),Meter(Fraction(2,3),4))
 ```

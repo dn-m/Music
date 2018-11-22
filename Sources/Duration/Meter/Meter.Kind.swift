@@ -45,7 +45,13 @@ extension Meter.Kind: Additive {
 
     /// The additive operation.
     static func + (_ lhs: Meter.Kind, _ rhs: Meter.Kind) -> Meter.Kind {
-        return .additive([lhs,rhs])
+        switch (lhs,rhs) {
+        case let (.single(lhsBeats, lhsSubdivision), .single(rhsBeats, rhsSubdivision)):
+            let fraction = Fraction(lhsBeats, lhsSubdivision) + Fraction(rhsBeats, rhsSubdivision)
+            return .single(fraction.numerator, fraction.denominator)
+        default:
+            return .additive([lhs,rhs])
+        }
     }
 }
 
