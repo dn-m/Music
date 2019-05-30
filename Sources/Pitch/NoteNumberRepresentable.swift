@@ -54,8 +54,8 @@ extension NoteNumberRepresentable {
     // MARK: - Hashable
 
     /// - Returns: The hash value of a `NoteNumberRepresentable` type.
-    public var hashValue: Int {
-        return value.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(value)
     }
 }
 
