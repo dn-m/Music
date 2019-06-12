@@ -137,7 +137,7 @@ public func * (duration: Int, durations: [Int]) -> ProportionTree {
 
 /// Tree recording the change (in degree of power-of-two) needed to normalize a 
 /// `ProprtionTree`.
-typealias DistanceTree = Tree<Int,Int>
+public typealias DistanceTree = Tree<Int,Int>
 
 extension Tree where Branch == Int, Leaf == Int {
 
@@ -178,7 +178,6 @@ extension Tree where Branch == Int, Leaf == Int {
             default:
                 fatalError("Incompatible trees")
             }
-            return propagatedUp
         }
 
         return propagatedDown(self, propagatedUp(self), inherited: nil)

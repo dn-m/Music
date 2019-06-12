@@ -464,7 +464,7 @@ public extension Tempo.Interpolation {
 
     /// An ordered, contiguous collection of `Tempo.Interpolation.Fragments` indexed by their
     /// fractional offset.
-    public typealias Collection = ContiguousSegmentCollection<Tempo.Interpolation>
+    typealias Collection = ContiguousSegmentCollection<Tempo.Interpolation>
 }
 
 /// A class which encapsulates the stateful incremental building process of
