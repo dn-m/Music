@@ -193,7 +193,7 @@ extension Pitch.Class {
 }
 
 extension Pitch.Class.Collection: Equatable { }
-
+extension Pitch.Class: Codable { }
 extension Pitch.Class.Collection: ExpressibleByArrayLiteral {
 
     // MARK: - ExpressibleByArrayLiteral
