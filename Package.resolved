@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
           "branch": null,
-          "revision": "075ebb5a934251ed7acbe4feace925ed7e322d0f",
-          "version": "0.6.0"
+          "revision": "47887e0d3f0d3699a3501156314563f265e68d70",
+          "version": "0.7.0"
         }
       },
       {
@@ -23,9 +23,9 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": null,
-          "revision": "11e920b1b883fe169c5ebb58e6489c0f28e9ad90",
-          "version": "0.20.0"
+          "branch": "pitchspeller-dependency",
+          "revision": "1e7f08f69faa37c37b6917e710a4d39be3e0e8e7",
+          "version": null
         }
       }
     ]
