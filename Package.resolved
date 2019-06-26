@@ -23,9 +23,9 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "pitchspeller-dependency",
-          "revision": "1e7f08f69faa37c37b6917e710a4d39be3e0e8e7",
-          "version": null
+          "branch": null,
+          "revision": "fc7d6a9dbaeb9c750988a6a142d5f67e395ddf69",
+          "version": "0.23.0"
         }
       }
     ]
