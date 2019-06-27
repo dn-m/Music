@@ -137,6 +137,7 @@ public func * (duration: Int, durations: [Int]) -> ProportionTree {
 
 /// Tree recording the change (in degree of power-of-two) needed to normalize a 
 /// `ProprtionTree`.
+@usableFromInline
 typealias DistanceTree = Tree<Int,Int>
 
 extension Tree where Branch == Int, Leaf == Int {

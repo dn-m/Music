@@ -17,6 +17,7 @@ import Math
 public struct IntervalSearchTree <Metric: Comparable, Value> {
 
     /// Underlying `AVLTree` augmented for interval searching purposes.
+    @usableFromInline
     typealias Base = AVLTree<Metric,Node>
 
     public struct Node {
