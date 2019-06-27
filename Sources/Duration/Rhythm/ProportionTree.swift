@@ -179,7 +179,6 @@ extension Tree where Branch == Int, Leaf == Int {
             default:
                 fatalError("Incompatible trees")
             }
-            return propagatedUp
         }
 
         return propagatedDown(self, propagatedUp(self), inherited: nil)
