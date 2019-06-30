@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", from: "0.23.0"),
-        .package(url: "https://github.com/dn-m/Math", from: "0.7.0")
+        .package(url: "https://github.com/dn-m/Math", from: "0.7.1")
     ],
     targets: [
 

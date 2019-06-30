@@ -63,6 +63,7 @@ extension NoteNumber {
 
 extension NoteNumber: Equatable { }
 extension NoteNumber: Hashable { }
+extension NoteNumber: Codable { }
 
 extension NoteNumber: CustomStringConvertible {
 

@@ -5,9 +5,9 @@
         "package": "Math",
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
-          "branch": "swift-5",
-          "revision": "51f8032aa2aea3e8a88b44dcc858c4551b855478",
-          "version": null
+          "branch": null,
+          "revision": "0bf8de5d353b7b7957cb2231395f6818bc575b47",
+          "version": "0.7.1"
         }
       },
       {
@@ -23,9 +23,9 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "swift-5",
-          "revision": "8f67514cba950f60ee992a8d0996d4f11d9654b0",
-          "version": null
+          "branch": null,
+          "revision": "fc7d6a9dbaeb9c750988a6a142d5f67e395ddf69",
+          "version": "0.23.0"
         }
       }
     ]

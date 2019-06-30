@@ -53,7 +53,6 @@ extension NoteNumberRepresentable {
 
     // MARK: - Hashable
 
-    /// - Returns: The hash value of a `NoteNumberRepresentable` type.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(value)
     }
