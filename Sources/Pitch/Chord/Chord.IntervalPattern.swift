@@ -53,15 +53,16 @@ extension Chord.IntervalPattern: ExpressibleByArrayLiteral {
     }
 }
 
-extension Chord.IntervalPattern: CollectionWrapping {
-
-    // MARK: - CollectionWrapping
-
-    /// - Returns: The `Collection` base of a `Chord.IntervalPattern`.
-    public var base: [Pitch] {
-        return intervals
-    }
-}
+#warning("FIXME: Reinstate Chord.IntervalPattern: CollectionWrapping when https://bugs.swift.org/browse/SR-11048 if fixed.")
+//extension Chord.IntervalPattern: CollectionWrapping {
+//
+//    // MARK: - CollectionWrapping
+//
+//    /// - Returns: The `Collection` base of a `Chord.IntervalPattern`.
+//    public var base: [Pitch] {
+//        return intervals
+//    }
+//}
 
 extension Chord.IntervalPattern: Equatable { }
 extension Chord.IntervalPattern: Hashable { }

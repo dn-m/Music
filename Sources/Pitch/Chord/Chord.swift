@@ -28,7 +28,8 @@ extension Chord {
 
     /// Creates a `Chord` with the given `first` pitch and the given `intervals`.
     init(_ lowest: Pitch, _ intervals: IntervalPattern) {
-        self.pitches = [lowest] + intervals.accumulatingSum.map { $0 + lowest }
+        // FIXME: Use `intervals.accumulatingSum` when https://bugs.swift.org/browse/SR-11048 if fixed.
+        self.pitches = [lowest] + intervals.intervals.accumulatingSum.map { $0 + lowest }
     }
 
     /// Creates a `Chord` with the pitches in the given `sequence`.
@@ -39,15 +40,16 @@ extension Chord {
     }
 }
 
-extension Chord: RandomAccessCollectionWrapping {
-
-    // MARK: - RandomAccessCollectionWrapping
-
-    /// - Returns: The `RandomAccessCollection` of `Pitch` values contained herein.
-    public var base: [Pitch] {
-        return pitches
-    }
-}
+#warning("FIXME: Reinstate Chord: CollectionWrapping when https://bugs.swift.org/browse/SR-11048 if fixed.")
+//extension Chord: RandomAccessCollectionWrapping {
+//
+//    // MARK: - RandomAccessCollectionWrapping
+//
+//    /// - Returns: The `RandomAccessCollection` of `Pitch` values contained herein.
+//    public var base: [Pitch] {
+//        return pitches
+//    }
+//}
 
 extension Chord: ExpressibleByArrayLiteral {
 
