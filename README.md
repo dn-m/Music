@@ -2,7 +2,7 @@
 
 ![Swift Version](https://img.shields.io/badge/Swift-5.0-orange.svg)
 ![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey.svg)
-[![Build Status](https://travis-ci.org/dn-m/Music.svg?branch=master)](https://travis-ci.org/dn-m/Music)
+[![Build Status](https://travis-ci.org/dn-m/Music.svg?branch=latest)](https://travis-ci.org/dn-m/Music)
 
 Structures for the creation, analysis, and performance of music in Swift.
 
