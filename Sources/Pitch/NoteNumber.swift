@@ -42,6 +42,11 @@ public struct NoteNumber:
     public init(value: Double) {
         self.value = value
     }
+
+    /// Create a `NoteNumber` with the given `int` value.
+    public init(_ int: Int) {
+        self.value = Double(int)
+    }
 }
 
 extension NoteNumber {
