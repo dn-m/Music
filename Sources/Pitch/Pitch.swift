@@ -33,6 +33,11 @@ public struct Pitch: NoteNumberRepresentable {
     public init(_ value: NoteNumber) {
         self.value = value
     }
+
+    /// Creates a `Pitch` with the given `int` value.
+    public init(_ int: Int) {
+        self.value = NoteNumber(int)
+    }
 }
 
 extension Pitch {

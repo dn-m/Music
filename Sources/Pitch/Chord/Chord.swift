@@ -27,16 +27,21 @@ extension Chord {
     // MARK: - Initializers
 
     /// Creates a `Chord` with the given `first` pitch and the given `intervals`.
-    init(_ lowest: Pitch, _ intervals: IntervalPattern) {
+    public init(_ lowest: Pitch, _ intervals: IntervalPattern) {
         // FIXME: Use `intervals.accumulatingSum` when https://bugs.swift.org/browse/SR-11048 if fixed.
         self.pitches = [lowest] + intervals.intervals.accumulatingSum.map { $0 + lowest }
     }
 
-    /// Creates a `Chord` with the pitches in the given `sequence`.
-    init <S> (_ sequence: S) where S: Sequence, S.Element == Pitch {
+    /// Creates a `Chord` with the intervals in the given `sequence`.
+    public init <S> (_ sequence: S) where S: Sequence, S.Element == Pitch {
         let sorted = sequence.sorted()
         precondition(!sorted.isEmpty, "Cannot create a 'Chord' with an empty sequence of pitches")
         self.init(sorted.first!, IntervalPattern(sorted.pairs.map { $1 - $0 }))
+    }
+
+    /// Creates a `Chord` with the given `lowest` pitch and the given `ChordDescriptor`.
+    public init(lowest: Pitch, descriptor: ChordDescriptor) {
+        self.pitches = [lowest] + descriptor.base.map { lowest + Pitch($0.steps) }
     }
 }
 
