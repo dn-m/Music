@@ -78,7 +78,7 @@ extension CompoundIntervalDescriptor: AdditiveGroup {
     public static func - (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
         -> CompoundIntervalDescriptor {
         let semitones = lhs.interval.semitones - rhs.interval.semitones
-        let steps = lhs.interval.ordinal.steps - rhs.interval.ordinal.steps
+        let steps = lhs.steps - rhs.steps
         let stepsModuloOctave = mod(steps,7)
         let octaves = steps / 7
         let interval = OrderedIntervalDescriptor(interval: semitones, steps: stepsModuloOctave)
@@ -327,5 +327,17 @@ extension OrderedIntervalDescriptor.Ordinal {
 extension OrderedIntervalDescriptor {
     var semitones: Double {
         return ordinal.idealInterval + quality.adjustment
+    }
+}
+
+extension OrderedIntervalDescriptor {
+    var steps: Int {
+        return ordinal.steps
+    }
+}
+
+extension CompoundIntervalDescriptor {
+    var steps: Int {
+        return interval.steps + octaveDisplacement * 7
     }
 }

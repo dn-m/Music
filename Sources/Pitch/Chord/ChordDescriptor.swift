@@ -33,6 +33,28 @@ public struct ChordDescriptor {
 
 extension ChordDescriptor {
 
+    // MARK: - Instance Methods
+
+    /// **Example Usage:**
+    ///
+    ///     let major: ChordDescriptor = [.M3, .m3]
+    ///     let firstInversion = major.inversion(1) // => [.m3, .P4]
+    ///     let secondInversion = major.inversion(2) // => [.P4, .M3]
+    ///
+    ///     let majorSeventh: ChordDescriptor = [.M3, .m3, .M3]
+    ///     let thirdInversion = majorSeventh.inversion(3) // => [.m2, .M3, .m3]
+    ///
+    /// - Returns: A `ChordDescriptor` which is the *nth* inversion of this `ChordDescriptor`.
+    public func inversion(_ value: Int) -> ChordDescriptor {
+        precondition(value >= 0 && value <= intervals.count)
+        if value == 0 { return self }
+        return ChordDescriptor(
+            (intervals + [.octave - intervals.sum])
+                .rotated(by: value)
+                .dropLast()
+        )
+    }
+
     // MARK: - Type Properties
 
     public static let major: ChordDescriptor = [.M3, .m3]
@@ -140,3 +162,6 @@ extension ChordDescriptor: ExpressibleByArrayLiteral {
         self.intervals = intervals
     }
 }
+
+extension ChordDescriptor: Equatable { }
+extension ChordDescriptor: Hashable { }

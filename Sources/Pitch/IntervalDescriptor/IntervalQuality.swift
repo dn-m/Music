@@ -163,7 +163,7 @@ extension IntervalQuality.Imperfect: CustomStringConvertible {
 
     /// Printable description of IntervalQuality.Imperfect.
     public var description: String {
-        return "P"
+        return self == .major ? "M" : "m"
     }
 }
 
