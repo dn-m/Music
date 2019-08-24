@@ -31,6 +31,16 @@ public struct ChordDescriptor {
     }
 }
 
+extension ChordDescriptor {
+
+    // MARK: - Type Properties
+
+    public static let major: ChordDescriptor = [.M3, .m3]
+    public static let minor: ChordDescriptor = [.m3, .M3]
+    public static let diminished: ChordDescriptor = [.m3, .m3]
+    public static let augmented: ChordDescriptor = [.M3, .M3]
+}
+
 extension ChordDescriptor/*: RandomAccessCollectionWrapping*/ {
 
     // MARK: - RandomAccessCollectionWrapping
