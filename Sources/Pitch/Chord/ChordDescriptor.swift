@@ -22,6 +22,13 @@ public struct ChordDescriptor {
     // MARK: - Instance Properties
 
     let intervals: [CompoundIntervalDescriptor]
+
+    // MARK: - Initializers
+
+    /// Creates a `ChordDescriptor` with the given `intervals`.
+    public init(_ intervals: [CompoundIntervalDescriptor]) {
+        self.intervals = intervals
+    }
 }
 
 extension ChordDescriptor/*: RandomAccessCollectionWrapping*/ {
