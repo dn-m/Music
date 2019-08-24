@@ -45,9 +45,6 @@ extension ChordDescriptor {
                 .dropLast()
         )
     }
-}
-
-extension ChordDescriptor {
 
     // MARK: - Type Properties
 
