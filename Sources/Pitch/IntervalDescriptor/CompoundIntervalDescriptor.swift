@@ -88,7 +88,7 @@ extension CompoundIntervalDescriptor: AdditiveGroup {
     }
 
     /// Mutates the left-hand-side by subtracting the right-hand-side.
-    public static func -= (lhs: inout Self, rhs: Self) {
+    public static func -= (lhs: inout CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor) {
         lhs = lhs - rhs
     }
 
