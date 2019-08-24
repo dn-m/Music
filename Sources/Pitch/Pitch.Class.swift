@@ -192,7 +192,7 @@ extension Pitch.Class {
     }
 }
 
-#warning("FIXME: Reinstate RandomAccessCollectionWrapping conformance SR-11084")
+// FIXME: Reinstate RandomAccessCollectionWrapping conformance SR-11084"
 extension Pitch.Class.Collection: RandomAccessCollection {
 
     // MARK: - RandomAccessCollection

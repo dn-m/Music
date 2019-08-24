@@ -195,6 +195,9 @@ extension OrderedIntervalDescriptor {
     /// Perfect fourth.
     public static let P4 = OrderedIntervalDescriptor(.perfect, .fourth)
 
+    /// Perfect fifth.
+    public static let P5 = OrderedIntervalDescriptor(.perfect, .fifth)
+
     /// Augmented fourth.
     public static let A4 = OrderedIntervalDescriptor(.augmented, .fourth)
 

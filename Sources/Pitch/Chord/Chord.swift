@@ -40,7 +40,7 @@ extension Chord {
     }
 }
 
-#warning("FIXME: Reinstate Chord: CollectionWrapping when https://bugs.swift.org/browse/SR-11048 if fixed.")
+// FIXME: Reinstate Chord: CollectionWrapping when https://bugs.swift.org/browse/SR-11048 if fixed."
 //extension Chord: RandomAccessCollectionWrapping {
 //
 //    // MARK: - RandomAccessCollectionWrapping

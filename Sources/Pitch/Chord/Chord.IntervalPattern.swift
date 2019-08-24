@@ -53,7 +53,7 @@ extension Chord.IntervalPattern: ExpressibleByArrayLiteral {
     }
 }
 
-#warning("FIXME: Reinstate Chord.IntervalPattern: CollectionWrapping when https://bugs.swift.org/browse/SR-11048 if fixed.")
+// FIXME: Reinstate Chord.IntervalPattern: CollectionWrapping when https://bugs.swift.org/browse/SR-11048 if fixed.
 //extension Chord.IntervalPattern: CollectionWrapping {
 //
 //    // MARK: - CollectionWrapping

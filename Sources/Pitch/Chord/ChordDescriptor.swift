@@ -22,6 +22,23 @@ public struct ChordDescriptor {
     // MARK: - Instance Properties
 
     let intervals: [CompoundIntervalDescriptor]
+
+    // MARK: - Initializers
+
+    /// Creates a `ChordDescriptor` with the given `intervals`.
+    public init(_ intervals: [CompoundIntervalDescriptor]) {
+        self.intervals = intervals
+    }
+}
+
+extension ChordDescriptor {
+
+    // MARK: - Type Properties
+
+    public static let major: ChordDescriptor = [.M3, .m3]
+    public static let minor: ChordDescriptor = [.m3, .M3]
+    public static let diminished: ChordDescriptor = [.m3, .m3]
+    public static let augmented: ChordDescriptor = [.M3, .M3]
 }
 
 extension ChordDescriptor/*: RandomAccessCollectionWrapping*/ {
@@ -34,7 +51,7 @@ extension ChordDescriptor/*: RandomAccessCollectionWrapping*/ {
     }
 }
 
-#warning("FIXME: Reinstate RandomAccessCollectionWrapping conformance SR-11084")
+// FIXME: Reinstate RandomAccessCollectionWrapping conformance SR-11084"
 extension ChordDescriptor: RandomAccessCollection {
 
     // MARK: - RandomAccessCollection
