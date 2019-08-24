@@ -40,4 +40,10 @@ class CompoundIntervalDescriptorTests: XCTestCase {
         let expected: CompoundIntervalDescriptor = CompoundIntervalDescriptor(orderedInterval)
         XCTAssertEqual(result, expected)
     }
+
+    func testOctaveSubtractingCompoundInterval() {
+        let result: CompoundIntervalDescriptor = .octave - (.M3 + .m3)
+        let expected: CompoundIntervalDescriptor = .P4
+        XCTAssertEqual(result, expected)
+    }
 }

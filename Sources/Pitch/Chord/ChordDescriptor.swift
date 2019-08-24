@@ -33,6 +33,22 @@ public struct ChordDescriptor {
 
 extension ChordDescriptor {
 
+    // MARK: - Instance Methods
+
+    /// - Returns: The inversion of the given `value`.
+    public func inversion(_ value: Int) -> ChordDescriptor {
+        precondition(value >= 0 && value <= intervals.count)
+        if value == 0 { return self }
+        return ChordDescriptor(
+            (intervals + [.octave - intervals.sum])
+                .rotated(by: value)
+                .dropLast()
+        )
+    }
+}
+
+extension ChordDescriptor {
+
     // MARK: - Type Properties
 
     public static let major: ChordDescriptor = [.M3, .m3]
@@ -140,3 +156,6 @@ extension ChordDescriptor: ExpressibleByArrayLiteral {
         self.intervals = intervals
     }
 }
+
+extension ChordDescriptor: Equatable { }
+extension ChordDescriptor: Hashable { }
