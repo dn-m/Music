@@ -53,7 +53,8 @@ extension CompoundIntervalDescriptor: AdditiveGroup {
     ///     let minorSeventh = perfectFifth + minorThird // => .m7
     ///
     /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
-    public static func + (lhs: Self, rhs: Self) -> Self {
+    public static func + (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
+        -> CompoundIntervalDescriptor {
         let semitones = lhs.interval.semitones + rhs.interval.semitones
         let steps = lhs.interval.ordinal.steps + rhs.interval.ordinal.steps
         let stepsModuloOctave = mod(steps,7)
@@ -63,7 +64,7 @@ extension CompoundIntervalDescriptor: AdditiveGroup {
     }
 
     /// Mutates the left-hand-side by adding the right-hand-side.
-    public static func += (lhs: inout Self, rhs: Self) {
+    public static func += (lhs: inout CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor) {
         lhs = lhs + rhs
     }
 
@@ -74,7 +75,8 @@ extension CompoundIntervalDescriptor: AdditiveGroup {
     ///     let majorThird = perfectFifth - minorThird // => .M3
     ///
     /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
-    public static func - (lhs: Self, rhs: Self) -> Self {
+    public static func - (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
+        -> CompoundIntervalDescriptor {
         let semitones = lhs.interval.semitones - rhs.interval.semitones
         let steps = lhs.interval.ordinal.steps - rhs.interval.ordinal.steps
         let stepsModuloOctave = mod(steps,7)
