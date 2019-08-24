@@ -34,7 +34,7 @@ extension ChordDescriptor/*: RandomAccessCollectionWrapping*/ {
     }
 }
 
-#warning("FIXME: Reinstate RandomAccessCollectionWrapping conformance SR-11084")
+// FIXME: Reinstate RandomAccessCollectionWrapping conformance SR-11084"
 extension ChordDescriptor: RandomAccessCollection {
 
     // MARK: - RandomAccessCollection
