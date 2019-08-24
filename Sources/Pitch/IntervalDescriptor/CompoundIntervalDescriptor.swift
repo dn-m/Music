@@ -5,6 +5,9 @@
 //  Created by James Bean on 10/10/18.
 //
 
+import Algebra
+import Math
+
 /// A descriptor for intervals between two `Pitch` values which takes into account octave
 /// displacement.
 public struct CompoundIntervalDescriptor: IntervalDescriptor {
@@ -36,10 +39,20 @@ extension CompoundIntervalDescriptor {
     }
 }
 
-extension CompoundIntervalDescriptor {
+extension CompoundIntervalDescriptor: AdditiveGroup {
 
     // MARK: - Type Methods
 
+    /// The `unison` is the `zero` for the `CompoundIntervalDescriptor` `AdditiveGroup`.
+    public static let zero: CompoundIntervalDescriptor = .unison
+
+    /// **Example Usage:**
+    ///
+    ///     let perfectFifth: CompoundIntervalDescriptor = .P5
+    ///     let minorThird: CompoundIntervalDescriptor = .m3
+    ///     let minorSeventh = perfectFifth + minorThird // => .m7
+    ///
+    /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
     public static func + (lhs: Self, rhs: Self) -> Self {
         let semitones = lhs.interval.semitones + rhs.interval.semitones
         let steps = lhs.interval.ordinal.steps + rhs.interval.ordinal.steps
@@ -49,10 +62,18 @@ extension CompoundIntervalDescriptor {
         return CompoundIntervalDescriptor(interval, displacedBy: octaves)
     }
 
+    /// Mutates the left-hand-side by adding the right-hand-side.
     public static func += (lhs: inout Self, rhs: Self) {
         lhs = lhs + rhs
     }
 
+    /// **Example Usage:**
+    ///
+    ///     let perfectFifth: CompoundIntervalDescriptor = .P5
+    ///     let minorThird: CompoundIntervalDescriptor = .m3
+    ///     let majorThird = perfectFifth - minorThird // => .M3
+    ///
+    /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
     public static func - (lhs: Self, rhs: Self) -> Self {
         let semitones = lhs.interval.semitones - rhs.interval.semitones
         let steps = lhs.interval.ordinal.steps - rhs.interval.ordinal.steps
@@ -64,8 +85,19 @@ extension CompoundIntervalDescriptor {
         )
     }
 
+    /// Mutates the left-hand-side by subtracting the right-hand-side.
     public static func -= (lhs: inout Self, rhs: Self) {
         lhs = lhs - rhs
+    }
+
+    /// - Returns: The `inverse` of a `CompoundIntervalDescriptor`.
+    public static prefix func - (element: CompoundIntervalDescriptor) -> CompoundIntervalDescriptor {
+        return element.inverse
+    }
+
+    /// - Returns: The `inverse` of a `CompoundIntervalDescriptor`.
+    public var inverse: CompoundIntervalDescriptor {
+        return CompoundIntervalDescriptor(interval.inverse, displacedBy: -octaveDisplacement)
     }
 }
 
@@ -227,7 +259,7 @@ extension IntervalDescriptor {
     }
 }
 
-import Math
+
 
 extension OrderedIntervalDescriptor.Ordinal {
 
