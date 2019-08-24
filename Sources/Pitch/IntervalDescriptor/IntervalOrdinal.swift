@@ -15,10 +15,12 @@ public protocol IntervalOrdinal {
     /// The amount of diatonic steps represented by this `IntervalOrdinal`.
     var steps: Int { get }
 
-    var platonicThreshold: Double { get }
-
     // MARK: - Initializers
 
     /// Creates a `IntervalOrdinal` with the given amount of `steps`.
     init?(steps: Int)
+}
+
+protocol WesternScaleMappingOrdinal: IntervalOrdinal {
+    var platonicThreshold: Double { get }
 }

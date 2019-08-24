@@ -238,7 +238,7 @@ func idealSemitoneInterval(steps: Int) -> Double {
     }
 }
 
-extension IntervalDescriptor {
+extension IntervalDescriptor where Ordinal: WesternScaleMappingOrdinal {
 
     /// Creates a `IntervalDescriptor`-conforming type with the given `interval` (i.e., the distance
     /// between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values) and the given
@@ -261,9 +261,7 @@ extension IntervalDescriptor {
     }
 }
 
-
-
-extension OrderedIntervalDescriptor.Ordinal {
+extension OrderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
 
     /// - Returns: The distance in semitones from an iedal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
@@ -277,11 +275,11 @@ extension OrderedIntervalDescriptor.Ordinal {
     }
 }
 
-extension UnorderedIntervalDescriptor.Ordinal {
+extension UnorderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
 
     /// - Returns: The distance in semitones from an iedal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
-    public var platonicThreshold: Double {
+    var platonicThreshold: Double {
         switch self {
         case .perfect:
             return 1
@@ -327,7 +325,7 @@ extension OrderedIntervalDescriptor.Ordinal {
 }
 
 extension OrderedIntervalDescriptor {
-    public var semitones: Double {
+    var semitones: Double {
         return ordinal.idealInterval + quality.adjustment
     }
 }
