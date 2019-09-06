@@ -8,6 +8,7 @@
 
 import Math
 import DataStructures
+import Algebra
 
 extension Pitch {
 
@@ -39,7 +40,7 @@ extension Pitch {
 
         /// Create a `Pitch.Class` with a given `noteNumber`.
         ///
-        /// > If the given `noteNumber` is not in the range [0,12), it will be updated to the mod 12
+        /// > If the given `noteNumber` is not in the range `[0,12)`, it will be updated to the mod 12
         /// equivalent value.
         ///
         public init(_ noteNumber: NoteNumber) {
