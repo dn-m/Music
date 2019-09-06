@@ -79,7 +79,7 @@ extension Pitch.Class {
         ///
         /// - TODO: Make a function which takes an axis over which pcs are inverted.
         public var inversion: Collection {
-            return map { $0.inversion }
+            return map { $0.inverse }
         }
 
         /// - Returns: The retrograde of this `Pitch.Class.Collection`.
