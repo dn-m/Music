@@ -19,20 +19,6 @@ extension Pitch {
 
         // MARK: - Instance Properties
 
-        /// Inversion of `Pitch.Class`.
-        ///
-        /// **Example Usage**
-        ///
-        ///     let wet: Pitch.Class = 9
-        ///     let dry = wet.inversion // => 3
-        ///
-        ///     let dark: Pitch.Class = 4
-        ///     let light = dark.inversion // => 8
-        ///
-        public var inversion: Pitch.Class {
-            return Pitch.Class(12 - value)
-        }
-
         /// Value of `Pitch.Class`.
         public var value: NoteNumber
 
@@ -49,7 +35,25 @@ extension Pitch {
     }
 }
 
+extension Pitch.Class: AdditiveGroup {
 
+    /// Inversion of `Pitch.Class`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let wet: Pitch.Class = 9
+    ///     let dry = wet.inversion // => 3
+    ///
+    ///     let dark: Pitch.Class = 4
+    ///     let light = dark.inversion // => 8
+    ///
+    public var inverse: Pitch.Class { Pitch.Class(12 - value) }
+
+    @available(*, deprecated, message: "Use `Pitch.Class.inverse` instead")
+    public var inversion: Pitch.Class {
+        return inverse
+    }
+}
 
 extension Pitch.Class: CustomStringConvertible {
 
