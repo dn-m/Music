@@ -140,14 +140,29 @@ extension UnorderedIntervalDescriptor {
 
     // MARK: - Type Properties
 
+    /// Diminished unison.
+    public static let d1 = UnorderedIntervalDescriptor(.diminished, .unison)
+
     /// Unison.
     public static let unison = UnorderedIntervalDescriptor(.perfect, .unison)
+
+    /// Diminished second.
+    public static let d2 = UnorderedIntervalDescriptor(.diminished, .second)
+
+    /// Augmented unison.
+    public static let A1 = UnorderedIntervalDescriptor(.augmented, .unison)
 
     /// Minor second.
     public static let m2 = UnorderedIntervalDescriptor(.minor, .second)
 
     /// Major second.
     public static let M2 = UnorderedIntervalDescriptor(.major, .second)
+
+    /// Diminished third.
+    public static let d3 = UnorderedIntervalDescriptor(.diminished, .third)
+
+    /// Augmented second.
+    public static let A2 = UnorderedIntervalDescriptor(.augmented, .second)
 
     /// Minor third.
     public static let m3 = UnorderedIntervalDescriptor(.minor, .third)
@@ -158,13 +173,14 @@ extension UnorderedIntervalDescriptor {
     /// Diminished fourth.
     public static let d4 = UnorderedIntervalDescriptor(.diminished, .fourth)
 
+    /// Augmented third.
+    public static let A3 = UnorderedIntervalDescriptor(.augmented, .third)
+
     /// Perfect fourth.
     public static let P4 = UnorderedIntervalDescriptor(.perfect, .fourth)
 
     /// Augmented fourth.
     public static let A4 = UnorderedIntervalDescriptor(.augmented, .fourth)
-
-    // TODO: Add diminished / augmented imperfect intervals
 }
 
 extension UnorderedIntervalDescriptor {

@@ -174,14 +174,29 @@ extension OrderedIntervalDescriptor {
 
     // MARK: - Type Properties
 
+    /// Diminished unison.
+    public static let d1 = OrderedIntervalDescriptor(.diminished, .unison)
+
     /// Unison.
     public static let unison = OrderedIntervalDescriptor(.perfect, .unison)
+
+    /// Diminished second.
+    public static let d2 = OrderedIntervalDescriptor(.diminished, .second)
+
+    /// Augmented Unison.
+    public static let A1 = OrderedIntervalDescriptor(.augmented, .unison)
 
     /// Minor second.
     public static let m2 = OrderedIntervalDescriptor(.minor, .second)
 
     /// Major second.
     public static let M2 = OrderedIntervalDescriptor(.major, .second)
+
+    /// Diminished third.
+    public static let d3 = OrderedIntervalDescriptor(.diminished, .third)
+
+    /// Augmented second.
+    public static let A2 = OrderedIntervalDescriptor(.augmented, .second)
 
     /// Minor third.
     public static let m3 = OrderedIntervalDescriptor(.minor, .third)
@@ -192,17 +207,23 @@ extension OrderedIntervalDescriptor {
     /// Diminished fourth.
     public static let d4 = OrderedIntervalDescriptor(.diminished, .fourth)
 
+    /// Augmented third.
+    public static let A3 = OrderedIntervalDescriptor(.augmented, .third)
+
     /// Perfect fourth.
     public static let P4 = OrderedIntervalDescriptor(.perfect, .fourth)
-
-    /// Perfect fifth.
-    public static let P5 = OrderedIntervalDescriptor(.perfect, .fifth)
 
     /// Augmented fourth.
     public static let A4 = OrderedIntervalDescriptor(.augmented, .fourth)
 
     /// Diminished fifth
     public static let d5 = OrderedIntervalDescriptor(.diminished, .fifth)
+
+    /// Perfect fifth.
+    public static let P5 = OrderedIntervalDescriptor(.perfect, .fifth)
+
+    /// Diminished sixth.
+    public static let d6 = OrderedIntervalDescriptor(.diminished, .sixth)
 
     /// Augmented fifth.
     public static let A5 = OrderedIntervalDescriptor(.augmented, .fifth)
@@ -213,13 +234,20 @@ extension OrderedIntervalDescriptor {
     /// Major sixth.
     public static let M6 = OrderedIntervalDescriptor(.major, .sixth)
 
+    /// Diminished seventh.
+    public static let d7 = OrderedIntervalDescriptor(.diminished, .seventh)
+
+    /// Augmented sixth.
+    public static let A6 = OrderedIntervalDescriptor(.augmented, .sixth)
+
     /// Minor seventh.
     public static let m7 = OrderedIntervalDescriptor(.minor, .seventh)
 
     /// Major seventh.
     public static let M7 = OrderedIntervalDescriptor(.major, .seventh)
 
-    // TODO: Add diminished / augmented imperfect intervals
+    /// Augmented seventh.
+    public static let A7 = OrderedIntervalDescriptor(.augmented, .seventh)
 }
 
 extension OrderedIntervalDescriptor {

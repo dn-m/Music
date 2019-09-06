@@ -107,14 +107,29 @@ extension CompoundIntervalDescriptor {
 
     // MARK: - Type Properties
 
+    /// Diminished Unison.
+    public static let d1 = CompoundIntervalDescriptor(.d1)
+
     /// Unison.
     public static let unison = CompoundIntervalDescriptor(.unison)
+
+    /// Diminished second.
+    public static let d2 = CompoundIntervalDescriptor(.d2)
+
+    /// Augmented unison.
+    public static let A1 = CompoundIntervalDescriptor(.A1)
 
     /// Minor second.
     public static let m2 = CompoundIntervalDescriptor(.m2)
 
     /// Major second.
     public static let M2 = CompoundIntervalDescriptor(.M2)
+
+    /// Diminished third.
+    public static let d3 = CompoundIntervalDescriptor(.d3)
+
+    /// Augmented second.
+    public static let A2 = CompoundIntervalDescriptor(.A2)
 
     /// Minor third.
     public static let m3 = CompoundIntervalDescriptor(.m3)
@@ -137,6 +152,9 @@ extension CompoundIntervalDescriptor {
     /// Perfect fifth.
     public static let P5 = CompoundIntervalDescriptor(.P5)
 
+    /// Diminished sixth.
+    public static let d6 = CompoundIntervalDescriptor(.d6)
+
     /// Augmented fifth.
     public static let A5 = CompoundIntervalDescriptor(.A5)
 
@@ -145,6 +163,12 @@ extension CompoundIntervalDescriptor {
 
     /// Major sixth.
     public static let M6 = CompoundIntervalDescriptor(.M6)
+
+    /// Diminished seventh.
+    public static let d7 = CompoundIntervalDescriptor(.d7)
+
+    /// Augmented sixth.
+    public static let A6 = CompoundIntervalDescriptor(.A6)
 
     /// Minor seventh.
     public static let m7 = CompoundIntervalDescriptor(.m7)
@@ -155,7 +179,77 @@ extension CompoundIntervalDescriptor {
     /// Octave.
     public static let octave = CompoundIntervalDescriptor(.unison, displacedBy: 1)
 
-    // TODO: Add intervals spanning more than one octave
+    /// Augmented seventh.
+    public static let A7 = CompoundIntervalDescriptor(.A7)
+
+    /// Diminished octave.
+    public static let d8 = CompoundIntervalDescriptor(.d1, displacedBy: 1)
+
+    /// Diminished ninth.
+    public static let d9 = CompoundIntervalDescriptor(.d2, displacedBy: 1)
+
+    /// Augmented octave.
+    public static let A8 = CompoundIntervalDescriptor(.A1, displacedBy: 1)
+
+    /// Minor ninth.
+    public static let m9 = CompoundIntervalDescriptor(.m2, displacedBy: 1)
+
+    /// Major ninth.
+    public static let M9 = CompoundIntervalDescriptor(.M2, displacedBy: 1)
+
+    /// Diminished tenth.
+    public static let d10 = CompoundIntervalDescriptor(.d3, displacedBy: 1)
+
+    /// Augmented ninth.
+    public static let A9 = CompoundIntervalDescriptor(.A2, displacedBy: 1)
+
+    /// Minor tenth.
+    public static let m10 = CompoundIntervalDescriptor(.m3, displacedBy: 1)
+
+    /// Major tenth.
+    public static let M10 = CompoundIntervalDescriptor(.M3, displacedBy: 1)
+
+    /// Diminished eleventh.
+    public static let d11 = CompoundIntervalDescriptor(.d4, displacedBy: 1)
+
+    /// Perfect eleventh.
+    public static let P11 = CompoundIntervalDescriptor(.P4, displacedBy: 1)
+
+    /// Augmented eleventh.
+    public static let A11 = CompoundIntervalDescriptor(.A4, displacedBy: 1)
+
+    /// Diminished twelfth.
+    public static let d12 = CompoundIntervalDescriptor(.d5, displacedBy: 1)
+
+    /// Perfect twelfth.
+    public static let P12 = CompoundIntervalDescriptor(.P5, displacedBy: 1)
+
+    /// Diminished thirteenth.
+    public static let d13 = CompoundIntervalDescriptor(.d6, displacedBy: 1)
+
+    /// Augmented twelfth.
+    public static let A12 = CompoundIntervalDescriptor(.A5, displacedBy: 1)
+
+    /// Minor thirteenth.
+    public static let m13 = CompoundIntervalDescriptor(.m6, displacedBy: 1)
+
+    /// Major thirteenth.
+    public static let M13 = CompoundIntervalDescriptor(.M6, displacedBy: 1)
+
+    /// Diminished fourteenth.
+    public static let d14 = CompoundIntervalDescriptor(.d7, displacedBy: 1)
+
+    /// Augmented thirteenth.
+    public static let A13 = CompoundIntervalDescriptor(.A6, displacedBy: 1)
+
+    /// Minor fourteenth.
+    public static let m14 = CompoundIntervalDescriptor(.m7, displacedBy: 1)
+
+    /// Major fourteenth.
+    public static let M14 = CompoundIntervalDescriptor(.M7, displacedBy: 1)
+
+    /// Augmented fourteenth.
+    public static let A14 = CompoundIntervalDescriptor(.A7, displacedBy: 1)
 }
 
 extension CompoundIntervalDescriptor: CustomStringConvertible {
