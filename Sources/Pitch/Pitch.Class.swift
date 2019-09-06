@@ -42,10 +42,10 @@ extension Pitch.Class: AdditiveGroup {
     /// **Example Usage**
     ///
     ///     let wet: Pitch.Class = 9
-    ///     let dry = wet.inversion // => 3
+    ///     let dry = wet.inverse // => 3
     ///
     ///     let dark: Pitch.Class = 4
-    ///     let light = dark.inversion // => 8
+    ///     let light = dark.inverse // => 8
     ///
     public var inverse: Pitch.Class { Pitch.Class(12 - value) }
 
@@ -62,6 +62,16 @@ extension Pitch.Class: CustomStringConvertible {
     /// Printable description of `Pitch.Class`.
     public var description: String {
         return value.description
+    }
+}
+
+extension Pitch.Class: Comparable {
+
+    // MARK: - Comparable
+
+    /// - Returns: `true` if the value on the left is less than the value on the `right`.
+    public static func < (lhs: Pitch.Class, rhs: Pitch.Class) -> Bool {
+        return lhs.value < rhs.value
     }
 }
 
