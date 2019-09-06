@@ -44,7 +44,11 @@ class PitchClassTests: XCTestCase {
     // MARK: Group Axioms
 
     func testAssociativity() {
-        zip(all,all).forEach { XCTAssertEqual($0 + $1, $1 + $0) }
+        zip(all,all,all).forEach {
+            let left = ($0 + $1) + $2
+            let right = $0 + ($1 + $2)
+            XCTAssertEqual(left, right)
+        }
     }
 
     func testIdentity() {
