@@ -47,6 +47,11 @@ extension OrderedIntervalDescriptor {
         self.quality = unordered.quality
         self.direction = .ascending
     }
+
+    /// Creates an `OrderedIntervalDescriptor` with the given compound one.
+    public init(_ compound: CompoundIntervalDescriptor) {
+        self = compound.interval
+    }
 }
 
 extension OrderedIntervalDescriptor {
@@ -371,8 +376,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ quality: IntervalQuality.Imperfect,
         _ ordinal: Ordinal.Imperfect
-    )
-    {
+    ) {
         self.direction = direction
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
@@ -388,8 +392,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
-    )
-    {
+    ) {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
         self.ordinal = .imperfect(ordinal)
@@ -406,8 +409,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
-    )
-    {
+    ) {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))
         self.ordinal = .imperfect(ordinal)
@@ -423,8 +425,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
-    )
-    {
+    ) {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
         self.ordinal = .perfect(ordinal)
@@ -441,8 +442,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
-    )
-    {
+    ) {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))
         self.ordinal = .perfect(ordinal)
@@ -453,7 +453,10 @@ extension OrderedIntervalDescriptor {
     ///     let diminishedSecond = OrderedIntervalDescriptor(.diminished, .second)
     ///     let augmentedSixth = OrderedIntervalDescriptor(.augmented, .sixth)
     ///
-    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
+    public init(
+        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ ordinal: Ordinal.Imperfect
+    ) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
@@ -469,8 +472,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
-    )
-    {
+    ) {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
@@ -497,8 +499,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
-    )
-    {
+    ) {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
