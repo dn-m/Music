@@ -10,6 +10,16 @@ import Pitch
 
 class CompoundIntervalDescriptorTests: XCTestCase {
 
+    let reasonableFiniteSubset: [CompoundIntervalDescriptor] = [
+        .d1, .unison, .A1,
+        .d2, .m2, .M2, .A2,
+        .d3, .m3, .M3, .A3,
+        .d4, .P4, .A4,
+        .d5, .P5, .A5,
+        .d6, .m6, .M6, .A6,
+        .d7, .m7, .M7, .A7
+    ]
+
     func testAddLessThanAnOctave() {
         let result: CompoundIntervalDescriptor = .m2 + .P4
         let expected: CompoundIntervalDescriptor = .d5
@@ -45,5 +55,11 @@ class CompoundIntervalDescriptorTests: XCTestCase {
         let result: CompoundIntervalDescriptor = .octave - (.M3 + .m3)
         let expected: CompoundIntervalDescriptor = .P4
         XCTAssertEqual(result, expected)
+    }
+
+    // MARK: - Additive Monoid Axioms
+
+    func testIdentity() {
+        reasonableFiniteSubset.forEach { XCTAssertEqual($0 + .unison, $0) }
     }
 }

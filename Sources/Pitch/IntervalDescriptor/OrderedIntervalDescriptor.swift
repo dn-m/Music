@@ -7,6 +7,7 @@
 
 import Algebra
 import DataStructures
+import Math
 
 /// Descriptor for ordered interval between two `Pitch` values.
 public struct OrderedIntervalDescriptor: IntervalDescriptor {
@@ -17,11 +18,11 @@ public struct OrderedIntervalDescriptor: IntervalDescriptor {
     public let direction: Direction
 
     /// Ordinal value of a `OrderedIntervalDescriptor`
-    /// (`unison`, `second`, `third`, `fourth`, `fifth`, `sixth`, `seventh`).
+    /// (e.g., `.unison`, `.second`, `.third`, `.fourth`, `.fifth`, `.sixth`, `.seventh`).
     public let ordinal: Ordinal
 
     /// IntervalQuality value of a `OrderedIntervalDescriptor`.
-    /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
+    /// (e.g., `.diminished`, `.minor`, `.perfect`, `.major`, `.augmented`).
     public let quality: IntervalQuality
 }
 
@@ -34,12 +35,41 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction = .ascending,
         _ ordinal: Ordinal,
         _ quality: IntervalQuality
-    )
-    {
+    ) {
         self.direction = direction
         self.ordinal = ordinal
         self.quality = quality
     }
+
+    /// Creates an `OrderedIntervalDescriptor` with the given unordered one.
+    public init(_ unordered: UnorderedIntervalDescriptor) {
+        self.ordinal = Ordinal(unordered.ordinal)
+        self.quality = unordered.quality
+        self.direction = .ascending
+    }
+}
+
+extension OrderedIntervalDescriptor {
+
+    // MARK: - Computed Properties
+
+    /// - Returns: The amount of semitones in this `OrderedIntervalDescriptor`.
+    public var semitones: Double {
+        switch quality {
+        case let .extended(extended):
+            switch extended.quality {
+            case .augmented:
+                return ordinal.idealInterval + quality.adjustment + (ordinal.augDimThreshold - 1)
+            case .diminished:
+                return ordinal.idealInterval + quality.adjustment - (ordinal.augDimThreshold - 1)
+            }
+        default:
+            return ordinal.idealInterval + quality.adjustment
+        }
+    }
+
+    /// - Returns: The amount of letter name steps in this `OrderedIntervalDescriptor`.
+    public var steps: Int { ordinal.steps }
 }
 
 extension OrderedIntervalDescriptor {
@@ -250,6 +280,35 @@ extension OrderedIntervalDescriptor {
     public static let A7 = OrderedIntervalDescriptor(.augmented, .seventh)
 }
 
+extension OrderedIntervalDescriptor: AdditiveGroup {
+
+    /// The `.unison` is the `Additive` `zero`.
+    public static var zero: OrderedIntervalDescriptor = .unison
+
+    /// - Returns: The sum of two `OrderedIntervalDescriptor` values.
+    public static func + (lhs: OrderedIntervalDescriptor, rhs: OrderedIntervalDescriptor)
+        -> OrderedIntervalDescriptor
+    {
+        let semitones = lhs.semitones + rhs.semitones
+        let steps = lhs.ordinal.steps + rhs.ordinal.steps
+        let stepsModOctave = mod(steps,7)
+        let result = OrderedIntervalDescriptor(interval: Double(semitones), steps: stepsModOctave)
+        return result
+    }
+}
+
+extension OrderedIntervalDescriptor.Ordinal {
+
+    // MARK: - Type Methods
+
+    /// - Returns: The distance from the given `interval` to the ideal interval for the given amount of `steps`.
+    public static func distanceToIdealInterval(for steps: Int, to interval: Double) -> Double {
+        let ideal = idealSemitoneInterval(steps: steps)
+        let difference = interval - ideal
+        return mod(difference + 6, 12) - 6
+    }
+}
+
 extension OrderedIntervalDescriptor {
 
     // MARK: - Initializers
@@ -382,7 +441,7 @@ extension OrderedIntervalDescriptor {
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
-        )
+    )
     {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))

@@ -208,4 +208,3 @@ extension IntervalQuality.Extended: Equatable { }
 extension IntervalQuality.Extended: Hashable { }
 extension IntervalQuality: Equatable { }
 extension IntervalQuality: Hashable { }
-

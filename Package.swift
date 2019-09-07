@@ -13,7 +13,7 @@ let package = Package(
         .library(name: "MusicModel", targets: ["MusicModel"])
     ],
     dependencies: [
-        .package(url: "https://github.com/dn-m/Structure", from: "0.23.0"),
+        .package(url: "https://github.com/dn-m/Structure", from: "0.24.0"),
         .package(url: "https://github.com/dn-m/Math", from: "0.7.0")
     ],
     targets: [

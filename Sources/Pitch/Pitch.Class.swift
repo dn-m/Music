@@ -53,6 +53,16 @@ extension Pitch.Class: AdditiveGroup {
     public var inversion: Pitch.Class {
         return inverse
     }
+
+    /// - Returns: The difference between two `Pitch.Class` values.
+    public static func - (lhs: Pitch.Class, rhs: Pitch.Class) -> Pitch.Class {
+        return Pitch.Class(lhs.value - rhs.value)
+    }
+
+    /// - Returns: The inverse of a given `Pitch.Class` value.
+    public static prefix func - (_ element: Pitch.Class) -> Pitch.Class {
+        return Pitch.Class(12 - element.value)
+    }
 }
 
 extension Pitch.Class: CustomStringConvertible {
