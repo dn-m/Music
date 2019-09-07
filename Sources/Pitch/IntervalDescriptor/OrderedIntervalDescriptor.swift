@@ -69,7 +69,7 @@ extension OrderedIntervalDescriptor {
     }
 
     /// - Returns: The amount of letter name steps in this `OrderedIntervalDescriptor`.
-    public var steps: Int { ordinal.steps }
+    public var steps: Int { return ordinal.steps }
 }
 
 extension OrderedIntervalDescriptor {

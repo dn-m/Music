@@ -55,7 +55,7 @@ extension UnorderedIntervalDescriptor {
     }
 
     /// - Returns: The amount of letter name steps in this `UnorderedIntervalDescriptor`.
-    public var steps: Int { ordinal.steps }
+    public var steps: Int { return ordinal.steps }
 }
 
 extension UnorderedIntervalDescriptor {

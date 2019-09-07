@@ -44,10 +44,10 @@ extension CompoundIntervalDescriptor {
     // MARK: - Computed Properties
 
     /// - Returns: The amount of semitones in this `CompoundIntervalDescriptor`.
-    public var semitones: Int { Int(interval.semitones) + octaveDisplacement * 12 }
+    public var semitones: Int { return Int(interval.semitones) + octaveDisplacement * 12 }
 
     /// - Returns: The amount of letter name steps in this `CompoundIntervalDescriptor`.
-    public var steps: Int { interval.steps + octaveDisplacement * 7 }
+    public var steps: Int { return interval.steps + octaveDisplacement * 7 }
 }
 
 extension CompoundIntervalDescriptor: Additive {
