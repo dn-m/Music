@@ -67,11 +67,9 @@ extension CompoundIntervalDescriptor: Additive {
     public static func + (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
         -> CompoundIntervalDescriptor
     {
-        let semitones = lhs.interval.semitones + rhs.interval.semitones
         let steps = lhs.interval.ordinal.steps + rhs.interval.ordinal.steps
-        let stepsModOctave = mod(steps,7)
         let octaves = steps / 7
-        let interval = OrderedIntervalDescriptor(interval: Double(semitones), steps: stepsModOctave)
+        let interval = OrderedIntervalDescriptor(lhs) + OrderedIntervalDescriptor(rhs)
         return CompoundIntervalDescriptor(interval, displacedBy: octaves)
     }
 
