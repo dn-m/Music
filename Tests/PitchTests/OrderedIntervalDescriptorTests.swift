@@ -10,11 +10,17 @@ import Pitch
 
 class OrderedIntervalDescriptorTests: XCTestCase {
 
-    typealias Ordinal = OrderedIntervalDescriptor.Ordinal
+    let reasonableFiniteSubset: [OrderedIntervalDescriptor] = [
+        .d1, .unison, .A1,
+        .d2, .m2, .M2, .A2,
+        .d3, .m3, .M3, .A3,
+        .d4, .P4, .A4,
+        .d5, .P5, .A5,
+        .d6, .m6, .M6, .A6,
+        .d7, .m7, .M7, .A7
+    ]
 
-    func testSecondOrdinalInverseSeventh() {
-        XCTAssertEqual(Ordinal.imperfect(.second).inverse, Ordinal.imperfect(.seventh))
-    }
+    // MARK: - API
 
     func testAPI() {
         let _: OrderedIntervalDescriptor = .unison
@@ -32,6 +38,33 @@ class OrderedIntervalDescriptorTests: XCTestCase {
     func testAPIShouldNotCompile() {
         //let _: OrderedIntervalDescriptor = .init(.minor, .fifth)
         //let _: OrderedIntervalDescriptor = .init(.perfect, .second)
+    }
+
+    func testDiminishedSemitones() {
+        XCTAssertEqual(OrderedIntervalDescriptor.d1.semitones, -1)
+        XCTAssertEqual(OrderedIntervalDescriptor.d2.semitones, 0)
+        XCTAssertEqual(OrderedIntervalDescriptor.d3.semitones, 2)
+        XCTAssertEqual(OrderedIntervalDescriptor.d4.semitones, 4)
+        XCTAssertEqual(OrderedIntervalDescriptor.d5.semitones, 6)
+        XCTAssertEqual(OrderedIntervalDescriptor.d6.semitones, 7)
+        XCTAssertEqual(OrderedIntervalDescriptor.d7.semitones, 9)
+    }
+
+    func testAugmentedSemitones() {
+        XCTAssertEqual(OrderedIntervalDescriptor.A1.semitones, 1)
+        XCTAssertEqual(OrderedIntervalDescriptor.A2.semitones, 3)
+        XCTAssertEqual(OrderedIntervalDescriptor.A3.semitones, 5)
+        XCTAssertEqual(OrderedIntervalDescriptor.A4.semitones, 6)
+        XCTAssertEqual(OrderedIntervalDescriptor.A5.semitones, 8)
+        XCTAssertEqual(OrderedIntervalDescriptor.A6.semitones, 10)
+        XCTAssertEqual(OrderedIntervalDescriptor.A7.semitones, 12)
+    }
+
+    // FIXME: Get rid of this
+    typealias Ordinal = OrderedIntervalDescriptor.Ordinal
+
+    func testSecondOrdinalInverseSeventh() {
+        XCTAssertEqual(Ordinal.imperfect(.second).inverse, Ordinal.imperfect(.seventh))
     }
 
     func testInversionPerfectFifthPerfectFourth() {
@@ -53,6 +86,7 @@ class OrderedIntervalDescriptorTests: XCTestCase {
         let m6 = OrderedIntervalDescriptor(.ascending, .minor, .sixth)
         XCTAssertEqual(M3.inverse, m6)
         XCTAssertEqual(m6.inverse, M3)
+        
     }
 
     func testAbsoluteNamedIntervalOrdinalInversion() {
@@ -66,8 +100,6 @@ class OrderedIntervalDescriptorTests: XCTestCase {
         let dd6 = OrderedIntervalDescriptor(.descending, .double, .diminished, .sixth)
         XCTAssertEqual(AA3.inverse, dd6)
         XCTAssertEqual(dd6.inverse, AA3)
-        print(AA3)
-        print(dd6)
     }
 
     func testPerfectOrdinalUnisonInverse() {
@@ -81,5 +113,22 @@ class OrderedIntervalDescriptorTests: XCTestCase {
         let fifth = OrderedIntervalDescriptor.Ordinal.perfect(.fifth)
         XCTAssertEqual(fourth.inverse, fifth)
         XCTAssertEqual(fifth.inverse, fourth)
+    }
+
+    // MARK: - Group Axioms
+
+    func testIdentity() {
+        reasonableFiniteSubset.forEach { XCTAssertEqual($0 + .unison, $0) }
+    }
+
+    func testInverse() {
+        reasonableFiniteSubset.forEach { XCTAssertEqual($0 + $0.inverse, .unison) }
+    }
+
+    // The `OrderedIntervalDescriptor` is an Abelian group
+    func testCommutativity() {
+        zip(reasonableFiniteSubset, reasonableFiniteSubset).forEach {
+            XCTAssertEqual($0 + $1, $1 + $0)
+        }
     }
 }

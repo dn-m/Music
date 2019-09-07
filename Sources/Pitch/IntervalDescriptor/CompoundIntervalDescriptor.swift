@@ -39,7 +39,18 @@ extension CompoundIntervalDescriptor {
     }
 }
 
-extension CompoundIntervalDescriptor: AdditiveGroup {
+extension CompoundIntervalDescriptor {
+
+    // MARK: - Computed Properties
+
+    /// - Returns: The amount of semitones in this `CompoundIntervalDescriptor`.
+    public var semitones: Int { return Int(interval.semitones) + octaveDisplacement * 12 }
+
+    /// - Returns: The amount of letter name steps in this `CompoundIntervalDescriptor`.
+    public var steps: Int { return interval.steps + octaveDisplacement * 7 }
+}
+
+extension CompoundIntervalDescriptor: Additive {
 
     // MARK: - Type Methods
 
@@ -54,12 +65,11 @@ extension CompoundIntervalDescriptor: AdditiveGroup {
     ///
     /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
     public static func + (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
-        -> CompoundIntervalDescriptor {
-        let semitones = lhs.interval.semitones + rhs.interval.semitones
+        -> CompoundIntervalDescriptor
+    {
         let steps = lhs.interval.ordinal.steps + rhs.interval.ordinal.steps
-        let stepsModuloOctave = mod(steps,7)
         let octaves = steps / 7
-        let interval = OrderedIntervalDescriptor(interval: semitones, steps: stepsModuloOctave)
+        let interval = OrderedIntervalDescriptor(lhs) + OrderedIntervalDescriptor(rhs)
         return CompoundIntervalDescriptor(interval, displacedBy: octaves)
     }
 
@@ -76,13 +86,15 @@ extension CompoundIntervalDescriptor: AdditiveGroup {
     ///
     /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
     public static func - (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
-        -> CompoundIntervalDescriptor {
+        -> CompoundIntervalDescriptor
+    {
         let semitones = lhs.interval.semitones - rhs.interval.semitones
         let steps = lhs.steps - rhs.steps
-        let stepsModuloOctave = mod(steps,7)
+        let stepsModOctave = mod(steps,7)
         let octaves = steps / 7
-        let interval = OrderedIntervalDescriptor(interval: semitones, steps: stepsModuloOctave)
-        return CompoundIntervalDescriptor(steps >= 0 ? interval : interval.inverse,
+        let interval = OrderedIntervalDescriptor(interval: semitones, steps: stepsModOctave)
+        return CompoundIntervalDescriptor(
+            steps >= 0 ? interval : interval.inverse,
             displacedBy: octaves
         )
     }
@@ -107,14 +119,29 @@ extension CompoundIntervalDescriptor {
 
     // MARK: - Type Properties
 
+    /// Diminished Unison.
+    public static let d1 = CompoundIntervalDescriptor(.d1)
+
     /// Unison.
     public static let unison = CompoundIntervalDescriptor(.unison)
+
+    /// Diminished second.
+    public static let d2 = CompoundIntervalDescriptor(.d2)
+
+    /// Augmented unison.
+    public static let A1 = CompoundIntervalDescriptor(.A1)
 
     /// Minor second.
     public static let m2 = CompoundIntervalDescriptor(.m2)
 
     /// Major second.
     public static let M2 = CompoundIntervalDescriptor(.M2)
+
+    /// Diminished third.
+    public static let d3 = CompoundIntervalDescriptor(.d3)
+
+    /// Augmented second.
+    public static let A2 = CompoundIntervalDescriptor(.A2)
 
     /// Minor third.
     public static let m3 = CompoundIntervalDescriptor(.m3)
@@ -124,6 +151,9 @@ extension CompoundIntervalDescriptor {
 
     /// Diminished fourth.
     public static let d4 = CompoundIntervalDescriptor(.d4)
+
+    /// Augmented third.
+    public static let A3 = CompoundIntervalDescriptor(.A3)
 
     /// Perfect fourth.
     public static let P4 = CompoundIntervalDescriptor(.P4)
@@ -137,6 +167,9 @@ extension CompoundIntervalDescriptor {
     /// Perfect fifth.
     public static let P5 = CompoundIntervalDescriptor(.P5)
 
+    /// Diminished sixth.
+    public static let d6 = CompoundIntervalDescriptor(.d6)
+
     /// Augmented fifth.
     public static let A5 = CompoundIntervalDescriptor(.A5)
 
@@ -145,6 +178,12 @@ extension CompoundIntervalDescriptor {
 
     /// Major sixth.
     public static let M6 = CompoundIntervalDescriptor(.M6)
+
+    /// Diminished seventh.
+    public static let d7 = CompoundIntervalDescriptor(.d7)
+
+    /// Augmented sixth.
+    public static let A6 = CompoundIntervalDescriptor(.A6)
 
     /// Minor seventh.
     public static let m7 = CompoundIntervalDescriptor(.m7)
@@ -155,7 +194,90 @@ extension CompoundIntervalDescriptor {
     /// Octave.
     public static let octave = CompoundIntervalDescriptor(.unison, displacedBy: 1)
 
-    // TODO: Add intervals spanning more than one octave
+    /// Augmented seventh.
+    public static let A7 = CompoundIntervalDescriptor(.A7)
+
+    /// Diminished octave.
+    public static let d8 = CompoundIntervalDescriptor(.d1, displacedBy: 1)
+
+    /// Diminished ninth.
+    public static let d9 = CompoundIntervalDescriptor(.d2, displacedBy: 1)
+
+    /// Augmented octave.
+    public static let A8 = CompoundIntervalDescriptor(.A1, displacedBy: 1)
+
+    /// Minor ninth.
+    public static let m9 = CompoundIntervalDescriptor(.m2, displacedBy: 1)
+
+    /// Major ninth.
+    public static let M9 = CompoundIntervalDescriptor(.M2, displacedBy: 1)
+
+    /// Diminished tenth.
+    public static let d10 = CompoundIntervalDescriptor(.d3, displacedBy: 1)
+
+    /// Augmented ninth.
+    public static let A9 = CompoundIntervalDescriptor(.A2, displacedBy: 1)
+
+    /// Minor tenth.
+    public static let m10 = CompoundIntervalDescriptor(.m3, displacedBy: 1)
+
+    /// Major tenth.
+    public static let M10 = CompoundIntervalDescriptor(.M3, displacedBy: 1)
+
+    /// Diminished eleventh.
+    public static let d11 = CompoundIntervalDescriptor(.d4, displacedBy: 1)
+
+    /// Perfect eleventh.
+    public static let P11 = CompoundIntervalDescriptor(.P4, displacedBy: 1)
+
+    /// Augmented eleventh.
+    public static let A11 = CompoundIntervalDescriptor(.A4, displacedBy: 1)
+
+    /// Diminished twelfth.
+    public static let d12 = CompoundIntervalDescriptor(.d5, displacedBy: 1)
+
+    /// Perfect twelfth.
+    public static let P12 = CompoundIntervalDescriptor(.P5, displacedBy: 1)
+
+    /// Diminished thirteenth.
+    public static let d13 = CompoundIntervalDescriptor(.d6, displacedBy: 1)
+
+    /// Augmented twelfth.
+    public static let A12 = CompoundIntervalDescriptor(.A5, displacedBy: 1)
+
+    /// Minor thirteenth.
+    public static let m13 = CompoundIntervalDescriptor(.m6, displacedBy: 1)
+
+    /// Major thirteenth.
+    public static let M13 = CompoundIntervalDescriptor(.M6, displacedBy: 1)
+
+    /// Diminished fourteenth.
+    public static let d14 = CompoundIntervalDescriptor(.d7, displacedBy: 1)
+
+    /// Augmented thirteenth.
+    public static let A13 = CompoundIntervalDescriptor(.A6, displacedBy: 1)
+
+    /// Minor fourteenth.
+    public static let m14 = CompoundIntervalDescriptor(.m7, displacedBy: 1)
+
+    /// Major fourteenth.
+    public static let M14 = CompoundIntervalDescriptor(.M7, displacedBy: 1)
+
+    /// Augmented fourteenth.
+    public static let A14 = CompoundIntervalDescriptor(.A7, displacedBy: 1)
+}
+
+extension CompoundIntervalDescriptor {
+
+    // MARK: - Type Methods
+
+    /// - Returns: The distance from the given `interval` to the ideal interval for the given amount of `steps`.
+    public static func distanceToIdealInterval(for steps: Int, from interval: Double) -> Double {
+        let ideal = idealSemitoneInterval(steps: steps)
+        let difference = interval - ideal
+        let normalized = mod(difference + 6, 12) - 6
+        return steps == 0 ? abs(normalized) : normalized
+    }
 }
 
 extension CompoundIntervalDescriptor: CustomStringConvertible {
@@ -176,8 +298,8 @@ extension CompoundIntervalDescriptor: Equatable { }
 extension CompoundIntervalDescriptor: Hashable { }
 
 extension IntervalQuality {
-    init(distance: Double, with platonicThreshold: Double) {
-        let (diminished, augmented) = (-platonicThreshold,platonicThreshold)
+    init(distance: Double, with augDimThreshold: Double) {
+        let (augmented, diminished) = (augDimThreshold,-augDimThreshold)
         switch distance {
         case diminished - 4:
             self = .extended(.init(.quintuple, .diminished))
@@ -251,21 +373,21 @@ extension IntervalDescriptor where Ordinal: WesternScaleMappingOrdinal {
 
     /// - Returns the `IntervalQuality` and `Ordinal` values for the given `interval` (i.e.,
     /// the distance between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values)
-    /// and the given `steps (i.e., the distance between the `LetterName` attributes of
+    /// and the given `steps` (i.e., the distance between the `LetterName` attributes of
     ///`Pitch.Spelling`  values).
     static func qualityAndOrdinal(interval: Double, steps: Int) -> (IntervalQuality, Ordinal) {
-        let distance = Ordinal.platonicDistance(from: interval, to: steps)
+        let distance = Ordinal.distanceToIdealInterval(for: steps, to: interval)
         let ordinal = Ordinal(steps: steps)!
-        let quality = IntervalQuality(distance: distance, with: ordinal.platonicThreshold)
+        let quality = IntervalQuality(distance: distance, with: ordinal.augDimThreshold)
         return (quality, ordinal)
     }
 }
 
 extension OrderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
 
-    /// - Returns: The distance in semitones from an iedal interval at which point an interval
+    /// - Returns: The distance in semitones from an ideal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
-    public var platonicThreshold: Double {
+    public var augDimThreshold: Double {
         switch self {
         case .perfect:
             return 1
@@ -277,9 +399,9 @@ extension OrderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
 
 extension UnorderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
 
-    /// - Returns: The distance in semitones from an iedal interval at which point an interval
+    /// - Returns: The distance in semitones from an ideal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
-    var platonicThreshold: Double {
+    var augDimThreshold: Double {
         switch self {
         case .perfect:
             return 1
@@ -289,22 +411,7 @@ extension UnorderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
     }
 }
 
-extension IntervalOrdinal {
-
-    /// - Returns: The distance of the given `interval` to the `idealSemitoneInterval` from the given
-    /// `steps`.
-    static func platonicDistance(from interval: Double, to steps: Int) -> Double {
-        let ideal = idealSemitoneInterval(steps: steps)
-        let difference = interval - ideal
-        let normalized = mod(difference + 6, 12) - 6
-        let result = steps == 0 ? abs(normalized) : normalized
-        return result
-    }
-}
-
 extension OrderedIntervalDescriptor.Ordinal {
-
-    // FIXME: Harmonize with `platonic` universe.
     var idealInterval: Double {
         switch self {
         case .perfect(let perfect):
@@ -321,23 +428,5 @@ extension OrderedIntervalDescriptor.Ordinal {
             case .seventh: return 10.5
             }
         }
-    }
-}
-
-extension OrderedIntervalDescriptor {
-    var semitones: Double {
-        return ordinal.idealInterval + quality.adjustment
-    }
-}
-
-extension OrderedIntervalDescriptor {
-    var steps: Int {
-        return ordinal.steps
-    }
-}
-
-extension CompoundIntervalDescriptor {
-    var steps: Int {
-        return interval.steps + octaveDisplacement * 7
     }
 }
