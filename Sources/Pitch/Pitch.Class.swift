@@ -47,7 +47,7 @@ extension Pitch.Class: AdditiveGroup {
     ///     let dark: Pitch.Class = 4
     ///     let light = dark.inverse // => 8
     ///
-    public var inverse: Pitch.Class { Pitch.Class(12 - value) }
+    public var inverse: Pitch.Class { return Pitch.Class(12 - value) }
 
     @available(*, deprecated, message: "Use `Pitch.Class.inverse` instead")
     public var inversion: Pitch.Class {
