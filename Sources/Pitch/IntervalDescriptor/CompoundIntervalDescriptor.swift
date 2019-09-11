@@ -34,7 +34,7 @@ extension CompoundIntervalDescriptor {
 
     /// Creates a `CompoundIntervalDescriptor` with the given `quality` and the given `ordinal`,
     /// with no octave displacement.
-    public init(_ quality: IntervalQuality, _ ordinal: OrderedIntervalDescriptor.Number) {
+    public init(_ quality: DiatonicIntervalQuality, _ ordinal: OrderedIntervalDescriptor.Number) {
         self.init(OrderedIntervalDescriptor(quality,ordinal))
     }
 }
@@ -297,7 +297,7 @@ extension CompoundIntervalDescriptor: CustomStringConvertible {
 extension CompoundIntervalDescriptor: Equatable { }
 extension CompoundIntervalDescriptor: Hashable { }
 
-extension IntervalQuality {
+extension DiatonicIntervalQuality {
     init(distance: Double, with augDimThreshold: Double) {
         let (augmented, diminished) = (augDimThreshold,-augDimThreshold)
         switch distance {
@@ -371,14 +371,14 @@ extension DiatonicIntervalProtocol where Number: WesternScaleMappingOrdinal {
         self.init(quality,ordinal)
     }
 
-    /// - Returns the `IntervalQuality` and `Number` values for the given `interval` (i.e.,
+    /// - Returns the `DiatonicIntervalQuality` and `Number` values for the given `interval` (i.e.,
     /// the distance between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values)
     /// and the given `steps` (i.e., the distance between the `LetterName` attributes of
     ///`Pitch.Spelling`  values).
-    static func qualityAndOrdinal(interval: Double, steps: Int) -> (IntervalQuality, Number) {
+    static func qualityAndOrdinal(interval: Double, steps: Int) -> (DiatonicIntervalQuality, Number) {
         let distance = Number.distanceToIdealInterval(for: steps, to: interval)
         let ordinal = Number(steps: steps)!
-        let quality = IntervalQuality(distance: distance, with: ordinal.augDimThreshold)
+        let quality = DiatonicIntervalQuality(distance: distance, with: ordinal.augDimThreshold)
         return (quality, ordinal)
     }
 }

@@ -23,7 +23,7 @@ public struct UnorderedIntervalDescriptor: DiatonicIntervalProtocol {
     /// - `major`
     /// - `augmented`
     ///
-    public let quality: IntervalQuality
+    public let quality: DiatonicIntervalQuality
 
     /// Ordinal of an `UnorderedIntervalDescriptor`.
     ///
@@ -242,7 +242,7 @@ extension UnorderedIntervalDescriptor {
     ///     let perfectUnison = UnorderedIntervalDescriptor(.perfect, .unison)
     ///     let perfectFourth = UnorderedIntervalDescriptor(.perfect, .fourth)
     ///
-    public init(_ quality: IntervalQuality.Perfect, _ ordinal: Number.Perfect) {
+    public init(_ quality: DiatonicIntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
     }
@@ -254,7 +254,7 @@ extension UnorderedIntervalDescriptor {
     ///     let majorSecond = UnorderedIntervalDescriptor(.major, .second)
     ///     let minorThird = UnorderedIntervalDescriptor(.minor, .third)
     ///
-    public init(_ quality: IntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
+    public init(_ quality: DiatonicIntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
     }
@@ -266,7 +266,7 @@ extension UnorderedIntervalDescriptor {
     ///     let doubleDiminishedSecond = UnorderedIntervalDescriptor(.diminished, .second)
     ///     let tripleAugmentedThird = UnorderedIntervalDescriptor(.augmented, .third)
     ///
-    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Imperfect) {
+    public init(_ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Imperfect) {
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
     }
@@ -276,7 +276,7 @@ extension UnorderedIntervalDescriptor {
     ///     let doubleAugmentedUnison = UnorderedIntervalDescriptor(.augmented, .unison)
     ///     let tripleDiminishedFourth = UnorderedIntervalDescriptor(.diminished, .fourth)
     ///
-    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
+    public init(_ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
@@ -288,8 +288,8 @@ extension UnorderedIntervalDescriptor {
     ///     let tripleDiminishedFourth = OrderedSpelledInterval(.triple, .diminished, .fourth)
     ///
     public init(
-        _ degree: IntervalQuality.Extended.Degree,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: DiatonicIntervalQuality.Extended.Degree,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     )
     {
@@ -304,8 +304,8 @@ extension UnorderedIntervalDescriptor {
     ///     let tripleDiminishedFourth = OrderedSpelledInterval(.triple, .diminished, .fourth)
     ///
     public init(
-        _ degree: IntervalQuality.Extended.Degree,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: DiatonicIntervalQuality.Extended.Degree,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Perfect
     )
     {
@@ -318,7 +318,7 @@ extension UnorderedIntervalDescriptor {
     ///     let minorSecond = UnorderedIntervalDescriptor(.minor, .second)
     ///     let augmentedSixth = UnorderedIntervalDescriptor(.augmented, .sixth)
     ///
-    public init(_ quality: IntervalQuality, _ ordinal: Number) {
+    public init(_ quality: DiatonicIntervalQuality, _ ordinal: Number) {
         self.quality = quality
         self.ordinal = ordinal
     }

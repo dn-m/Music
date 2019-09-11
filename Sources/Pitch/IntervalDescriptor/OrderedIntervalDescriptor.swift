@@ -23,7 +23,7 @@ public struct OrderedIntervalDescriptor: DiatonicIntervalProtocol {
 
     /// IntervalQuality value of a `OrderedIntervalDescriptor`.
     /// (e.g., `.diminished`, `.minor`, `.perfect`, `.major`, `.augmented`).
-    public let quality: IntervalQuality
+    public let quality: DiatonicIntervalQuality
 }
 
 extension OrderedIntervalDescriptor {
@@ -34,7 +34,7 @@ extension OrderedIntervalDescriptor {
     public init(
         _ direction: Direction = .ascending,
         _ ordinal: Number,
-        _ quality: IntervalQuality
+        _ quality: DiatonicIntervalQuality
     ) {
         self.direction = direction
         self.ordinal = ordinal
@@ -319,14 +319,14 @@ extension OrderedIntervalDescriptor {
     // MARK: - Initializers
 
     /// Creates an `OrderedIntervalDescriptor` with a given `quality` and `ordinal`.
-    internal init(_ direction: Direction, _ quality: IntervalQuality, _ ordinal: Number) {
+    internal init(_ direction: Direction, _ quality: DiatonicIntervalQuality, _ ordinal: Number) {
         self.direction = direction
         self.quality = quality
         self.ordinal = ordinal
     }
 
     /// Creates an `OrderedIntervalDescriptor` with a given `quality` and `ordinal`.
-    public init(_ quality: IntervalQuality, _ ordinal: Number) {
+    public init(_ quality: DiatonicIntervalQuality, _ ordinal: Number) {
         self.direction = .ascending
         self.quality = quality
         self.ordinal = ordinal
@@ -336,7 +336,7 @@ extension OrderedIntervalDescriptor {
     ///
     ///     let perfectFifth = OrderedIntervalDescriptor(.perfect, .fifth)
     ///
-    public init(_ quality: IntervalQuality.Perfect, _ ordinal: Number.Perfect) {
+    public init(_ quality: DiatonicIntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
@@ -346,7 +346,7 @@ extension OrderedIntervalDescriptor {
     ///
     ///     let descendingPerfectFifth = OrderedIntervalDescriptor(.descending, .perfect, .fifth)
     ///
-    public init(_ direction: Direction, _ quality: IntervalQuality.Perfect, _ ordinal: Number.Perfect) {
+    public init(_ direction: Direction, _ quality: DiatonicIntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = direction
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
@@ -359,7 +359,7 @@ extension OrderedIntervalDescriptor {
     ///     let majorSixth = OrderedIntervalDescriptor(.major, .sixth)
     ///     let minorSeventh = OrderedIntervalDescriptor(.minor, .seventh)
     ///
-    public init(_ quality: IntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
+    public init(_ quality: DiatonicIntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
         self.direction = .ascending
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
@@ -374,7 +374,7 @@ extension OrderedIntervalDescriptor {
     ///
     public init(
         _ direction: Direction,
-        _ quality: IntervalQuality.Imperfect,
+        _ quality: DiatonicIntervalQuality.Imperfect,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
@@ -389,8 +389,8 @@ extension OrderedIntervalDescriptor {
     ///     let tripleAugmentedThird = OrderedIntervalDescriptor(.triple, .augmented, .third)
     ///
     public init(
-        _ degree: IntervalQuality.Extended.Degree,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: DiatonicIntervalQuality.Extended.Degree,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = .ascending
@@ -406,8 +406,8 @@ extension OrderedIntervalDescriptor {
     ///
     public init(
         _ direction: Direction,
-        _ degree: IntervalQuality.Extended.Degree,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: DiatonicIntervalQuality.Extended.Degree,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
@@ -422,8 +422,8 @@ extension OrderedIntervalDescriptor {
     ///     let tripleDiminishedFourth = OrderedIntervalDescriptor(.triple, .diminished, .fourth)
     ///
     public init(
-        _ degree: IntervalQuality.Extended.Degree,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: DiatonicIntervalQuality.Extended.Degree,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Perfect
     ) {
         self.direction = .ascending
@@ -439,8 +439,8 @@ extension OrderedIntervalDescriptor {
     ///
     public init(
         _ direction: Direction,
-        _ degree: IntervalQuality.Extended.Degree,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: DiatonicIntervalQuality.Extended.Degree,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Perfect
     ) {
         self.direction = direction
@@ -454,7 +454,7 @@ extension OrderedIntervalDescriptor {
     ///     let augmentedSixth = OrderedIntervalDescriptor(.augmented, .sixth)
     ///
     public init(
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = .ascending
@@ -470,7 +470,7 @@ extension OrderedIntervalDescriptor {
     ///
     public init(
         _ direction: Direction,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
@@ -483,7 +483,7 @@ extension OrderedIntervalDescriptor {
     ///     let augmentedUnison = OrderedIntervalDescriptor(.augmented, .unison)
     ///     let diminishedFourth = OrderedIntervalDescriptor(.diminished, .fourth)
     ///
-    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
+    public init(_ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
@@ -497,7 +497,7 @@ extension OrderedIntervalDescriptor {
     ///
     public init(
         _ direction: Direction,
-        _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
+        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Perfect
     ) {
         self.direction = direction

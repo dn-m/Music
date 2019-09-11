@@ -1,5 +1,5 @@
 //
-//  IntervalQuality.swift
+//  DiatonicIntervalQuality.swift
 //  Pitch
 //
 //  Created by James Bean on 10/10/18.
@@ -9,7 +9,7 @@ import Algebra
 import DataStructures
 
 /// The quality of an interval between two `Pitch` values.
-public enum IntervalQuality: Invertible {
+public enum DiatonicIntervalQuality: Invertible {
 
     // MARK: - Cases
 
@@ -23,7 +23,7 @@ public enum IntervalQuality: Invertible {
     case extended(Extended)
 }
 
-extension IntervalQuality {
+extension DiatonicIntervalQuality {
 
     // MARK: - Nested Types
 
@@ -81,7 +81,7 @@ extension IntervalQuality {
     }
 }
 
-extension IntervalQuality.Extended {
+extension DiatonicIntervalQuality.Extended {
 
     // MARK: - Nested Types
 
@@ -117,12 +117,12 @@ extension IntervalQuality.Extended {
     }
 }
 
-extension IntervalQuality {
+extension DiatonicIntervalQuality {
 
     // MARK: - Instance Properties
 
     /// - Returns: Inversion of `self`
-    public var inverse: IntervalQuality {
+    public var inverse: DiatonicIntervalQuality {
         switch self {
         case .perfect:
             return .perfect(.perfect)
@@ -147,7 +147,7 @@ extension IntervalQuality {
     }
 }
 
-extension IntervalQuality.Perfect: CustomStringConvertible {
+extension DiatonicIntervalQuality.Perfect: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
@@ -157,7 +157,7 @@ extension IntervalQuality.Perfect: CustomStringConvertible {
     }
 }
 
-extension IntervalQuality.Imperfect: CustomStringConvertible {
+extension DiatonicIntervalQuality.Imperfect: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
@@ -167,7 +167,7 @@ extension IntervalQuality.Imperfect: CustomStringConvertible {
     }
 }
 
-extension IntervalQuality.Extended.AugmentedOrDiminished: CustomStringConvertible {
+extension DiatonicIntervalQuality.Extended.AugmentedOrDiminished: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
@@ -177,7 +177,7 @@ extension IntervalQuality.Extended.AugmentedOrDiminished: CustomStringConvertibl
     }
 }
 
-extension IntervalQuality.Extended: CustomStringConvertible {
+extension DiatonicIntervalQuality.Extended: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
@@ -187,7 +187,7 @@ extension IntervalQuality.Extended: CustomStringConvertible {
     }
 }
 
-extension IntervalQuality: CustomStringConvertible {
+extension DiatonicIntervalQuality: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
@@ -204,7 +204,7 @@ extension IntervalQuality: CustomStringConvertible {
     }
 }
 
-extension IntervalQuality.Extended: Equatable { }
-extension IntervalQuality.Extended: Hashable { }
-extension IntervalQuality: Equatable { }
-extension IntervalQuality: Hashable { }
+extension DiatonicIntervalQuality.Extended: Equatable { }
+extension DiatonicIntervalQuality.Extended: Hashable { }
+extension DiatonicIntervalQuality: Equatable { }
+extension DiatonicIntervalQuality: Hashable { }
