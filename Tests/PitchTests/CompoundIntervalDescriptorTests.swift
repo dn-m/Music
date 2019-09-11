@@ -10,7 +10,7 @@ import Pitch
 
 class CompoundIntervalDescriptorTests: XCTestCase {
 
-    let reasonableFiniteSubset: [CompoundIntervalDescriptor] = [
+    let reasonableFiniteSubset: [CompoundDiatonicInterval] = [
         .d1, .unison, .A1,
         .d2, .m2, .M2, .A2,
         .d3, .m3, .M3, .A3,
@@ -21,39 +21,39 @@ class CompoundIntervalDescriptorTests: XCTestCase {
     ]
 
     func testAddLessThanAnOctave() {
-        let result: CompoundIntervalDescriptor = .m2 + .P4
-        let expected: CompoundIntervalDescriptor = .d5
+        let result: CompoundDiatonicInterval = .m2 + .P4
+        let expected: CompoundDiatonicInterval = .d5
         XCTAssertEqual(result, expected)
     }
 
     func testAddEqualToOctave() {
-        let result: CompoundIntervalDescriptor = .P4 + .P5
-        let expected: CompoundIntervalDescriptor = .octave
+        let result: CompoundDiatonicInterval = .P4 + .P5
+        let expected: CompoundDiatonicInterval = .octave
         XCTAssertEqual(result, expected)
     }
 
     func testAddMoreThanAnOctave() {
-        let result: CompoundIntervalDescriptor = .P5 + .m6
-        let expected = CompoundIntervalDescriptor(.m3, displacedBy: 1)
+        let result: CompoundDiatonicInterval = .P5 + .m6
+        let expected = CompoundDiatonicInterval(.m3, displacedBy: 1)
         XCTAssertEqual(result, expected)
     }
 
     func testSubtractNoOctaveDisplacement() {
-        let result: CompoundIntervalDescriptor = .M3 - .M2
-        let expected: CompoundIntervalDescriptor = .M2
+        let result: CompoundDiatonicInterval = .M3 - .M2
+        let expected: CompoundDiatonicInterval = .M2
         XCTAssertEqual(result, expected)
     }
 
     func testSubtractWithOctaveDisplacement() {
-        let result: CompoundIntervalDescriptor = .m3 - .m6
+        let result: CompoundDiatonicInterval = .m3 - .m6
         let orderedInterval = DiatonicInterval(.descending, .perfect, .fourth)
-        let expected: CompoundIntervalDescriptor = CompoundIntervalDescriptor(orderedInterval)
+        let expected: CompoundDiatonicInterval = CompoundDiatonicInterval(orderedInterval)
         XCTAssertEqual(result, expected)
     }
 
     func testOctaveSubtractingCompoundInterval() {
-        let result: CompoundIntervalDescriptor = .octave - (.M3 + .m3)
-        let expected: CompoundIntervalDescriptor = .P4
+        let result: CompoundDiatonicInterval = .octave - (.M3 + .m3)
+        let expected: CompoundDiatonicInterval = .P4
         XCTAssertEqual(result, expected)
     }
 

@@ -49,7 +49,7 @@ extension DiatonicInterval {
     }
 
     /// Creates an `DiatonicInterval` with the given compound one.
-    public init(_ compound: CompoundIntervalDescriptor) {
+    public init(_ compound: CompoundDiatonicInterval) {
         self = compound.interval
     }
 }

@@ -1,5 +1,5 @@
 //
-//  CompoundIntervalDescriptor.swift
+//  CompoundDiatonicInterval.swift
 //  Pitch
 //
 //  Created by James Bean on 10/10/18.
@@ -10,7 +10,7 @@ import Math
 
 /// A descriptor for intervals between two `Pitch` values which takes into account octave
 /// displacement.
-public struct CompoundIntervalDescriptor: DiatonicIntervalProtocol {
+public struct CompoundDiatonicInterval: DiatonicIntervalProtocol {
 
     // MARK: - Instance Properties
 
@@ -21,25 +21,25 @@ public struct CompoundIntervalDescriptor: DiatonicIntervalProtocol {
     public let octaveDisplacement: Int
 }
 
-extension CompoundIntervalDescriptor {
+extension CompoundDiatonicInterval {
 
     // MARK: - Initializers
 
-    /// Creates a `CompoundIntervalDescriptor` with the given `interval` and the amount of `octaves`
+    /// Creates a `CompoundDiatonicInterval` with the given `interval` and the amount of `octaves`
     /// of displacement.
     public init(_ interval: DiatonicInterval, displacedBy octaves: Int = 0) {
         self.interval = interval
         self.octaveDisplacement = octaves
     }
 
-    /// Creates a `CompoundIntervalDescriptor` with the given `quality` and the given `number`,
+    /// Creates a `CompoundDiatonicInterval` with the given `quality` and the given `number`,
     /// with no octave displacement.
     public init(_ quality: DiatonicIntervalQuality, _ ordinal: DiatonicInterval.Number) {
         self.init(DiatonicInterval(quality,ordinal))
     }
 }
 
-extension CompoundIntervalDescriptor {
+extension CompoundDiatonicInterval {
 
     // MARK: - Computed Properties
 
@@ -50,224 +50,224 @@ extension CompoundIntervalDescriptor {
     public var steps: Int { return interval.steps + octaveDisplacement * 7 }
 }
 
-extension CompoundIntervalDescriptor: Additive {
+extension CompoundDiatonicInterval: Additive {
 
     // MARK: - Type Methods
 
     /// The `unison` is the `zero` for the `CompoundIntervalDescriptor` `AdditiveGroup`.
-    public static let zero: CompoundIntervalDescriptor = .unison
+    public static let zero: CompoundDiatonicInterval = .unison
 
     /// **Example Usage:**
     ///
-    ///     let perfectFifth: CompoundIntervalDescriptor = .P5
-    ///     let minorThird: CompoundIntervalDescriptor = .m3
+    ///     let perfectFifth: CompoundDiatonicInterval = .P5
+    ///     let minorThird: CompoundDiatonicInterval = .m3
     ///     let minorSeventh = perfectFifth + minorThird // => .m7
     ///
     /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
-    public static func + (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
-        -> CompoundIntervalDescriptor
+    public static func + (lhs: CompoundDiatonicInterval, rhs: CompoundDiatonicInterval)
+        -> CompoundDiatonicInterval
     {
         let steps = lhs.interval.number.steps + rhs.interval.number.steps
         let octaves = steps / 7
         let interval = DiatonicInterval(lhs) + DiatonicInterval(rhs)
-        return CompoundIntervalDescriptor(interval, displacedBy: octaves)
+        return CompoundDiatonicInterval(interval, displacedBy: octaves)
     }
 
     /// Mutates the left-hand-side by adding the right-hand-side.
-    public static func += (lhs: inout CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor) {
+    public static func += (lhs: inout CompoundDiatonicInterval, rhs: CompoundDiatonicInterval) {
         lhs = lhs + rhs
     }
 
     /// **Example Usage:**
     ///
-    ///     let perfectFifth: CompoundIntervalDescriptor = .P5
-    ///     let minorThird: CompoundIntervalDescriptor = .m3
+    ///     let perfectFifth: CompoundDiatonicInterval = .P5
+    ///     let minorThird: CompoundDiatonicInterval = .m3
     ///     let majorThird = perfectFifth - minorThird // => .M3
     ///
     /// - Returns: The sum of the given `CompoundIntervalDescriptors`.
-    public static func - (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
-        -> CompoundIntervalDescriptor
+    public static func - (lhs: CompoundDiatonicInterval, rhs: CompoundDiatonicInterval)
+        -> CompoundDiatonicInterval
     {
         let semitones = lhs.interval.semitones - rhs.interval.semitones
         let steps = lhs.steps - rhs.steps
         let stepsModOctave = mod(steps,7)
         let octaves = steps / 7
         let interval = DiatonicInterval(interval: semitones, steps: stepsModOctave)
-        return CompoundIntervalDescriptor(
+        return CompoundDiatonicInterval(
             steps >= 0 ? interval : interval.inverse,
             displacedBy: octaves
         )
     }
 
     /// Mutates the left-hand-side by subtracting the right-hand-side.
-    public static func -= (lhs: inout CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor) {
+    public static func -= (lhs: inout CompoundDiatonicInterval, rhs: CompoundDiatonicInterval) {
         lhs = lhs - rhs
     }
 
-    /// - Returns: The `inverse` of a `CompoundIntervalDescriptor`.
-    public static prefix func - (element: CompoundIntervalDescriptor) -> CompoundIntervalDescriptor {
+    /// - Returns: The `inverse` of a `CompoundDiatonicInterval`.
+    public static prefix func - (element: CompoundDiatonicInterval) -> CompoundDiatonicInterval {
         return element.inverse
     }
 
     /// - Returns: The `inverse` of a `CompoundIntervalDescriptor`.
-    public var inverse: CompoundIntervalDescriptor {
-        return CompoundIntervalDescriptor(interval.inverse, displacedBy: -octaveDisplacement)
+    public var inverse: CompoundDiatonicInterval {
+        return CompoundDiatonicInterval(interval.inverse, displacedBy: -octaveDisplacement)
     }
 }
 
-extension CompoundIntervalDescriptor {
+extension CompoundDiatonicInterval {
 
     // MARK: - Type Properties
 
     /// Diminished Unison.
-    public static let d1 = CompoundIntervalDescriptor(.d1)
+    public static let d1 = CompoundDiatonicInterval(.d1)
 
     /// Unison.
-    public static let unison = CompoundIntervalDescriptor(.unison)
+    public static let unison = CompoundDiatonicInterval(.unison)
 
     /// Diminished second.
-    public static let d2 = CompoundIntervalDescriptor(.d2)
+    public static let d2 = CompoundDiatonicInterval(.d2)
 
     /// Augmented unison.
-    public static let A1 = CompoundIntervalDescriptor(.A1)
+    public static let A1 = CompoundDiatonicInterval(.A1)
 
     /// Minor second.
-    public static let m2 = CompoundIntervalDescriptor(.m2)
+    public static let m2 = CompoundDiatonicInterval(.m2)
 
     /// Major second.
-    public static let M2 = CompoundIntervalDescriptor(.M2)
+    public static let M2 = CompoundDiatonicInterval(.M2)
 
     /// Diminished third.
-    public static let d3 = CompoundIntervalDescriptor(.d3)
+    public static let d3 = CompoundDiatonicInterval(.d3)
 
     /// Augmented second.
-    public static let A2 = CompoundIntervalDescriptor(.A2)
+    public static let A2 = CompoundDiatonicInterval(.A2)
 
     /// Minor third.
-    public static let m3 = CompoundIntervalDescriptor(.m3)
+    public static let m3 = CompoundDiatonicInterval(.m3)
 
     /// Major third.
-    public static let M3 = CompoundIntervalDescriptor(.M3)
+    public static let M3 = CompoundDiatonicInterval(.M3)
 
     /// Diminished fourth.
-    public static let d4 = CompoundIntervalDescriptor(.d4)
+    public static let d4 = CompoundDiatonicInterval(.d4)
 
     /// Augmented third.
-    public static let A3 = CompoundIntervalDescriptor(.A3)
+    public static let A3 = CompoundDiatonicInterval(.A3)
 
     /// Perfect fourth.
-    public static let P4 = CompoundIntervalDescriptor(.P4)
+    public static let P4 = CompoundDiatonicInterval(.P4)
 
     /// Augmented fourth.
-    public static let A4 = CompoundIntervalDescriptor(.A4)
+    public static let A4 = CompoundDiatonicInterval(.A4)
 
     /// Diminished fifth.
-    public static let d5 = CompoundIntervalDescriptor(.d5)
+    public static let d5 = CompoundDiatonicInterval(.d5)
 
     /// Perfect fifth.
-    public static let P5 = CompoundIntervalDescriptor(.P5)
+    public static let P5 = CompoundDiatonicInterval(.P5)
 
     /// Diminished sixth.
-    public static let d6 = CompoundIntervalDescriptor(.d6)
+    public static let d6 = CompoundDiatonicInterval(.d6)
 
     /// Augmented fifth.
-    public static let A5 = CompoundIntervalDescriptor(.A5)
+    public static let A5 = CompoundDiatonicInterval(.A5)
 
     /// Minor sixth.
-    public static let m6 = CompoundIntervalDescriptor(.m6)
+    public static let m6 = CompoundDiatonicInterval(.m6)
 
     /// Major sixth.
-    public static let M6 = CompoundIntervalDescriptor(.M6)
+    public static let M6 = CompoundDiatonicInterval(.M6)
 
     /// Diminished seventh.
-    public static let d7 = CompoundIntervalDescriptor(.d7)
+    public static let d7 = CompoundDiatonicInterval(.d7)
 
     /// Augmented sixth.
-    public static let A6 = CompoundIntervalDescriptor(.A6)
+    public static let A6 = CompoundDiatonicInterval(.A6)
 
     /// Minor seventh.
-    public static let m7 = CompoundIntervalDescriptor(.m7)
+    public static let m7 = CompoundDiatonicInterval(.m7)
 
     /// Major seventh.
-    public static let M7 = CompoundIntervalDescriptor(.M7)
+    public static let M7 = CompoundDiatonicInterval(.M7)
 
     /// Octave.
-    public static let octave = CompoundIntervalDescriptor(.unison, displacedBy: 1)
+    public static let octave = CompoundDiatonicInterval(.unison, displacedBy: 1)
 
     /// Augmented seventh.
-    public static let A7 = CompoundIntervalDescriptor(.A7)
+    public static let A7 = CompoundDiatonicInterval(.A7)
 
     /// Diminished octave.
-    public static let d8 = CompoundIntervalDescriptor(.d1, displacedBy: 1)
+    public static let d8 = CompoundDiatonicInterval(.d1, displacedBy: 1)
 
     /// Diminished ninth.
-    public static let d9 = CompoundIntervalDescriptor(.d2, displacedBy: 1)
+    public static let d9 = CompoundDiatonicInterval(.d2, displacedBy: 1)
 
     /// Augmented octave.
-    public static let A8 = CompoundIntervalDescriptor(.A1, displacedBy: 1)
+    public static let A8 = CompoundDiatonicInterval(.A1, displacedBy: 1)
 
     /// Minor ninth.
-    public static let m9 = CompoundIntervalDescriptor(.m2, displacedBy: 1)
+    public static let m9 = CompoundDiatonicInterval(.m2, displacedBy: 1)
 
     /// Major ninth.
-    public static let M9 = CompoundIntervalDescriptor(.M2, displacedBy: 1)
+    public static let M9 = CompoundDiatonicInterval(.M2, displacedBy: 1)
 
     /// Diminished tenth.
-    public static let d10 = CompoundIntervalDescriptor(.d3, displacedBy: 1)
+    public static let d10 = CompoundDiatonicInterval(.d3, displacedBy: 1)
 
     /// Augmented ninth.
-    public static let A9 = CompoundIntervalDescriptor(.A2, displacedBy: 1)
+    public static let A9 = CompoundDiatonicInterval(.A2, displacedBy: 1)
 
     /// Minor tenth.
-    public static let m10 = CompoundIntervalDescriptor(.m3, displacedBy: 1)
+    public static let m10 = CompoundDiatonicInterval(.m3, displacedBy: 1)
 
     /// Major tenth.
-    public static let M10 = CompoundIntervalDescriptor(.M3, displacedBy: 1)
+    public static let M10 = CompoundDiatonicInterval(.M3, displacedBy: 1)
 
     /// Diminished eleventh.
-    public static let d11 = CompoundIntervalDescriptor(.d4, displacedBy: 1)
+    public static let d11 = CompoundDiatonicInterval(.d4, displacedBy: 1)
 
     /// Perfect eleventh.
-    public static let P11 = CompoundIntervalDescriptor(.P4, displacedBy: 1)
+    public static let P11 = CompoundDiatonicInterval(.P4, displacedBy: 1)
 
     /// Augmented eleventh.
-    public static let A11 = CompoundIntervalDescriptor(.A4, displacedBy: 1)
+    public static let A11 = CompoundDiatonicInterval(.A4, displacedBy: 1)
 
     /// Diminished twelfth.
-    public static let d12 = CompoundIntervalDescriptor(.d5, displacedBy: 1)
+    public static let d12 = CompoundDiatonicInterval(.d5, displacedBy: 1)
 
     /// Perfect twelfth.
-    public static let P12 = CompoundIntervalDescriptor(.P5, displacedBy: 1)
+    public static let P12 = CompoundDiatonicInterval(.P5, displacedBy: 1)
 
     /// Diminished thirteenth.
-    public static let d13 = CompoundIntervalDescriptor(.d6, displacedBy: 1)
+    public static let d13 = CompoundDiatonicInterval(.d6, displacedBy: 1)
 
     /// Augmented twelfth.
-    public static let A12 = CompoundIntervalDescriptor(.A5, displacedBy: 1)
+    public static let A12 = CompoundDiatonicInterval(.A5, displacedBy: 1)
 
     /// Minor thirteenth.
-    public static let m13 = CompoundIntervalDescriptor(.m6, displacedBy: 1)
+    public static let m13 = CompoundDiatonicInterval(.m6, displacedBy: 1)
 
     /// Major thirteenth.
-    public static let M13 = CompoundIntervalDescriptor(.M6, displacedBy: 1)
+    public static let M13 = CompoundDiatonicInterval(.M6, displacedBy: 1)
 
     /// Diminished fourteenth.
-    public static let d14 = CompoundIntervalDescriptor(.d7, displacedBy: 1)
+    public static let d14 = CompoundDiatonicInterval(.d7, displacedBy: 1)
 
     /// Augmented thirteenth.
-    public static let A13 = CompoundIntervalDescriptor(.A6, displacedBy: 1)
+    public static let A13 = CompoundDiatonicInterval(.A6, displacedBy: 1)
 
     /// Minor fourteenth.
-    public static let m14 = CompoundIntervalDescriptor(.m7, displacedBy: 1)
+    public static let m14 = CompoundDiatonicInterval(.m7, displacedBy: 1)
 
     /// Major fourteenth.
-    public static let M14 = CompoundIntervalDescriptor(.M7, displacedBy: 1)
+    public static let M14 = CompoundDiatonicInterval(.M7, displacedBy: 1)
 
     /// Augmented fourteenth.
-    public static let A14 = CompoundIntervalDescriptor(.A7, displacedBy: 1)
+    public static let A14 = CompoundDiatonicInterval(.A7, displacedBy: 1)
 }
 
-extension CompoundIntervalDescriptor {
+extension CompoundDiatonicInterval {
 
     // MARK: - Type Methods
 
@@ -280,7 +280,7 @@ extension CompoundIntervalDescriptor {
     }
 }
 
-extension CompoundIntervalDescriptor: CustomStringConvertible {
+extension CompoundDiatonicInterval: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
@@ -294,8 +294,8 @@ extension CompoundIntervalDescriptor: CustomStringConvertible {
     }
 }
 
-extension CompoundIntervalDescriptor: Equatable { }
-extension CompoundIntervalDescriptor: Hashable { }
+extension CompoundDiatonicInterval: Equatable { }
+extension CompoundDiatonicInterval: Hashable { }
 
 extension DiatonicIntervalQuality {
     init(distance: Double, with augDimThreshold: Double) {
