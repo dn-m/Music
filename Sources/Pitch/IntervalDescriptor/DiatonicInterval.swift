@@ -42,7 +42,7 @@ extension DiatonicInterval {
     }
 
     /// Creates an `DiatonicInterval` with the given unordered one.
-    public init(_ unordered: UnorderedIntervalDescriptor) {
+    public init(_ unordered: UnorderedDiatonicInterval) {
         self.number = Number(unordered.ordinal)
         self.quality = unordered.quality
         self.direction = .ascending
@@ -185,7 +185,7 @@ extension DiatonicInterval.Number {
     ///
     /// - Warning: This is a lossless conversion.
     ///
-    public init(_ unordered: UnorderedIntervalDescriptor.Number) {
+    public init(_ unordered: UnorderedDiatonicInterval.Number) {
         switch unordered {
         case .perfect(let perfect):
             switch perfect {

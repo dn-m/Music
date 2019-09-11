@@ -397,7 +397,7 @@ extension DiatonicInterval.Number: WesternScaleMappingOrdinal {
     }
 }
 
-extension UnorderedIntervalDescriptor.Number: WesternScaleMappingOrdinal {
+extension UnorderedDiatonicInterval.Number: WesternScaleMappingOrdinal {
 
     /// - Returns: The distance in semitones from an ideal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
