@@ -1,5 +1,5 @@
 //
-//  OrderedIntervalDescriptorTests.swift
+//  DiatonicIntervalTests.swift
 //  PitchTests
 //
 //  Created by James Bean on 10/10/18.
@@ -8,7 +8,7 @@
 import XCTest
 import Pitch
 
-class OrderedIntervalDescriptorTests: XCTestCase {
+class DiatonicIntervalTests: XCTestCase {
 
     let reasonableFiniteSubset: [DiatonicInterval] = [
         .d1, .unison, .A1,

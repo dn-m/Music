@@ -1,5 +1,5 @@
 //
-//  CompoundIntervalDescriptorTests.swift
+//  CompoundDiatonicIntervalTests.swift
 //  PitchTests
 //
 //  Created by James Bean on 8/24/19.
@@ -8,7 +8,7 @@
 import XCTest
 import Pitch
 
-class CompoundIntervalDescriptorTests: XCTestCase {
+class CompoundDiatonicIntervalTests: XCTestCase {
 
     let reasonableFiniteSubset: [CompoundDiatonicInterval] = [
         .d1, .unison, .A1,
