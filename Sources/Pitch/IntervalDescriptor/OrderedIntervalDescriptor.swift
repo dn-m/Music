@@ -19,7 +19,7 @@ public struct OrderedIntervalDescriptor: DiatonicIntervalProtocol {
 
     /// Ordinal value of a `OrderedIntervalDescriptor`
     /// (e.g., `.unison`, `.second`, `.third`, `.fourth`, `.fifth`, `.sixth`, `.seventh`).
-    public let ordinal: Ordinal
+    public let ordinal: Number
 
     /// IntervalQuality value of a `OrderedIntervalDescriptor`.
     /// (e.g., `.diminished`, `.minor`, `.perfect`, `.major`, `.augmented`).
@@ -33,7 +33,7 @@ extension OrderedIntervalDescriptor {
     /// Creates an `OrderedIntervalDescriptor` with the given `direction`, `ordinal`, and `quality`.
     public init(
         _ direction: Direction = .ascending,
-        _ ordinal: Ordinal,
+        _ ordinal: Number,
         _ quality: IntervalQuality
     ) {
         self.direction = direction
@@ -43,7 +43,7 @@ extension OrderedIntervalDescriptor {
 
     /// Creates an `OrderedIntervalDescriptor` with the given unordered one.
     public init(_ unordered: UnorderedIntervalDescriptor) {
-        self.ordinal = Ordinal(unordered.ordinal)
+        self.ordinal = Number(unordered.ordinal)
         self.quality = unordered.quality
         self.direction = .ascending
     }
@@ -87,7 +87,7 @@ extension OrderedIntervalDescriptor {
     }
 
     /// Ordinal for `OrderedIntervalDescriptor`.
-    public enum Ordinal: IntervalOrdinal {
+    public enum Number: DiatonicIntervalNumber {
 
         // MARK: - Cases
 
@@ -104,7 +104,7 @@ extension OrderedIntervalDescriptor {
         ///     let fifth: Ordinal = .perfect(.fifth)
         ///     fifth.inverse // => .perfect(.fourth)
         ///
-        public var inverse: OrderedIntervalDescriptor.Ordinal {
+        public var inverse: OrderedIntervalDescriptor.Number {
             switch self {
             case .perfect(let ordinal):
                 return .perfect(ordinal.inverse)
@@ -125,11 +125,11 @@ extension OrderedIntervalDescriptor {
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal {
+extension OrderedIntervalDescriptor.Number {
 
     // MARK: - Nested Types
 
-    /// Perfect `Ordinal` cases.
+    /// Perfect `Number` cases.
     public enum Perfect: Int, InvertibleEnum {
 
         // MARK: - Cases
@@ -144,7 +144,7 @@ extension OrderedIntervalDescriptor.Ordinal {
         case fifth = 4
     }
 
-    /// Imperfect `Ordinal` cases
+    /// Imperfect `Number` cases
     public enum Imperfect: Int, InvertibleEnum {
 
         // MARK: - Cases
@@ -163,7 +163,7 @@ extension OrderedIntervalDescriptor.Ordinal {
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal {
+extension OrderedIntervalDescriptor.Number {
 
     // MARK: - Initializers
 
@@ -185,7 +185,7 @@ extension OrderedIntervalDescriptor.Ordinal {
     ///
     /// - Warning: This is a lossless conversion.
     ///
-    public init(_ unordered: UnorderedIntervalDescriptor.Ordinal) {
+    public init(_ unordered: UnorderedIntervalDescriptor.Number) {
         switch unordered {
         case .perfect(let perfect):
             switch perfect {
@@ -302,7 +302,7 @@ extension OrderedIntervalDescriptor: AdditiveGroup {
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal {
+extension OrderedIntervalDescriptor.Number {
 
     // MARK: - Type Methods
 
@@ -319,14 +319,14 @@ extension OrderedIntervalDescriptor {
     // MARK: - Initializers
 
     /// Creates an `OrderedIntervalDescriptor` with a given `quality` and `ordinal`.
-    internal init(_ direction: Direction, _ quality: IntervalQuality, _ ordinal: Ordinal) {
+    internal init(_ direction: Direction, _ quality: IntervalQuality, _ ordinal: Number) {
         self.direction = direction
         self.quality = quality
         self.ordinal = ordinal
     }
 
     /// Creates an `OrderedIntervalDescriptor` with a given `quality` and `ordinal`.
-    public init(_ quality: IntervalQuality, _ ordinal: Ordinal) {
+    public init(_ quality: IntervalQuality, _ ordinal: Number) {
         self.direction = .ascending
         self.quality = quality
         self.ordinal = ordinal
@@ -336,7 +336,7 @@ extension OrderedIntervalDescriptor {
     ///
     ///     let perfectFifth = OrderedIntervalDescriptor(.perfect, .fifth)
     ///
-    public init(_ quality: IntervalQuality.Perfect, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: IntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
@@ -346,7 +346,7 @@ extension OrderedIntervalDescriptor {
     ///
     ///     let descendingPerfectFifth = OrderedIntervalDescriptor(.descending, .perfect, .fifth)
     ///
-    public init(_ direction: Direction, _ quality: IntervalQuality.Perfect, _ ordinal: Ordinal.Perfect) {
+    public init(_ direction: Direction, _ quality: IntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = direction
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
@@ -359,7 +359,7 @@ extension OrderedIntervalDescriptor {
     ///     let majorSixth = OrderedIntervalDescriptor(.major, .sixth)
     ///     let minorSeventh = OrderedIntervalDescriptor(.minor, .seventh)
     ///
-    public init(_ quality: IntervalQuality.Imperfect, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: IntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
         self.direction = .ascending
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
@@ -375,7 +375,7 @@ extension OrderedIntervalDescriptor {
     public init(
         _ direction: Direction,
         _ quality: IntervalQuality.Imperfect,
-        _ ordinal: Ordinal.Imperfect
+        _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
         self.quality = .imperfect(quality)
@@ -391,7 +391,7 @@ extension OrderedIntervalDescriptor {
     public init(
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Imperfect
+        _ ordinal: Number.Imperfect
     ) {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
@@ -408,7 +408,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Imperfect
+        _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))
@@ -424,7 +424,7 @@ extension OrderedIntervalDescriptor {
     public init(
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Perfect
+        _ ordinal: Number.Perfect
     ) {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
@@ -441,7 +441,7 @@ extension OrderedIntervalDescriptor {
         _ direction: Direction,
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Perfect
+        _ ordinal: Number.Perfect
     ) {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))
@@ -455,7 +455,7 @@ extension OrderedIntervalDescriptor {
     ///
     public init(
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Imperfect
+        _ ordinal: Number.Imperfect
     ) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
@@ -471,7 +471,7 @@ extension OrderedIntervalDescriptor {
     public init(
         _ direction: Direction,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Imperfect
+        _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
@@ -483,7 +483,7 @@ extension OrderedIntervalDescriptor {
     ///     let augmentedUnison = OrderedIntervalDescriptor(.augmented, .unison)
     ///     let diminishedFourth = OrderedIntervalDescriptor(.diminished, .fourth)
     ///
-    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
@@ -498,7 +498,7 @@ extension OrderedIntervalDescriptor {
     public init(
         _ direction: Direction,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Perfect
+        _ ordinal: Number.Perfect
     ) {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
@@ -526,5 +526,5 @@ extension OrderedIntervalDescriptor: CustomStringConvertible {
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal: Equatable, Hashable { }
+extension OrderedIntervalDescriptor.Number: Equatable, Hashable { }
 extension OrderedIntervalDescriptor: Equatable, Hashable { }

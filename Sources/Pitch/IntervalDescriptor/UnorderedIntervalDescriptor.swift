@@ -32,7 +32,7 @@ public struct UnorderedIntervalDescriptor: DiatonicIntervalProtocol {
     /// - `third`
     /// - `fourth`
     ///
-    public let ordinal: Ordinal
+    public let ordinal: Number
 }
 
 extension UnorderedIntervalDescriptor {
@@ -63,7 +63,7 @@ extension UnorderedIntervalDescriptor {
     // MARK: - Nested Types
 
     /// The ordinal of a `UnorderedIntervalDescriptor`.
-    public enum Ordinal: IntervalOrdinal {
+    public enum Number: DiatonicIntervalNumber {
 
         // MARK: - Cases
 
@@ -73,7 +73,7 @@ extension UnorderedIntervalDescriptor {
         /// Perfect unordered interval ordinals (e.g., second, third).
         case imperfect(Imperfect)
 
-        public var inverse: UnorderedIntervalDescriptor.Ordinal {
+        public var inverse: UnorderedIntervalDescriptor.Number {
             switch self {
             case .perfect(let ordinal):
                 return .perfect(ordinal.inverse)
@@ -94,7 +94,7 @@ extension UnorderedIntervalDescriptor {
     }
 }
 
-extension UnorderedIntervalDescriptor.Ordinal {
+extension UnorderedIntervalDescriptor.Number {
 
     // MARK: - Initializers
 
@@ -115,7 +115,7 @@ extension UnorderedIntervalDescriptor.Ordinal {
     /// `.seventh`), the `.inverse` is converted into an unordered interval (e.g., a `.seventh`
     /// becomes a `.second`).
     ///
-    public init(_ ordered: OrderedIntervalDescriptor.Ordinal) {
+    public init(_ ordered: OrderedIntervalDescriptor.Number) {
         switch ordered {
         case .perfect(let perfect):
             switch perfect {
@@ -141,7 +141,7 @@ extension UnorderedIntervalDescriptor.Ordinal {
     }
 }
 
-extension UnorderedIntervalDescriptor.Ordinal {
+extension UnorderedIntervalDescriptor.Number {
 
     // MARK: - Nested Types
 
@@ -217,7 +217,7 @@ extension UnorderedIntervalDescriptor {
     public static let A4 = UnorderedIntervalDescriptor(.augmented, .fourth)
 }
 
-extension UnorderedIntervalDescriptor.Ordinal {
+extension UnorderedIntervalDescriptor.Number {
 
     // MARK: - Type Methods
 
@@ -242,7 +242,7 @@ extension UnorderedIntervalDescriptor {
     ///     let perfectUnison = UnorderedIntervalDescriptor(.perfect, .unison)
     ///     let perfectFourth = UnorderedIntervalDescriptor(.perfect, .fourth)
     ///
-    public init(_ quality: IntervalQuality.Perfect, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: IntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
     }
@@ -254,7 +254,7 @@ extension UnorderedIntervalDescriptor {
     ///     let majorSecond = UnorderedIntervalDescriptor(.major, .second)
     ///     let minorThird = UnorderedIntervalDescriptor(.minor, .third)
     ///
-    public init(_ quality: IntervalQuality.Imperfect, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: IntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
     }
@@ -266,7 +266,7 @@ extension UnorderedIntervalDescriptor {
     ///     let doubleDiminishedSecond = UnorderedIntervalDescriptor(.diminished, .second)
     ///     let tripleAugmentedThird = UnorderedIntervalDescriptor(.augmented, .third)
     ///
-    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Imperfect) {
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
     }
@@ -276,7 +276,7 @@ extension UnorderedIntervalDescriptor {
     ///     let doubleAugmentedUnison = UnorderedIntervalDescriptor(.augmented, .unison)
     ///     let tripleDiminishedFourth = UnorderedIntervalDescriptor(.diminished, .fourth)
     ///
-    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: IntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
@@ -290,7 +290,7 @@ extension UnorderedIntervalDescriptor {
     public init(
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Imperfect
+        _ ordinal: Number.Imperfect
     )
     {
         self.quality = .extended(.init(degree, quality))
@@ -306,7 +306,7 @@ extension UnorderedIntervalDescriptor {
     public init(
         _ degree: IntervalQuality.Extended.Degree,
         _ quality: IntervalQuality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Perfect
+        _ ordinal: Number.Perfect
     )
     {
         self.quality = .extended(.init(degree, quality))
@@ -318,7 +318,7 @@ extension UnorderedIntervalDescriptor {
     ///     let minorSecond = UnorderedIntervalDescriptor(.minor, .second)
     ///     let augmentedSixth = UnorderedIntervalDescriptor(.augmented, .sixth)
     ///
-    public init(_ quality: IntervalQuality, _ ordinal: Ordinal) {
+    public init(_ quality: IntervalQuality, _ ordinal: Number) {
         self.quality = quality
         self.ordinal = ordinal
     }
@@ -326,7 +326,7 @@ extension UnorderedIntervalDescriptor {
     /// Creates an `UnorderedIntervalDescriptor` from an ordered one. This inverts intervals with
     /// ordinals larger than a `.fourth`.
     public init(_ ordered: OrderedIntervalDescriptor) {
-        self.ordinal = Ordinal(ordered.ordinal)
+        self.ordinal = Number(ordered.ordinal)
         self.quality = ordered.quality
     }
 }
@@ -356,12 +356,12 @@ extension UnorderedIntervalDescriptor: Additive {
     }
 }
 
-extension UnorderedIntervalDescriptor.Ordinal: Equatable { }
-extension UnorderedIntervalDescriptor.Ordinal: Hashable { }
+extension UnorderedIntervalDescriptor.Number: Equatable { }
+extension UnorderedIntervalDescriptor.Number: Hashable { }
 extension UnorderedIntervalDescriptor: Equatable { }
 extension UnorderedIntervalDescriptor: Hashable { }
 
-extension UnorderedIntervalDescriptor.Ordinal {
+extension UnorderedIntervalDescriptor.Number {
 
     /// - Returns: The _ideal_ interval in semitones for this given `Ordinal`.
     ///

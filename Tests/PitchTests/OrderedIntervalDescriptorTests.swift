@@ -61,7 +61,7 @@ class OrderedIntervalDescriptorTests: XCTestCase {
     }
 
     // FIXME: Get rid of this
-    typealias Ordinal = OrderedIntervalDescriptor.Ordinal
+    typealias Ordinal = OrderedIntervalDescriptor.Number
 
     func testSecondOrdinalInverseSeventh() {
         XCTAssertEqual(Ordinal.imperfect(.second).inverse, Ordinal.imperfect(.seventh))
@@ -90,8 +90,8 @@ class OrderedIntervalDescriptorTests: XCTestCase {
     }
 
     func testAbsoluteNamedIntervalOrdinalInversion() {
-        let sixth = OrderedIntervalDescriptor.Ordinal.imperfect(.sixth)
-        let expected = OrderedIntervalDescriptor.Ordinal.imperfect(.third)
+        let sixth = OrderedIntervalDescriptor.Number.imperfect(.sixth)
+        let expected = OrderedIntervalDescriptor.Number.imperfect(.third)
         XCTAssertEqual(sixth.inverse, expected)
     }
 
@@ -103,14 +103,14 @@ class OrderedIntervalDescriptorTests: XCTestCase {
     }
 
     func testPerfectOrdinalUnisonInverse() {
-        let unison = OrderedIntervalDescriptor.Ordinal.perfect(.unison)
-        let expected = OrderedIntervalDescriptor.Ordinal.perfect(.unison)
+        let unison = OrderedIntervalDescriptor.Number.perfect(.unison)
+        let expected = OrderedIntervalDescriptor.Number.perfect(.unison)
         XCTAssertEqual(unison.inverse, expected)
     }
 
     func testPerfectOrdinalFourthFifthInverse() {
-        let fourth = OrderedIntervalDescriptor.Ordinal.perfect(.fourth)
-        let fifth = OrderedIntervalDescriptor.Ordinal.perfect(.fifth)
+        let fourth = OrderedIntervalDescriptor.Number.perfect(.fourth)
+        let fifth = OrderedIntervalDescriptor.Number.perfect(.fifth)
         XCTAssertEqual(fourth.inverse, fifth)
         XCTAssertEqual(fifth.inverse, fourth)
     }

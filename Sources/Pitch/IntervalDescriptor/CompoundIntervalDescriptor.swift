@@ -34,7 +34,7 @@ extension CompoundIntervalDescriptor {
 
     /// Creates a `CompoundIntervalDescriptor` with the given `quality` and the given `ordinal`,
     /// with no octave displacement.
-    public init(_ quality: IntervalQuality, _ ordinal: OrderedIntervalDescriptor.Ordinal) {
+    public init(_ quality: IntervalQuality, _ ordinal: OrderedIntervalDescriptor.Number) {
         self.init(OrderedIntervalDescriptor(quality,ordinal))
     }
 }
@@ -360,7 +360,7 @@ func idealSemitoneInterval(steps: Int) -> Double {
     }
 }
 
-extension DiatonicIntervalProtocol where Ordinal: WesternScaleMappingOrdinal {
+extension DiatonicIntervalProtocol where Number: WesternScaleMappingOrdinal {
 
     /// Creates a `DiatonicIntervalProtocol`-conforming type with the given `interval` (i.e., the distance
     /// between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values) and the given
@@ -371,19 +371,19 @@ extension DiatonicIntervalProtocol where Ordinal: WesternScaleMappingOrdinal {
         self.init(quality,ordinal)
     }
 
-    /// - Returns the `IntervalQuality` and `Ordinal` values for the given `interval` (i.e.,
+    /// - Returns the `IntervalQuality` and `Number` values for the given `interval` (i.e.,
     /// the distance between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values)
     /// and the given `steps` (i.e., the distance between the `LetterName` attributes of
     ///`Pitch.Spelling`  values).
-    static func qualityAndOrdinal(interval: Double, steps: Int) -> (IntervalQuality, Ordinal) {
-        let distance = Ordinal.distanceToIdealInterval(for: steps, to: interval)
-        let ordinal = Ordinal(steps: steps)!
+    static func qualityAndOrdinal(interval: Double, steps: Int) -> (IntervalQuality, Number) {
+        let distance = Number.distanceToIdealInterval(for: steps, to: interval)
+        let ordinal = Number(steps: steps)!
         let quality = IntervalQuality(distance: distance, with: ordinal.augDimThreshold)
         return (quality, ordinal)
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
+extension OrderedIntervalDescriptor.Number: WesternScaleMappingOrdinal {
 
     /// - Returns: The distance in semitones from an ideal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
@@ -397,7 +397,7 @@ extension OrderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
     }
 }
 
-extension UnorderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
+extension UnorderedIntervalDescriptor.Number: WesternScaleMappingOrdinal {
 
     /// - Returns: The distance in semitones from an ideal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
@@ -411,7 +411,7 @@ extension UnorderedIntervalDescriptor.Ordinal: WesternScaleMappingOrdinal {
     }
 }
 
-extension OrderedIntervalDescriptor.Ordinal {
+extension OrderedIntervalDescriptor.Number {
     var idealInterval: Double {
         switch self {
         case .perfect(let perfect):

@@ -10,8 +10,8 @@ public protocol DiatonicIntervalProtocol {
 
     // MARK: - Associated Types
 
-    /// The `IntervalOrdinal`-conforming type for this `DiatonicIntervalProtocol`.
-    associatedtype Ordinal: IntervalOrdinal
+    /// The `DiatonicIntervalNumber`-conforming type for this `DiatonicIntervalProtocol`.
+    associatedtype Number: DiatonicIntervalNumber
 
     // MARK: - Type Properties
 
@@ -21,5 +21,5 @@ public protocol DiatonicIntervalProtocol {
     // MARK: - Initializers
 
     /// Creates a `DiatonicIntervalProtocol` with the given `quality` and the given `ordinal`.
-    init(_ quality: IntervalQuality, _ ordinal: Ordinal)
+    init(_ quality: IntervalQuality, _ ordinal: Number)
 }
