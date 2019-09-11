@@ -10,7 +10,7 @@ import Math
 
 /// A descriptor for intervals between two `Pitch` values which takes into account octave
 /// displacement.
-public struct CompoundIntervalDescriptor: IntervalDescriptor {
+public struct CompoundIntervalDescriptor: DiatonicIntervalProtocol {
 
     // MARK: - Instance Properties
 
@@ -360,9 +360,9 @@ func idealSemitoneInterval(steps: Int) -> Double {
     }
 }
 
-extension IntervalDescriptor where Ordinal: WesternScaleMappingOrdinal {
+extension DiatonicIntervalProtocol where Ordinal: WesternScaleMappingOrdinal {
 
-    /// Creates a `IntervalDescriptor`-conforming type with the given `interval` (i.e., the distance
+    /// Creates a `DiatonicIntervalProtocol`-conforming type with the given `interval` (i.e., the distance
     /// between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values) and the given
     /// `steps` (i.e., the distance between the `LetterName` attributes of `Pitch.Spelling`
     /// values).

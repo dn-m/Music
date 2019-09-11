@@ -1,16 +1,16 @@
 //
-//  IntervalDescriptor.swift
+//  DiatonicIntervalProtocol.swift
 //  Pitch
 //
 //  Created by James Bean on 10/10/18.
 //
 
 /// Interface for intervals between two `Pitch` values.
-public protocol IntervalDescriptor {
+public protocol DiatonicIntervalProtocol {
 
     // MARK: - Associated Types
 
-    /// The `IntervalOrdinal`-conforming type for this `IntervalDescriptor`.
+    /// The `IntervalOrdinal`-conforming type for this `DiatonicIntervalProtocol`.
     associatedtype Ordinal: IntervalOrdinal
 
     // MARK: - Type Properties
@@ -20,6 +20,6 @@ public protocol IntervalDescriptor {
 
     // MARK: - Initializers
 
-    /// Creates a `IntervalDescriptor` with the given `quality` and the given `ordinal`.
+    /// Creates a `DiatonicIntervalProtocol` with the given `quality` and the given `ordinal`.
     init(_ quality: IntervalQuality, _ ordinal: Ordinal)
 }

@@ -11,7 +11,7 @@ import DataStructures
 import Math
 
 /// Descriptor for unordered intervals between two `Pitch.Class` values.
-public struct UnorderedIntervalDescriptor: IntervalDescriptor {
+public struct UnorderedIntervalDescriptor: DiatonicIntervalProtocol {
 
     // MARK: - Instance Properties
 

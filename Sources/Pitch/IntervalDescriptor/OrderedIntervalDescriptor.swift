@@ -10,7 +10,7 @@ import DataStructures
 import Math
 
 /// Descriptor for ordered interval between two `Pitch` values.
-public struct OrderedIntervalDescriptor: IntervalDescriptor {
+public struct OrderedIntervalDescriptor: DiatonicIntervalProtocol {
 
     // MARK: - Instance Properties
 
