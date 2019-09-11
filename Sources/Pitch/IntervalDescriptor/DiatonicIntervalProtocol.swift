@@ -13,6 +13,11 @@ public protocol DiatonicIntervalProtocol {
     /// The `DiatonicIntervalNumber`-conforming type for this `DiatonicIntervalProtocol`.
     associatedtype Number: DiatonicIntervalNumber
 
+    /// IntervalQuality value of a `OrderedIntervalDescriptor`.
+    ///
+    /// (e.g., `.diminished`, `.minor`, `.perfect`, `.major`, `.augmented`).
+    typealias Quality = DiatonicIntervalQuality
+
     // MARK: - Type Properties
 
     /// Unison interval descriptor.
@@ -21,5 +26,5 @@ public protocol DiatonicIntervalProtocol {
     // MARK: - Initializers
 
     /// Creates a `DiatonicIntervalProtocol` with the given `quality` and the given `number`.
-    init(_ quality: DiatonicIntervalQuality, _ ordinal: Number)
+    init(_ quality: Quality, _ ordinal: Number)
 }

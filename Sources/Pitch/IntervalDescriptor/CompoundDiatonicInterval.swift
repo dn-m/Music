@@ -34,7 +34,7 @@ extension CompoundDiatonicInterval {
 
     /// Creates a `CompoundDiatonicInterval` with the given `quality` and the given `number`,
     /// with no octave displacement.
-    public init(_ quality: DiatonicIntervalQuality, _ ordinal: DiatonicInterval.Number) {
+    public init(_ quality: Quality, _ ordinal: DiatonicInterval.Number) {
         self.init(DiatonicInterval(quality,ordinal))
     }
 }
@@ -371,14 +371,14 @@ extension DiatonicIntervalProtocol where Number: WesternScaleMappingOrdinal {
         self.init(quality,ordinal)
     }
 
-    /// - Returns the `DiatonicIntervalQuality` and `Number` values for the given `interval` (i.e.,
+    /// - Returns the `Quality` and `Number` values for the given `interval` (i.e.,
     /// the distance between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values)
     /// and the given `steps` (i.e., the distance between the `LetterName` attributes of
     ///`Pitch.Spelling`  values).
-    static func qualityAndOrdinal(interval: Double, steps: Int) -> (DiatonicIntervalQuality, Number) {
+    static func qualityAndOrdinal(interval: Double, steps: Int) -> (Quality, Number) {
         let distance = Number.distanceToIdealInterval(for: steps, to: interval)
         let ordinal = Number(steps: steps)!
-        let quality = DiatonicIntervalQuality(distance: distance, with: ordinal.augDimThreshold)
+        let quality = Quality(distance: distance, with: ordinal.augDimThreshold)
         return (quality, ordinal)
     }
 }

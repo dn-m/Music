@@ -17,13 +17,15 @@ public struct DiatonicInterval: DiatonicIntervalProtocol {
     /// The direction of a `OrderedIntervalDescriptor`.
     public let direction: Direction
 
-    /// Ordinal value of a `OrderedIntervalDescriptor`.
+    /// The `DiatonicIntervalNumber` value of a `OrderedIntervalDescriptor`.
+    ///
     /// (e.g., `.unison`, `.second`, `.third`, `.fourth`, `.fifth`, `.sixth`, `.seventh`).
     public let number: Number
 
-    /// IntervalQuality value of a `OrderedIntervalDescriptor`.
+    /// The `DiatonicIntervalQuality` value of a `OrderedIntervalDescriptor`.
+    ///
     /// (e.g., `.diminished`, `.minor`, `.perfect`, `.major`, `.augmented`).
-    public let quality: DiatonicIntervalQuality
+    public let quality: Quality
 }
 
 extension DiatonicInterval {
@@ -34,7 +36,7 @@ extension DiatonicInterval {
     public init(
         _ direction: Direction = .ascending,
         _ ordinal: Number,
-        _ quality: DiatonicIntervalQuality
+        _ quality: Quality
     ) {
         self.direction = direction
         self.number = ordinal
@@ -319,14 +321,14 @@ extension DiatonicInterval {
     // MARK: - Initializers
 
     /// Creates an `DiatonicInterval` with a given `quality` and `number`.
-    internal init(_ direction: Direction, _ quality: DiatonicIntervalQuality, _ ordinal: Number) {
+    internal init(_ direction: Direction, _ quality: Quality, _ ordinal: Number) {
         self.direction = direction
         self.quality = quality
         self.number = ordinal
     }
 
     /// Creates an `DiatonicInterval` with a given `quality` and `number`.
-    public init(_ quality: DiatonicIntervalQuality, _ ordinal: Number) {
+    public init(_ quality: Quality, _ ordinal: Number) {
         self.direction = .ascending
         self.quality = quality
         self.number = ordinal
@@ -336,7 +338,7 @@ extension DiatonicInterval {
     ///
     ///     let perfectFifth = DiatonicInterval(.perfect, .fifth)
     ///
-    public init(_ quality: DiatonicIntervalQuality.Perfect, _ ordinal: Number.Perfect) {
+    public init(_ quality: Quality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .perfect(.perfect)
         self.number = .perfect(ordinal)
@@ -346,7 +348,7 @@ extension DiatonicInterval {
     ///
     ///     let descendingPerfectFifth = DiatonicInterval(.descending, .perfect, .fifth)
     ///
-    public init(_ direction: Direction, _ quality: DiatonicIntervalQuality.Perfect, _ ordinal: Number.Perfect) {
+    public init(_ direction: Direction, _ quality: Quality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = direction
         self.quality = .perfect(.perfect)
         self.number = .perfect(ordinal)
@@ -359,7 +361,7 @@ extension DiatonicInterval {
     ///     let majorSixth = DiatonicInterval(.major, .sixth)
     ///     let minorSeventh = DiatonicInterval(.minor, .seventh)
     ///
-    public init(_ quality: DiatonicIntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
+    public init(_ quality: Quality.Imperfect, _ ordinal: Number.Imperfect) {
         self.direction = .ascending
         self.quality = .imperfect(quality)
         self.number = .imperfect(ordinal)
@@ -374,7 +376,7 @@ extension DiatonicInterval {
     ///
     public init(
         _ direction: Direction,
-        _ quality: DiatonicIntervalQuality.Imperfect,
+        _ quality: Quality.Imperfect,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
@@ -389,8 +391,8 @@ extension DiatonicInterval {
     ///     let tripleAugmentedThird = DiatonicInterval(.triple, .augmented, .third)
     ///
     public init(
-        _ degree: DiatonicIntervalQuality.Extended.Degree,
-        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = .ascending
@@ -406,8 +408,8 @@ extension DiatonicInterval {
     ///
     public init(
         _ direction: Direction,
-        _ degree: DiatonicIntervalQuality.Extended.Degree,
-        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
@@ -422,8 +424,8 @@ extension DiatonicInterval {
     ///     let tripleDiminishedFourth = DiatonicInterval(.triple, .diminished, .fourth)
     ///
     public init(
-        _ degree: DiatonicIntervalQuality.Extended.Degree,
-        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Perfect
     ) {
         self.direction = .ascending
@@ -439,8 +441,8 @@ extension DiatonicInterval {
     ///
     public init(
         _ direction: Direction,
-        _ degree: DiatonicIntervalQuality.Extended.Degree,
-        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Perfect
     ) {
         self.direction = direction
@@ -454,7 +456,7 @@ extension DiatonicInterval {
     ///     let augmentedSixth = DiatonicInterval(.augmented, .sixth)
     ///
     public init(
-        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = .ascending
@@ -470,7 +472,7 @@ extension DiatonicInterval {
     ///
     public init(
         _ direction: Direction,
-        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Imperfect
     ) {
         self.direction = direction
@@ -483,7 +485,7 @@ extension DiatonicInterval {
     ///     let augmentedUnison = DiatonicInterval(.augmented, .unison)
     ///     let diminishedFourth = DiatonicInterval(.diminished, .fourth)
     ///
-    public init(_ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
         self.number = .perfect(ordinal)
@@ -497,7 +499,7 @@ extension DiatonicInterval {
     ///
     public init(
         _ direction: Direction,
-        _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Number.Perfect
     ) {
         self.direction = direction
