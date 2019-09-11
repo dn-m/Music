@@ -1,5 +1,5 @@
 //
-//  IntervalOrdinal.swift
+//  DiatonicIntervalNumber.swift
 //  Pitch
 //
 //  Created by James Bean on 10/10/18.
@@ -8,8 +8,8 @@
 import Algebra
 import Math
 
-/// Interface for `IntervalOrdinal`-like values.
-public protocol IntervalOrdinal {
+/// Interface for `DiatonicIntervalNumber`-like values.
+public protocol DiatonicIntervalNumber {
 
     // MARK: - Type Methods
 
@@ -23,10 +23,10 @@ public protocol IntervalOrdinal {
 
     // MARK: - Initializers
 
-    /// Creates a `IntervalOrdinal` with the given amount of `steps`.
+    /// Creates a `DiatonicIntervalNumber` with the given amount of `steps`.
     init?(steps: Int)
 }
 
-protocol WesternScaleMappingOrdinal: IntervalOrdinal {
+protocol WesternScaleMappingOrdinal: DiatonicIntervalNumber {
     var augDimThreshold: Double { get }
 }

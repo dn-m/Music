@@ -1,5 +1,5 @@
 //
-//  UnorderedIntervalDescriptorTests.swift
+//  UnorderedDiatonicIntervalTests.swift
 //  PitchTests
 //
 //  Created by James Bean on 9/6/19.
@@ -8,9 +8,9 @@
 import XCTest
 import Pitch
 
-class UnorderedIntervalDescriptorTests: XCTestCase {
+class UnorderedDiatonicIntervalTests: XCTestCase {
 
-    let reasonableFiniteSubset: [UnorderedIntervalDescriptor] = [
+    let reasonableFiniteSubset: [UnorderedDiatonicInterval] = [
         .d1, .unison, .A1,
         .d2, .m2, .M2, .A2,
         .d3, .m3, .M3, .A3,
@@ -20,7 +20,7 @@ class UnorderedIntervalDescriptorTests: XCTestCase {
     // MARK: - Additive Monoid Axioms
 
     func testAddUnison() {
-        XCTAssertEqual(UnorderedIntervalDescriptor.d1 + .unison, .d1)
+        XCTAssertEqual(UnorderedDiatonicInterval.d1 + .unison, .d1)
     }
 
     func testIdentity() {

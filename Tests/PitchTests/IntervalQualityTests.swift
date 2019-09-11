@@ -11,21 +11,21 @@ import Pitch
 class IntervalQualityTests: XCTestCase {
 
     func testInverseDimAug() {
-        let dim = IntervalQuality.extended(.init(.single, .diminished))
-        let aug = IntervalQuality.extended(.init(.single, .augmented))
+        let dim = DiatonicIntervalQuality.extended(.init(.single, .diminished))
+        let aug = DiatonicIntervalQuality.extended(.init(.single, .augmented))
         XCTAssertEqual(dim.inverse, aug)
         XCTAssertEqual(aug.inverse, dim)
     }
 
     func testInverseMinorMajor() {
-        let maj = IntervalQuality.imperfect(.major)
-        let min = IntervalQuality.imperfect(.minor)
+        let maj = DiatonicIntervalQuality.imperfect(.major)
+        let min = DiatonicIntervalQuality.imperfect(.minor)
         XCTAssertEqual(maj.inverse, min)
         XCTAssertEqual(min.inverse, maj)
     }
 
     func testInversePerfect() {
-        let perfect = IntervalQuality.perfect(.perfect)
+        let perfect = DiatonicIntervalQuality.perfect(.perfect)
         XCTAssertEqual(perfect.inverse, perfect)
     }
 }

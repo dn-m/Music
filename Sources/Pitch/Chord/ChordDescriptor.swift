@@ -21,12 +21,12 @@ public struct ChordDescriptor {
 
     // MARK: - Instance Properties
 
-    let intervals: [CompoundIntervalDescriptor]
+    let intervals: [CompoundDiatonicInterval]
 
     // MARK: - Initializers
 
     /// Creates a `ChordDescriptor` with the given `intervals`.
-    public init(_ intervals: [CompoundIntervalDescriptor]) {
+    public init(_ intervals: [CompoundDiatonicInterval]) {
         self.intervals = intervals
     }
 }
@@ -68,7 +68,7 @@ extension ChordDescriptor/*: RandomAccessCollectionWrapping*/ {
     // MARK: - RandomAccessCollectionWrapping
 
     /// - Returns: The `RandomAccessCollection` base of a `ChordDescriptor`.
-    public var base: [CompoundIntervalDescriptor] {
+    public var base: [CompoundDiatonicInterval] {
         return intervals
     }
 }
@@ -78,7 +78,7 @@ extension ChordDescriptor: RandomAccessCollection {
 
     // MARK: - RandomAccessCollection
 
-    public typealias Base = [CompoundIntervalDescriptor]
+    public typealias Base = [CompoundDiatonicInterval]
 
     /// Start index.
     ///
@@ -156,9 +156,9 @@ extension ChordDescriptor: ExpressibleByArrayLiteral {
 
     // MARK: ExpressibleByArrayLiteral
 
-    /// Creates a `ChordDescriptor` with the given array literal of `CompoundIntervalDescriptor`
+    /// Creates a `ChordDescriptor` with the given array literal of `CompoundDiatonicInterval`
     /// values.
-    public init(arrayLiteral intervals: CompoundIntervalDescriptor...) {
+    public init(arrayLiteral intervals: CompoundDiatonicInterval...) {
         self.intervals = intervals
     }
 }
