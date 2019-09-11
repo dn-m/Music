@@ -10,7 +10,7 @@ import Pitch
 
 class OrderedIntervalDescriptorTests: XCTestCase {
 
-    let reasonableFiniteSubset: [OrderedIntervalDescriptor] = [
+    let reasonableFiniteSubset: [DiatonicInterval] = [
         .d1, .unison, .A1,
         .d2, .m2, .M2, .A2,
         .d3, .m3, .M3, .A3,
@@ -23,94 +23,94 @@ class OrderedIntervalDescriptorTests: XCTestCase {
     // MARK: - API
 
     func testAPI() {
-        let _: OrderedIntervalDescriptor = .unison
-        let _: OrderedIntervalDescriptor = .init(.minor, .second)
-        let _: OrderedIntervalDescriptor = .init(.perfect, .fifth)
-        let _: OrderedIntervalDescriptor = .init(.perfect, .fourth)
-        let _: OrderedIntervalDescriptor = .init(.augmented, .fifth)
-        let _: OrderedIntervalDescriptor = .init(.diminished, .fifth)
-        let _: OrderedIntervalDescriptor = .init(.augmented, .third)
-        let _: OrderedIntervalDescriptor = .init(.minor, .seventh)
-        let _: OrderedIntervalDescriptor = .init(.triple, .augmented, .seventh)
-        let _: OrderedIntervalDescriptor = .init(.double, .diminished, .fifth)
+        let _: DiatonicInterval = .unison
+        let _: DiatonicInterval = .init(.minor, .second)
+        let _: DiatonicInterval = .init(.perfect, .fifth)
+        let _: DiatonicInterval = .init(.perfect, .fourth)
+        let _: DiatonicInterval = .init(.augmented, .fifth)
+        let _: DiatonicInterval = .init(.diminished, .fifth)
+        let _: DiatonicInterval = .init(.augmented, .third)
+        let _: DiatonicInterval = .init(.minor, .seventh)
+        let _: DiatonicInterval = .init(.triple, .augmented, .seventh)
+        let _: DiatonicInterval = .init(.double, .diminished, .fifth)
     }
 
     func testAPIShouldNotCompile() {
-        //let _: OrderedIntervalDescriptor = .init(.minor, .fifth)
-        //let _: OrderedIntervalDescriptor = .init(.perfect, .second)
+        //let _: DiatonicInterval = .init(.minor, .fifth)
+        //let _: DiatonicInterval = .init(.perfect, .second)
     }
 
     func testDiminishedSemitones() {
-        XCTAssertEqual(OrderedIntervalDescriptor.d1.semitones, -1)
-        XCTAssertEqual(OrderedIntervalDescriptor.d2.semitones, 0)
-        XCTAssertEqual(OrderedIntervalDescriptor.d3.semitones, 2)
-        XCTAssertEqual(OrderedIntervalDescriptor.d4.semitones, 4)
-        XCTAssertEqual(OrderedIntervalDescriptor.d5.semitones, 6)
-        XCTAssertEqual(OrderedIntervalDescriptor.d6.semitones, 7)
-        XCTAssertEqual(OrderedIntervalDescriptor.d7.semitones, 9)
+        XCTAssertEqual(DiatonicInterval.d1.semitones, -1)
+        XCTAssertEqual(DiatonicInterval.d2.semitones, 0)
+        XCTAssertEqual(DiatonicInterval.d3.semitones, 2)
+        XCTAssertEqual(DiatonicInterval.d4.semitones, 4)
+        XCTAssertEqual(DiatonicInterval.d5.semitones, 6)
+        XCTAssertEqual(DiatonicInterval.d6.semitones, 7)
+        XCTAssertEqual(DiatonicInterval.d7.semitones, 9)
     }
 
     func testAugmentedSemitones() {
-        XCTAssertEqual(OrderedIntervalDescriptor.A1.semitones, 1)
-        XCTAssertEqual(OrderedIntervalDescriptor.A2.semitones, 3)
-        XCTAssertEqual(OrderedIntervalDescriptor.A3.semitones, 5)
-        XCTAssertEqual(OrderedIntervalDescriptor.A4.semitones, 6)
-        XCTAssertEqual(OrderedIntervalDescriptor.A5.semitones, 8)
-        XCTAssertEqual(OrderedIntervalDescriptor.A6.semitones, 10)
-        XCTAssertEqual(OrderedIntervalDescriptor.A7.semitones, 12)
+        XCTAssertEqual(DiatonicInterval.A1.semitones, 1)
+        XCTAssertEqual(DiatonicInterval.A2.semitones, 3)
+        XCTAssertEqual(DiatonicInterval.A3.semitones, 5)
+        XCTAssertEqual(DiatonicInterval.A4.semitones, 6)
+        XCTAssertEqual(DiatonicInterval.A5.semitones, 8)
+        XCTAssertEqual(DiatonicInterval.A6.semitones, 10)
+        XCTAssertEqual(DiatonicInterval.A7.semitones, 12)
     }
 
     // FIXME: Get rid of this
-    typealias Ordinal = OrderedIntervalDescriptor.Number
+    typealias Ordinal = DiatonicInterval.Number
 
     func testSecondOrdinalInverseSeventh() {
         XCTAssertEqual(Ordinal.imperfect(.second).inverse, Ordinal.imperfect(.seventh))
     }
 
     func testInversionPerfectFifthPerfectFourth() {
-        let P5 = OrderedIntervalDescriptor(.perfect, .fifth)
-        let P4 = OrderedIntervalDescriptor(.descending, .perfect, .fourth)
+        let P5 = DiatonicInterval(.perfect, .fifth)
+        let P4 = DiatonicInterval(.descending, .perfect, .fourth)
         XCTAssertEqual(P5.inverse, P4)
         XCTAssertEqual(P4.inverse, P5)
     }
 
     func testInversionMajorSecondMinorSeventh() {
-        let M2 = OrderedIntervalDescriptor(.major, .second)
-        let m7 = OrderedIntervalDescriptor(.descending, .minor, .seventh)
+        let M2 = DiatonicInterval(.major, .second)
+        let m7 = DiatonicInterval(.descending, .minor, .seventh)
         XCTAssertEqual(M2.inverse, m7)
         XCTAssertEqual(m7.inverse, M2)
     }
 
     func testInversionMajorThirdMinorSixth() {
-        let M3 = OrderedIntervalDescriptor(.descending, .major, .third)
-        let m6 = OrderedIntervalDescriptor(.ascending, .minor, .sixth)
+        let M3 = DiatonicInterval(.descending, .major, .third)
+        let m6 = DiatonicInterval(.ascending, .minor, .sixth)
         XCTAssertEqual(M3.inverse, m6)
         XCTAssertEqual(m6.inverse, M3)
         
     }
 
     func testAbsoluteNamedIntervalOrdinalInversion() {
-        let sixth = OrderedIntervalDescriptor.Number.imperfect(.sixth)
-        let expected = OrderedIntervalDescriptor.Number.imperfect(.third)
+        let sixth = DiatonicInterval.Number.imperfect(.sixth)
+        let expected = DiatonicInterval.Number.imperfect(.third)
         XCTAssertEqual(sixth.inverse, expected)
     }
 
     func testDoubleAugmentedThirdDoubleDiminishedSixth() {
-        let AA3 = OrderedIntervalDescriptor(.ascending, .double, .augmented, .third)
-        let dd6 = OrderedIntervalDescriptor(.descending, .double, .diminished, .sixth)
+        let AA3 = DiatonicInterval(.ascending, .double, .augmented, .third)
+        let dd6 = DiatonicInterval(.descending, .double, .diminished, .sixth)
         XCTAssertEqual(AA3.inverse, dd6)
         XCTAssertEqual(dd6.inverse, AA3)
     }
 
     func testPerfectOrdinalUnisonInverse() {
-        let unison = OrderedIntervalDescriptor.Number.perfect(.unison)
-        let expected = OrderedIntervalDescriptor.Number.perfect(.unison)
+        let unison = DiatonicInterval.Number.perfect(.unison)
+        let expected = DiatonicInterval.Number.perfect(.unison)
         XCTAssertEqual(unison.inverse, expected)
     }
 
     func testPerfectOrdinalFourthFifthInverse() {
-        let fourth = OrderedIntervalDescriptor.Number.perfect(.fourth)
-        let fifth = OrderedIntervalDescriptor.Number.perfect(.fifth)
+        let fourth = DiatonicInterval.Number.perfect(.fourth)
+        let fifth = DiatonicInterval.Number.perfect(.fifth)
         XCTAssertEqual(fourth.inverse, fifth)
         XCTAssertEqual(fifth.inverse, fourth)
     }
@@ -125,7 +125,7 @@ class OrderedIntervalDescriptorTests: XCTestCase {
         reasonableFiniteSubset.forEach { XCTAssertEqual($0 + $0.inverse, .unison) }
     }
 
-    // The `OrderedIntervalDescriptor` is an Abelian group
+    // The `DiatonicInterval` is an Abelian group
     func testCommutativity() {
         zip(reasonableFiniteSubset, reasonableFiniteSubset).forEach {
             XCTAssertEqual($0 + $1, $1 + $0)

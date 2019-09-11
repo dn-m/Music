@@ -15,7 +15,7 @@ public struct CompoundIntervalDescriptor: DiatonicIntervalProtocol {
     // MARK: - Instance Properties
 
     /// The base interval descriptor.
-    public let interval: OrderedIntervalDescriptor
+    public let interval: DiatonicInterval
 
     /// The amount of octaves displaced.
     public let octaveDisplacement: Int
@@ -27,15 +27,15 @@ extension CompoundIntervalDescriptor {
 
     /// Creates a `CompoundIntervalDescriptor` with the given `interval` and the amount of `octaves`
     /// of displacement.
-    public init(_ interval: OrderedIntervalDescriptor, displacedBy octaves: Int = 0) {
+    public init(_ interval: DiatonicInterval, displacedBy octaves: Int = 0) {
         self.interval = interval
         self.octaveDisplacement = octaves
     }
 
-    /// Creates a `CompoundIntervalDescriptor` with the given `quality` and the given `ordinal`,
+    /// Creates a `CompoundIntervalDescriptor` with the given `quality` and the given `number`,
     /// with no octave displacement.
-    public init(_ quality: DiatonicIntervalQuality, _ ordinal: OrderedIntervalDescriptor.Number) {
-        self.init(OrderedIntervalDescriptor(quality,ordinal))
+    public init(_ quality: DiatonicIntervalQuality, _ ordinal: DiatonicInterval.Number) {
+        self.init(DiatonicInterval(quality,ordinal))
     }
 }
 
@@ -67,9 +67,9 @@ extension CompoundIntervalDescriptor: Additive {
     public static func + (lhs: CompoundIntervalDescriptor, rhs: CompoundIntervalDescriptor)
         -> CompoundIntervalDescriptor
     {
-        let steps = lhs.interval.ordinal.steps + rhs.interval.ordinal.steps
+        let steps = lhs.interval.number.steps + rhs.interval.number.steps
         let octaves = steps / 7
-        let interval = OrderedIntervalDescriptor(lhs) + OrderedIntervalDescriptor(rhs)
+        let interval = DiatonicInterval(lhs) + DiatonicInterval(rhs)
         return CompoundIntervalDescriptor(interval, displacedBy: octaves)
     }
 
@@ -92,7 +92,7 @@ extension CompoundIntervalDescriptor: Additive {
         let steps = lhs.steps - rhs.steps
         let stepsModOctave = mod(steps,7)
         let octaves = steps / 7
-        let interval = OrderedIntervalDescriptor(interval: semitones, steps: stepsModOctave)
+        let interval = DiatonicInterval(interval: semitones, steps: stepsModOctave)
         return CompoundIntervalDescriptor(
             steps >= 0 ? interval : interval.inverse,
             displacedBy: octaves
@@ -288,7 +288,7 @@ extension CompoundIntervalDescriptor: CustomStringConvertible {
     public var description: String {
         return(
             interval.quality.description +
-            "\(interval.ordinal.steps + octaveDisplacement * 7 + 1)" +
+            "\(interval.number.steps + octaveDisplacement * 7 + 1)" +
             (interval.direction == .descending ? "↓" : "")
         )
     }
@@ -383,7 +383,7 @@ extension DiatonicIntervalProtocol where Number: WesternScaleMappingOrdinal {
     }
 }
 
-extension OrderedIntervalDescriptor.Number: WesternScaleMappingOrdinal {
+extension DiatonicInterval.Number: WesternScaleMappingOrdinal {
 
     /// - Returns: The distance in semitones from an ideal interval at which point an interval
     /// quality becomes diminished or augmented for a given `Ordinal`.
@@ -411,7 +411,7 @@ extension UnorderedIntervalDescriptor.Number: WesternScaleMappingOrdinal {
     }
 }
 
-extension OrderedIntervalDescriptor.Number {
+extension DiatonicInterval.Number {
     var idealInterval: Double {
         switch self {
         case .perfect(let perfect):

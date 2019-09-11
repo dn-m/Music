@@ -62,7 +62,7 @@ extension UnorderedIntervalDescriptor {
 
     // MARK: - Nested Types
 
-    /// The ordinal of a `UnorderedIntervalDescriptor`.
+    /// The number of a `UnorderedIntervalDescriptor`.
     public enum Number: DiatonicIntervalNumber {
 
         // MARK: - Cases
@@ -115,7 +115,7 @@ extension UnorderedIntervalDescriptor.Number {
     /// `.seventh`), the `.inverse` is converted into an unordered interval (e.g., a `.seventh`
     /// becomes a `.second`).
     ///
-    public init(_ ordered: OrderedIntervalDescriptor.Number) {
+    public init(_ ordered: DiatonicInterval.Number) {
         switch ordered {
         case .perfect(let perfect):
             switch perfect {
@@ -261,7 +261,7 @@ extension UnorderedIntervalDescriptor {
 
     // MARK: Augmented or Diminished Interval Descriptors
 
-    /// Creates an augmented or diminished `UnorderedIntervalDescriptor` with an imperfect ordinal.
+    /// Creates an augmented or diminished `UnorderedIntervalDescriptor` with an imperfect number.
     ///
     ///     let doubleDiminishedSecond = UnorderedIntervalDescriptor(.diminished, .second)
     ///     let tripleAugmentedThird = UnorderedIntervalDescriptor(.augmented, .third)
@@ -271,7 +271,7 @@ extension UnorderedIntervalDescriptor {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `UnorderedIntervalDescriptor` with a perfect ordinal.
+    /// Creates an augmented or diminished `UnorderedIntervalDescriptor` with a perfect number.
     ///
     ///     let doubleAugmentedUnison = UnorderedIntervalDescriptor(.augmented, .unison)
     ///     let tripleDiminishedFourth = UnorderedIntervalDescriptor(.diminished, .fourth)
@@ -281,7 +281,7 @@ extension UnorderedIntervalDescriptor {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `UnorderedIntervalDescriptor` with an imperfect ordinal.
+    /// Creates an augmented or diminished `UnorderedIntervalDescriptor` with an imperfect number.
     /// These intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .unison)
@@ -297,7 +297,7 @@ extension UnorderedIntervalDescriptor {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal. These
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a perfect number. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .unison)
@@ -313,7 +313,7 @@ extension UnorderedIntervalDescriptor {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Creates an `UnorderedIntervalDescriptor` with a given `quality` and `ordinal`.
+    /// Creates an `UnorderedIntervalDescriptor` with a given `quality` and `number`.
     ///
     ///     let minorSecond = UnorderedIntervalDescriptor(.minor, .second)
     ///     let augmentedSixth = UnorderedIntervalDescriptor(.augmented, .sixth)
@@ -325,8 +325,8 @@ extension UnorderedIntervalDescriptor {
 
     /// Creates an `UnorderedIntervalDescriptor` from an ordered one. This inverts intervals with
     /// ordinals larger than a `.fourth`.
-    public init(_ ordered: OrderedIntervalDescriptor) {
-        self.ordinal = Number(ordered.ordinal)
+    public init(_ ordered: DiatonicInterval) {
+        self.ordinal = Number(ordered.number)
         self.quality = ordered.quality
     }
 }
@@ -351,7 +351,7 @@ extension UnorderedIntervalDescriptor: Additive {
         -> UnorderedIntervalDescriptor
     {
         return UnorderedIntervalDescriptor(
-            OrderedIntervalDescriptor(lhs) + OrderedIntervalDescriptor(rhs)
+            DiatonicInterval(lhs) + DiatonicInterval(rhs)
         )
     }
 }

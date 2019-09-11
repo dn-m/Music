@@ -20,6 +20,6 @@ public protocol DiatonicIntervalProtocol {
 
     // MARK: - Initializers
 
-    /// Creates a `DiatonicIntervalProtocol` with the given `quality` and the given `ordinal`.
+    /// Creates a `DiatonicIntervalProtocol` with the given `quality` and the given `number`.
     init(_ quality: DiatonicIntervalQuality, _ ordinal: Number)
 }

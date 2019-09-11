@@ -46,7 +46,7 @@ class CompoundIntervalDescriptorTests: XCTestCase {
 
     func testSubtractWithOctaveDisplacement() {
         let result: CompoundIntervalDescriptor = .m3 - .m6
-        let orderedInterval = OrderedIntervalDescriptor(.descending, .perfect, .fourth)
+        let orderedInterval = DiatonicInterval(.descending, .perfect, .fourth)
         let expected: CompoundIntervalDescriptor = CompoundIntervalDescriptor(orderedInterval)
         XCTAssertEqual(result, expected)
     }

@@ -1,5 +1,5 @@
 //
-//  OrderedIntervalDescriptor.swift
+//  DiatonicInterval.swift
 //  Pitch
 //
 //  Created by James Bean on 10/10/18.
@@ -10,51 +10,51 @@ import DataStructures
 import Math
 
 /// Descriptor for ordered interval between two `Pitch` values.
-public struct OrderedIntervalDescriptor: DiatonicIntervalProtocol {
+public struct DiatonicInterval: DiatonicIntervalProtocol {
 
     // MARK: - Instance Properties
 
     /// The direction of a `OrderedIntervalDescriptor`.
     public let direction: Direction
 
-    /// Ordinal value of a `OrderedIntervalDescriptor`
+    /// Ordinal value of a `OrderedIntervalDescriptor`.
     /// (e.g., `.unison`, `.second`, `.third`, `.fourth`, `.fifth`, `.sixth`, `.seventh`).
-    public let ordinal: Number
+    public let number: Number
 
     /// IntervalQuality value of a `OrderedIntervalDescriptor`.
     /// (e.g., `.diminished`, `.minor`, `.perfect`, `.major`, `.augmented`).
     public let quality: DiatonicIntervalQuality
 }
 
-extension OrderedIntervalDescriptor {
+extension DiatonicInterval {
 
     // MARK: - Initializers
 
-    /// Creates an `OrderedIntervalDescriptor` with the given `direction`, `ordinal`, and `quality`.
+    /// Creates an `DiatonicInterval` with the given `direction`, `number`, and `quality`.
     public init(
         _ direction: Direction = .ascending,
         _ ordinal: Number,
         _ quality: DiatonicIntervalQuality
     ) {
         self.direction = direction
-        self.ordinal = ordinal
+        self.number = ordinal
         self.quality = quality
     }
 
-    /// Creates an `OrderedIntervalDescriptor` with the given unordered one.
+    /// Creates an `DiatonicInterval` with the given unordered one.
     public init(_ unordered: UnorderedIntervalDescriptor) {
-        self.ordinal = Number(unordered.ordinal)
+        self.number = Number(unordered.ordinal)
         self.quality = unordered.quality
         self.direction = .ascending
     }
 
-    /// Creates an `OrderedIntervalDescriptor` with the given compound one.
+    /// Creates an `DiatonicInterval` with the given compound one.
     public init(_ compound: CompoundIntervalDescriptor) {
         self = compound.interval
     }
 }
 
-extension OrderedIntervalDescriptor {
+extension DiatonicInterval {
 
     // MARK: - Computed Properties
 
@@ -64,29 +64,29 @@ extension OrderedIntervalDescriptor {
         case let .extended(extended):
             switch extended.quality {
             case .augmented:
-                return ordinal.idealInterval + quality.adjustment + (ordinal.augDimThreshold - 1)
+                return number.idealInterval + quality.adjustment + (number.augDimThreshold - 1)
             case .diminished:
-                return ordinal.idealInterval + quality.adjustment - (ordinal.augDimThreshold - 1)
+                return number.idealInterval + quality.adjustment - (number.augDimThreshold - 1)
             }
         default:
-            return ordinal.idealInterval + quality.adjustment
+            return number.idealInterval + quality.adjustment
         }
     }
 
     /// - Returns: The amount of letter name steps in this `OrderedIntervalDescriptor`.
-    public var steps: Int { return ordinal.steps }
+    public var steps: Int { return number.steps }
 }
 
-extension OrderedIntervalDescriptor {
+extension DiatonicInterval {
 
     // MARK: - Nested Types
 
-    /// Direction of a `OrderedIntervalDescriptor`.
+    /// Direction of a `DiatonicInterval`.
     public enum Direction: InvertibleEnum {
         case ascending, descending
     }
 
-    /// Ordinal for `OrderedIntervalDescriptor`.
+    /// Ordinal for `DiatonicInterval`.
     public enum Number: DiatonicIntervalNumber {
 
         // MARK: - Cases
@@ -104,7 +104,7 @@ extension OrderedIntervalDescriptor {
         ///     let fifth: Ordinal = .perfect(.fifth)
         ///     fifth.inverse // => .perfect(.fourth)
         ///
-        public var inverse: OrderedIntervalDescriptor.Number {
+        public var inverse: DiatonicInterval.Number {
             switch self {
             case .perfect(let ordinal):
                 return .perfect(ordinal.inverse)
@@ -125,7 +125,7 @@ extension OrderedIntervalDescriptor {
     }
 }
 
-extension OrderedIntervalDescriptor.Number {
+extension DiatonicInterval.Number {
 
     // MARK: - Nested Types
 
@@ -163,11 +163,11 @@ extension OrderedIntervalDescriptor.Number {
     }
 }
 
-extension OrderedIntervalDescriptor.Number {
+extension DiatonicInterval.Number {
 
     // MARK: - Initializers
 
-    /// Creates a `OrderedIntervalDescriptor` with the given amount of `steps`.
+    /// Creates a `DiatonicInterval` with the given amount of `steps`.
     public init?(steps: Int) {
         switch steps {
         case 0: self = .perfect(.unison)
@@ -181,7 +181,7 @@ extension OrderedIntervalDescriptor.Number {
         }
     }
 
-    /// Creates an `OrderedIntervalDescriptor` with the given `unordered` interval.
+    /// Creates an `DiatonicInterval` with the given `unordered` interval.
     ///
     /// - Warning: This is a lossless conversion.
     ///
@@ -205,104 +205,104 @@ extension OrderedIntervalDescriptor.Number {
     }
 }
 
-extension OrderedIntervalDescriptor {
+extension DiatonicInterval {
 
     // MARK: - Type Properties
 
     /// Diminished unison.
-    public static let d1 = OrderedIntervalDescriptor(.diminished, .unison)
+    public static let d1 = DiatonicInterval(.diminished, .unison)
 
     /// Unison.
-    public static let unison = OrderedIntervalDescriptor(.perfect, .unison)
+    public static let unison = DiatonicInterval(.perfect, .unison)
 
     /// Diminished second.
-    public static let d2 = OrderedIntervalDescriptor(.diminished, .second)
+    public static let d2 = DiatonicInterval(.diminished, .second)
 
     /// Augmented Unison.
-    public static let A1 = OrderedIntervalDescriptor(.augmented, .unison)
+    public static let A1 = DiatonicInterval(.augmented, .unison)
 
     /// Minor second.
-    public static let m2 = OrderedIntervalDescriptor(.minor, .second)
+    public static let m2 = DiatonicInterval(.minor, .second)
 
     /// Major second.
-    public static let M2 = OrderedIntervalDescriptor(.major, .second)
+    public static let M2 = DiatonicInterval(.major, .second)
 
     /// Diminished third.
-    public static let d3 = OrderedIntervalDescriptor(.diminished, .third)
+    public static let d3 = DiatonicInterval(.diminished, .third)
 
     /// Augmented second.
-    public static let A2 = OrderedIntervalDescriptor(.augmented, .second)
+    public static let A2 = DiatonicInterval(.augmented, .second)
 
     /// Minor third.
-    public static let m3 = OrderedIntervalDescriptor(.minor, .third)
+    public static let m3 = DiatonicInterval(.minor, .third)
 
     /// Major third.
-    public static let M3 = OrderedIntervalDescriptor(.major, .third)
+    public static let M3 = DiatonicInterval(.major, .third)
 
     /// Diminished fourth.
-    public static let d4 = OrderedIntervalDescriptor(.diminished, .fourth)
+    public static let d4 = DiatonicInterval(.diminished, .fourth)
 
     /// Augmented third.
-    public static let A3 = OrderedIntervalDescriptor(.augmented, .third)
+    public static let A3 = DiatonicInterval(.augmented, .third)
 
     /// Perfect fourth.
-    public static let P4 = OrderedIntervalDescriptor(.perfect, .fourth)
+    public static let P4 = DiatonicInterval(.perfect, .fourth)
 
     /// Augmented fourth.
-    public static let A4 = OrderedIntervalDescriptor(.augmented, .fourth)
+    public static let A4 = DiatonicInterval(.augmented, .fourth)
 
     /// Diminished fifth
-    public static let d5 = OrderedIntervalDescriptor(.diminished, .fifth)
+    public static let d5 = DiatonicInterval(.diminished, .fifth)
 
     /// Perfect fifth.
-    public static let P5 = OrderedIntervalDescriptor(.perfect, .fifth)
+    public static let P5 = DiatonicInterval(.perfect, .fifth)
 
     /// Diminished sixth.
-    public static let d6 = OrderedIntervalDescriptor(.diminished, .sixth)
+    public static let d6 = DiatonicInterval(.diminished, .sixth)
 
     /// Augmented fifth.
-    public static let A5 = OrderedIntervalDescriptor(.augmented, .fifth)
+    public static let A5 = DiatonicInterval(.augmented, .fifth)
 
     /// Minor sixth.
-    public static let m6 = OrderedIntervalDescriptor(.minor, .sixth)
+    public static let m6 = DiatonicInterval(.minor, .sixth)
 
     /// Major sixth.
-    public static let M6 = OrderedIntervalDescriptor(.major, .sixth)
+    public static let M6 = DiatonicInterval(.major, .sixth)
 
     /// Diminished seventh.
-    public static let d7 = OrderedIntervalDescriptor(.diminished, .seventh)
+    public static let d7 = DiatonicInterval(.diminished, .seventh)
 
     /// Augmented sixth.
-    public static let A6 = OrderedIntervalDescriptor(.augmented, .sixth)
+    public static let A6 = DiatonicInterval(.augmented, .sixth)
 
     /// Minor seventh.
-    public static let m7 = OrderedIntervalDescriptor(.minor, .seventh)
+    public static let m7 = DiatonicInterval(.minor, .seventh)
 
     /// Major seventh.
-    public static let M7 = OrderedIntervalDescriptor(.major, .seventh)
+    public static let M7 = DiatonicInterval(.major, .seventh)
 
     /// Augmented seventh.
-    public static let A7 = OrderedIntervalDescriptor(.augmented, .seventh)
+    public static let A7 = DiatonicInterval(.augmented, .seventh)
 }
 
-extension OrderedIntervalDescriptor: AdditiveGroup {
+extension DiatonicInterval: AdditiveGroup {
 
     /// The `.unison` is the `Additive` `zero`.
-    public static var zero: OrderedIntervalDescriptor = .unison
+    public static var zero: DiatonicInterval = .unison
 
-    /// - Returns: The sum of two `OrderedIntervalDescriptor` values.
-    public static func + (lhs: OrderedIntervalDescriptor, rhs: OrderedIntervalDescriptor)
-        -> OrderedIntervalDescriptor
+    /// - Returns: The sum of two `DiatonicInterval` values.
+    public static func + (lhs: DiatonicInterval, rhs: DiatonicInterval)
+        -> DiatonicInterval
     {
         let semitones = lhs.semitones + rhs.semitones
-        let steps = lhs.ordinal.steps + rhs.ordinal.steps
+        let steps = lhs.number.steps + rhs.number.steps
         let stepsModOctave = mod(steps,7)
-        let result = OrderedIntervalDescriptor(interval: Double(semitones), steps: stepsModOctave)
+        let result = DiatonicInterval(interval: Double(semitones), steps: stepsModOctave)
         return result
     }
 }
 
-extension OrderedIntervalDescriptor.Number {
+extension DiatonicInterval.Number {
 
     // MARK: - Type Methods
 
@@ -314,63 +314,63 @@ extension OrderedIntervalDescriptor.Number {
     }
 }
 
-extension OrderedIntervalDescriptor {
+extension DiatonicInterval {
 
     // MARK: - Initializers
 
-    /// Creates an `OrderedIntervalDescriptor` with a given `quality` and `ordinal`.
+    /// Creates an `DiatonicInterval` with a given `quality` and `number`.
     internal init(_ direction: Direction, _ quality: DiatonicIntervalQuality, _ ordinal: Number) {
         self.direction = direction
         self.quality = quality
-        self.ordinal = ordinal
+        self.number = ordinal
     }
 
-    /// Creates an `OrderedIntervalDescriptor` with a given `quality` and `ordinal`.
+    /// Creates an `DiatonicInterval` with a given `quality` and `number`.
     public init(_ quality: DiatonicIntervalQuality, _ ordinal: Number) {
         self.direction = .ascending
         self.quality = quality
-        self.ordinal = ordinal
+        self.number = ordinal
     }
 
-    /// Creates a perfect `OrderedIntervalDescriptor`.
+    /// Creates a perfect `DiatonicInterval`.
     ///
-    ///     let perfectFifth = OrderedIntervalDescriptor(.perfect, .fifth)
+    ///     let perfectFifth = DiatonicInterval(.perfect, .fifth)
     ///
     public init(_ quality: DiatonicIntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .perfect(.perfect)
-        self.ordinal = .perfect(ordinal)
+        self.number = .perfect(ordinal)
     }
 
-    /// Creates a perfect `OrderedIntervalDescriptor` with a given `direction`.
+    /// Creates a perfect `DiatonicInterval` with a given `direction`.
     ///
-    ///     let descendingPerfectFifth = OrderedIntervalDescriptor(.descending, .perfect, .fifth)
+    ///     let descendingPerfectFifth = DiatonicInterval(.descending, .perfect, .fifth)
     ///
     public init(_ direction: Direction, _ quality: DiatonicIntervalQuality.Perfect, _ ordinal: Number.Perfect) {
         self.direction = direction
         self.quality = .perfect(.perfect)
-        self.ordinal = .perfect(ordinal)
+        self.number = .perfect(ordinal)
     }
 
-    /// Creates an imperfect `OrderedIntervalDescriptor`.
+    /// Creates an imperfect `DiatonicInterval`.
     ///
-    ///     let majorSecond = OrderedIntervalDescriptor(.major, .second)
-    ///     let minorThird = OrderedIntervalDescriptor(.minor, .third)
-    ///     let majorSixth = OrderedIntervalDescriptor(.major, .sixth)
-    ///     let minorSeventh = OrderedIntervalDescriptor(.minor, .seventh)
+    ///     let majorSecond = DiatonicInterval(.major, .second)
+    ///     let minorThird = DiatonicInterval(.minor, .third)
+    ///     let majorSixth = DiatonicInterval(.major, .sixth)
+    ///     let minorSeventh = DiatonicInterval(.minor, .seventh)
     ///
     public init(_ quality: DiatonicIntervalQuality.Imperfect, _ ordinal: Number.Imperfect) {
         self.direction = .ascending
         self.quality = .imperfect(quality)
-        self.ordinal = .imperfect(ordinal)
+        self.number = .imperfect(ordinal)
     }
 
-    /// Creates an imperfect `OrderedIntervalDescriptor`.
+    /// Creates an imperfect `DiatonicInterval`.
     ///
-    ///     let majorSecond = OrderedIntervalDescriptor(.ascending, .major, .second)
-    ///     let minorThird = OrderedIntervalDescriptor(.descending, .minor, .third)
-    ///     let majorSixth = OrderedIntervalDescriptor(.ascending, .major, .sixth)
-    ///     let minorSeventh = OrderedIntervalDescriptor(.descending, .minor, .seventh)
+    ///     let majorSecond = DiatonicInterval(.ascending, .major, .second)
+    ///     let minorThird = DiatonicInterval(.descending, .minor, .third)
+    ///     let majorSixth = DiatonicInterval(.ascending, .major, .sixth)
+    ///     let minorSeventh = DiatonicInterval(.descending, .minor, .seventh)
     ///
     public init(
         _ direction: Direction,
@@ -379,14 +379,14 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = direction
         self.quality = .imperfect(quality)
-        self.ordinal = .imperfect(ordinal)
+        self.number = .imperfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with an imperfect ordinal. These
+    /// Creates an augmented or diminished `DiatonicInterval` with an imperfect number. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleDiminishedSecond = OrderedIntervalDescriptor(.double, .diminished, .second)
-    ///     let tripleAugmentedThird = OrderedIntervalDescriptor(.triple, .augmented, .third)
+    ///     let doubleDiminishedSecond = DiatonicInterval(.double, .diminished, .second)
+    ///     let tripleAugmentedThird = DiatonicInterval(.triple, .augmented, .third)
     ///
     public init(
         _ degree: DiatonicIntervalQuality.Extended.Degree,
@@ -395,14 +395,14 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
-        self.ordinal = .imperfect(ordinal)
+        self.number = .imperfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with a given `direction` and an
-    /// imperfect ordinal. These intervals can be up to quintuple augmented or diminished.
+    /// Creates an augmented or diminished `DiatonicInterval` with a given `direction` and an
+    /// imperfect number. These intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleDiminishedSecond = OrderedIntervalDescriptor(.descending, .double, .diminished, .second)
-    ///     let tripleAugmentedThird = OrderedIntervalDescriptor(.ascending, .triple, .augmented, .third)
+    ///     let doubleDiminishedSecond = DiatonicInterval(.descending, .double, .diminished, .second)
+    ///     let tripleAugmentedThird = DiatonicInterval(.ascending, .triple, .augmented, .third)
     ///
     public init(
         _ direction: Direction,
@@ -412,14 +412,14 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))
-        self.ordinal = .imperfect(ordinal)
+        self.number = .imperfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with a perfect ordinal. These
+    /// Creates an augmented or diminished `DiatonicInterval` with a perfect number. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = OrderedIntervalDescriptor(.double, .augmented, .unison)
-    ///     let tripleDiminishedFourth = OrderedIntervalDescriptor(.triple, .diminished, .fourth)
+    ///     let doubleAugmentedUnison = DiatonicInterval(.double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = DiatonicInterval(.triple, .diminished, .fourth)
     ///
     public init(
         _ degree: DiatonicIntervalQuality.Extended.Degree,
@@ -428,14 +428,14 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = .ascending
         self.quality = .extended(.init(degree, quality))
-        self.ordinal = .perfect(ordinal)
+        self.number = .perfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with a given `direction` and a
-    /// perfect ordinal. These intervals can be up to quintuple augmented or diminished.
+    /// Creates an augmented or diminished `DiatonicInterval` with a given `direction` and a
+    /// perfect number. These intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = OrderedIntervalDescriptor(.descending, .double, .augmented, .unison)
-    ///     let tripleDiminishedFourth = OrderedIntervalDescriptor(.ascending, .triple, .diminished, .fourth)
+    ///     let doubleAugmentedUnison = DiatonicInterval(.descending, .double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = DiatonicInterval(.ascending, .triple, .diminished, .fourth)
     ///
     public init(
         _ direction: Direction,
@@ -445,13 +445,13 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = direction
         self.quality = .extended(.init(degree, quality))
-        self.ordinal = .perfect(ordinal)
+        self.number = .perfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with an imperfect ordinal.
+    /// Creates an augmented or diminished `DiatonicInterval` with an imperfect number.
     ///
-    ///     let diminishedSecond = OrderedIntervalDescriptor(.diminished, .second)
-    ///     let augmentedSixth = OrderedIntervalDescriptor(.augmented, .sixth)
+    ///     let diminishedSecond = DiatonicInterval(.diminished, .second)
+    ///     let augmentedSixth = DiatonicInterval(.augmented, .sixth)
     ///
     public init(
         _ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished,
@@ -459,14 +459,14 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
-        self.ordinal = .imperfect(ordinal)
+        self.number = .imperfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with a given `direction` and an
-    /// imperfect ordinal.
+    /// Creates an augmented or diminished `DiatonicInterval` with a given `direction` and an
+    /// imperfect number.
     ///
-    ///     let diminishedSecond = OrderedIntervalDescriptor(.descending, .diminished, .second)
-    ///     let augmentedSixth = OrderedIntervalDescriptor(.ascending, .augmented, .sixth)
+    ///     let diminishedSecond = DiatonicInterval(.descending, .diminished, .second)
+    ///     let augmentedSixth = DiatonicInterval(.ascending, .augmented, .sixth)
     ///
     public init(
         _ direction: Direction,
@@ -475,25 +475,25 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
-        self.ordinal = .imperfect(ordinal)
+        self.number = .imperfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with a perfect ordinal.
+    /// Creates an augmented or diminished `DiatonicInterval` with a perfect number.
     ///
-    ///     let augmentedUnison = OrderedIntervalDescriptor(.augmented, .unison)
-    ///     let diminishedFourth = OrderedIntervalDescriptor(.diminished, .fourth)
+    ///     let augmentedUnison = DiatonicInterval(.augmented, .unison)
+    ///     let diminishedFourth = DiatonicInterval(.diminished, .fourth)
     ///
     public init(_ quality: DiatonicIntervalQuality.Extended.AugmentedOrDiminished, _ ordinal: Number.Perfect) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
-        self.ordinal = .perfect(ordinal)
+        self.number = .perfect(ordinal)
     }
 
-    /// Creates an augmented or diminished `OrderedIntervalDescriptor` with a given `direction` and a
-    /// perfect ordinal.
+    /// Creates an augmented or diminished `DiatonicInterval` with a given `direction` and a
+    /// perfect number.
     ///
-    ///     let augmentedUnison = OrderedIntervalDescriptor(.ascending, .augmented, .unison)
-    ///     let diminishedFourth = OrderedIntervalDescriptor(.descending, .diminished, .fourth)
+    ///     let augmentedUnison = DiatonicInterval(.ascending, .augmented, .unison)
+    ///     let diminishedFourth = DiatonicInterval(.descending, .diminished, .fourth)
     ///
     public init(
         _ direction: Direction,
@@ -502,29 +502,29 @@ extension OrderedIntervalDescriptor {
     ) {
         self.direction = direction
         self.quality = .extended(.init(.single, quality))
-        self.ordinal = .perfect(ordinal)
+        self.number = .perfect(ordinal)
     }
 }
 
-extension OrderedIntervalDescriptor: Invertible {
+extension DiatonicInterval: Invertible {
 
     // MARK: - Invertible
 
     /// - Returns: Inversion of `self`.
-    public var inverse: OrderedIntervalDescriptor {
-        return .init(direction.inverse, quality.inverse, ordinal.inverse)
+    public var inverse: DiatonicInterval {
+        return .init(direction.inverse, quality.inverse, number.inverse)
     }
 }
 
-extension OrderedIntervalDescriptor: CustomStringConvertible {
+extension DiatonicInterval: CustomStringConvertible {
 
     // MARK: - CustomStringConvertible
 
     /// Printable description of UnorderedIntervalDescriptor.
     public var description: String {
-        return "\(quality)\(ordinal.steps + 1)\(direction == .descending ? "↓" : "")"
+        return "\(quality)\(number.steps + 1)\(direction == .descending ? "↓" : "")"
     }
 }
 
-extension OrderedIntervalDescriptor.Number: Equatable, Hashable { }
-extension OrderedIntervalDescriptor: Equatable, Hashable { }
+extension DiatonicInterval.Number: Equatable, Hashable { }
+extension DiatonicInterval: Equatable, Hashable { }
