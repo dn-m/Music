@@ -2,8 +2,8 @@ theme: fullwidth
 custom_categories:
   - name: "Basic Types"
     children:
-      - "NoteNumber"
       - "Frequency"
+      - "NoteNumber"
       - "Pitch"
       - "Scale"
       - "Chord"
@@ -15,14 +15,16 @@ custom_categories:
     children:
       - "OrderedInterval"
       - "UnorderedInterval"
-  - name: "Interval Description"
+  - name: "Diatonic Intervals"
     children:
-      - "IntervalQuality"
-      - "IntervalOrdinal"
-      - "IntervalDescriptor"
-      - "UnorderedIntervalDescriptor"
-      - "OrderedIntervalDescriptor"
-      - "CompoundIntervalDescriptor"
+      - "DiatonicInterval"
+      - "UnorderedDiatonicInterval"
+      - "CompoundDiatonicInterval"
+      - "DiatonicIntervalQuality"
+      - "DiatonicIntervalNumber"
+      - "DiatonicIntervalProtocol"
+  - name: "Harmonic Structures"
+    children:
       - "ChordDescriptor"
   - name: "Tuning Systems"
     children:
