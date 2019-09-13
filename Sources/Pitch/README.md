@@ -5,12 +5,12 @@ The [`Pitch`](https://github.com/dn-m/Music/tree/latest/Sources/Pitch) module pr
 ## Basic Types
 
 ```swift
-let a440: Frequency = 440 		// Hz
-let middleC: Pitch = 60 		// MIDI note number
-let e = middleC + 4 			// e above middle c
-let microtone = e - 0.25		// eighth-tone below the e above middle c
-let anyE = Pitch.Class(e) 		// pitch class 4
-let anyGSharp = anyE.inverse	// pitch class 8
+let a440: Frequency = 440    // Hz
+let middleC: Pitch = 60      // MIDI note number
+let e = middleC + 4          // e above middle c
+let microtone = e - 0.25     // eighth-tone below the e above middle c
+let anyE = Pitch.Class(e)    // pitch class 4
+let anyGSharp = anyE.inverse // pitch class 8
 ```
 
 ### Set Operations
