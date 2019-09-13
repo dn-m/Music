@@ -38,8 +38,8 @@ set.primeForm  // => [0,2,4,8]
 #### Row Transformations
 ```swift
 let pcs: Pitch.Class.Collection = [0,11,3,4,8,7,9,5,6,1,2,10]
-pcs.retrograde // => [0,11,3,4,8,7,9,5,6,1,2,10]
-pcs.inversion  // => [0,11,3,4,8,7,9,5,6,1,2,10]
+pcs.retrograde // => [10,2,1,6,5,9,7,8,4,3,11,0]
+pcs.inversion  // => [0,1,9,8,4,5,3,7,6,11,10,2]
 ```
 
 #### Diatonic Intervals
