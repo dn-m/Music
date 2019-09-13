@@ -1,6 +1,6 @@
 # Pitch
 
-The [`Pitch`](https://github.com/dn-m/Music/tree/latest/Sources/Pitch) module provides types for constructing, transforming, and structuring frequencies.
+The [`Pitch`](https://github.com/dn-m/Music/tree/latest/Sources/Pitch) module provides types for structuring and transforming the frequency domain.
 
 ## Basic Types
 

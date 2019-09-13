@@ -14,7 +14,7 @@ Structures for the creation, analysis, and performance of music in Swift. Check 
 
 ### 🎶 Pitch
 
-The [`Pitch`](https://github.com/dn-m/Music/tree/latest/Sources/Pitch) module provides types for structuring and transforming frequency domain.
+The [`Pitch`](https://github.com/dn-m/Music/tree/latest/Sources/Pitch) module provides types for structuring and transforming the frequency domain.
 
 #### Basic Types
 
